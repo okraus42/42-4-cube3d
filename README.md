@@ -1,2 +1,2 @@
-# 42-4-cube3d
+# 42-4-miniRT
 miniRT++
