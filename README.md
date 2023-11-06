@@ -11,3 +11,7 @@ https://stackoverflow.com/questions/65566282/cylinder-intersection-with-ray-trac
 
 Shadows and Point lights:
 https://www.gamedev.net/blogs/entry/2260865-shadows-and-point-lights/
+
+Scratchapixel 3.0
+3D Rendering for Beginners
+https://scratchapixel.com/
