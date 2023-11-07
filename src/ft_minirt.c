@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/07 13:58:22 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/07 15:11:03 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,33 +16,52 @@ int	get_ambient(t_rt *rt, char **split)
 {
 	t_ambient	*ambient;
 	char		**rgb;
+	int			i;
 
+	/* needs protection against:
+		- swapped values
+		- values not digits (?)
+		- only some values (e.g. missing rgb)
+		- only some rgb specs (e.g. missing blue)
+		- too many decimal places (check before atof)
+		- number too big (check before)
+		- unique properties more than once
+	*/
+
+	i = 0;
 	ambient = malloc(sizeof(t_ambient));
  	rt->ambient = ambient;
 	ambient->ratio = ft_atof(split[1]);
-	printf("Ratio: %f\n", ambient->ratio);
+	if (ambient->ratio < 0.0 || ambient->ratio > 1.0)
+		return (1);
 	rgb = ft_split(split[2], ',');
 	ambient->r = ft_atoi(rgb[0]);
 	ambient->g = ft_atoi(rgb[1]);
 	ambient->b = ft_atoi(rgb[2]);
-	free(rgb[0]);
-	free(rgb[1]);
-	free(rgb[2]);
+	while (rgb[i])
+	{
+		free(rgb[i]);
+		i++;
+	}
+	free(rgb[i]);
 	free(rgb);
+	if (ambient->r > 255 || ambient->r < 0
+	|| ambient->g > 255 || ambient->g < 0
+	|| ambient->b > 255 || ambient->b < 0)
+		return (1);
 	return (0);
 }
 
 int	load_data(char *line, t_rt *rt)
 {
 	char	**split;
+	int		i;
 	//char	*id;
 
+	i = 0;
 	split = ft_split(line, ' ');
 	if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
-	{
-		//ft_printf("Loading ambience...\n");
 		get_ambient(rt, split);
-	}
 	/* else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
 		get_camera(rt, split);
 	else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
@@ -53,8 +72,13 @@ int	load_data(char *line, t_rt *rt)
 		get_plane(rt, split);
 	else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
 		get_cylinder(rt, split); */
-	else
-		return (1);
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split[i]);
+	free(split);
 	return (0);
 }
 
