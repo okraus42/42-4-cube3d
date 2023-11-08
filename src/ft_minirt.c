@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/08 16:03:44 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/08 16:05:29 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -477,10 +477,10 @@ int	main(int ac, char *av[])
 		//mandatory (open specific map)
 		ft_printf("Should open map: %s\n", av[1]);
 		load_file(av[1], rt);
-		/* printf("Ambience ratio: %f\n", rt->ambient->ratio);
-		printf("R, G, B: %d, %d, %d\n", rt->ambient->r, rt->ambient->g, rt->ambient->b); */
 	}
 	free(rt->ambient);
+	free(rt->camera);
+	free(rt->light);
 	free(rt);
 	return (0);
 }
