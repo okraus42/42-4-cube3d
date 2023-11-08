@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/08 15:44:56 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/08 16:03:44 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,23 +385,46 @@ int	get_light(t_rt *rt, char **split)
 	return (0);
 }
 
-int	load_data(char *line, t_rt *rt)
+int	load_data(char *line, t_rt *rt, int *flag)
 {
 	char	**split;
 	char	*trimmed;
 	int		i;
-	//char	*id;
 
 	i = 0;
 	trimmed = ft_strtrim(line, " \n");
 	split = ft_split(trimmed, ' ');
 	free(trimmed);
 	if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
-		get_ambient(rt, split);
+	{
+		if (rt->ambient == NULL)
+			*flag = get_ambient(rt, split);
+		else
+		{
+			throw_error("Duplicate instruction for A");
+			*flag = 1;
+		}
+	}
 	else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
-		get_camera(rt, split);
+	{
+		if (rt->camera == NULL)
+			*flag = get_camera(rt, split);
+		else
+		{
+			throw_error("Duplicate instruction for C");
+			*flag = 1;
+		}
+	}
 	else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
-		get_light(rt, split);
+	{
+		if (rt->light == NULL)
+			*flag = get_light(rt, split);
+		else
+		{
+			throw_error("Duplicate instruction for L");
+			*flag = 1;
+		}
+	}
 	/*
 	else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
 		get_sphere(rt, split);
@@ -418,12 +441,14 @@ int	load_file(char *file, t_rt *rt)
 {
 	int		fd;
 	char	*line;
+	int		flag;
 
+	flag = 0;
 	fd = open(file, O_RDONLY);
 	line = get_next_line(fd);
-	while (line)
+	while (line && !flag)
 	{
-		load_data(line, rt);
+		load_data(line, rt, &flag);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -439,6 +464,9 @@ int	main(int ac, char *av[])
 	rt = malloc(sizeof(t_rt));
 	if (!rt)
 		return (1);
+	rt->ambient = NULL;
+	rt->camera = NULL;
+	rt->light = NULL;
 	if (ac != 2)
 	{
 		// error
