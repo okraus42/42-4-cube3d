@@ -6,13 +6,19 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/08 09:20:13 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/08 15:23:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
+# define X 0
+# define Y 1
+# define Z 2
+# define R 0
+# define G 1
+# define B 2
 
 // INCLUDES
 
@@ -34,30 +40,28 @@
 typedef struct s_ambient
 {
 	double	ratio; // 0.0-1.0
-	int		r;
-	int		g;
-	int		b;
+	int		*rgb;
 }				t_ambient;
 
 typedef struct s_camera
 {
-	double	viewpoint; // x,y,z coordinates
-	double	nvect; // 3d normalized vector; [-1;1],[-1;1],[-1,1]
+	double	*coords; // x,y,z coordinates of viewpoint
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		fov; // 0-180
 }				t_camera;
 
 typedef struct s_light
 {
-	double	lightpoint; // x,y,z coordinates
+	double	*coords; // x,y,z coordinates of lightpoint
 	double	brightness; // 0.0-1.0
-	int		r;
-	int		g;
-	int		b;
+	int		*rgb;
 }				t_light;
 
 typedef struct s_sphere
 {
-	double	center; // x,y,z coordinates
+	double	x; // x,y,z coordinates of center
+	double	y;
+	double	z;
 	double	diameter;
 	int		r;
 	int		g;
@@ -66,7 +70,9 @@ typedef struct s_sphere
 
 typedef struct s_plane
 {
-	double	point; // x,y,z coordinates
+	double	x; // x,y,z coordinates of point
+	double	y;
+	double	z;
 	double	nvect; // 3d normalized vector; [-1;1],[-1;1],[-1,1]
 	int		r;
 	int		g;
@@ -75,7 +81,9 @@ typedef struct s_plane
 
 typedef struct s_cylinder
 {
-	double	center; // x,y,z coordinates
+	double	x; // x,y,z coordinates of center
+	double	y;
+	double	z;
 	double	nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1,1]
 	double	diameter;
 	double	height;
