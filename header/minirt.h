@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/07 13:55:04 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/08 09:20:13 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_master
 }				t_master;
 
 double	ft_atof(char *str);
+int	throw_error(char *str);
 
 
 

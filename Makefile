@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/07 13:27:45 by plouda           ###   ########.fr        #
+#    Updated: 2023/11/08 09:20:20 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,8 @@ SRC_DIR		=	src/
 # miniRT functions
 
 SRC_S		=	ft_minirt.c \
-				ft_atof.c
+				ft_atof.c \
+				error.c
 
 # Formating
 
