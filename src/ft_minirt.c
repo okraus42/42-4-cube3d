@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/09 14:14:45 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/09 15:48:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,43 +435,46 @@ int	get_light(t_rt *rt, char **split)
 
 int	add_sphere(t_rt *rt, char **split)
 {
-	t_sphere	*sphere;
+	//t_sphere	*sphere;
 	char		**coords;
 	char		**rgb;
 	int			i;
 
-	i = 0;
 	if (check_format_sphere(split))
 		return (1);
-	sphere = malloc(sizeof(t_sphere));
-	while (rt->spheres[i] != NULL)
-		i++;
-	rt->spheres[i] = sphere;
+	//sphere = malloc(sizeof(t_sphere));
+	/* while (rt->spheres[i] != NULL)
+		i++; */
+	//rt->spheres[i] = sphere;
+	i = rt->n_spheres;
+	ft_printf("Processing %i. sphere\n", i);
 	coords = ft_split(split[1], ',');
-	sphere->coords = malloc(sizeof(double) * 3);
-	sphere->coords[X] = ft_atof(coords[0]);
-	sphere->coords[Y] = ft_atof(coords[1]);
-	sphere->coords[Z] = ft_atof(coords[2]);
+	ft_printf("ptr: %p\n", rt->spheres[i]);
+	rt->spheres[i]->coords = malloc(sizeof(double) * 3);
+	rt->spheres[i]->coords[X] = ft_atof(coords[0]);
+	rt->spheres[i]->coords[Y] = ft_atof(coords[1]);
+	rt->spheres[i]->coords[Z] = ft_atof(coords[2]);
 	ft_free_split(&coords);
-	sphere->diameter = ft_atof(split[2]);
-	if (sphere->diameter <= 0)
+	rt->spheres[i]->diameter = ft_atof(split[2]);
+	if (rt->spheres[i]->diameter <= 0)
 	{
 		throw_error("sp: Nice try. Expected diameter value larger than 0.");
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	sphere->rgb = malloc(sizeof(int) * 3);
-	sphere->rgb[R] = ft_atoi(rgb[0]);
-	sphere->rgb[G] = ft_atoi(rgb[1]);
-	sphere->rgb[B] = ft_atoi(rgb[2]);
+	rt->spheres[i]->rgb = malloc(sizeof(int) * 3);
+	rt->spheres[i]->rgb[R] = ft_atoi(rgb[0]);
+	rt->spheres[i]->rgb[G] = ft_atoi(rgb[1]);
+	rt->spheres[i]->rgb[B] = ft_atoi(rgb[2]);
 	ft_free_split(&rgb);
-	if (sphere->rgb[R]> 255 || sphere->rgb[R] < 0
-		|| sphere->rgb[G] > 255 || sphere->rgb[G] < 0
-		|| sphere->rgb[B] > 255 || sphere->rgb[B] < 0)
+	if (rt->spheres[i]->rgb[R]> 255 || rt->spheres[i]->rgb[R] < 0
+		|| rt->spheres[i]->rgb[G] > 255 || rt->spheres[i]->rgb[G] < 0
+		|| rt->spheres[i]->rgb[B] > 255 || rt->spheres[i]->rgb[B] < 0)
 	{
 		throw_error("sp: RGB out of bounds, expected integers between 0 and 255");
 		return (1);
 	}
+	rt->n_spheres++;
 	return (0);
 }
 
@@ -497,9 +500,9 @@ int	load_data(char *line, t_rt *rt, int *flag)
 			*flag = add_sphere(rt, split);
 		/*
 		else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
-			get_plane(rt, split);
+			add_plane(rt, split);
 		else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
-			get_cylinder(rt, split); 
+			add_cylinder(rt, split); 
 		*/
 	}
 	ft_free_split(&split);
@@ -586,16 +589,22 @@ int	init_objects(t_rt *rt, int *ids)
 	rt->light = malloc(sizeof(t_light));
 	i = 0;
 	rt->spheres = malloc(sizeof(t_sphere *) * (ids[3] + 1));
-	while (i < (ids[3] + 1))
-		rt->spheres[i++] = NULL;
+	rt->n_spheres = 0;
+	while (i < (ids[3]))
+		rt->spheres[i++] = malloc(sizeof(t_sphere));
+	rt->spheres[i] = NULL;
 	i = 0;
 	rt->planes = malloc(sizeof(t_plane *) * (ids[4] + 1));
-	while (i < (ids[4] + 1))
-		rt->planes[i++] = NULL;
+	rt->n_planes = 0;
+	while (i < (ids[4]))
+		rt->planes[i++] = malloc(sizeof(t_plane));
+	rt->planes[i] = NULL;
 	i = 0;
 	rt->cylinders = malloc(sizeof(t_cylinder *) * (ids[5] + 1));
-	while (i < (ids[5] + 1))
-		rt->spheres[i++] = NULL;
+	rt->n_cylinders = 0;
+	while (i < (ids[5]))
+		rt->cylinders[i++] = malloc(sizeof(t_cylinder));
+	rt->cylinders[i] = NULL;
 	return (0);
 }
 
