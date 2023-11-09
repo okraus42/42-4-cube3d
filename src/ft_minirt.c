@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/08 16:05:29 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/09 14:14:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,7 @@ int	check_format_camera(char **split)
 		|| !float_in_range(subsplit[2]))
 	{
 		throw_error("C: Wrong coordinate format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
 		return (1);
 	}
 	ft_free_split(&subsplit);
@@ -212,6 +213,7 @@ int	check_format_camera(char **split)
 		|| !float_in_range(subsplit[2]))
 	{
 		throw_error("C: Wrong coordinate format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
 		return (1);
 	}
 	ft_free_split(&subsplit);
@@ -246,6 +248,7 @@ int	check_format_light(char **split)
 		|| !float_in_range(subsplit[2]))
 	{
 		throw_error("L: Wrong coordinate format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
 		return (1);
 	}
 	ft_free_split(&subsplit);
@@ -267,9 +270,54 @@ int	check_format_light(char **split)
 	return (0);
 }
 
+int	check_format_sphere(char **split)
+{
+	int		num;
+	char	**subsplit;
+
+	num = 0;
+	while (split[num])
+		num++;
+	if (num != 4)
+	{
+		throw_error("sp: Invalid number of specifiers, expected 3");
+		return (1);
+	}
+	if (!is_float_triad(split[1]))
+	{
+		throw_error("sp: Wrong coordinate format, expected three integers/floats separated by commas");
+		return (1);
+	}
+	subsplit = ft_split(split[1], ',');
+	if (!float_in_range(subsplit[0]) || !float_in_range(subsplit[1])
+		|| !float_in_range(subsplit[2]))
+	{
+		throw_error("sp: Wrong coordinate format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
+		return (1);
+	}
+	ft_free_split(&subsplit);
+	if (!is_floatable(split[2]))
+	{
+		throw_error("sp: Wrong diameter format, expected float");
+		return (1);
+	}
+	if (!float_in_range(split[2]))
+	{
+		throw_error("sp: Wrong diameter format, max. 4 integer digits and 5 decimals (ex. 9999.99999)");
+		return (1);
+	}
+	if (!is_rgb_format(split[3]))
+	{
+		throw_error("sp: Wrong RGB format, expected three integers separated by commas");
+		return (1);
+	}
+	return (0);
+}
+
 int	get_ambient(t_rt *rt, char **split)
 {
-	t_ambient	*ambient;
+	//t_ambient	*ambient;
 	char		**rgb;
 
 	/* needs protection against:
@@ -284,23 +332,23 @@ int	get_ambient(t_rt *rt, char **split)
 
 	if (check_format_ambient(split))
 		return (1);
-	ambient = malloc(sizeof(t_ambient));
- 	rt->ambient = ambient;
-	ambient->ratio = ft_atof(split[1]);
-	if (ambient->ratio < 0.0 || ambient->ratio > 1.0)
+	/* ambient = malloc(sizeof(t_ambient));
+ 	rt->ambient = ambient; */
+	rt->ambient->ratio = ft_atof(split[1]);
+	if (rt->ambient->ratio < 0.0 || rt->ambient->ratio > 1.0)
 	{
 		throw_error("A: Ratio out of bounds, expected number between 0.0 and 1.0");
 		return (1);
 	}
 	rgb = ft_split(split[2], ',');
-	ambient->rgb = malloc(sizeof(int) * 3);
-	ambient->rgb[R] = ft_atoi(rgb[0]);
-	ambient->rgb[G] = ft_atoi(rgb[1]);
-	ambient->rgb[B] = ft_atoi(rgb[2]);
+	rt->ambient->rgb = malloc(sizeof(int) * 3);
+	rt->ambient->rgb[R] = ft_atoi(rgb[0]);
+	rt->ambient->rgb[G] = ft_atoi(rgb[1]);
+	rt->ambient->rgb[B] = ft_atoi(rgb[2]);
 	ft_free_split(&rgb);
-	if (ambient->rgb[R]> 255 || ambient->rgb[R] < 0
-		|| ambient->rgb[G] > 255 || ambient->rgb[G] < 0
-		|| ambient->rgb[B] > 255 || ambient->rgb[B] < 0)
+	if (rt->ambient->rgb[R]> 255 || rt->ambient->rgb[R] < 0
+		|| rt->ambient->rgb[G] > 255 || rt->ambient->rgb[G] < 0
+		|| rt->ambient->rgb[B] > 255 || rt->ambient->rgb[B] < 0)
 	{
 		throw_error("A: RGB out of bounds, expected integers between 0 and 255");
 		return (1);
@@ -310,36 +358,36 @@ int	get_ambient(t_rt *rt, char **split)
 
 int	get_camera(t_rt *rt, char **split)
 {
-	t_camera	*camera;
+	//t_camera	*camera;
 	char		**coords;
 	char		**nvect;
 
 	if (check_format_camera(split))
 		return (1);
-	camera = malloc(sizeof(t_camera));
-	rt->camera = camera;
+	/* camera = malloc(sizeof(t_camera));
+	rt->camera = camera; */
 	coords = ft_split(split[1], ',');
-	camera->coords = malloc(sizeof(double) * 3);
-	camera->coords[X] = ft_atof(coords[0]);
-	camera->coords[Y] = ft_atof(coords[1]);
-	camera->coords[Z] = ft_atof(coords[2]);
+	rt->camera->coords = malloc(sizeof(double) * 3);
+	rt->camera->coords[X] = ft_atof(coords[0]);
+	rt->camera->coords[Y] = ft_atof(coords[1]);
+	rt->camera->coords[Z] = ft_atof(coords[2]);
 	ft_free_split(&coords);
 	nvect = ft_split(split[2], ',');
-	camera->nvect = malloc(sizeof(double) * 3);
-	camera->nvect[X] = ft_atof(nvect[0]);
-	camera->nvect[Y] = ft_atof(nvect[1]);
-	camera->nvect[Z] = ft_atof(nvect[2]);
+	rt->camera->nvect = malloc(sizeof(double) * 3);
+	rt->camera->nvect[X] = ft_atof(nvect[0]);
+	rt->camera->nvect[Y] = ft_atof(nvect[1]);
+	rt->camera->nvect[Z] = ft_atof(nvect[2]);
 	ft_free_split(&nvect);
-	if (camera->nvect[X] < -1. || camera->nvect[X] > 1.
-		|| camera->nvect[Y] < -1. || camera->nvect[Y] > 1.
-		|| camera->nvect[Z] < -1. || camera->nvect[Z] > 1.)
+	if (rt->camera->nvect[X] < -1. || rt->camera->nvect[X] > 1.
+		|| rt->camera->nvect[Y] < -1. || rt->camera->nvect[Y] > 1.
+		|| rt->camera->nvect[Z] < -1. || rt->camera->nvect[Z] > 1.)
 	{
 		throw_error("C: Vector coordinates out of bounds, expected numbers between [-1.0;1.0]");
 		ft_dprintf(2, "%.*CC: Vector coordinates out of bounds, expected numbers between [-1.0;1.0]\n%C", 0xff0000);
 		return (1);
 	}
-	camera->fov = ft_atoi(split[3]);
-	if (camera->fov < 0 || camera->fov > 180)
+	rt->camera->fov = ft_atoi(split[3]);
+	if (rt->camera->fov < 0 || rt->camera->fov > 180)
 	{
 		throw_error("C: FoV coordinates out of bounds, expected a number between [0;180]");
 		return (1);
@@ -349,37 +397,79 @@ int	get_camera(t_rt *rt, char **split)
 
 int	get_light(t_rt *rt, char **split)
 {
-	t_light	*light;
+	//t_light	*light;
 	char	**coords;
 	char	**rgb;
 
 	if (check_format_light(split))
 		return (1);
-	light = malloc(sizeof(t_light));
-	rt->light = light;
+	/* light = malloc(sizeof(t_light));
+	rt->light = light; */
 	coords = ft_split(split[1], ',');
-	light->coords = malloc(sizeof(double) * 3);
-	light->coords[X] = ft_atof(coords[0]);
-	light->coords[Y] = ft_atof(coords[1]);
-	light->coords[Z] = ft_atof(coords[2]);
+	rt->light->coords = malloc(sizeof(double) * 3);
+	rt->light->coords[X] = ft_atof(coords[0]);
+	rt->light->coords[Y] = ft_atof(coords[1]);
+	rt->light->coords[Z] = ft_atof(coords[2]);
 	ft_free_split(&coords);
-	light->brightness = ft_atof(split[2]);
-	if (light->brightness < 0.0 || light->brightness > 1.0)
+	rt->light->brightness = ft_atof(split[2]);
+	if (rt->light->brightness < 0.0 || rt->light->brightness > 1.0)
 	{
 		throw_error("L: Brightness out of bounds, expected number between 0.0 and 1.0");
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	light->rgb = malloc(sizeof(int) * 3);
-	light->rgb[R] = ft_atoi(rgb[0]);
-	light->rgb[G] = ft_atoi(rgb[1]);
-	light->rgb[B] = ft_atoi(rgb[2]);
+	rt->light->rgb = malloc(sizeof(int) * 3);
+	rt->light->rgb[R] = ft_atoi(rgb[0]);
+	rt->light->rgb[G] = ft_atoi(rgb[1]);
+	rt->light->rgb[B] = ft_atoi(rgb[2]);
 	ft_free_split(&rgb);
-	if (light->rgb[R]> 255 || light->rgb[R] < 0
-		|| light->rgb[G] > 255 || light->rgb[G] < 0
-		|| light->rgb[B] > 255 || light->rgb[B] < 0)
+	if (rt->light->rgb[R]> 255 || rt->light->rgb[R] < 0
+		|| rt->light->rgb[G] > 255 || rt->light->rgb[G] < 0
+		|| rt->light->rgb[B] > 255 || rt->light->rgb[B] < 0)
 	{
 		throw_error("L: RGB out of bounds, expected integers between 0 and 255");
+		return (1);
+	}
+	return (0);
+}
+
+int	add_sphere(t_rt *rt, char **split)
+{
+	t_sphere	*sphere;
+	char		**coords;
+	char		**rgb;
+	int			i;
+
+	i = 0;
+	if (check_format_sphere(split))
+		return (1);
+	sphere = malloc(sizeof(t_sphere));
+	while (rt->spheres[i] != NULL)
+		i++;
+	rt->spheres[i] = sphere;
+	coords = ft_split(split[1], ',');
+	sphere->coords = malloc(sizeof(double) * 3);
+	sphere->coords[X] = ft_atof(coords[0]);
+	sphere->coords[Y] = ft_atof(coords[1]);
+	sphere->coords[Z] = ft_atof(coords[2]);
+	ft_free_split(&coords);
+	sphere->diameter = ft_atof(split[2]);
+	if (sphere->diameter <= 0)
+	{
+		throw_error("sp: Nice try. Expected diameter value larger than 0.");
+		return (1);
+	}
+	rgb = ft_split(split[3], ',');
+	sphere->rgb = malloc(sizeof(int) * 3);
+	sphere->rgb[R] = ft_atoi(rgb[0]);
+	sphere->rgb[G] = ft_atoi(rgb[1]);
+	sphere->rgb[B] = ft_atoi(rgb[2]);
+	ft_free_split(&rgb);
+	if (sphere->rgb[R]> 255 || sphere->rgb[R] < 0
+		|| sphere->rgb[G] > 255 || sphere->rgb[G] < 0
+		|| sphere->rgb[B] > 255 || sphere->rgb[B] < 0)
+	{
+		throw_error("sp: RGB out of bounds, expected integers between 0 and 255");
 		return (1);
 	}
 	return (0);
@@ -395,45 +485,117 @@ int	load_data(char *line, t_rt *rt, int *flag)
 	trimmed = ft_strtrim(line, " \n");
 	split = ft_split(trimmed, ' ');
 	free(trimmed);
-	if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
+	if (ft_strlen(split[0]) != 0)
 	{
-		if (rt->ambient == NULL)
+		if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
 			*flag = get_ambient(rt, split);
-		else
-		{
-			throw_error("Duplicate instruction for A");
-			*flag = 1;
-		}
-	}
-	else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
-	{
-		if (rt->camera == NULL)
+		else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
 			*flag = get_camera(rt, split);
-		else
-		{
-			throw_error("Duplicate instruction for C");
-			*flag = 1;
-		}
-	}
-	else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
-	{
-		if (rt->light == NULL)
+		else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
 			*flag = get_light(rt, split);
+		else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
+			*flag = add_sphere(rt, split);
+		/*
+		else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
+			get_plane(rt, split);
+		else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
+			get_cylinder(rt, split); 
+		*/
+	}
+	ft_free_split(&split);
+	return (0);
+}
+
+int	count_identifiers(char *line, int *ids, int *flag)
+{
+	char	**split;
+	char	*trimmed;
+
+	trimmed = ft_strtrim(line, " \n");
+	split = ft_split(trimmed, ' ');
+	free(trimmed);
+	if (ft_strlen(split[0]) != 0)
+	{
+		if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
+			ids[0]++;
+		else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
+			ids[1]++;
+		else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
+			ids[2]++;
+		else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
+			ids[3]++;
+		else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
+			ids[4]++;
+		else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
+			ids[5]++;
 		else
 		{
-			throw_error("Duplicate instruction for L");
+			throw_error("Unknown identifier in file");
 			*flag = 1;
 		}
 	}
-	/*
-	else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
-		get_sphere(rt, split);
-	else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
-		get_plane(rt, split);
-	else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
-		get_cylinder(rt, split); 
-	*/
 	ft_free_split(&split);
+	return (0);
+}
+
+// checks for uniqueness of A, C and L, and the number of sp, pl and cy
+// order: A, C, L, sp, pl, cy
+int	check_identifiers(int fd, int *ids, int *flag)
+{
+	
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line && !(*flag))
+	{
+		count_identifiers(line, ids, flag);
+		//ft_dprintf(2, "A: %i, C: %i, L: %i, sp: %i, pl: %i, cy: %i\n", ids[0], ids[1], ids[2], ids[3], ids[4], ids[5]);
+		if (ids[0] > 1)
+			throw_error("Duplicate identifiers for A");
+		else if (ids[1] > 1)
+			throw_error("Duplicate identifiers for C");
+		else if (ids[2] > 1)
+			throw_error("Duplicate identifiers for L");
+		if (ids[0] > 1 || ids[1] > 1 || ids[2] > 1)
+			*flag = 1;
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
+	return (0);
+}
+
+int	*init_ids(void)
+{
+	int		*ids;
+	int		i;
+
+	i = 0;
+	ids = malloc(sizeof(int) * 6);
+	while (i < 6)
+		ids[i++] = 0;
+	return (ids);
+}
+
+int	init_objects(t_rt *rt, int *ids)
+{
+	int	i;
+
+	rt->ambient = malloc(sizeof(t_ambient));
+	rt->camera = malloc(sizeof(t_camera));
+	rt->light = malloc(sizeof(t_light));
+	i = 0;
+	rt->spheres = malloc(sizeof(t_sphere *) * (ids[3] + 1));
+	while (i < (ids[3] + 1))
+		rt->spheres[i++] = NULL;
+	i = 0;
+	rt->planes = malloc(sizeof(t_plane *) * (ids[4] + 1));
+	while (i < (ids[4] + 1))
+		rt->planes[i++] = NULL;
+	i = 0;
+	rt->cylinders = malloc(sizeof(t_cylinder *) * (ids[5] + 1));
+	while (i < (ids[5] + 1))
+		rt->spheres[i++] = NULL;
 	return (0);
 }
 
@@ -442,24 +604,37 @@ int	load_file(char *file, t_rt *rt)
 	int		fd;
 	char	*line;
 	int		flag;
+	int		*ids;
 
 	flag = 0;
 	fd = open(file, O_RDONLY);
-	line = get_next_line(fd);
-	while (line && !flag)
+	ids = init_ids();
+	check_identifiers(fd, ids, &flag);
+	close(fd);
+	init_objects(rt, ids);
+	if (!flag)
 	{
-		load_data(line, rt, &flag);
-		free(line);
+		fd = open(file, O_RDONLY);
 		line = get_next_line(fd);
+		while (line && !flag)
+		{
+			load_data(line, rt, &flag);
+			free(line);
+			line = get_next_line(fd);
+		}
+		free(line);
+		close(fd);
 	}
-	free(line);
+	free(ids);
 	return (0);
 }
 
 int	main(int ac, char *av[])
 {
 	t_rt	*rt;
+	int		i;
 
+	i = 0;
 	rt = NULL;
 	rt = malloc(sizeof(t_rt));
 	if (!rt)
@@ -467,10 +642,15 @@ int	main(int ac, char *av[])
 	rt->ambient = NULL;
 	rt->camera = NULL;
 	rt->light = NULL;
+	rt->spheres = NULL;
+	rt->planes = NULL;
+	rt->cylinders = NULL;
 	if (ac != 2)
 	{
 		// error
 		throw_error("Incorrect number of parameters");
+		free(rt);
+		return (1);
 	}
 	else
 	{
@@ -478,9 +658,39 @@ int	main(int ac, char *av[])
 		ft_printf("Should open map: %s\n", av[1]);
 		load_file(av[1], rt);
 	}
+	free(rt->ambient->rgb);
 	free(rt->ambient);
+	free(rt->camera->coords);
+	free(rt->camera->nvect);
 	free(rt->camera);
+	free(rt->light->coords);
+	free(rt->light->rgb);
 	free(rt->light);
+	while (rt->spheres[i] != NULL)
+	{
+		free(rt->spheres[i]->coords);
+		free(rt->spheres[i]->rgb);
+		free(rt->spheres[i++]);
+	}
+	free(rt->spheres);
+	i = 0;
+	while (rt->planes[i] != NULL)
+	{
+		/* free(rt->planes[i]->coords);
+		free(rt->planes[i]->nvect);
+		free(rt->planes[i]->rgb); */
+		free(rt->planes[i++]);
+	}
+	free(rt->planes);
+	i = 0;
+	while (rt->cylinders[i] != NULL)
+	{
+		/* free(rt->cylinders[i]->coords);
+		free(rt->cylinders[i]->nvect);
+		free(rt->cylinders[i]->rgb); */
+		free(rt->cylinders[i++]);
+	}
+	free(rt->cylinders);
 	free(rt);
 	return (0);
 }

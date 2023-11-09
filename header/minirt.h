@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/08 15:23:09 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/09 13:06:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,37 +59,25 @@ typedef struct s_light
 
 typedef struct s_sphere
 {
-	double	x; // x,y,z coordinates of center
-	double	y;
-	double	z;
+	double	*coords; // x,y,z coordinates of center
 	double	diameter;
-	int		r;
-	int		g;
-	int		b;
+	int		*rgb;
 }				t_sphere;
 
 typedef struct s_plane
 {
-	double	x; // x,y,z coordinates of point
-	double	y;
-	double	z;
-	double	nvect; // 3d normalized vector; [-1;1],[-1;1],[-1,1]
-	int		r;
-	int		g;
-	int		b;
+	double	*coords; // x,y,z coordinates of point
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	int		*rgb;
 }				t_plane;
 
 typedef struct s_cylinder
 {
-	double	x; // x,y,z coordinates of center
-	double	y;
-	double	z;
-	double	nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1,1]
+	double	*coords; // x,y,z coordinates of center
+	double	*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
 	double	diameter;
 	double	height;
-	int		r;
-	int		g;
-	int		b;
+	int		*rgb;
 }				t_cylinder;
 
 typedef struct s_rt
@@ -97,9 +85,9 @@ typedef struct s_rt
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	t_sphere	*spheres;
-	t_plane		*planes;
-	t_cylinder	*cylinders;
+	t_sphere	**spheres;
+	t_plane		**planes;
+	t_cylinder	**cylinders;
 }				t_rt;
 
 typedef struct s_master
