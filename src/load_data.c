@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:18:20 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 09:20:54 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 11:35:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,51 @@ int	add_sphere(t_rt *rt, char **split)
 	return (0);
 }
 
+int	add_plane(t_rt *rt, char **split)
+{
+	char		**coords;
+	char		**nvect;
+	char		**rgb;
+	int			i;
+
+	if (check_format_plane(split))
+		return (1);
+	i = rt->n_planes;
+	ft_printf("Processing %i. plane\n", i);
+	coords = ft_split(split[1], ',');
+	ft_printf("ptr: %p\n", rt->planes[i]);
+	rt->planes[i]->coords[X] = ft_atof(coords[0]);
+	rt->planes[i]->coords[Y] = ft_atof(coords[1]);
+	rt->planes[i]->coords[Z] = ft_atof(coords[2]);
+	ft_free_split(&coords);
+	nvect = ft_split(split[2], ',');
+	rt->planes[i]->nvect[X] = ft_atof(nvect[0]);
+	rt->planes[i]->nvect[Y] = ft_atof(nvect[1]);
+	rt->planes[i]->nvect[Z] = ft_atof(nvect[2]);
+	ft_free_split(&nvect);
+	if (rt->planes[i]->nvect[X] < -1. || rt->planes[i]->nvect[X] > 1.
+		|| rt->planes[i]->nvect[Y] < -1. || rt->planes[i]->nvect[Y] > 1.
+		|| rt->planes[i]->nvect[Z] < -1. || rt->planes[i]->nvect[Z] > 1.)
+	{
+		throw_error("pl: Vector coordinates out of bounds, expected numbers between [-1.0;1.0]");
+		return (1);
+	}
+	rgb = ft_split(split[3], ',');
+	rt->planes[i]->rgb[R] = ft_atoi(rgb[0]);
+	rt->planes[i]->rgb[G] = ft_atoi(rgb[1]);
+	rt->planes[i]->rgb[B] = ft_atoi(rgb[2]);
+	ft_free_split(&rgb);
+	if (rt->planes[i]->rgb[R]> 255 || rt->planes[i]->rgb[R] < 0
+		|| rt->planes[i]->rgb[G] > 255 || rt->planes[i]->rgb[G] < 0
+		|| rt->planes[i]->rgb[B] > 255 || rt->planes[i]->rgb[B] < 0)
+	{
+		throw_error("pl: RGB out of bounds, expected integers between 0 and 255");
+		return (1);
+	}
+	rt->n_planes++;
+	return (0);
+}
+
 int	load_data(char *line, t_rt *rt, int *flag)
 {
 	char	**split;
@@ -195,9 +240,9 @@ int	load_data(char *line, t_rt *rt, int *flag)
 			*flag = get_light(rt, split);
 		else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
 			*flag = add_sphere(rt, split);
-		/*
 		else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
 			add_plane(rt, split);
+		/*
 		else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
 			add_cylinder(rt, split); 
 		*/

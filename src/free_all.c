@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:26:32 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 09:28:44 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 11:39:46 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	free_all(t_rt *rt)
 	i = 0;
 	while (rt->planes[i] != NULL)
 	{
-		/* free(rt->planes[i]->coords);
+		free(rt->planes[i]->coords);
 		free(rt->planes[i]->nvect);
-		free(rt->planes[i]->rgb); */
+		free(rt->planes[i]->rgb);
 		free(rt->planes[i++]);
 	}
 	free(rt->planes);

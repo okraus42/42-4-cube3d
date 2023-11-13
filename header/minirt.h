@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 09:28:48 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 11:29:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int	check_format_ambient(char **split);
 int	check_format_camera(char **split);
 int	check_format_light(char **split);
 int	check_format_sphere(char **split);
+int	check_format_plane(char **split);
 
 // Data loading
 int	load_data(char *line, t_rt *rt, int *flag);

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 11:10:38 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 11:37:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,12 @@ int	init_objects(t_rt *rt, int *ids)
 	rt->planes = malloc(sizeof(t_plane *) * (ids[4] + 1));
 	rt->n_planes = 0;
 	while (i < (ids[4]))
-		rt->planes[i++] = malloc(sizeof(t_plane));
+	{
+		rt->planes[i] = malloc(sizeof(t_plane));
+		rt->planes[i]->coords = malloc(sizeof(double) * 3);
+		rt->planes[i]->nvect = malloc(sizeof(double) * 3);
+		rt->planes[i++]->rgb = malloc(sizeof(int) * 3);
+	}
 	rt->planes[i] = NULL;
 	i = 0;
 	rt->cylinders = malloc(sizeof(t_cylinder *) * (ids[5] + 1));
@@ -111,7 +116,17 @@ int	print_contents(t_rt *rt)
 		printf("=================================================\n");
 		i++;
 	}
-	
+	i = 0;
+	while (rt->n_planes > i)
+	{
+		printf("PLANE %i\n", i + 1);
+		printf("%-11s %.5f,%.5f,%.5f\n%-11s %.5f,%.5f,%.5f\n%-11s %i,%i,%i\n", \
+				"Coords:", rt->planes[i]->coords[0], rt->planes[i]->coords[1], rt->planes[i]->coords[2], \
+				"Vector:", rt->planes[i]->nvect[0], rt->planes[i]->nvect[1], rt->planes[i]->nvect[2], \
+				"RGB:", rt->planes[i]->rgb[0], rt->planes[i]->rgb[1], rt->planes[i]->rgb[2]);
+		printf("=================================================\n");
+		i++;
+	}
 	return (0);
 }
 
