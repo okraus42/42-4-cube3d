@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/09 15:40:32 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 08:41:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ typedef struct s_rt
 	t_camera	*camera;
 	t_light		*light;
 	t_sphere	**spheres;
-	int			n_spheres;
 	t_plane		**planes;
-	int			n_planes;
 	t_cylinder	**cylinders;
+	int			n_spheres;
+	int			n_planes;
 	int			n_cylinders;
 }				t_rt;
 

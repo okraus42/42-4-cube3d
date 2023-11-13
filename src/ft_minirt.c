@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/09 15:48:56 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 09:07:19 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ int	get_ambient(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[2], ',');
-	rt->ambient->rgb = malloc(sizeof(int) * 3);
+	// rt->ambient->rgb = malloc(sizeof(int) * 3);
 	rt->ambient->rgb[R] = ft_atoi(rgb[0]);
 	rt->ambient->rgb[G] = ft_atoi(rgb[1]);
 	rt->ambient->rgb[B] = ft_atoi(rgb[2]);
@@ -367,13 +367,13 @@ int	get_camera(t_rt *rt, char **split)
 	/* camera = malloc(sizeof(t_camera));
 	rt->camera = camera; */
 	coords = ft_split(split[1], ',');
-	rt->camera->coords = malloc(sizeof(double) * 3);
+	//rt->camera->coords = malloc(sizeof(double) * 3);
 	rt->camera->coords[X] = ft_atof(coords[0]);
 	rt->camera->coords[Y] = ft_atof(coords[1]);
 	rt->camera->coords[Z] = ft_atof(coords[2]);
 	ft_free_split(&coords);
 	nvect = ft_split(split[2], ',');
-	rt->camera->nvect = malloc(sizeof(double) * 3);
+	//rt->camera->nvect = malloc(sizeof(double) * 3);
 	rt->camera->nvect[X] = ft_atof(nvect[0]);
 	rt->camera->nvect[Y] = ft_atof(nvect[1]);
 	rt->camera->nvect[Z] = ft_atof(nvect[2]);
@@ -406,7 +406,7 @@ int	get_light(t_rt *rt, char **split)
 	/* light = malloc(sizeof(t_light));
 	rt->light = light; */
 	coords = ft_split(split[1], ',');
-	rt->light->coords = malloc(sizeof(double) * 3);
+	//rt->light->coords = malloc(sizeof(double) * 3);
 	rt->light->coords[X] = ft_atof(coords[0]);
 	rt->light->coords[Y] = ft_atof(coords[1]);
 	rt->light->coords[Z] = ft_atof(coords[2]);
@@ -418,7 +418,7 @@ int	get_light(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	rt->light->rgb = malloc(sizeof(int) * 3);
+	//rt->light->rgb = malloc(sizeof(int) * 3);
 	rt->light->rgb[R] = ft_atoi(rgb[0]);
 	rt->light->rgb[G] = ft_atoi(rgb[1]);
 	rt->light->rgb[B] = ft_atoi(rgb[2]);
@@ -450,7 +450,7 @@ int	add_sphere(t_rt *rt, char **split)
 	ft_printf("Processing %i. sphere\n", i);
 	coords = ft_split(split[1], ',');
 	ft_printf("ptr: %p\n", rt->spheres[i]);
-	rt->spheres[i]->coords = malloc(sizeof(double) * 3);
+	//rt->spheres[i]->coords = malloc(sizeof(double) * 3);
 	rt->spheres[i]->coords[X] = ft_atof(coords[0]);
 	rt->spheres[i]->coords[Y] = ft_atof(coords[1]);
 	rt->spheres[i]->coords[Z] = ft_atof(coords[2]);
@@ -462,7 +462,7 @@ int	add_sphere(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	rt->spheres[i]->rgb = malloc(sizeof(int) * 3);
+	//rt->spheres[i]->rgb = malloc(sizeof(int) * 3);
 	rt->spheres[i]->rgb[R] = ft_atoi(rgb[0]);
 	rt->spheres[i]->rgb[G] = ft_atoi(rgb[1]);
 	rt->spheres[i]->rgb[B] = ft_atoi(rgb[2]);
@@ -585,13 +585,22 @@ int	init_objects(t_rt *rt, int *ids)
 	int	i;
 
 	rt->ambient = malloc(sizeof(t_ambient));
+	rt->ambient->rgb = malloc(sizeof(int) * 3);
 	rt->camera = malloc(sizeof(t_camera));
+	rt->camera->coords = malloc(sizeof(double) * 3);
+	rt->camera->nvect = malloc(sizeof(double) * 3);
 	rt->light = malloc(sizeof(t_light));
+	rt->light->coords = malloc(sizeof(double) * 3);
+	rt->light->rgb = malloc(sizeof(int) * 3);
 	i = 0;
 	rt->spheres = malloc(sizeof(t_sphere *) * (ids[3] + 1));
 	rt->n_spheres = 0;
 	while (i < (ids[3]))
-		rt->spheres[i++] = malloc(sizeof(t_sphere));
+	{
+		rt->spheres[i] = malloc(sizeof(t_sphere));
+		rt->spheres[i]->coords = malloc(sizeof(double) * 3);
+		rt->spheres[i++]->rgb = malloc(sizeof(int) * 3);
+	}
 	rt->spheres[i] = NULL;
 	i = 0;
 	rt->planes = malloc(sizeof(t_plane *) * (ids[4] + 1));
