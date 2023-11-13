@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 09:23:21 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 09:28:48 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int	add_sphere(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int	throw_error(char *str);
+void	free_all(t_rt *rt);
 
 
 

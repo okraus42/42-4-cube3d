@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/13 09:24:05 by plouda           ###   ########.fr        #
+#    Updated: 2023/11/13 09:28:28 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,8 @@ SRC_S		=	ft_minirt.c \
 				identifier_check.c \
 				format_check.c \
 				format_check_utils.c \
-				load_data.c
+				load_data.c \
+				free_all.c
 
 # Formating
 
