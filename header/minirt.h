@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 08:41:34 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 09:23:21 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,31 @@ typedef struct s_master
 	mlx_image_t	*img;
 	t_rt		*rt;
 }				t_master;
+
+// Identifier check
+int	*init_ids(void);
+int	count_identifiers(char *line, int *ids, int *flag);
+int	check_identifiers(int fd, int *ids, int *flag);
+
+// Format check
+int	is_float_triad(char *str);
+int	is_rgb_format(char *str);
+int	is_floatable(char *str);
+int	is_integer(char *str);
+int	float_in_range(char *str); // format 9999.99999 allowed
+
+int	check_format_ambient(char **split);
+int	check_format_camera(char **split);
+int	check_format_light(char **split);
+int	check_format_sphere(char **split);
+
+// Data loading
+int	load_data(char *line, t_rt *rt, int *flag);
+int	get_ambient(t_rt *rt, char **split);
+int	get_camera(t_rt *rt, char **split);
+int	get_light(t_rt *rt, char **split);
+int	add_sphere(t_rt *rt, char **split);
+
 
 double	ft_atof(char *str);
 int	throw_error(char *str);
