@@ -6,11 +6,13 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:22:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 09:22:46 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 10:43:03 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
+
+// Check for missing obligatory identifiers
 
 int	count_identifiers(char *line, int *ids, int *flag)
 {

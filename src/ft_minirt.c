@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 09:28:02 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/13 11:10:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,42 @@ int	load_file(char *file, t_rt *rt)
 	return (0);
 }
 
+int	print_contents(t_rt *rt)
+{
+	int	i;
+
+	i = 0;
+	printf("=================================================\n");
+	printf("AMBIENT\n");
+	printf("%-11s %.5f\n%-11s %i,%i,%i\n", "Ratio:", rt->ambient->ratio, \
+		"RGB:", rt->ambient->rgb[0], rt->ambient->rgb[1], rt->ambient->rgb[2]);
+	printf("=================================================\n");
+	printf("CAMERA\n");
+	printf("%-11s %.5f,%.5f,%.5f\n%-11s %.5f,%.5f,%.5f\n%-11s %i\n", \
+			"Coords:", rt->camera->coords[0], rt->camera->coords[1], rt->camera->coords[2], \
+			"Vector:", rt->camera->nvect[0], rt->camera->nvect[1], rt->camera->nvect[2], \
+			"FoV:", rt->camera->fov);
+	printf("=================================================\n");
+	printf("LIGHT\n");
+	printf("%-11s %.5f,%.5f,%.5f\n%-11s %.5f\n%-11s %i,%i,%i\n", \
+			"Coords:", rt->light->coords[0], rt->light->coords[1], rt->light->coords[2], \
+			"Brightness:", rt->light->brightness,
+			"RGB:", rt->light->rgb[0], rt->light->rgb[1], rt->light->rgb[2]);
+	printf("=================================================\n");
+	while (rt->n_spheres > i)
+	{
+		printf("SPHERE %i\n", i + 1);
+		printf("%-11s %.5f,%.5f,%.5f\n%-11s %.5f\n%-11s %i,%i,%i\n", \
+				"Coords:", rt->spheres[i]->coords[0], rt->spheres[i]->coords[1], rt->spheres[i]->coords[2], \
+				"Diameter:", rt->spheres[i]->diameter, \
+				"RGB:", rt->spheres[i]->rgb[0], rt->spheres[i]->rgb[1], rt->spheres[i]->rgb[2]);
+		printf("=================================================\n");
+		i++;
+	}
+	
+	return (0);
+}
+
 int	main(int ac, char *av[])
 {
 	t_rt	*rt;
@@ -107,6 +143,7 @@ int	main(int ac, char *av[])
 		//mandatory (open specific map)
 		ft_printf("Should open map: %s\n", av[1]);
 		load_file(av[1], rt);
+		print_contents(rt);
 	}
 	free_all(rt);
 	return (0);
