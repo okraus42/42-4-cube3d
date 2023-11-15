@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:26:32 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 11:39:46 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/15 09:47:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	free_all(t_rt *rt)
 	i = 0;
 	while (rt->cylinders[i] != NULL)
 	{
-		/* free(rt->cylinders[i]->coords);
+		free(rt->cylinders[i]->coords);
 		free(rt->cylinders[i]->nvect);
-		free(rt->cylinders[i]->rgb); */
+		free(rt->cylinders[i]->rgb);
 		free(rt->cylinders[i++]);
 	}
 	free(rt->cylinders);

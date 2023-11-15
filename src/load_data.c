@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   load_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:18:20 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 11:35:09 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/15 09:50:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,9 +144,7 @@ int	add_sphere(t_rt *rt, char **split)
 		i++; */
 	//rt->spheres[i] = sphere;
 	i = rt->n_spheres;
-	ft_printf("Processing %i. sphere\n", i);
 	coords = ft_split(split[1], ',');
-	ft_printf("ptr: %p\n", rt->spheres[i]);
 	//rt->spheres[i]->coords = malloc(sizeof(double) * 3);
 	rt->spheres[i]->coords[X] = ft_atof(coords[0]);
 	rt->spheres[i]->coords[Y] = ft_atof(coords[1]);
@@ -155,7 +153,7 @@ int	add_sphere(t_rt *rt, char **split)
 	rt->spheres[i]->diameter = ft_atof(split[2]);
 	if (rt->spheres[i]->diameter <= 0)
 	{
-		throw_error("sp: Nice try. Expected diameter value larger than 0.");
+		throw_error("sp: Expected diameter value larger than 0.");
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
@@ -185,9 +183,7 @@ int	add_plane(t_rt *rt, char **split)
 	if (check_format_plane(split))
 		return (1);
 	i = rt->n_planes;
-	ft_printf("Processing %i. plane\n", i);
 	coords = ft_split(split[1], ',');
-	ft_printf("ptr: %p\n", rt->planes[i]);
 	rt->planes[i]->coords[X] = ft_atof(coords[0]);
 	rt->planes[i]->coords[Y] = ft_atof(coords[1]);
 	rt->planes[i]->coords[Z] = ft_atof(coords[2]);
@@ -220,33 +216,103 @@ int	add_plane(t_rt *rt, char **split)
 	return (0);
 }
 
+int	add_cylinder(t_rt *rt, char **split)
+{
+	char		**coords;
+	char		**nvect;
+	char		**rgb;
+	int			i;
+
+	if (check_format_cylinder(split))
+		return (1);
+	i = rt->n_cylinders;
+	coords = ft_split(split[1], ',');
+	rt->cylinders[i]->coords[X] = ft_atof(coords[0]);
+	rt->cylinders[i]->coords[Y] = ft_atof(coords[1]);
+	rt->cylinders[i]->coords[Z] = ft_atof(coords[2]);
+	ft_free_split(&coords);
+	nvect = ft_split(split[2], ',');
+	rt->cylinders[i]->nvect[X] = ft_atof(nvect[0]);
+	rt->cylinders[i]->nvect[Y] = ft_atof(nvect[1]);
+	rt->cylinders[i]->nvect[Z] = ft_atof(nvect[2]);
+	ft_free_split(&nvect);
+	if (rt->cylinders[i]->nvect[X] < -1. || rt->cylinders[i]->nvect[X] > 1.
+		|| rt->cylinders[i]->nvect[Y] < -1. || rt->cylinders[i]->nvect[Y] > 1.
+		|| rt->cylinders[i]->nvect[Z] < -1. || rt->cylinders[i]->nvect[Z] > 1.)
+	{
+		throw_error("cy: Vector coordinates out of bounds, expected numbers between [-1.0;1.0]");
+		return (1);
+	}
+	rt->cylinders[i]->diameter = ft_atof(split[3]);
+	if (rt->cylinders[i]->diameter <= 0)
+	{
+		throw_error("cy: Expected diameter value larger than 0.");
+		return (1);
+	}
+	rt->cylinders[i]->height = ft_atof(split[4]);
+	if (rt->cylinders[i]->height <= 0)
+	{
+		throw_error("cy: Expected height value larger than 0.");
+		return (1);
+	}
+	rgb = ft_split(split[5], ',');
+	rt->cylinders[i]->rgb[R] = ft_atoi(rgb[0]);
+	rt->cylinders[i]->rgb[G] = ft_atoi(rgb[1]);
+	rt->cylinders[i]->rgb[B] = ft_atoi(rgb[2]);
+	ft_free_split(&rgb);
+	if (rt->cylinders[i]->rgb[R]> 255 || rt->cylinders[i]->rgb[R] < 0
+		|| rt->cylinders[i]->rgb[G] > 255 || rt->cylinders[i]->rgb[G] < 0
+		|| rt->cylinders[i]->rgb[B] > 255 || rt->cylinders[i]->rgb[B] < 0)
+	{
+		throw_error("cy: RGB out of bounds, expected integers between 0 and 255");
+		return (1);
+	}
+	rt->n_cylinders++;
+	return (0);
+}
+
 int	load_data(char *line, t_rt *rt, int *flag)
 {
 	char	**split;
 	char	*trimmed;
-	int		i;
+	//int		i;
 
-	i = 0;
+	//i = 0;
 	trimmed = ft_strtrim(line, " \n");
 	split = ft_split(trimmed, ' ');
 	free(trimmed);
-	if (ft_strlen(split[0]) != 0)
+	if (ft_strlen(split[0]) > 0)
 	{
-		if (!ft_strncmp(split[0], "A", ft_strlen(split[0])))
-			*flag = get_ambient(rt, split);
-		else if (!ft_strncmp(split[0], "C", ft_strlen(split[0])))
-			*flag = get_camera(rt, split);
-		else if (!ft_strncmp(split[0], "L", ft_strlen(split[0])))
-			*flag = get_light(rt, split);
-		else if (!ft_strncmp(split[0], "sp", ft_strlen(split[0])))
-			*flag = add_sphere(rt, split);
-		else if (!ft_strncmp(split[0], "pl", ft_strlen(split[0])))
-			add_plane(rt, split);
-		/*
-		else if (!ft_strncmp(split[0], "cy", ft_strlen(split[0])))
-			add_cylinder(rt, split); 
-		*/
+		if (ft_strlen(split[0]) == 1)
+		{
+			if (!ft_strncmp(split[0], "A", 1))
+				*flag = get_ambient(rt, split);
+			else if (!ft_strncmp(split[0], "C", 1))
+				*flag = get_camera(rt, split);
+			else if (!ft_strncmp(split[0], "L", 1))
+				*flag = get_light(rt, split);
+			else
+				*flag = 1;
+		}
+		else if (ft_strlen(split[0]) == 2)
+		{
+			if (!ft_strncmp(split[0], "sp", 2))
+				*flag = add_sphere(rt, split);
+			else if (!ft_strncmp(split[0], "pl", 2))
+				*flag = add_plane(rt, split);
+			else if (!ft_strncmp(split[0], "cy", 2))
+				*flag = add_cylinder(rt, split);
+			else
+				*flag = 1;
+		}
+		else
+			*flag = 1;
 	}
 	ft_free_split(&split);
-	return (0);
+/* 	if (*flag)
+	{
+		throw_error("Something went terribly wrong.");
+		return (1);
+	} */
+	return (*flag);
 }

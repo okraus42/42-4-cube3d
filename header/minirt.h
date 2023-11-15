@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/13 11:29:11 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/14 12:16:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,16 @@ int	check_format_camera(char **split);
 int	check_format_light(char **split);
 int	check_format_sphere(char **split);
 int	check_format_plane(char **split);
+int	check_format_cylinder(char **split);
 
 // Data loading
 int	load_data(char *line, t_rt *rt, int *flag);
 int	get_ambient(t_rt *rt, char **split);
 int	get_camera(t_rt *rt, char **split);
 int	get_light(t_rt *rt, char **split);
+int	add_plane(t_rt *rt, char **split);
 int	add_sphere(t_rt *rt, char **split);
-
+int	add_cylinder(t_rt *rt, char **split);;
 
 double	ft_atof(char *str);
 int	throw_error(char *str);

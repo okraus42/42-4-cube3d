@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:15:44 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 11:24:05 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/15 09:34:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,6 +225,75 @@ int	check_format_plane(char **split)
 	if (!is_rgb_format(split[3]))
 	{
 		throw_error("pl: Wrong RGB format, expected three integers separated by commas");
+		return (1);
+	}
+	return (0);
+}
+
+int	check_format_cylinder(char **split)
+{
+	int		num;
+	char	**subsplit;
+
+	num = 0;
+	while (split[num])
+		num++;
+	if (num != 6)
+	{
+		throw_error("cy: Invalid number of specifiers, expected 5");
+		return (1);
+	}
+	if (!is_float_triad(split[1]))
+	{
+		throw_error("cy: Wrong coordinate format, expected three integers/floats separated by commas");
+		return (1);
+	}
+	subsplit = ft_split(split[1], ',');
+	if (!float_in_range(subsplit[0]) || !float_in_range(subsplit[1])
+		|| !float_in_range(subsplit[2]))
+	{
+		throw_error("cy: Wrong coordinate format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
+		return (1);
+	}
+	ft_free_split(&subsplit);
+	if (!is_float_triad(split[2]))
+	{
+		throw_error("cy: Wrong vector format, expected three integers/floats separated by commas");
+		return (1);
+	}
+	subsplit = ft_split(split[2], ',');
+	if (!float_in_range(subsplit[0]) || !float_in_range(subsplit[1])
+		|| !float_in_range(subsplit[2]))
+	{
+		throw_error("cy: Wrong vector format, max. 4 integer digits and 5 decimals per coordinate (ex. 9999.99999)");
+		ft_free_split(&subsplit);
+		return (1);
+	}
+	ft_free_split(&subsplit);
+	if (!is_floatable(split[3]))
+	{
+		throw_error("cy: Wrong diameter format, expected float");
+		return (1);
+	}
+	if (!float_in_range(split[3]))
+	{
+		throw_error("cy: Wrong diameter format, max. 4 integer digits and 5 decimals (ex. 9999.99999)");
+		return (1);
+	}
+	if (!is_floatable(split[4]))
+	{
+		throw_error("cy: Wrong height format, expected float");
+		return (1);
+	}
+	if (!float_in_range(split[4]))
+	{
+		throw_error("cy: Wrong height format, max. 4 integer digits and 5 decimals (ex. 9999.99999)");
+		return (1);
+	}
+	if (!is_rgb_format(split[5]))
+	{
+		throw_error("cy: Wrong RGB format, expected three integers separated by commas");
 		return (1);
 	}
 	return (0);
