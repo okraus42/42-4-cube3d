@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:22:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/14 11:28:47 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/15 14:55:40 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	check_identifiers(int fd, int *ids, int *flag)
 	while (line && !(*flag))
 	{
 		count_identifiers(line, ids, flag);
-		//ft_dprintf(2, "A: %i, C: %i, L: %i, sp: %i, pl: %i, cy: %i\n", ids[0], ids[1], ids[2], ids[3], ids[4], ids[5]);
 		if (ids[0] > 1)
 			throw_error("Duplicate identifiers for A");
 		else if (ids[1] > 1)
@@ -77,6 +76,17 @@ int	check_identifiers(int fd, int *ids, int *flag)
 			*flag = 1;
 		free(line);
 		line = get_next_line(fd);
+	}
+	if (!*flag)
+	{
+		if (!ids[0])
+			throw_error("Missing obligatory identifier: A");
+		else if (!ids[1])
+			throw_error("Missing obligatory identifier: C");
+		else if (!ids[2])
+			throw_error("Missing obligatory identifier: L");
+		if (!ids[0] || !ids[1] || !ids[2])
+			*flag = 1;
 	}
 	free(line);
 	return (0);
