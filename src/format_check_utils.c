@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/13 09:14:27 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/16 11:28:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,20 @@ int	float_in_range(char *str)
 	}
 	if (len > 5)
 		return (0);
+	return (1);
+}
+
+int	triad_in_range(char *triad)
+{
+	char	**subsplit;
+
+	subsplit = ft_split(triad, ',');
+	if (!float_in_range(subsplit[0]) || !float_in_range(subsplit[1])
+		|| !float_in_range(subsplit[2]))
+	{
+		ft_free_split(&subsplit);
+		return (0);
+	}
+	ft_free_split(&subsplit);
 	return (1);
 }

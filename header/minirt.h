@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/14 12:16:05 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/16 11:44:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # define R 0
 # define G 1
 # define B 2
+# define E_SPEC "Invalid number of specifiers"
+# define E_RATIO "Invalid ratio format"
+# define E_RGB "Invalid RGB format"
+# define E_COORD "Invalid coordinate format"
+# define E_VECT "Invalid vector format"
+# define E_FOV "Invalid FOV format"
+# define E_BRIGHT "Invalid brightness format"
 
 // INCLUDES
 
@@ -111,6 +118,7 @@ int	is_rgb_format(char *str);
 int	is_floatable(char *str);
 int	is_integer(char *str);
 int	float_in_range(char *str); // format 9999.99999 allowed
+int	triad_in_range(char *triad);
 
 int	check_format_ambient(char **split);
 int	check_format_camera(char **split);
@@ -130,6 +138,7 @@ int	add_cylinder(t_rt *rt, char **split);;
 
 double	ft_atof(char *str);
 int	throw_error(char *str);
+int		id_err(char id, char *err_str, char *details);
 void	free_all(t_rt *rt);
 
 
