@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/17 12:06:50 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 12:20:39 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@
 # define E_BRIGHT "Invalid brightness format"
 # define E_DIA "Invalid diameter format"
 # define E_HEIGHT "Invalid height format"
+# define E_TRIAD_INTFLOAT "3 integers/floats separated by commas"
+# define E_MAX_DIGITS "max. 4 integer digits and 5 decimals"
+# define E_TRIAD_INT "3 integers, separated by commas"
+# define E_INTFLOAT "int or float"
 
 // INCLUDES
 
