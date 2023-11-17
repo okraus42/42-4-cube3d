@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 09:15:13 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/16 11:04:22 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 11:46:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	throw_error(char *str)
 	return (1);
 }
 
-int	id_err(char id, char *err_str, char *details)
+int	id_err(char *id, char *err_str, char *details)
 {
-	ft_dprintf(2, "%.*CError: %c: %s, expected %s\n%C", \
+	ft_dprintf(2, "%.*CError: %s: %s, expected %s\n%C", \
 	0xE74C3C, id, err_str, details);
 	return (1);
 }

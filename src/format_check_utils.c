@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/16 11:28:59 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 12:06:46 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,5 +158,17 @@ int	triad_in_range(char *triad)
 		return (0);
 	}
 	ft_free_split(&subsplit);
+	return (1);
+}
+
+int	has_spec_count(char **split, int target)
+{
+	int	num;
+
+	num = 0;
+	while (split[num])
+		num++;
+	if (num != target)
+		return (0);
 	return (1);
 }
