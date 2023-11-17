@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:18:20 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/15 09:50:37 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 13:58:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,10 @@
 
 int	get_ambient(t_rt *rt, char **split)
 {
-	//t_ambient	*ambient;
 	char		**rgb;
-
-	/* needs protection against:
-		- swapped values
-		- values not digits (?)
-		- only some values (e.g. missing rgb)
-		- only some rgb specs (e.g. missing blue)
-		- too many decimal places (check before atof)
-		- number too big (check before atof)
-		- unique properties more than once
-	*/
 
 	if (check_format_ambient(split))
 		return (1);
-	/* ambient = malloc(sizeof(t_ambient));
- 	rt->ambient = ambient; */
 	rt->ambient->ratio = ft_atof(split[1]);
 	if (rt->ambient->ratio < 0.0 || rt->ambient->ratio > 1.0)
 	{
@@ -38,7 +25,6 @@ int	get_ambient(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[2], ',');
-	// rt->ambient->rgb = malloc(sizeof(int) * 3);
 	rt->ambient->rgb[R] = ft_atoi(rgb[0]);
 	rt->ambient->rgb[G] = ft_atoi(rgb[1]);
 	rt->ambient->rgb[B] = ft_atoi(rgb[2]);
@@ -55,22 +41,17 @@ int	get_ambient(t_rt *rt, char **split)
 
 int	get_camera(t_rt *rt, char **split)
 {
-	//t_camera	*camera;
 	char		**coords;
 	char		**nvect;
 
 	if (check_format_camera(split))
 		return (1);
-	/* camera = malloc(sizeof(t_camera));
-	rt->camera = camera; */
 	coords = ft_split(split[1], ',');
-	//rt->camera->coords = malloc(sizeof(double) * 3);
 	rt->camera->coords[X] = ft_atof(coords[0]);
 	rt->camera->coords[Y] = ft_atof(coords[1]);
 	rt->camera->coords[Z] = ft_atof(coords[2]);
 	ft_free_split(&coords);
 	nvect = ft_split(split[2], ',');
-	//rt->camera->nvect = malloc(sizeof(double) * 3);
 	rt->camera->nvect[X] = ft_atof(nvect[0]);
 	rt->camera->nvect[Y] = ft_atof(nvect[1]);
 	rt->camera->nvect[Z] = ft_atof(nvect[2]);
@@ -94,16 +75,12 @@ int	get_camera(t_rt *rt, char **split)
 
 int	get_light(t_rt *rt, char **split)
 {
-	//t_light	*light;
 	char	**coords;
 	char	**rgb;
 
 	if (check_format_light(split))
 		return (1);
-	/* light = malloc(sizeof(t_light));
-	rt->light = light; */
 	coords = ft_split(split[1], ',');
-	//rt->light->coords = malloc(sizeof(double) * 3);
 	rt->light->coords[X] = ft_atof(coords[0]);
 	rt->light->coords[Y] = ft_atof(coords[1]);
 	rt->light->coords[Z] = ft_atof(coords[2]);
@@ -115,7 +92,6 @@ int	get_light(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	//rt->light->rgb = malloc(sizeof(int) * 3);
 	rt->light->rgb[R] = ft_atoi(rgb[0]);
 	rt->light->rgb[G] = ft_atoi(rgb[1]);
 	rt->light->rgb[B] = ft_atoi(rgb[2]);
@@ -132,20 +108,14 @@ int	get_light(t_rt *rt, char **split)
 
 int	add_sphere(t_rt *rt, char **split)
 {
-	//t_sphere	*sphere;
 	char		**coords;
 	char		**rgb;
 	int			i;
 
 	if (check_format_sphere(split))
 		return (1);
-	//sphere = malloc(sizeof(t_sphere));
-	/* while (rt->spheres[i] != NULL)
-		i++; */
-	//rt->spheres[i] = sphere;
 	i = rt->n_spheres;
 	coords = ft_split(split[1], ',');
-	//rt->spheres[i]->coords = malloc(sizeof(double) * 3);
 	rt->spheres[i]->coords[X] = ft_atof(coords[0]);
 	rt->spheres[i]->coords[Y] = ft_atof(coords[1]);
 	rt->spheres[i]->coords[Z] = ft_atof(coords[2]);
@@ -157,7 +127,6 @@ int	add_sphere(t_rt *rt, char **split)
 		return (1);
 	}
 	rgb = ft_split(split[3], ',');
-	//rt->spheres[i]->rgb = malloc(sizeof(int) * 3);
 	rt->spheres[i]->rgb[R] = ft_atoi(rgb[0]);
 	rt->spheres[i]->rgb[G] = ft_atoi(rgb[1]);
 	rt->spheres[i]->rgb[B] = ft_atoi(rgb[2]);
@@ -275,9 +244,7 @@ int	load_data(char *line, t_rt *rt, int *flag)
 {
 	char	**split;
 	char	*trimmed;
-	//int		i;
 
-	//i = 0;
 	trimmed = ft_strtrim(line, " \n");
 	split = ft_split(trimmed, ' ');
 	free(trimmed);

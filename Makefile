@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/13 09:28:28 by plouda           ###   ########.fr        #
+#    Updated: 2023/11/17 14:04:55 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ SRC_S		=	ft_minirt.c \
 				format_check.c \
 				format_check_utils.c \
 				load_data.c \
+				load_data_utils.c \
 				free_all.c
 
 # Formating

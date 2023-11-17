@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:15:44 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/17 12:20:26 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 13:12:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	check_format_camera(char **split)
 
 int	check_format_light(char **split)
 {
-	int		num;
-
 	if (!has_spec_count(split, 4))
 		return (id_err("L", E_SPEC, "3"));
 	if (!is_float_triad(split[1]))

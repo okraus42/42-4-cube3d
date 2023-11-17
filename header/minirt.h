@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/17 12:20:39 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 14:28:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ int	throw_error(char *str);
 int		id_err(char *id, char *err_str, char *details);
 void	free_all(t_rt *rt);
 
+//void	get_rgb(t_rt *rt, void *object, char *id);
 
 
 #endif

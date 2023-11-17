@@ -6,11 +6,61 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/17 12:06:46 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/17 13:22:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
+
+static int	iter_float_triad(char *str, int *i, int *j, int flag)
+{
+	if (str[*i] == '-')
+		(*i)++;
+	if (!ft_isdigit(str[*i])) // is there at least one digit before the decimal
+		flag++;
+	while (str[*i] && ft_isdigit(str[*i]))
+		(*i)++;
+	if (str[*i] == '.')
+		(*i)++;
+	if (!ft_isdigit(str[*i]) && flag) // if no digits on either side, invalid
+		return (0);
+	while (str[*i] && ft_isdigit(str[*i]))
+		(*i)++;
+	if ((*j) != 2)
+	{
+		if (str[(*i)++] != ',') // is there a comma at the expected place
+			return (0);
+	}
+	else
+	{
+		if (str[*i]) // is there anything after the last digit
+			return (0);
+	}
+	(*j)++;
+	return (1);
+}
+
+static int	iter_int_triad(char *str, int *i, int *j)
+{
+	if (str[*i] == '-')
+			(*i)++;
+	if (!ft_isdigit(str[*i])) // is there at least one digit
+		return (0);
+	while (str[*i] && ft_isdigit(str[*i]))
+		(*i)++;
+	if (*j != 2)
+	{
+		if (str[(*i)++] != ',') // is there a comma at the expected place
+			return (0);
+	}
+	else
+	{
+		if (str[*i]) // is there anything after the last digit
+			return (0);
+	}
+	(*j)++;
+	return (1);
+}
 
 int	is_float_triad(char *str)
 {
@@ -23,29 +73,8 @@ int	is_float_triad(char *str)
 	while (j < 3 && str[i])
 	{
 		flag = 0;
-		if (str[i] == '-')
-			i++;
-		if (!ft_isdigit(str[i])) // is there at least one digit before the decimal
-			flag++;
-		while (str[i] && ft_isdigit(str[i]))
-			i++;
-		if (str[i] == '.')
-			i++;
-		if (!ft_isdigit(str[i]) && flag) // if no digits on either side, invalid
+		if (!iter_float_triad(str, &i, &j, flag))
 			return (0);
-		while (str[i] && ft_isdigit(str[i]))
-			i++;
-		if (j != 2)
-		{
-			if (str[i++] != ',') // is there a comma at the expected place
-				return (0);
-		}
-		else
-		{
-			if (str[i]) // is there anything after the last digit
-				return (0); 
-		}
-		j++;
 	}
 	if (!str[i] && j < 3) // too short
 		return (0);
@@ -55,29 +84,14 @@ int	is_float_triad(char *str)
 int	is_rgb_format(char *str)
 {
 	int	i;
-	int j;
+	int	j;
 
 	i = 0;
 	j = 0;
 	while (j < 3 && str[i])
 	{
-		if (str[i] == '-')
-			i++;
-		if (!ft_isdigit(str[i])) // is there at least one digit
+		if (!iter_int_triad(str, &i, &j))
 			return (0);
-		while (str[i] && ft_isdigit(str[i]))
-			i++;
-		if (j != 2)
-		{
-			if (str[i++] != ',') // is there a comma at the expected place
-				return (0);
-		}
-		else
-		{
-			if (str[i]) // is there anything after the last digit
-				return (0); 
-		}
-		j++;
 	}
 	if (!str[i] && j < 3) // too short
 		return (0);
@@ -114,7 +128,6 @@ int	is_integer(char *str)
 	if (str[i])
 		return (0);
 	return (1);
-	
 }
 
 int	float_in_range(char *str)
