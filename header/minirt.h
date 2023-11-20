@@ -3,16 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/22 13:59:36 by okraus           ###   ########.fr       */
+/*   Updated: 2023/11/20 16:00:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
+# define X 0
+# define Y 1
+# define Z 2
+# define R 0
+# define G 1
+# define B 2
+# define E_SPEC "Invalid number of specifiers"
+# define E_RATIO "Invalid ratio format"
+# define E_RGB "Invalid RGB format"
+# define E_COORD "Invalid coordinate format"
+# define E_VECT "Invalid vector format"
+# define E_FOV "Invalid FOV format"
+# define E_BRIGHT "Invalid brightness format"
+# define E_DIA "Invalid diameter format"
+# define E_HEIGHT "Invalid height format"
+# define E_TRIAD_INTFLOAT "3 integers/floats separated by commas"
+# define E_MAX_DIGITS "max. 4 integer digits and 5 decimals"
+# define E_TRIAD_INT "3 integers, separated by commas"
+# define E_INTFLOAT "int or float"
+# define E_RATIO_RANGE "Ratio value out of bounds"
+# define E_RGB_RANGE "RGB value out of bounds"
+# define E_VECT_RANGE "Normalized vector coordinate value out of bounds"
+# define E_FOV_RANGE "FOV value out of bounds"
+# define E_BRIGHT_RANGE "Brightness value out of bounds"
+# define E_DIA_RANGE "Diameter value too low"
+# define E_HEIGHT_RANGE "Height value too low"
+# define E_RANGE_INT "integers in range (0;255)"
+# define E_RANGE_POS "a value in range (0.0;1.0)"
+# define E_RANGE_NORM "values in range (-1.0;1.0)"
+# define E_RANGE_STRICT "a strictly positive value"
 
 // INCLUDES
 
@@ -31,111 +61,128 @@
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
 
-//	DEFINITIONS
-
-//	ENUMS
-
-//	STRUCTURES
-
-// typedef struct map_s
-// {
-// 	char	**m;		//map saved in array
-// 	int		w;			//width of map
-// 	int		h;			//height of map
-// 	int		p;			//player status 1-alive, 0 dead
-// 	int		px;			//player position on map the x axis
-// 	int		py;			//player position on map the y axis
-//						//add player direction?
-// 	int		ct;			//total number of collectibles
-//	int		cr;			//number of remaining collectibles
-// 	int		*c;			//collectible status 
-// 	int		*cx;		//collectible position on the x axis
-// 	int		*cy;		//collectible position on the y axis
-// 	int		et;			//total number of enemies
-//						//add enemy remaining?
-// 	int		*e;			//array of enemies 0 dead, 1 alive
-// 	int		*ex;		//enemy position on map the x axis
-// 	int		*ey;		//enemy position on map the y axis
-//						//add enemy direction?
-//	int		x;			// exit status 0 closed, 1 open
-//	int		xx;			// exit X
-//	int		xy;			// exit Y
-//	int		steps;		// number of steps player did
-// } map_t;
-
-typedef struct s_map
+typedef struct s_ambient
 {
-	char	**m;
-	char	*s;
-	int		w;
-	int		h;
-	int		p;
-	int		px;
-	int		py;
-	int		ct;
-	int		cr;
-	int		*c;
-	int		*cx;
-	int		*cy;
-	int		et;
-	int		*e;
-	int		*ex;
-	int		*ey;
-	int		x;
-	int		xx;
-	int		xy;
-	int		steps;
-}	t_map;
+	double	ratio; // 0.0-1.0
+	int		*rgb;
+}				t_ambient;
 
-typedef struct s_highscore
+typedef struct s_camera
 {
-	char	*name;
-	char	*coalition;
-	int		index;
-	int		score;
-}	t_hs;
+	double	*coords; // x,y,z coordinates of viewpoint
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	int		fov; // 0-180
+}				t_camera;
 
-typedef struct s_control
+typedef struct s_light
 {
-	int		w;
-	int		s;
-	int		a;
-	int		d;
-	int		space;
-	int		ctrl;
-	int		time;
-	int		t;
-}	t_controls;
+	double	*coords; // x,y,z coordinates of lightpoint
+	double	brightness; // 0.0-1.0
+	int		*rgb;
+}				t_light;
 
-typedef struct s_imgs
+typedef struct s_sphere
 {
-	mlx_instance_t	*pi;
-	mlx_instance_t	*ei;
-	mlx_instance_t	*ci;
-	mlx_instance_t	*c2i;
-	mlx_instance_t	*dci;
-	mlx_instance_t	*doi;
-}	t_imgs;
+	double	*coords; // x,y,z coordinates of center
+	double	diameter;
+	int		*rgb;
+}				t_sphere;
 
-typedef struct s_max
+typedef struct s_plane
+{
+	double	*coords; // x,y,z coordinates of point
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	int		*rgb;
+}				t_plane;
+
+typedef struct s_cylinder
+{
+	double	*coords; // x,y,z coordinates of center
+	double	*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
+	double	diameter;
+	double	height;
+	int		*rgb;
+}				t_cylinder;
+
+typedef struct s_rt
+{
+	t_ambient	*ambient;
+	t_camera	*camera;
+	t_light		*light;
+	t_sphere	**spheres;
+	t_plane		**planes;
+	t_cylinder	**cylinders;
+	int			n_spheres;
+	int			n_planes;
+	int			n_cylinders;
+}				t_rt;
+
+typedef struct s_master
 {
 	mlx_t		*mlx;
-	t_map		*map;
-	t_controls	*key;
-	t_imgs		*img;
-	mlx_image_t	*str;
-	mlx_image_t	*tmp;
-	char		*player_name;
-	char		*player_coalition;
-	int			death;
-	int			lives;
-	int			score;
-	int			exit;
-	int			time;
-}	t_max;
+	mlx_image_t	*img;
+	t_rt		*rt;
+}				t_master;
 
-// PROTOTYPES
+// Initialize objects
+void	init_ambient(t_rt *rt);
+void	init_light(t_rt *rt);
+void	init_camera(t_rt *rt);
+void	init_spheres(t_rt *rt, int *ids);
+void	init_planes(t_rt *rt, int *ids);
+void	init_cylinders(t_rt *rt, int *ids);
 
+// Identifier check
+int	*init_ids(void);
+int	count_identifiers(char *line, int *ids, int *flag);
+int	check_identifiers(int fd, int *ids, int *flag);
+void	check_missing(int *ids, int *flag);
+void	check_duplicates(int *ids, int *flag);
+void	get_identifiers(char **split, int *ids, int *flag);
 
+// Format check
+int	is_float_triad(char *str);
+int	is_rgb_format(char *str);
+int	is_floatable(char *str);
+int	is_integer(char *str);
+int	float_in_range(char *str); // format 9999.99999 allowed
+int	triad_in_range(char *triad);
+int	has_spec_count(char **split, int target);
+
+int	check_format_ambient(char **split);
+int	check_format_camera(char **split);
+int	check_format_light(char **split);
+int	check_format_sphere(char **split);
+int	check_format_plane(char **split);
+int	check_format_cylinder(char **split);
+
+// Data loading
+void	get_data_from_line(char *line, t_rt *rt, int *flag);
+void	fill_objects(t_rt *rt, char **split, int *flag);
+int		fill_ambient(t_rt *rt, char **split);
+int		fill_camera(t_rt *rt, char **split);
+int		fill_light(t_rt *rt, char **split);
+int		fill_plane(t_rt *rt, char **split);
+int		fill_sphere(t_rt *rt, char **split);
+int		fill_cylinder(t_rt *rt, char **split);;
+
+double	ft_atof(char *str);
+int		id_err(char *id, char *err_str, char *details);
+void	free_objects(t_rt *rt);
+
+int	get_rgb(int *rgb, char *triad);
+int	get_coords(double *coords, char *triad);
+int	get_nvect(double *nvect, char *triad);
+
+void	init_objects(t_rt *rt, int *ids);
+int	print_contents(t_rt *rt);
+
+// Free objects
+void	free_ambient(t_rt *rt);
+void	free_light(t_rt *rt);
+void	free_camera(t_rt *rt);
+void	free_spheres(t_rt *rt);
+void	free_planes(t_rt *rt);
+void	free_cylinders(t_rt *rt);
 
 #endif

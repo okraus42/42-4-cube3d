@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/10/22 14:00:07 by okraus           ###   ########.fr        #
+#    Updated: 2023/11/20 16:03:48 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,7 +55,21 @@ SRC_DIR		=	src/
 
 # miniRT functions
 
-SRC_S		=	ft_minirt.c
+SRC_S		=	minirt.c \
+				ft_atof.c \
+				error.c \
+				check_identifiers_helpers.c \
+				format_check_utils.c \
+				format_check_utils2.c \
+				print_contents.c \
+				fill_object_getters.c \
+				o_ambient.c \
+				o_light.c \
+				o_camera.c \
+				o_sphere.c \
+				o_plane.c \
+				o_cylinder.c \
+				object_handler.c
 
 # Formating
 

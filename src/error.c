@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minirt.c                                        :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/22 14:01:12 by okraus           ###   ########.fr       */
+/*   Created: 2023/11/08 09:15:13 by plouda            #+#    #+#             */
+/*   Updated: 2023/11/20 15:51:07 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
 
-int	main(int ac, char *av[])
+int	id_err(char *id, char *err_str, char *details)
 {
-	if (ac != 2)
-	{
-		// error
-		ft_dprintf(2, "Incorrect number of parameters\n");
-	}
+	if (id == NULL)
+		ft_dprintf(2, "%.*CError: %s\n%C", 0xE74C3C, err_str);
 	else
-	{
-		//mandatory (open specific map)
-		ft_printf("Should open map: %s\n", av[1]);
-	}
-	return (0);
+		ft_dprintf(2, "%.*CError: %s: %s, expected %s\n%C", \
+		0xE74C3C, id, err_str, details);
+	return (1);
 }
