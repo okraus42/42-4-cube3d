@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 13:43:29 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/15 13:41:40 by okraus           ###   ########.fr       */
+/*   Updated: 2023/11/20 16:11:49 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,19 @@
 # endif
 
 // FT_PRINTF definitions
-# define F_TYPES	"cspdiouxXBbPC%"
+# define F_TYPES	"cspdiouxXBbPCQ%"
 # define F_FLAGS	"0#-+ 'I"
 # define F_NUMBERS	"0123456789*"
 # define F_MODIFIER	"hlLz"
 # define BASE_CAP	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # define BASE_SML	"0123456789abcdefghijklmnopqrstuvwxyz"
+# define BASE_HEX	"0123456789ABCDEF"
+
+//	MACROS - forbidden?
+
+typedef long long	t_fix64;
+
+//# define ABS(Value) (Value < 0 ? -Value : Value)
 
 typedef enum e_print_flag
 {
@@ -187,8 +194,9 @@ typedef enum e_print_flag
 // 	LOWERCASE_B = 0x4000000,		//binary unsigned int
 									//(maybe change to signed base?)
 // 	UPPERCASE_B = 0x8000000,		//bases unsigned int
-// 	UPPERCASE_P = 0x10000000,		//dunno?
-// 	PERCENTAGE = 0x20000000			// percentage
+// 	UPPERCASE_P = 0x10000000,		//Fixed point numbers
+// 	UPPERCASE_Q = 0x20000000,		// dunno?
+// 	PERCENTAGE = 0x40000000			// percentage
 // }	t_type_flag;
 
 typedef enum e_print_type_flag
@@ -228,7 +236,8 @@ typedef enum e_print_type_flag
 	LOWERCASE_B = 0x4000000,
 	UPPERCASE_B = 0x8000000,
 	UPPERCASE_P = 0x10000000,
-	PERCENTAGE = 0x20000000
+	UPPERCASE_Q = 0x20000000,
+	PERCENTAGE = 0x40000000
 }	t_type_flag;
 
 typedef enum e_print_value_flag
@@ -526,6 +535,13 @@ int				ft_init_double(char c, t_pf_info *data, va_list arg);
 int				ft_init_pointer(char c, t_pf_info *data, va_list arg);
 int				ft_init_conversion(int i, t_pf_info *data, va_list arg);
 int				ft_init_list(va_list arg, t_list *lst);
+
+//	ft_fixtoa. + temp;
+char			*ft_fixtoa(long long n, unsigned int fixbits);
+char			*ft_fixstr(long long n, int declen, char *whole, char *decimal);
+int				ft_process_prcfix(t_pf_info *data);
+int				ft_fix_prec(t_pf_info *data);
+t_fix64			ft_ftofix(double f, unsigned int bits);
 
 // void			ft_putstuff(va_list arg, const char *s, int *q, t_output *t);
 // void			ft_writestuff(int fd, const char *s, int *q);

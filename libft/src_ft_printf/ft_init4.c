@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:46 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/14 11:01:28 by okraus           ###   ########.fr       */
+/*   Updated: 2023/11/17 11:26:49 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_init_conversion(int i, t_pf_info *data, va_list arg)
 
 	c = data->orig[i];
 	err = 0;
-	if (c == 'i' || c == 'd' || c == 'c')
+	if (c == 'i' || c == 'd' || c == 'c' || c == 'P')
 		err = ft_init_int(c, data, arg);
 	else if (c == 'o' || c == 'u' || c == 'x' || c == 'X'
 		|| c == 'b' || c == 'B')
@@ -50,8 +50,6 @@ int	ft_init_conversion(int i, t_pf_info *data, va_list arg)
 		err = ft_init_pointer(c, data, arg);
 	else if (data->orig[i] == 'C')
 		data->type_flag |= UPPERCASE_C;
-	else if (data->orig[i] == 'P')
-		data->type_flag |= UPPERCASE_P;
 	else if (data->orig[i] == '%')
 		data->type_flag |= PERCENTAGE;
 	else

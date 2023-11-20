@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:51:51 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/14 14:33:33 by okraus           ###   ########.fr       */
+/*   Updated: 2023/11/17 11:17:56 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	ft_process_percent(t_pf_info *data)
 		err = ft_process_prcclr(data);
 	if (data->type_flag & LOWERCASE_P)
 		err = ft_process_prcptr(data);
+	if (data->type_flag & UPPERCASE_P)
+		err = ft_process_prcfix(data);
 	return (err);
 }
 
