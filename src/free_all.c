@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:26:32 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/15 09:47:33 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 12:47:21 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
 
-void	free_all(t_rt *rt)
+static void	free_acl(t_rt *rt)
 {
-	int	i;
-
-	i = 0;
 	free(rt->ambient->rgb);
 	free(rt->ambient);
 	free(rt->camera->coords);
@@ -25,6 +22,13 @@ void	free_all(t_rt *rt)
 	free(rt->light->coords);
 	free(rt->light->rgb);
 	free(rt->light);
+}
+
+static void	free_spheres(t_rt *rt)
+{
+	int	i;
+
+	i = 0;
 	while (rt->spheres[i] != NULL)
 	{
 		free(rt->spheres[i]->coords);
@@ -32,6 +36,12 @@ void	free_all(t_rt *rt)
 		free(rt->spheres[i++]);
 	}
 	free(rt->spheres);
+}
+
+static void	free_planes(t_rt *rt)
+{
+	int	i;
+
 	i = 0;
 	while (rt->planes[i] != NULL)
 	{
@@ -41,6 +51,12 @@ void	free_all(t_rt *rt)
 		free(rt->planes[i++]);
 	}
 	free(rt->planes);
+}
+
+static void	free_cylinders(t_rt *rt)
+{
+	int	i;
+
 	i = 0;
 	while (rt->cylinders[i] != NULL)
 	{
@@ -50,5 +66,13 @@ void	free_all(t_rt *rt)
 		free(rt->cylinders[i++]);
 	}
 	free(rt->cylinders);
+}
+
+void	free_all(t_rt *rt)
+{
+	free_acl(rt);
+	free_spheres(rt);
+	free_planes(rt);
+	free_cylinders(rt);
 	free(rt);
 }

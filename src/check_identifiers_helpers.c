@@ -1,42 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   identifier_check.c                                 :+:      :+:    :+:   */
+/*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 09:22:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/17 13:54:03 by plouda           ###   ########.fr       */
+/*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
+/*   Updated: 2023/11/20 14:02:46 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
 
-static void	check_missing(int *ids, int *flag)
+void	check_missing(int *ids, int *flag)
 {
 	if (!ids[0])
-		throw_error("Missing obligatory identifier: A");
+		id_err(NULL, "Missing obligatory identifier: A", NULL);
 	else if (!ids[1])
-		throw_error("Missing obligatory identifier: C");
+		id_err(NULL, "Missing obligatory identifier: C", NULL);
 	else if (!ids[2])
-		throw_error("Missing obligatory identifier: L");
+		id_err(NULL, "Missing obligatory identifier: L", NULL);
 	if (!ids[0] || !ids[1] || !ids[2])
 		*flag = 1;
 }
 
-static void	check_duplicates(int *ids, int *flag)
+void	check_duplicates(int *ids, int *flag)
 {
 	if (ids[0] > 1)
-		throw_error("Duplicate identifiers for A");
+		id_err(NULL, "Duplicate identifier: A", NULL);
 	else if (ids[1] > 1)
-		throw_error("Duplicate identifiers for C");
+		id_err(NULL, "Duplicate identifier: C", NULL);
 	else if (ids[2] > 1)
-		throw_error("Duplicate identifiers for L");
+		id_err(NULL, "Duplicate identifier: L", NULL);
 	if (ids[0] > 1 || ids[1] > 1 || ids[2] > 1)
 		*flag = 1;
 }
 
-static void	get_identifiers(char **split, int *ids, int *flag)
+void	get_identifiers(char **split, int *ids, int *flag)
 {
 	if (ft_strlen(split[0]) == 1)
 	{
@@ -76,36 +76,6 @@ int	count_identifiers(char *line, int *ids, int *flag)
 		get_identifiers(split, ids, flag);
 	ft_free_split(&split);
 	if (*flag)
-		throw_error("Unknown identifier in file");
+		id_err(NULL, "Unknown identifier in file", NULL);
 	return (0);
-}
-
-int	check_identifiers(int fd, int *ids, int *flag)
-{
-	char	*line;
-
-	line = get_next_line(fd);
-	while (line && !(*flag))
-	{
-		count_identifiers(line, ids, flag);
-		check_duplicates(ids, flag);
-		free(line);
-		line = get_next_line(fd);
-	}
-	if (!*flag)
-		check_missing(ids, flag);
-	free(line);
-	return (0);
-}
-
-int	*init_ids(void)
-{
-	int		*ids;
-	int		i;
-
-	i = 0;
-	ids = malloc(sizeof(int) * 6);
-	while (i < 6)
-		ids[i++] = 0;
-	return (ids);
 }

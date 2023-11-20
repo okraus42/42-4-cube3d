@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 13:26:55 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/07 13:45:55 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 12:47:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,5 @@ double	ft_atof(char *str)
 		div *= 0.1;
 		i++;
 	}
-	/* if (str[i] && !ft_isdigit(str[i]))
-		return (-100); */
 	return (nb * neg);
 }

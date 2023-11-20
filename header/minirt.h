@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/17 14:28:14 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 13:46:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,17 @@
 # define E_MAX_DIGITS "max. 4 integer digits and 5 decimals"
 # define E_TRIAD_INT "3 integers, separated by commas"
 # define E_INTFLOAT "int or float"
+# define E_RATIO_RANGE "Ratio value out of bounds"
+# define E_RGB_RANGE "RGB value out of bounds"
+# define E_VECT_RANGE "Normalized vector coordinate value out of bounds"
+# define E_FOV_RANGE "FOV value out of bounds"
+# define E_BRIGHT_RANGE "Brightness value out of bounds"
+# define E_DIA_RANGE "Diameter value too low"
+# define E_HEIGHT_RANGE "Height value too low"
+# define E_RANGE_INT "integers in range (0;255)"
+# define E_RANGE_POS "a value in range (0.0;1.0)"
+# define E_RANGE_NORM "values in range (-1.0;1.0)"
+# define E_RANGE_STRICT "a strictly positive value"
 
 // INCLUDES
 
@@ -117,6 +128,9 @@ typedef struct s_master
 int	*init_ids(void);
 int	count_identifiers(char *line, int *ids, int *flag);
 int	check_identifiers(int fd, int *ids, int *flag);
+void	check_missing(int *ids, int *flag);
+void	check_duplicates(int *ids, int *flag);
+void	get_identifiers(char **split, int *ids, int *flag);
 
 // Format check
 int	is_float_triad(char *str);
@@ -135,20 +149,27 @@ int	check_format_plane(char **split);
 int	check_format_cylinder(char **split);
 
 // Data loading
-int	load_data(char *line, t_rt *rt, int *flag);
-int	get_ambient(t_rt *rt, char **split);
-int	get_camera(t_rt *rt, char **split);
-int	get_light(t_rt *rt, char **split);
-int	add_plane(t_rt *rt, char **split);
-int	add_sphere(t_rt *rt, char **split);
-int	add_cylinder(t_rt *rt, char **split);;
+void	get_data_from_line(char *line, t_rt *rt, int *flag);
+void	fill_objects(t_rt *rt, char **split, int *flag);
+int		fill_ambient(t_rt *rt, char **split);
+int		fill_camera(t_rt *rt, char **split);
+int		fill_light(t_rt *rt, char **split);
+int		fill_plane(t_rt *rt, char **split);
+int		fill_sphere(t_rt *rt, char **split);
+int		fill_cylinder(t_rt *rt, char **split);;
 
 double	ft_atof(char *str);
 int	throw_error(char *str);
 int		id_err(char *id, char *err_str, char *details);
 void	free_all(t_rt *rt);
 
-//void	get_rgb(t_rt *rt, void *object, char *id);
+int	get_rgb(int *rgb, char *triad);
+int	get_coords(double *coords, char *triad);
+int	get_nvect(double *nvect, char *triad);
+
+int	init_objects(t_rt *rt, int *ids);
+int	print_contents(t_rt *rt);
+
 
 
 #endif

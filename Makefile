@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/17 14:04:55 by plouda           ###   ########.fr        #
+#    Updated: 2023/11/20 13:34:02 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,12 +58,15 @@ SRC_DIR		=	src/
 SRC_S		=	ft_minirt.c \
 				ft_atof.c \
 				error.c \
-				identifier_check.c \
+				check_identifiers.c \
+				check_identifiers_helpers.c \
 				format_check.c \
 				format_check_utils.c \
-				load_data.c \
-				load_data_utils.c \
-				free_all.c
+				free_all.c \
+				init_objects.c \
+				print_contents.c \
+				fill_objects.c \
+				fill_objects_getters.c
 
 # Formating
 

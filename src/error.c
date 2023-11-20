@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 09:15:13 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/17 11:46:28 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 13:45:44 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	throw_error(char *str)
 
 int	id_err(char *id, char *err_str, char *details)
 {
-	ft_dprintf(2, "%.*CError: %s: %s, expected %s\n%C", \
-	0xE74C3C, id, err_str, details);
+	if (id == NULL)
+		ft_dprintf(2, "%.*CError: %s\n%C", 0xE74C3C, err_str);
+	else
+		ft_dprintf(2, "%.*CError: %s: %s, expected %s\n%C", \
+		0xE74C3C, id, err_str, details);
 	return (1);
 }
