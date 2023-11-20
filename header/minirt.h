@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 13:46:12 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 16:00:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,14 @@ typedef struct s_master
 	t_rt		*rt;
 }				t_master;
 
+// Initialize objects
+void	init_ambient(t_rt *rt);
+void	init_light(t_rt *rt);
+void	init_camera(t_rt *rt);
+void	init_spheres(t_rt *rt, int *ids);
+void	init_planes(t_rt *rt, int *ids);
+void	init_cylinders(t_rt *rt, int *ids);
+
 // Identifier check
 int	*init_ids(void);
 int	count_identifiers(char *line, int *ids, int *flag);
@@ -159,17 +167,22 @@ int		fill_sphere(t_rt *rt, char **split);
 int		fill_cylinder(t_rt *rt, char **split);;
 
 double	ft_atof(char *str);
-int	throw_error(char *str);
 int		id_err(char *id, char *err_str, char *details);
-void	free_all(t_rt *rt);
+void	free_objects(t_rt *rt);
 
 int	get_rgb(int *rgb, char *triad);
 int	get_coords(double *coords, char *triad);
 int	get_nvect(double *nvect, char *triad);
 
-int	init_objects(t_rt *rt, int *ids);
+void	init_objects(t_rt *rt, int *ids);
 int	print_contents(t_rt *rt);
 
-
+// Free objects
+void	free_ambient(t_rt *rt);
+void	free_light(t_rt *rt);
+void	free_camera(t_rt *rt);
+void	free_spheres(t_rt *rt);
+void	free_planes(t_rt *rt);
+void	free_cylinders(t_rt *rt);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/20 13:34:02 by plouda           ###   ########.fr        #
+#    Updated: 2023/11/20 16:03:48 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,18 +55,21 @@ SRC_DIR		=	src/
 
 # miniRT functions
 
-SRC_S		=	ft_minirt.c \
+SRC_S		=	minirt.c \
 				ft_atof.c \
 				error.c \
-				check_identifiers.c \
 				check_identifiers_helpers.c \
-				format_check.c \
 				format_check_utils.c \
-				free_all.c \
-				init_objects.c \
+				format_check_utils2.c \
 				print_contents.c \
-				fill_objects.c \
-				fill_objects_getters.c
+				fill_object_getters.c \
+				o_ambient.c \
+				o_light.c \
+				o_camera.c \
+				o_sphere.c \
+				o_plane.c \
+				o_cylinder.c \
+				object_handler.c
 
 # Formating
 

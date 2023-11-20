@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_minirt.c                                        :+:      :+:    :+:   */
+/*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 14:43:36 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/20 16:04:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	get_data_from_line(char *line, t_rt *rt, int *flag)
 	ft_free_split(&split);
 }
 
-static void	load_data(t_rt *rt, char *file, int *flag)
+void	load_data(t_rt *rt, char *file, int *flag)
 {
 	int		fd;
 	char	*line;
-	
+
 	fd = open(file, O_RDONLY);
 	line = get_next_line(fd);
 	while (line && !(*flag))
@@ -70,18 +70,17 @@ int	main(int ac, char *av[])
 		return (1);
 	if (ac != 2)
 	{
-		// error
 		id_err(NULL, "Incorrect number of parameters", NULL);
 		free(rt);
 		return (1);
 	}
 	else
 	{
-		//mandatory (open specific map)
 		ft_printf("Should open map: %s\n", av[1]);
 		if (!load_file(av[1], rt))
 			print_contents(rt);
 	}
-	free_all(rt);
+	free_objects(rt);
+	free(rt);
 	return (0);
 }
