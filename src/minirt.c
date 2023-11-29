@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 16:04:37 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/29 17:13:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,12 @@ int	load_file(char *file, t_rt *rt)
 
 int	main(int ac, char *av[])
 {
-	t_rt	*rt;
+	t_rt		*rt;
+	t_master	*master;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
 
+	master = malloc(sizeof(t_master));
 	rt = NULL;
 	rt = malloc(sizeof(t_rt));
 	if (!rt)
@@ -79,8 +83,20 @@ int	main(int ac, char *av[])
 		ft_printf("Should open map: %s\n", av[1]);
 		if (!load_file(av[1], rt))
 			print_contents(rt);
+
+		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
+		mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
+		img = mlx_new_image(mlx, mlx->width, mlx->height);
+		mlx_image_to_window(mlx, img, 0, 0);
+		master->mlx = mlx;
+		master->img = img;
+		master->rt = rt;
+		mlx_loop(mlx);
 	}
 	free_objects(rt);
 	free(rt);
+	free(master);
+	mlx_delete_image(mlx, img);
+	mlx_terminate(mlx);
 	return (0);
 }

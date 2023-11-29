@@ -6,13 +6,15 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 16:00:58 by plouda           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:30:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
+# define HEIGHT 720
+# define WIDTH 1280
 # define X 0
 # define Y 1
 # define Z 2
