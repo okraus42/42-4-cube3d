@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/11/20 16:03:48 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/04 17:47:26 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,8 @@ SRC_S		=	minirt.c \
 				o_sphere.c \
 				o_plane.c \
 				o_cylinder.c \
-				object_handler.c
+				object_handler.c \
+				find_rays.c
 
 # Formating
 

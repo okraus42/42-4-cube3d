@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/29 16:30:54 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/04 17:43:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,33 @@
 # include <math.h>
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
+
+typedef struct s_quad
+{
+	double	a;
+	double	b;
+	double	c;
+	double	delta;
+}			t_quad;
+
+typedef struct s_vect2f
+{
+	double	x;
+	double	y;
+}				t_vect2f;
+
+typedef struct s_vect3f
+{
+	double	x;
+	double	y;
+	double	z;
+}			t_vect3f;
+
+typedef struct s_ray
+{
+	t_vect3f	origin;
+	t_vect3f	direction;
+}				t_ray;
 
 typedef struct s_ambient
 {
@@ -186,5 +213,12 @@ void	free_camera(t_rt *rt);
 void	free_spheres(t_rt *rt);
 void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
+
+// Ray casting
+//void	cast_rays(t_master *master);
+void	find_rays(t_master *master);
+
+double	deg(double rad);
+double	rad(double deg);
 
 #endif

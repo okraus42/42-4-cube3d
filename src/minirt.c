@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/29 17:13:15 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/04 17:05:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int	main(int ac, char *av[])
 		ft_printf("Should open map: %s\n", av[1]);
 		if (!load_file(av[1], rt))
 			print_contents(rt);
-
+		//wrong map name segfaults!!
+		
 		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
 		mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
 		img = mlx_new_image(mlx, mlx->width, mlx->height);
@@ -91,6 +92,8 @@ int	main(int ac, char *av[])
 		master->mlx = mlx;
 		master->img = img;
 		master->rt = rt;
+		//cast_rays(master);
+		find_rays(master);
 		mlx_loop(mlx);
 	}
 	free_objects(rt);
