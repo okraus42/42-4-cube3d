@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/04 17:43:26 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/06 15:42:36 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
 
-typedef struct s_quad
+typedef enum e_object
 {
-	double	a;
-	double	b;
-	double	c;
-	double	delta;
-}			t_quad;
+	EMPTY,
+	SPHERE,
+	PLANE,
+	CYLINDER
+}				t_object;
 
 typedef struct s_vect2f
 {
@@ -82,7 +82,7 @@ typedef struct s_vect3f
 	double	x;
 	double	y;
 	double	z;
-}			t_vect3f;
+}				t_vect3f;
 
 typedef struct s_ray
 {

@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/04 17:49:03 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/06 16:54:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,18 @@ t_vect3f	subtract_center_abs(t_vect3f vect1, double *coords)
 	return (res);
 }
 
-double	*test_sphere(t_ray *ray, t_sphere *sphere)
+t_vect3f	subtract_vect3f(t_vect3f vect1, t_vect3f vect2)
+{
+	t_vect3f	res;
+
+	res.x = vect1.x - vect2.x;
+	res.y = vect1.y - vect2.y;
+	res.z = vect1.z - vect2.z;
+	return (res);
+}
+
+
+int	test_sphere(t_ray ray, t_sphere *sphere, double *t)
 {
 	double	*res;
 	double	a;
@@ -93,23 +104,26 @@ double	*test_sphere(t_ray *ray, t_sphere *sphere)
 	double	discr;
 	double	q;
 	t_vect3f	centered;
-	t_vect3f	centered_abs;
+	//t_vect3f	centered_abs;
 
 	res = malloc(sizeof(int) * 2);
-	centered = subtract_center(ray->origin, sphere->coords);
-	centered_abs = subtract_center_abs(ray->origin, sphere->coords);
-	a = dot_product(ray->direction, ray->direction);
-	b = 2 * dot_product(ray->direction, centered);
-	c = dot_product(centered_abs, centered_abs) - pow(sphere->diameter / 2, 2);
+	centered = subtract_center(ray.origin, sphere->coords);
+	//centered_abs = subtract_center_abs(ray->origin, sphere->coords);
+	a = dot_product(ray.direction, ray.direction);
+	b = 2 * dot_product(ray.direction, centered);
+	c = dot_product(centered, centered) - pow(sphere->diameter / 2, 2);
 	discr = pow(b, 2) - 4 * a * c;
-	//printf("Discr: %.5f\n", discr);
 	if (discr < 0)
-		return (NULL);
+	{
+		free(res);
+		return (0);
+	}
 	else if (discr == 0)
 	{
 		res[0] = - 0.5 * b / a;
 		res[1] = res[0];
-		return (res);
+		*t = res[0];
+		return (1);
 	}
 	else
 	{
@@ -119,22 +133,49 @@ double	*test_sphere(t_ray *ray, t_sphere *sphere)
 			q = -0.5 * (b - sqrt(discr));
 		res[0] = q / a;
 		res[1] = c / q;
-		//printf("Intersect: %.5f, %.5f\n", res[0], res[1]);
 		if (res[0] > res[1])
 			ft_swapf(&res[0], &res[1]);
 		if (res[0] < 0)
 		{
 			res[0] = res[1];
 			if (res[0] < 0)
-				return (NULL);
+			{
+				free(res);
+				return (0);
+			}
 		}
-		return (res);
+		*t = res[0];
+		return (1);
 	}
+}
+
+int	test_plane(t_ray ray, t_plane *plane, double *t)
+{
+	double	denom;
+	t_vect3f	point;
+	t_vect3f	normal;
+	t_vect3f	diff;
+
+	point.x = plane->coords[X];
+	point.y = plane->coords[Y];
+	point.z = plane->coords[Z];
+	normal.x = plane->nvect[X];
+	normal.y = plane->nvect[Y];
+	normal.z = plane->nvect[Z];
+	denom = dot_product(ray.direction, normal);
+	if (denom > 1e-6) // means they're nearly or completely parallel
+	{
+		diff = subtract_vect3f(point, ray.origin);
+		*t = dot_product(diff, normal) / denom;
+		return (*t >= 0);
+	}
+	return (0);
 	
 }
 
 void	find_rays(t_master *master)
 {
+	int		i;
 	int		x;
 	int		y;
 	double	ratio;
@@ -142,8 +183,10 @@ void	find_rays(t_master *master)
 	double	py;
 	double	pz;
 	int		fov;
-	double	*inter;
-	//double	t;
+	double	t_near;
+	double	t;
+	int		object_flag;
+	//void	*object_ptr;
 	t_ray	**rays;
 
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
@@ -153,7 +196,9 @@ void	find_rays(t_master *master)
 		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));
 		x++;
 	}
-
+	t_near = (double)INT_MAX;
+	t = (double)INT_MAX;
+	i = 0;
 	x = 0;
 	y = 0;
 	fov = master->rt->camera->fov;
@@ -163,21 +208,55 @@ void	find_rays(t_master *master)
 		y = 0;
 		while (y < HEIGHT)
 		{
+			object_flag = EMPTY;
 			mlx_put_pixel(master->img, x, y, 0x000000FF);
-			px = (2 * ((x + 0.5) / WIDTH) - 1) * ratio * tan(rad(fov * 0.5));
-			py = (1 - 2 * ((y + 0.5) / HEIGHT)) * tan(rad(fov * 0.5));
-			pz = -1;
-			// some camera stuff goes here
+			t_near = (double)INT_MAX;
+			// why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
+			px = (2. * ((x + 0.5) / (double)WIDTH) - 1.) * ratio * tan(cos(rad(fov * 0.5)));
+			py = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) * tan(cos(rad(fov * 0.5)));
+			pz = -1; // change to calibrate focal length, should be -1
 			rays[x][y].origin.x = 0;
 			rays[x][y].origin.y = 0;
 			rays[x][y].origin.z = 0;
+			// some camera stuff goes here
 			normalize(&rays[x][y], px, py, pz);
-			inter = test_sphere(&rays[x][y], master->rt->spheres[0]);
-			if (inter != NULL)
+			i = 0;
+			while (i < master->rt->n_spheres)
 			{
-				mlx_put_pixel(master->img, x, y, 0xFFFFFFFF);
+				if (test_sphere(rays[x][y], master->rt->spheres[i], &t))
+				{
+					//mlx_put_pixel(master->img, x, y, 0xffffffff);
+					if (t < t_near)
+					{
+						t_near = t;
+						object_flag = SPHERE;
+						//object_ptr = master->rt->spheres[i];
+					}
+				}
+				i++;
 			}
-			free(inter);
+			i = 0;
+			while (i < master->rt->n_planes)
+			{
+				if (test_plane(rays[x][y], master->rt->planes[i], &t))
+				{
+					//mlx_put_pixel(master->img, x, y, 0x00ffffff);
+					if (t < t_near)
+					{
+						t_near = t;
+						object_flag = PLANE;
+						//object_ptr = master->rt->planes[i];
+					}
+				}
+				i++;
+			}
+			if (object_flag == SPHERE)
+			{
+				printf("Sphere!\n");
+				mlx_put_pixel(master->img, x, y, 0xffffffff);
+			}
+			else if (object_flag == PLANE)
+					mlx_put_pixel(master->img, x, y, 0x00ffffff);
 			y++;
 		}
 		x++;
@@ -185,5 +264,4 @@ void	find_rays(t_master *master)
 	printf("Ray dir of 0,0: %.5f,%.5f,%.5f\n", rays[0][0].direction.x, rays[0][0].direction.y, rays[0][0].direction.z);
 	printf("Ray dir of 4,2: %.5f,%.5f,%.5f\n", rays[4][2].direction.x, rays[4][2].direction.y, rays[4][2].direction.z);
 	printf("Ray dir of 640,360: %.5f,%.5f,%.5f\n", rays[640][360].direction.x, rays[640][360].direction.y, rays[640][360].direction.z);
-	//printf("Ray dir of 1279,719: %.5f,%.5f,%.5f\n", rays[1279][719].direction.x, rays[1279][719].direction.y, rays[1279][719].direction.z);
 }
