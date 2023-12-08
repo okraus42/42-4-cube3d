@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/06 15:42:36 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/08 11:21:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ typedef enum e_object
 	EMPTY,
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	DISC
 }				t_object;
 
 typedef struct s_vect2f
@@ -124,6 +125,14 @@ typedef struct s_plane
 	int		*rgb;
 }				t_plane;
 
+typedef	struct s_disc
+{
+	double	*coords; // x,y,z coordinates of center
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	double	radius;
+	int		*rgb;
+}				t_disc;
+
 typedef struct s_cylinder
 {
 	double	*coords; // x,y,z coordinates of center
@@ -131,6 +140,8 @@ typedef struct s_cylinder
 	double	diameter;
 	double	height;
 	int		*rgb;
+	t_disc	*botcap;
+	t_disc	*topcap;
 }				t_cylinder;
 
 typedef struct s_rt
@@ -193,7 +204,7 @@ int		fill_camera(t_rt *rt, char **split);
 int		fill_light(t_rt *rt, char **split);
 int		fill_plane(t_rt *rt, char **split);
 int		fill_sphere(t_rt *rt, char **split);
-int		fill_cylinder(t_rt *rt, char **split);;
+int		fill_cylinder(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -220,5 +231,13 @@ void	find_rays(t_master *master);
 
 double	deg(double rad);
 double	rad(double deg);
+
+// Cylinder caps functions
+void	init_discs(t_cylinder *cylinder);
+void	define_botcap(t_cylinder *cylinder);
+void	define_topcap(t_cylinder *cylinder);
+void	get_discs(t_cylinder *cylinder);
+void	free_discs(t_cylinder *cylinder);
+
 
 #endif

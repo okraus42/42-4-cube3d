@@ -6,7 +6,7 @@
 #    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/04 17:47:26 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/08 11:15:33 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,7 +70,8 @@ SRC_S		=	minirt.c \
 				o_plane.c \
 				o_cylinder.c \
 				object_handler.c \
-				find_rays.c
+				find_rays.c \
+				o_cylinder_disc.c
 
 # Formating
 

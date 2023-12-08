@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 15:44:34 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/08 11:11:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i] = malloc(sizeof(t_cylinder));
 		rt->cylinders[i]->coords = malloc(sizeof(double) * 3);
 		rt->cylinders[i]->nvect = malloc(sizeof(double) * 3);
-		rt->cylinders[i++]->rgb = malloc(sizeof(double) * 3);
+		rt->cylinders[i]->rgb = malloc(sizeof(double) * 3);
+		init_discs(rt->cylinders[i]);
+		i++;
 	}
 	rt->cylinders[i] = NULL;
 }
@@ -72,6 +74,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 		return (id_err("cy", E_HEIGHT_RANGE, E_RANGE_STRICT));
 	if (!get_rgb(rt->cylinders[i]->rgb, split[5]))
 		return (id_err("cy", E_RGB_RANGE, E_RANGE_INT));
+	get_discs(rt->cylinders[i]);
 	rt->n_cylinders++;
 	return (0);
 }
@@ -86,6 +89,7 @@ void	free_cylinders(t_rt *rt)
 		free(rt->cylinders[i]->coords);
 		free(rt->cylinders[i]->nvect);
 		free(rt->cylinders[i]->rgb);
+		free_discs(rt->cylinders[i]);
 		free(rt->cylinders[i++]);
 	}
 	free(rt->cylinders);

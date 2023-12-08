@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_contents.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:02:07 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 16:06:04 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/08 12:14:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,25 @@ int	print_contents(t_rt *rt)
 				"Vector:", rt->cylinders[i]->nvect[0], rt->cylinders[i]->nvect[1], rt->cylinders[i]->nvect[2], \
 				"Diameter:", rt->cylinders[i]->diameter, \
 				"Height:", rt->cylinders[i]->height, \
+				"RGB:", rt->cylinders[i]->rgb[0], rt->cylinders[i]->rgb[1], rt->cylinders[i]->rgb[2]);
+		printf("=================================================\n");
+		i++;
+	}
+	i = 0;
+	while (rt->n_cylinders > i)
+	{
+		printf("DISC BOTCAP %i\n", i + 1);
+		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %i,%i,%i\n", \
+				"Coords:", rt->cylinders[i]->botcap->coords[0], rt->cylinders[i]->botcap->coords[1], rt->cylinders[i]->botcap->coords[2], \
+				"Vector:", rt->cylinders[i]->botcap->nvect[0], rt->cylinders[i]->botcap->nvect[1], rt->cylinders[i]->botcap->nvect[2], \
+				"Radius:", rt->cylinders[i]->botcap->radius, \
+				"RGB:", rt->cylinders[i]->rgb[0], rt->cylinders[i]->rgb[1], rt->cylinders[i]->rgb[2]);
+		printf("=================================================\n");
+		printf("DISC TOPCAP %i\n", i + 1);
+		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %i,%i,%i\n", \
+				"Coords:", rt->cylinders[i]->topcap->coords[0], rt->cylinders[i]->topcap->coords[1], rt->cylinders[i]->topcap->coords[2], \
+				"Vector:", rt->cylinders[i]->topcap->nvect[0], rt->cylinders[i]->topcap->nvect[1], rt->cylinders[i]->topcap->nvect[2], \
+				"Radius:", rt->cylinders[i]->topcap->radius, \
 				"RGB:", rt->cylinders[i]->rgb[0], rt->cylinders[i]->rgb[1], rt->cylinders[i]->rgb[2]);
 		printf("=================================================\n");
 		i++;

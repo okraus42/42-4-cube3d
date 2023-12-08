@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/06 16:54:51 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/08 15:12:03 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,15 +162,230 @@ int	test_plane(t_ray ray, t_plane *plane, double *t)
 	normal.x = plane->nvect[X];
 	normal.y = plane->nvect[Y];
 	normal.z = plane->nvect[Z];
-	denom = dot_product(ray.direction, normal);
+	denom = dot_product(normal, ray.direction);
 	if (denom > 1e-6) // means they're nearly or completely parallel
 	{
 		diff = subtract_vect3f(point, ray.origin);
 		*t = dot_product(diff, normal) / denom;
+		//printf("aaaa");
+
+		return (*t >= 0);
+	}
+	if (denom < -1e-6) // means they're nearly or completely parallel
+	{
+		diff = subtract_vect3f(point, ray.origin);
+		*t = dot_product(diff, normal) / denom;
+		//*t = absf(*t);
 		return (*t >= 0);
 	}
 	return (0);
-	
+}
+
+// literally the same as test_plane, needs merging
+int	test_disc_plane(t_ray ray, t_disc *plane, double *t)
+{
+	double	denom;
+	t_vect3f	point;
+	t_vect3f	normal;
+	t_vect3f	diff;
+
+	point.x = plane->coords[X];
+	point.y = plane->coords[Y];
+	point.z = plane->coords[Z];
+	normal.x = plane->nvect[X];
+	normal.y = plane->nvect[Y];
+	normal.z = plane->nvect[Z];
+	denom = dot_product(normal, ray.direction);
+	if (denom > 1e-6) // means they're nearly or completely parallel
+	{
+		diff = subtract_vect3f(point, ray.origin);
+		*t = dot_product(diff, normal) / denom;
+		//printf("aaaa");
+
+		return (*t >= 0);
+	}
+	if (denom < -1e-6) // means they're nearly or completely parallel
+	{
+		diff = subtract_vect3f(point, ray.origin);
+		*t = dot_product(diff, normal) / denom;
+		//*t = absf(*t);
+		return (*t >= 0);
+	}
+	return (0);
+}
+
+// l0 - origin, l - direction, p - intersect from ray
+int	test_disc(t_ray ray, t_disc *disc, double *t)
+{
+	t_vect3f	center; //p0
+	t_vect3f	intersect;
+	t_vect3f	v;
+	double	distance2;
+
+	//*t = 0;
+	center.x = disc->coords[X];
+	center.y = disc->coords[Y];
+	center.z = disc->coords[Z];
+	if (test_disc_plane(ray, disc, t))
+	{
+		intersect.x = ray.origin.x + ray.direction.x * *t;
+		intersect.y = ray.origin.y + ray.direction.y * *t;
+		intersect.z = ray.origin.z + ray.direction.z * *t;
+		v.x = intersect.x - center.x;
+		v.y = intersect.y - center.y;
+		v.z = intersect.z - center.z;
+		distance2 = dot_product(v, v);
+		return (distance2 <= pow(disc->radius, 2));
+	}
+	return (0);
+}
+
+// d=-ax_0-by_0-cz_0. 
+int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
+{
+	double	dist1;
+	double	dist2;
+	double	plane1;
+	double	plane2;
+	t_vect3f	inter;
+
+	inter.x = ray.origin.x + ray.direction.x * t;
+	inter.y = ray.origin.y + ray.direction.y * t;
+	inter.z = ray.origin.z + ray.direction.z * t;
+	dist1 = (-1 * cap1->nvect[X] * cap1->coords[X]) - (cap1->nvect[Y] * cap1->coords[Y]) - (cap1->nvect[Z] * cap1->coords[Z]);
+	dist2 = (-1 * cap2->nvect[X] * cap2->coords[X]) - (cap2->nvect[Y] * cap2->coords[Y]) - (cap2->nvect[Z] * cap2->coords[Z]);
+	plane1 = (cap1->nvect[X] * inter.x) + (cap1->nvect[Y] * inter.y) + (cap1->nvect[Z] * inter.z) + dist1;
+	plane2 =(cap2->nvect[X] * inter.x) + (cap2->nvect[Y] * inter.y) + (cap2->nvect[Z] * inter.z) + dist2;
+	if (plane1 > 0 || plane2 > 0)
+		return (0);
+	else if (plane1 < 0 && plane2 < 0)
+		return (1);
+	else
+		return (0);
+}
+
+// https://stackoverflow.com/questions/73866852/ray-cylinder-intersection-formula
+/*
+D - ray direction
+V - axis (normalized)
+X - ray.origin - cylinder.center
+r - radius
+
+a = D|D - (D|V)^2
+
+c = X|X - (X|V)^2 - r^2
+
+b = 2 * (D-V*(D|V))|(X-V*(X|V)) =
+ = 2 * (D|X - D|V*(X|V) - X|V*(D|V) + (D|V)*(X|V)) =
+ = 2 * (D|X - (D|V)*(X|V))
+*/
+int	test_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
+{
+	double	*res;
+	double	a;
+	double	b;
+	double	c;
+	double	discr;
+	double	q;
+	t_vect3f	centered;
+	t_vect3f	axis;
+	//t_vect3f	point;
+	//double		max;
+
+	axis.x = cylinder->nvect[X];
+	axis.y = cylinder->nvect[Y];
+	axis.z = cylinder->nvect[Z];
+	res = malloc(sizeof(int) * 2);
+	centered = subtract_center(ray.origin, cylinder->coords);
+	a = dot_product(ray.direction, ray.direction) - pow(dot_product(ray.direction, axis), 2);
+	b = 2 * (dot_product(ray.direction, centered) - (dot_product(ray.direction, axis) * dot_product(centered, axis)));
+	c = dot_product(centered, centered) - pow(dot_product(centered, axis), 2) - pow(cylinder->diameter / 2, 2);
+	discr = pow(b, 2) - 4 * a * c;
+	if (discr < 0)
+	{
+		free(res);
+		return (0);
+	}
+	else if (discr == 0)
+	{
+		res[0] = - 0.5 * b / a;
+		res[1] = res[0];
+		if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[0]))
+		{
+			*t = res[0];
+			return (1);
+		}
+		else
+			return (0);
+	}
+	else
+	{
+		if (b > 0)
+			q = -0.5 * (b + sqrt(discr));
+		else
+			q = -0.5 * (b - sqrt(discr));
+		res[0] = q / a;
+		res[1] = c / q;
+		if (res[0] > res[1])
+			ft_swapf(&res[0], &res[1]);
+		if (res[0] < 0)
+		{
+			res[0] = res[1];
+			if (res[0] < 0)
+			{
+				free(res);
+				return (0);
+			}
+		}
+		if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[0]))
+		{
+			*t = res[0];
+			return (1);
+		}
+		if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[1]))
+		{
+			*t = res[1];
+			return (1);
+		}
+		else
+			return (0);
+	}
+}
+
+void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr)
+{
+	t_sphere	*sphere;
+	t_plane		*plane;
+	t_cylinder	*cylinder;
+	t_disc		*disc;
+
+	sphere = NULL;
+	plane = NULL;
+	cylinder = NULL;
+	disc = NULL;
+	if (flag == SPHERE)
+	{
+		sphere = (t_sphere *)object_ptr;
+		*clr = (sphere->rgb[0] << 24 | sphere->rgb[1] << 16 | sphere->rgb[2] << 8 | 0xFF);
+	}
+	else if (flag == PLANE)
+	{
+		plane = (t_plane *)object_ptr;
+		*clr = (plane->rgb[0] << 24 | plane->rgb[1] << 16 | plane->rgb[2] << 8 | 0xFF);
+	}
+	else if (flag == CYLINDER)
+	{
+		
+		cylinder = (t_cylinder *)object_ptr;
+		*clr = (cylinder->rgb[0] << 24 | cylinder->rgb[1] << 16 | cylinder->rgb[2] << 8 | 0xFF);
+	}
+	else if (flag == DISC)
+	{
+		disc = (t_disc *)object_ptr;
+		*clr = 0xff00ffff;
+		(void)disc;
+
+	}
 }
 
 void	find_rays(t_master *master)
@@ -186,7 +401,8 @@ void	find_rays(t_master *master)
 	double	t_near;
 	double	t;
 	int		object_flag;
-	//void	*object_ptr;
+	uint32_t	clr;
+	void	*object_ptr;
 	t_ray	**rays;
 
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
@@ -208,13 +424,15 @@ void	find_rays(t_master *master)
 		y = 0;
 		while (y < HEIGHT)
 		{
+			// will cause conditional jumps for now
 			object_flag = EMPTY;
-			mlx_put_pixel(master->img, x, y, 0x000000FF);
+			object_ptr = NULL;
+			clr = 0x000000FF;
 			t_near = (double)INT_MAX;
 			// why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
-			px = (2. * ((x + 0.5) / (double)WIDTH) - 1.) * ratio * tan(cos(rad(fov * 0.5)));
-			py = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) * tan(cos(rad(fov * 0.5)));
-			pz = -1; // change to calibrate focal length, should be -1
+			px = (2. * ((x + 0.5) / (double)WIDTH) - 1.) * ratio * tan((rad(fov * 0.5)));
+			py = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) * tan((rad(fov * 0.5)));
+			pz = -10; // change to calibrate focal length, should be -1
 			rays[x][y].origin.x = 0;
 			rays[x][y].origin.y = 0;
 			rays[x][y].origin.z = 0;
@@ -225,12 +443,11 @@ void	find_rays(t_master *master)
 			{
 				if (test_sphere(rays[x][y], master->rt->spheres[i], &t))
 				{
-					//mlx_put_pixel(master->img, x, y, 0xffffffff);
 					if (t < t_near)
 					{
 						t_near = t;
 						object_flag = SPHERE;
-						//object_ptr = master->rt->spheres[i];
+						object_ptr = master->rt->spheres[i];
 					}
 				}
 				i++;
@@ -240,28 +457,62 @@ void	find_rays(t_master *master)
 			{
 				if (test_plane(rays[x][y], master->rt->planes[i], &t))
 				{
-					//mlx_put_pixel(master->img, x, y, 0x00ffffff);
 					if (t < t_near)
 					{
 						t_near = t;
 						object_flag = PLANE;
-						//object_ptr = master->rt->planes[i];
+						object_ptr = master->rt->planes[i];
 					}
 				}
 				i++;
 			}
-			if (object_flag == SPHERE)
+			i = 0;
+			while (i < master->rt->n_cylinders)
 			{
-				printf("Sphere!\n");
-				mlx_put_pixel(master->img, x, y, 0xffffffff);
+				if (test_cylinder(rays[x][y], master->rt->cylinders[i], &t))
+				{
+					if (t < t_near)
+					{
+						t_near = t;
+						object_flag = CYLINDER;
+						object_ptr = master->rt->cylinders[i];
+					}
+				}
+				i++;
 			}
-			else if (object_flag == PLANE)
-					mlx_put_pixel(master->img, x, y, 0x00ffffff);
+			i = 0;
+			while (i < master->rt->n_cylinders)
+			{
+				if (test_disc(rays[x][y], master->rt->cylinders[i]->topcap, &t))
+				{
+					if (t < t_near)
+					{
+						t_near = t;
+						object_flag = DISC;
+						object_ptr = master->rt->cylinders[i]->topcap;
+					}
+				}
+				i++;
+			}
+			i = 0;
+			while (i < master->rt->n_cylinders)
+			{
+				if (test_disc(rays[x][y], master->rt->cylinders[i]->botcap, &t))
+				{
+					if (t < t_near)
+					{
+						t_near = t;
+						object_flag = DISC;
+						object_ptr = master->rt->cylinders[i]->botcap;
+					}
+				}
+				i++;
+			}
+			
+			get_nearest_object(object_flag, object_ptr, &clr);
+			mlx_put_pixel(master->img, x, y, clr);
 			y++;
 		}
 		x++;
 	}
-	printf("Ray dir of 0,0: %.5f,%.5f,%.5f\n", rays[0][0].direction.x, rays[0][0].direction.y, rays[0][0].direction.z);
-	printf("Ray dir of 4,2: %.5f,%.5f,%.5f\n", rays[4][2].direction.x, rays[4][2].direction.y, rays[4][2].direction.z);
-	printf("Ray dir of 640,360: %.5f,%.5f,%.5f\n", rays[640][360].direction.x, rays[640][360].direction.y, rays[640][360].direction.z);
 }
