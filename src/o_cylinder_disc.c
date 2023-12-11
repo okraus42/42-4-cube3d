@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 09:42:18 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:18:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,6 @@ void	free_discs(t_cylinder *cylinder)
 	free(cylinder->topcap->nvect);
 	free(cylinder->topcap->rgb);
 	free(cylinder->topcap->normal);
+	free(cylinder->botcap);
+	free(cylinder->topcap);
 }

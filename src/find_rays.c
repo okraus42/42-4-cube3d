@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 12:40:19 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:16:46 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -603,6 +603,13 @@ void	find_rays(t_master *master)
 			mlx_put_pixel(master->img, x, y, clr);
 			y++;
 		}
+		free(rays[x]);
 		x++;
 	}
+	free(rays);
+	free(camera_matrix[0]);
+	free(camera_matrix[1]);
+	free(camera_matrix[2]);
+	free(camera_matrix[3]);
+	free(camera_matrix);
 }
