@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 09:26:31 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 12:40:19 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ double	absf(double n)
 		return (n);
 }
 
+// will fail for 0,0,0!
 void	normalize(t_vect3f *vect, double px, double py, double pz)
 {
 	double	magnitude;
@@ -387,8 +388,87 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr)
 		disc = (t_disc *)object_ptr;
 		*clr = 0xff00ffff;
 		(void)disc;
-
 	}
+}
+
+t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2)
+{
+	t_vect3f	res;
+
+	res.x = vect1.y * vect2.z - vect1.z * vect2.y;
+	res.y = vect1.z * vect2.x - vect1.x * vect2.z;
+	res.z = vect1.x * vect2.y - vect1.y * vect2.x;
+	return (res);
+}
+
+double	**set_camera(t_camera *camera)
+{
+	t_vect3f	tmp;
+	//t_vect3f	from;
+	//t_vect3f	to;
+	t_vect3f	forward;
+	t_vect3f	right;
+	t_vect3f	up;
+	double		**matrix;
+
+	matrix = malloc(sizeof(double *) * 4);
+	matrix[0] = malloc(sizeof(double) * 4);
+	matrix[1] = malloc(sizeof(double) * 4);
+	matrix[2] = malloc(sizeof(double) * 4);
+	matrix[3] = malloc(sizeof(double) * 4);
+	tmp.x = 0;
+	tmp.y = 1;
+	tmp.z = 0;
+	forward.x = camera->normal->x;
+	forward.y = camera->normal->y;
+	forward.z = camera->normal->z;
+	right = cross_product(tmp, forward);
+	normalize(&right, right.x, right.y, right.z);
+	up = cross_product(forward, right);
+	normalize(&up, up.x, up.y, up.z);
+	matrix[0][0] = right.x;
+	matrix[0][1] = right.y;
+	matrix[0][2] = right.z;
+	matrix[0][3] = 0;
+	matrix[1][0] = up.x;
+	matrix[1][1] = up.y;
+	matrix[1][2] = up.z;
+	matrix[1][3] = 0;
+	matrix[2][0] = forward.x;
+	matrix[2][1] = forward.y;
+	matrix[2][2] = forward.z;
+	matrix[2][3] = 0;
+	matrix[3][0] = camera->coords[X];
+	matrix[3][1] = camera->coords[Y];
+	matrix[3][2] = camera->coords[Z];
+	matrix[3][3] = 1;
+	printf("WorldToCamera:\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n", \
+	matrix[0][0], matrix[0][1], matrix[0][2], matrix[1][0], matrix[1][1], matrix[1][2], \
+	matrix[2][0], matrix[2][1], matrix[2][2], matrix[3][0], matrix[3][1], matrix[3][2]);
+	return (matrix);
+}
+
+/* since origin is 0,0,0, it's just shifting it to "from" point. Proper 
+matrix multiplication becomes relevant when:
+1/ origin is not 0,0,0
+2/ homogenous coordinate is not 1 (e.g. after projection matrix)
+*/
+t_vect3f	shift_origin(double **cam)
+{
+	t_vect3f	origin;
+
+	origin.x = cam[3][0];
+	origin.y = cam[3][1];
+	origin.z = cam[3][2];
+	return (origin);
+}
+
+void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
+{
+	direction->x = temp.x * cam[0][0] + temp.y * cam[1][0] + temp.z * cam[2][0];
+	direction->y = temp.x * cam[0][1] + temp.y * cam[1][1] + temp.z * cam[2][1];
+	direction->z = temp.x * cam[0][2] + temp.y * cam[1][2] + temp.z * cam[2][2];
+	normalize(direction, direction->x, direction->y, direction->z);
 }
 
 void	find_rays(t_master *master)
@@ -407,6 +487,9 @@ void	find_rays(t_master *master)
 	uint32_t	clr;
 	void	*object_ptr;
 	t_ray	**rays;
+	t_vect3f	origin;
+	double	**camera_matrix;
+	t_vect3f	direction;
 
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
 	x = 0;
@@ -422,6 +505,8 @@ void	find_rays(t_master *master)
 	y = 0;
 	fov = master->rt->camera->fov;
 	ratio = (double)WIDTH / (double)HEIGHT; // assuming WIDTH > HEIGHT
+	camera_matrix = set_camera(master->rt->camera);
+	origin = shift_origin(camera_matrix);
 	while (x < WIDTH)
 	{
 		y = 0;
@@ -432,15 +517,18 @@ void	find_rays(t_master *master)
 			object_ptr = NULL;
 			clr = 0x000000FF;
 			t_near = (double)INT_MAX;
+			rays[x][y].origin.x = origin.x;
+			rays[x][y].origin.y = origin.y;
+			rays[x][y].origin.z = origin.z;
 			// why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
 			px = (2. * ((x + 0.5) / (double)WIDTH) - 1.) * ratio * tan((rad(fov * 0.5)));
 			py = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) * tan((rad(fov * 0.5)));
 			pz = -10; // change to calibrate focal length, should be -1
-			rays[x][y].origin.x = 0;
-			rays[x][y].origin.y = 0;
-			rays[x][y].origin.z = 0;
-			// some camera stuff goes here
-			normalize(&rays[x][y].direction, px, py, pz);
+			direction.x = px;
+			direction.y = py;
+			direction.z = pz;
+			change_ray_direction(camera_matrix, &rays[x][y].direction, direction);
+			//normalize(&rays[x][y].direction, px, py, pz);
 			i = 0;
 			while (i < master->rt->n_spheres)
 			{

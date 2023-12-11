@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 09:06:28 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 11:48:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	fill_camera(t_rt *rt, char **split)
 		return (id_err("C", E_VECT_RANGE, E_RANGE_NORM));
 	normalize(rt->camera->normal, rt->camera->nvect[X], rt->camera->nvect[Y], \
 				rt->camera->nvect[Z]);
+	printf("%f %f\n", rt->camera->normal->x, rt->camera->coords[X]);
 	rt->camera->fov = ft_atoi(split[3]);
 	if (rt->camera->fov < 0 || rt->camera->fov > 180)
 		return (id_err("C", E_FOV_RANGE, "a value in range (0;180)"));
