@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/11 09:40:58 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 18:14:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,65 @@ int	load_file(char *file, t_rt *rt)
 	return (flag);
 }
 
+void	shift_camera(t_master *master, mlx_key_data_t keydata)
+{
+	if (keydata.key == MLX_KEY_RIGHT)
+		master->rt->camera->coords[X] += 5;
+	if (keydata.key == MLX_KEY_LEFT)
+		master->rt->camera->coords[X] -= 5;
+	if (keydata.key == MLX_KEY_UP)
+		master->rt->camera->coords[Y] += 5;
+	if (keydata.key == MLX_KEY_DOWN)
+		master->rt->camera->coords[Y] -= 5;
+	if (keydata.key == MLX_KEY_KP_ADD)
+		master->rt->camera->coords[Z] -= 5;
+	if (keydata.key == MLX_KEY_KP_SUBTRACT)
+		master->rt->camera->coords[Z] += 5;
+	find_rays(master);
+}
+
+void	rotate_camera(t_master *master, mlx_key_data_t keydata)
+{
+	if (keydata.key == MLX_KEY_Q)
+		master->rt->camera->normal->x += 0.05;
+	if (keydata.key == MLX_KEY_E)
+		master->rt->camera->normal->x -= 0.05;
+	if (keydata.key == MLX_KEY_W)
+		master->rt->camera->normal->y -= 0.05;
+	if (keydata.key == MLX_KEY_S)
+		master->rt->camera->normal->y += 0.05;
+	normalize(master->rt->camera->normal, master->rt->camera->normal->x, \
+	master->rt->camera->normal->y, master->rt->camera->normal->z);
+	find_rays(master);
+}
+
+void	keyhook(mlx_key_data_t keydata, void *param)
+{
+	t_master	*master;
+
+	master = param;
+	if ((keydata.key == MLX_KEY_RIGHT
+			|| keydata.key == MLX_KEY_LEFT
+			|| keydata.key == MLX_KEY_UP
+			|| keydata.key == MLX_KEY_DOWN
+			|| keydata.key == MLX_KEY_KP_ADD
+			|| keydata.key == MLX_KEY_KP_SUBTRACT)
+		&& keydata.action != MLX_RELEASE)
+		shift_camera(master, keydata);
+	if ((keydata.key == MLX_KEY_Q
+			|| keydata.key == MLX_KEY_E
+			|| keydata.key == MLX_KEY_W
+			|| keydata.key == MLX_KEY_S)
+		&& keydata.action != MLX_RELEASE)
+		rotate_camera(master, keydata);
+}
+
+static void	loop(mlx_t *mlx, t_master *master)
+{
+	mlx_key_hook(mlx, &keyhook, master);
+	mlx_loop(mlx);
+}
+
 int	main(int ac, char *av[])
 {
 	t_rt		*rt;
@@ -85,16 +144,15 @@ int	main(int ac, char *av[])
 			print_contents(rt);
 		//wrong map name segfaults!!
 		
-		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
+		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 		mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
 		img = mlx_new_image(mlx, mlx->width, mlx->height);
 		mlx_image_to_window(mlx, img, 0, 0);
 		master->mlx = mlx;
 		master->img = img;
 		master->rt = rt;
-		//cast_rays(master);
 		find_rays(master);
-		mlx_loop(mlx);
+		loop(mlx, master);
 	}
 
 	free_objects(rt);

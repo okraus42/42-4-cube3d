@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 16:16:46 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 16:41:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -442,9 +442,9 @@ double	**set_camera(t_camera *camera)
 	matrix[3][1] = camera->coords[Y];
 	matrix[3][2] = camera->coords[Z];
 	matrix[3][3] = 1;
-	printf("WorldToCamera:\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n", \
+	/* printf("WorldToCamera:\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n", \
 	matrix[0][0], matrix[0][1], matrix[0][2], matrix[1][0], matrix[1][1], matrix[1][2], \
-	matrix[2][0], matrix[2][1], matrix[2][2], matrix[3][0], matrix[3][1], matrix[3][2]);
+	matrix[2][0], matrix[2][1], matrix[2][2], matrix[3][0], matrix[3][1], matrix[3][2]); */
 	return (matrix);
 }
 
