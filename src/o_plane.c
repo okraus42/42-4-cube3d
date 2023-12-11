@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 15:46:47 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:19:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i] = malloc(sizeof(t_plane));
 		rt->planes[i]->coords = malloc(sizeof(double) * 3);
 		rt->planes[i]->nvect = malloc(sizeof(double) * 3);
-		rt->planes[i++]->rgb = malloc(sizeof(int) * 3);
+		rt->planes[i]->rgb = malloc(sizeof(int) * 3);
+		rt->planes[i++]->normal = malloc(sizeof(t_vect3f));
 	}
 	rt->planes[i] = NULL;
 }
@@ -56,6 +57,8 @@ int	fill_plane(t_rt *rt, char **split)
 	get_coords(rt->planes[i]->coords, split[1]);
 	if (!get_nvect(rt->planes[i]->nvect, split[2]))
 		return (id_err("pl", E_VECT_RANGE, E_RANGE_NORM));
+	normalize(rt->planes[i]->normal, rt->planes[i]->nvect[X], \
+			rt->planes[i]->nvect[Y], rt->planes[i]->nvect[Z]);
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));
 	rt->n_planes++;
@@ -72,6 +75,7 @@ void	free_planes(t_rt *rt)
 		free(rt->planes[i]->coords);
 		free(rt->planes[i]->nvect);
 		free(rt->planes[i]->rgb);
+		free(rt->planes[i]->normal);
 		free(rt->planes[i++]);
 	}
 	free(rt->planes);

@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/08 15:12:03 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:26:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ double	absf(double n)
 		return (n);
 }
 
-void	normalize(t_ray *ray, double px, double py, double pz)
+void	normalize(t_vect3f *vect, double px, double py, double pz)
 {
 	double	magnitude;
 
 	magnitude = sqrt(pow(px, 2) + pow(py, 2) + pow(pz, 2));
-	ray->direction.x = px / magnitude;
-	ray->direction.y = py / magnitude;
-	ray->direction.z = pz / magnitude;
+	vect->x = px / magnitude;
+	vect->y = py / magnitude;
+	vect->z = pz / magnitude;
 }
 
 double	dot_product(t_vect3f vect1, t_vect3f vect2)
@@ -97,7 +97,7 @@ t_vect3f	subtract_vect3f(t_vect3f vect1, t_vect3f vect2)
 
 int	test_sphere(t_ray ray, t_sphere *sphere, double *t)
 {
-	double	*res;
+	double	res[2];
 	double	a;
 	double	b;
 	double	c;
@@ -106,7 +106,7 @@ int	test_sphere(t_ray ray, t_sphere *sphere, double *t)
 	t_vect3f	centered;
 	//t_vect3f	centered_abs;
 
-	res = malloc(sizeof(int) * 2);
+	//res = malloc(sizeof(int) * 2);
 	centered = subtract_center(ray.origin, sphere->coords);
 	//centered_abs = subtract_center_abs(ray->origin, sphere->coords);
 	a = dot_product(ray.direction, ray.direction);
@@ -115,7 +115,7 @@ int	test_sphere(t_ray ray, t_sphere *sphere, double *t)
 	discr = pow(b, 2) - 4 * a * c;
 	if (discr < 0)
 	{
-		free(res);
+		//free(res);
 		return (0);
 	}
 	else if (discr == 0)
@@ -140,7 +140,7 @@ int	test_sphere(t_ray ray, t_sphere *sphere, double *t)
 			res[0] = res[1];
 			if (res[0] < 0)
 			{
-				free(res);
+				//free(res);
 				return (0);
 			}
 		}
@@ -159,9 +159,9 @@ int	test_plane(t_ray ray, t_plane *plane, double *t)
 	point.x = plane->coords[X];
 	point.y = plane->coords[Y];
 	point.z = plane->coords[Z];
-	normal.x = plane->nvect[X];
-	normal.y = plane->nvect[Y];
-	normal.z = plane->nvect[Z];
+	normal.x = plane->normal->x;
+	normal.y = plane->normal->y;
+	normal.z = plane->normal->z;
 	denom = dot_product(normal, ray.direction);
 	if (denom > 1e-6) // means they're nearly or completely parallel
 	{
@@ -192,9 +192,9 @@ int	test_disc_plane(t_ray ray, t_disc *plane, double *t)
 	point.x = plane->coords[X];
 	point.y = plane->coords[Y];
 	point.z = plane->coords[Z];
-	normal.x = plane->nvect[X];
-	normal.y = plane->nvect[Y];
-	normal.z = plane->nvect[Z];
+	normal.x = plane->normal->x;
+	normal.y = plane->normal->y;
+	normal.z = plane->normal->z;
 	denom = dot_product(normal, ray.direction);
 	if (denom > 1e-6) // means they're nearly or completely parallel
 	{
@@ -252,10 +252,10 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
 	inter.x = ray.origin.x + ray.direction.x * t;
 	inter.y = ray.origin.y + ray.direction.y * t;
 	inter.z = ray.origin.z + ray.direction.z * t;
-	dist1 = (-1 * cap1->nvect[X] * cap1->coords[X]) - (cap1->nvect[Y] * cap1->coords[Y]) - (cap1->nvect[Z] * cap1->coords[Z]);
-	dist2 = (-1 * cap2->nvect[X] * cap2->coords[X]) - (cap2->nvect[Y] * cap2->coords[Y]) - (cap2->nvect[Z] * cap2->coords[Z]);
-	plane1 = (cap1->nvect[X] * inter.x) + (cap1->nvect[Y] * inter.y) + (cap1->nvect[Z] * inter.z) + dist1;
-	plane2 =(cap2->nvect[X] * inter.x) + (cap2->nvect[Y] * inter.y) + (cap2->nvect[Z] * inter.z) + dist2;
+	dist1 = (-1 * cap1->normal->x * cap1->coords[X]) - (cap1->normal->y * cap1->coords[Y]) - (cap1->normal->z * cap1->coords[Z]);
+	dist2 = (-1 * cap2->normal->x * cap2->coords[X]) - (cap2->normal->y * cap2->coords[Y]) - (cap2->normal->z * cap2->coords[Z]);
+	plane1 = (cap1->normal->x * inter.x) + (cap1->normal->y * inter.y) + (cap1->normal->z * inter.z) + dist1;
+	plane2 =(cap2->normal->x * inter.x) + (cap2->normal->y * inter.y) + (cap2->normal->z * inter.z) + dist2;
 	if (plane1 > 0 || plane2 > 0)
 		return (0);
 	else if (plane1 < 0 && plane2 < 0)
@@ -281,7 +281,7 @@ b = 2 * (D-V*(D|V))|(X-V*(X|V)) =
 */
 int	test_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 {
-	double	*res;
+	double	res[2];
 	double	a;
 	double	b;
 	double	c;
@@ -292,10 +292,13 @@ int	test_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 	//t_vect3f	point;
 	//double		max;
 
-	axis.x = cylinder->nvect[X];
+	/* axis.x = cylinder->nvect[X];
 	axis.y = cylinder->nvect[Y];
-	axis.z = cylinder->nvect[Z];
-	res = malloc(sizeof(int) * 2);
+	axis.z = cylinder->nvect[Z]; */
+	axis.x = cylinder->normal->x;
+	axis.y = cylinder->normal->y;
+	axis.z = cylinder->normal->z;
+	//res = malloc(sizeof(int) * 2);
 	centered = subtract_center(ray.origin, cylinder->coords);
 	a = dot_product(ray.direction, ray.direction) - pow(dot_product(ray.direction, axis), 2);
 	b = 2 * (dot_product(ray.direction, centered) - (dot_product(ray.direction, axis) * dot_product(centered, axis)));
@@ -303,7 +306,7 @@ int	test_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 	discr = pow(b, 2) - 4 * a * c;
 	if (discr < 0)
 	{
-		free(res);
+		//free(res);
 		return (0);
 	}
 	else if (discr == 0)
@@ -333,7 +336,7 @@ int	test_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 			res[0] = res[1];
 			if (res[0] < 0)
 			{
-				free(res);
+				//free(res);
 				return (0);
 			}
 		}
@@ -437,7 +440,7 @@ void	find_rays(t_master *master)
 			rays[x][y].origin.y = 0;
 			rays[x][y].origin.z = 0;
 			// some camera stuff goes here
-			normalize(&rays[x][y], px, py, pz);
+			normalize(&rays[x][y].direction, px, py, pz);
 			i = 0;
 			while (i < master->rt->n_spheres)
 			{
@@ -508,7 +511,6 @@ void	find_rays(t_master *master)
 				}
 				i++;
 			}
-			
 			get_nearest_object(object_flag, object_ptr, &clr);
 			mlx_put_pixel(master->img, x, y, clr);
 			y++;

@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/08 11:20:52 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:42:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->nvect = malloc(sizeof(double) * 3);
 	cylinder->botcap->rgb = malloc(sizeof(int) * 3);
 	cylinder->topcap->rgb = malloc(sizeof(int) * 3);
+	cylinder->botcap->normal = malloc(sizeof(t_vect3f));
+	cylinder->topcap->normal = malloc(sizeof(t_vect3f));
 }
 
 void	define_botcap(t_cylinder *cylinder)
@@ -39,6 +41,8 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
 	botcap->radius = cylinder->diameter / 2;
+	normalize(botcap->normal, botcap->nvect[X], botcap->nvect[Y], \
+				botcap->nvect[Z]);
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -56,6 +60,8 @@ void	define_topcap(t_cylinder *cylinder)
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
 	cylinder->topcap->radius = cylinder->diameter / 2;
+	normalize(topcap->normal, topcap->nvect[X], topcap->nvect[Y], \
+				topcap->nvect[Z]);
 }
 
 void	get_discs(t_cylinder *cylinder)
@@ -69,7 +75,9 @@ void	free_discs(t_cylinder *cylinder)
 	free(cylinder->botcap->coords);
 	free(cylinder->botcap->nvect);
 	free(cylinder->botcap->rgb);
+	free(cylinder->botcap->normal);
 	free(cylinder->topcap->coords);
 	free(cylinder->topcap->nvect);
 	free(cylinder->topcap->rgb);
+	free(cylinder->topcap->normal);
 }

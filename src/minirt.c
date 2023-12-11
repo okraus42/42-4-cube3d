@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/04 17:05:11 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:40:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	main(int ac, char *av[])
 		find_rays(master);
 		mlx_loop(mlx);
 	}
+
 	free_objects(rt);
 	free(rt);
 	free(master);

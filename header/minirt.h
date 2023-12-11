@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/08 11:21:18 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:05:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_camera
 	double	*coords; // x,y,z coordinates of viewpoint
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		fov; // 0-180
+	t_vect3f	*normal;
 }				t_camera;
 
 typedef struct s_light
@@ -123,6 +124,7 @@ typedef struct s_plane
 	double	*coords; // x,y,z coordinates of point
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		*rgb;
+	t_vect3f	*normal;
 }				t_plane;
 
 typedef	struct s_disc
@@ -131,6 +133,7 @@ typedef	struct s_disc
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	double	radius;
 	int		*rgb;
+	t_vect3f	*normal;
 }				t_disc;
 
 typedef struct s_cylinder
@@ -142,6 +145,7 @@ typedef struct s_cylinder
 	int		*rgb;
 	t_disc	*botcap;
 	t_disc	*topcap;
+	t_vect3f	*normal;
 }				t_cylinder;
 
 typedef struct s_rt
@@ -231,6 +235,7 @@ void	find_rays(t_master *master);
 
 double	deg(double rad);
 double	rad(double deg);
+void	normalize(t_vect3f *vect, double px, double py, double pz);
 
 // Cylinder caps functions
 void	init_discs(t_cylinder *cylinder);

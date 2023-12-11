@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/08 11:11:11 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/11 09:42:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i]->coords = malloc(sizeof(double) * 3);
 		rt->cylinders[i]->nvect = malloc(sizeof(double) * 3);
 		rt->cylinders[i]->rgb = malloc(sizeof(double) * 3);
+		rt->cylinders[i]->normal = malloc(sizeof(t_vect3f));
 		init_discs(rt->cylinders[i]);
 		i++;
 	}
@@ -66,6 +67,8 @@ int	fill_cylinder(t_rt *rt, char **split)
 	get_coords(rt->cylinders[i]->coords, split[1]);
 	if (!get_nvect(rt->cylinders[i]->nvect, split[2]))
 		return (id_err("cy", E_VECT_RANGE, E_RANGE_NORM));
+	normalize(rt->cylinders[i]->normal, rt->cylinders[i]->nvect[X], \
+			rt->cylinders[i]->nvect[Y], rt->cylinders[i]->nvect[Z]);
 	rt->cylinders[i]->diameter = ft_atof(split[3]);
 	if (rt->cylinders[i]->diameter <= 0)
 		return (id_err("cy", E_DIA_RANGE, E_RANGE_STRICT));
@@ -90,6 +93,7 @@ void	free_cylinders(t_rt *rt)
 		free(rt->cylinders[i]->nvect);
 		free(rt->cylinders[i]->rgb);
 		free_discs(rt->cylinders[i]);
+		free(rt->cylinders[i]->normal);
 		free(rt->cylinders[i++]);
 	}
 	free(rt->cylinders);
