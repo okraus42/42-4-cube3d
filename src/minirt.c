@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/12 12:49:54 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/12 13:42:19 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_KP_SUBTRACT)
 		&& keydata.action != MLX_RELEASE)
 		shift_camera(master, keydata);
-	if ((keydata.key == MLX_KEY_Q
-			|| keydata.key == MLX_KEY_E
+	if ((keydata.key == MLX_KEY_A
+			|| keydata.key == MLX_KEY_D
 			|| keydata.key == MLX_KEY_W
 			|| keydata.key == MLX_KEY_S)
 		&& keydata.action != MLX_RELEASE)

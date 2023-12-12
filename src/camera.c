@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/12 12:53:05 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/12 13:43:25 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,20 +124,43 @@ void	shift_camera(t_master *master, mlx_key_data_t keydata)
 	find_rays(master);
 }
 
+void	tilt(t_camera *camera, double angle)
+{
+	double	y;
+	double	z;
+
+	y = camera->normal->y;
+	z = camera->normal->z;
+	camera->normal->y = y * cos(rad(angle)) - z * sin(rad(angle));
+	camera->normal->z = y * sin(rad(angle)) + z * cos(rad(angle));
+}
+
+void	pan(t_camera *camera, double angle)
+{
+	double	x;
+	double	z;
+
+	x = camera->normal->x;
+	z = camera->normal->z;
+	camera->normal->z = z * cos(rad(angle)) - x * sin(rad(angle));
+	camera->normal->x = z * sin(rad(angle)) + x * cos(rad(angle));
+}
+
 // does not work atm, needs different approach
 void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 {
-	if (keydata.key == MLX_KEY_Q)
-		master->rt->camera->nvect[X]+= 0.20;
-	if (keydata.key == MLX_KEY_E)
-		master->rt->camera->nvect[X] -= 0.20;
+	if (keydata.key == MLX_KEY_A)
+		pan(master->rt->camera, 5);
+	if (keydata.key == MLX_KEY_D)
+		pan(master->rt->camera, -5);
 	if (keydata.key == MLX_KEY_W)
-		master->rt->camera->nvect[Y] -= 0.20;
+		tilt(master->rt->camera, 5);
 	if (keydata.key == MLX_KEY_S)
-		master->rt->camera->nvect[Y] += 0.20;
-	printf("Before norm: %f,%f,%f\n", master->rt->camera->nvect[X], master->rt->camera->nvect[Y], master->rt->camera->nvect[Z]);
-	normalize(master->rt->camera->normal, master->rt->camera->nvect[X], \
-	master->rt->camera->nvect[Y], master->rt->camera->nvect[Z]);
+		tilt(master->rt->camera, -5);
+	printf("Before norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, \
+	master->rt->camera->normal->z);
+	normalize(master->rt->camera->normal, master->rt->camera->normal->x, master->rt->camera->normal->y, \
+	master->rt->camera->normal->z);
 	printf("After norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, master->rt->camera->normal->z);
 	find_rays(master);
 }
