@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/12 13:43:25 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:02:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,18 @@ void	pan(t_camera *camera, double angle)
 	camera->normal->x = z * sin(rad(angle)) + x * cos(rad(angle));
 }
 
-// does not work atm, needs different approach
+// doesn't work for now
+void	cant(t_camera *camera, double angle)
+{
+	double	x;
+	double	y;
+
+	x = camera->normal->x;
+	y = camera->normal->y;
+	camera->normal->x = x * cos(rad(angle)) - y * sin(rad(angle));
+	camera->normal->y = x * sin(rad(angle)) + y * cos(rad(angle));
+}
+
 void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 {
 	if (keydata.key == MLX_KEY_A)
@@ -157,10 +168,14 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 		tilt(master->rt->camera, 5);
 	if (keydata.key == MLX_KEY_S)
 		tilt(master->rt->camera, -5);
-	printf("Before norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, \
-	master->rt->camera->normal->z);
+	if (keydata.key == MLX_KEY_Q)
+		cant(master->rt->camera, 5);
+	if (keydata.key == MLX_KEY_E)
+		cant(master->rt->camera, -5);
+	/*printf("Before norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, \
+	master->rt->camera->normal->z);*/
 	normalize(master->rt->camera->normal, master->rt->camera->normal->x, master->rt->camera->normal->y, \
 	master->rt->camera->normal->z);
-	printf("After norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, master->rt->camera->normal->z);
+	//printf("After norm: %f,%f,%f\n", master->rt->camera->normal->x, master->rt->camera->normal->y, master->rt->camera->normal->z);
 	find_rays(master);
 }
