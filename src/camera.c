@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/12 14:02:45 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/12 15:25:23 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,10 +113,10 @@ void	shift_camera(t_master *master, mlx_key_data_t keydata)
 		master->rt->camera->coords[Y] += 5;
 	if (keydata.key == MLX_KEY_DOWN)
 		master->rt->camera->coords[Y] -= 5;
-	/* if (keydata.key == MLX_KEY_KP_ADD)
+	if (keydata.key == MLX_KEY_K)
 		master->rt->camera->coords[Z] -= 5;
-	if (keydata.key == MLX_KEY_KP_SUBTRACT)
-		master->rt->camera->coords[Z] += 5; */
+	if (keydata.key == MLX_KEY_L)
+		master->rt->camera->coords[Z] += 5;
 	if (keydata.key == MLX_KEY_KP_ADD)
 		master->rt->camera->fov += 5;
 	if (keydata.key == MLX_KEY_KP_SUBTRACT)

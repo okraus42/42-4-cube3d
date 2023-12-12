@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/12 14:00:59 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/12 15:24:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
 			|| keydata.key == MLX_KEY_KP_ADD
-			|| keydata.key == MLX_KEY_KP_SUBTRACT)
+			|| keydata.key == MLX_KEY_KP_SUBTRACT
+			|| keydata.key == MLX_KEY_K
+			|| keydata.key == MLX_KEY_L)
 		&& keydata.action != MLX_RELEASE)
 		shift_camera(master, keydata);
 	if ((keydata.key == MLX_KEY_A
