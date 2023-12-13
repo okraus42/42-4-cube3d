@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/13 12:28:10 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 16:19:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,17 +343,48 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 void	shift_camera(t_master *master, mlx_key_data_t keydata)
 {
 	if (keydata.key == MLX_KEY_RIGHT)
-		master->rt->camera->coords[X] += 5;
+	{
+		//master->rt->camera->coords[X] += 5;
+		master->rt->camera->coords[X] += (master->rt->camera->right->x * 5);
+		master->rt->camera->coords[Y] += (master->rt->camera->right->y * 5);
+		master->rt->camera->coords[Z] += (master->rt->camera->right->z * 5);
+	}
 	if (keydata.key == MLX_KEY_LEFT)
-		master->rt->camera->coords[X] -= 5;
+	{
+		//master->rt->camera->coords[X] -= 5;
+		master->rt->camera->coords[X] -= (master->rt->camera->right->x * 5);
+		master->rt->camera->coords[Y] -= (master->rt->camera->right->y * 5);
+		master->rt->camera->coords[Z] -= (master->rt->camera->right->z * 5); 
+	}
 	if (keydata.key == MLX_KEY_UP)
-		master->rt->camera->coords[Y] += 5;
+	{
+		//master->rt->camera->coords[Y] += 5;
+		master->rt->camera->coords[X] += (master->rt->camera->up->x * 5);
+		master->rt->camera->coords[Y] += (master->rt->camera->up->y * 5);
+		master->rt->camera->coords[Z] += (master->rt->camera->up->z * 5);
+	}
 	if (keydata.key == MLX_KEY_DOWN)
-		master->rt->camera->coords[Y] -= 5;
-	if (keydata.key == MLX_KEY_K)
-		master->rt->camera->coords[Z] -= 5;
-	if (keydata.key == MLX_KEY_L)
-		master->rt->camera->coords[Z] += 5;
+	{
+		//master->rt->camera->coords[Y] -= 5;
+		master->rt->camera->coords[X] -= (master->rt->camera->up->x * 5);
+		master->rt->camera->coords[Y] -= (master->rt->camera->up->y * 5);
+		master->rt->camera->coords[Z] -= (master->rt->camera->up->z * 5);
+	}
+	// maybe actually bind this to a superkey later
+	if (keydata.key == MLX_KEY_PAGE_UP)
+	{
+		//master->rt->camera->coords[Z] -= 5;
+		master->rt->camera->coords[X] -= (master->rt->camera->normal->x * 5);
+		master->rt->camera->coords[Y] -= (master->rt->camera->normal->y * 5);
+		master->rt->camera->coords[Z] -= (master->rt->camera->normal->z * 5);
+	}
+	if (keydata.key == MLX_KEY_PAGE_DOWN)
+	{
+		//master->rt->camera->coords[Z] += 5;
+		master->rt->camera->coords[X] += (master->rt->camera->normal->x * 5);
+		master->rt->camera->coords[Y] += (master->rt->camera->normal->y * 5);
+		master->rt->camera->coords[Z] += (master->rt->camera->normal->z * 5);
+	}
 	if (keydata.key == MLX_KEY_KP_ADD)
 		master->rt->camera->fov += 5;
 	if (keydata.key == MLX_KEY_KP_SUBTRACT)
