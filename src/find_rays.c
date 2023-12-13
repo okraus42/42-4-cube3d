@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/12 12:54:32 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 09:28:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,7 +387,7 @@ void	find_rays(t_master *master)
 	void	*object_ptr;
 	t_ray	**rays;
 	t_vect3f	origin;
-	double	**camera_matrix;
+	//double	**camera_matrix;
 	t_vect3f	direction;
 
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
@@ -404,8 +404,9 @@ void	find_rays(t_master *master)
 	y = 0;
 	fov = master->rt->camera->fov;
 	ratio = (double)WIDTH / (double)HEIGHT; // assuming WIDTH > HEIGHT
-	camera_matrix = set_camera(master->rt->camera); // create camera matrix
-	origin = shift_origin(camera_matrix); // translate camera position
+	//camera_matrix = set_camera(master->rt->camera); // create camera matrix
+	update_camera_matrix(master->rt->camera);
+	origin = shift_origin(master->rt->camera->matrix); // translate camera position
 	while (x < WIDTH)
 	{
 		y = 0;
@@ -426,7 +427,7 @@ void	find_rays(t_master *master)
 			direction.x = px;
 			direction.y = py;
 			direction.z = pz;
-			change_ray_direction(camera_matrix, &rays[x][y].direction, direction); // change direction based on camera position and its direction
+			change_ray_direction(master->rt->camera->matrix, &rays[x][y].direction, direction); // change direction based on camera position and its direction
 			i = 0;
 			while (i < master->rt->n_spheres)
 			{
@@ -505,9 +506,4 @@ void	find_rays(t_master *master)
 		x++;
 	}
 	free(rays);
-	free(camera_matrix[0]);
-	free(camera_matrix[1]);
-	free(camera_matrix[2]);
-	free(camera_matrix[3]);
-	free(camera_matrix);
 }

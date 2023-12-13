@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/12 15:24:53 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 09:00:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_E)
 		&& keydata.action != MLX_RELEASE)
 		rotate_camera(master, keydata);
+	if ((keydata.key == MLX_KEY_ESCAPE)
+		&& keydata.action != MLX_RELEASE)
+		mlx_close_window(master->mlx);
 }
 
 static void	loop(mlx_t *mlx, t_master *master)
@@ -126,7 +129,6 @@ int	main(int ac, char *av[])
 		find_rays(master);
 		loop(mlx, master);
 	}
-
 	free_objects(rt);
 	free(rt);
 	free(master);

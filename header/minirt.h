@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/12 12:54:46 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 09:30:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,9 @@ typedef struct s_camera
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		fov; // 0-180
 	t_vect3f	*normal;
+	t_vect3f	*right;
+	t_vect3f	*up;
+	double		**matrix;
 }				t_camera;
 
 typedef struct s_light
@@ -245,11 +248,12 @@ void	get_discs(t_cylinder *cylinder);
 void	free_discs(t_cylinder *cylinder);
 
 // Camera
-double	**set_camera(t_camera *camera);
+void	set_camera(t_camera *camera);
 t_vect3f	shift_origin(double **cam);
 void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp);
 void	shift_camera(t_master *master, mlx_key_data_t keydata);
 void	rotate_camera(t_master *master, mlx_key_data_t keydata);
+void	update_camera_matrix(t_camera *camera);
 
 t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
 
