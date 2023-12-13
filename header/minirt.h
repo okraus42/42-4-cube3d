@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/13 09:30:08 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 11:58:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,14 @@ typedef struct s_vect3f
 	double	z;
 }				t_vect3f;
 
+typedef struct s_quat
+{
+	double	q0;
+	double	q1;
+	double	q2;
+	double	q3;
+}				t_quat;
+
 typedef struct s_ray
 {
 	t_vect3f	origin;
@@ -106,6 +114,7 @@ typedef struct s_camera
 	t_vect3f	*right;
 	t_vect3f	*up;
 	double		**matrix;
+	t_quat		*quat;
 }				t_camera;
 
 typedef struct s_light

@@ -6,11 +6,47 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/13 09:59:07 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 12:28:10 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
+
+// axis = axis along which we're rotating
+t_quat	get_rot_quat(t_vect3f axis, double angle)
+{
+	t_quat	rot;
+	
+	//camera->quat = malloc(sizeof(malloc));
+	rot.q0 = cos(rad(angle) / 2);
+	rot.q1 = axis.x * sin(rad(angle) / 2);
+	rot.q2 = axis.y * sin(rad(angle) / 2);
+	rot.q3 = axis.z * sin(rad(angle) / 2);
+	return (rot);
+}
+
+// axis = point that we're rotating
+t_quat	get_point_quat(t_vect3f axis)
+{
+	t_quat	point;
+
+	point.q0 = 0;
+	point.q1 = axis.x;
+	point.q2 = axis.y;
+	point.q3 = axis.z;
+	return (point);
+}
+
+t_quat	get_inverse_quat(t_quat quat)
+{
+	t_quat	inverse;
+
+	inverse.q0 = quat.q0;
+	inverse.q1 = quat.q1 * -1;
+	inverse.q2 = quat.q2 * -1;
+	inverse.q3 = quat.q3 * -1;
+	return (inverse);
+}
 
 void	set_camera(t_camera *camera)
 {
@@ -78,7 +114,7 @@ void	update_camera_matrix(t_camera *camera)
 	matrix[3][1] = camera->coords[Y];
 	matrix[3][2] = camera->coords[Z];
 	matrix[3][3] = 1;
-	printf("WorldToCamera:\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n%.5f %.5f %.5f;\n", \
+	printf("WorldToCamera:\nR: %.5f %.5f %.5f;\nU:%.5f %.5f %.5f;\nF:%.5f %.5f %.5f;\nC:%.5f %.5f %.5f;\n", \
 	matrix[0][0], matrix[0][1], matrix[0][2], matrix[1][0], matrix[1][1], matrix[1][2], \
 	matrix[2][0], matrix[2][1], matrix[2][2], matrix[3][0], matrix[3][1], matrix[3][2]);
 }
@@ -107,8 +143,11 @@ void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
 	normalize(direction, direction->x, direction->y, direction->z);
 }
 
+// rotation along right/x-axis
+// p' = q−1 pq
 void	tilt(t_camera *camera, double angle)
 {
+	/*
 	double	y;
 	double	z;
 
@@ -120,11 +159,53 @@ void	tilt(t_camera *camera, double angle)
 	z = camera->up->z;
 	camera->up->y = y * cos(rad(angle)) - z * sin(rad(angle));
 	camera->up->z = y * sin(rad(angle)) + z * cos(rad(angle));
-}
+	*/
+	t_quat	res1;
+	t_quat	res2;
+	t_quat	point;
+	t_quat	inv;
+	t_quat	rot;
 
+	point = get_point_quat(*camera->normal);
+	rot = get_rot_quat(*camera->right, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->normal->x = res2.q1;
+	camera->normal->y = res2.q2;
+	camera->normal->z = res2.q3;
+
+	point = get_point_quat(*camera->up);
+	rot = get_rot_quat(*camera->right, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->up->x = res2.q1;
+	camera->up->y = res2.q2;
+	camera->up->z = res2.q3;
+}
+// rotation along up/y-axis
 void	pan(t_camera *camera, double angle)
 {
-	double	x;
+	/* double	x;
 	double	z;
 
 	x = camera->normal->x;
@@ -134,13 +215,55 @@ void	pan(t_camera *camera, double angle)
 	x = camera->right->x;
 	z = camera->right->z;
 	camera->right->z = z * cos(rad(angle)) - x * sin(rad(angle));
-	camera->right->x = z * sin(rad(angle)) + x * cos(rad(angle));
+	camera->right->x = z * sin(rad(angle)) + x * cos(rad(angle)); */
+	
+	t_quat	res1;
+	t_quat	res2;
+	t_quat	point;
+	t_quat	inv;
+	t_quat	rot;
+
+	point = get_point_quat(*camera->normal);
+	rot = get_rot_quat(*camera->up, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->normal->x = res2.q1;
+	camera->normal->y = res2.q2;
+	camera->normal->z = res2.q3;
+
+	point = get_point_quat(*camera->right);
+	rot = get_rot_quat(*camera->up, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->right->x = res2.q1;
+	camera->right->y = res2.q2;
+	camera->right->z = res2.q3;
 }
 
-// doesn't work for now
+// rotation along forward/z-axis
 void	cant(t_camera *camera, double angle)
 {
-	double	x;
+	/* double	x;
 	double	y;
 
 	x = camera->up->x;
@@ -150,7 +273,48 @@ void	cant(t_camera *camera, double angle)
 	x = camera->right->x;
 	y = camera->right->y;
 	camera->right->x = x * cos(rad(angle)) - y * sin(rad(angle));
-	camera->right->y = x * sin(rad(angle)) + y * cos(rad(angle));
+	camera->right->y = x * sin(rad(angle)) + y * cos(rad(angle)); */
+	t_quat	res1;
+	t_quat	res2;
+	t_quat	point;
+	t_quat	inv;
+	t_quat	rot;
+
+	point = get_point_quat(*camera->right);
+	rot = get_rot_quat(*camera->normal, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->right->x = res2.q1;
+	camera->right->y = res2.q2;
+	camera->right->z = res2.q3;
+
+	point = get_point_quat(*camera->up);
+	rot = get_rot_quat(*camera->normal, angle);
+	inv = get_inverse_quat(rot);
+	
+	res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
+	res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
+	res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
+	res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+
+	res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
+	res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
+	res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
+	res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0;
+
+	camera->up->x = res2.q1;
+	camera->up->y = res2.q2;
+	camera->up->z = res2.q3;
 }
 
 void	rotate_camera(t_master *master, mlx_key_data_t keydata)
