@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/13 16:19:37 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/13 16:59:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	set_camera(t_camera *camera)
 		right->z = 0;
 		up->x = 0;
 		up->y = 0;
-		up->z = 1;
+		up->z = -1;
 	}
 	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
 	{
@@ -80,7 +80,7 @@ void	set_camera(t_camera *camera)
 		right->z = 0;
 		up->x = 0;
 		up->y = 0;
-		up->z = -1;
+		up->z = 1;
 	}
 	else
 	{
