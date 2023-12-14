@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/12 12:53:35 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/14 09:52:36 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,8 @@ SRC_S		=	minirt.c \
 				object_handler.c \
 				find_rays.c \
 				o_cylinder_disc.c \
-				camera.c
+				camera.c \
+				quaternions.c
 
 # Formating
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 09:42:00 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:23:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ void	init_cylinders(t_rt *rt, int *ids)
 	int	i;
 
 	i = 0;
-	rt->cylinders = malloc(sizeof(t_cylinder *) * (ids[5] + 1));
+	rt->cylinders = ft_calloc(ids[5] + 1, sizeof(t_cylinder *));
 	rt->n_cylinders = 0;
 	while (i < (ids[5]))
 	{
-		rt->cylinders[i] = malloc(sizeof(t_cylinder));
-		rt->cylinders[i]->coords = malloc(sizeof(double) * 3);
-		rt->cylinders[i]->nvect = malloc(sizeof(double) * 3);
-		rt->cylinders[i]->rgb = malloc(sizeof(double) * 3);
-		rt->cylinders[i]->normal = malloc(sizeof(t_vect3f));
+		rt->cylinders[i] = ft_calloc(1, sizeof(t_cylinder));
+		rt->cylinders[i]->coords = ft_calloc(3, sizeof(double));
+		rt->cylinders[i]->nvect = ft_calloc(3, sizeof(double));
+		rt->cylinders[i]->rgb = ft_calloc(3, sizeof(double));
+		rt->cylinders[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		init_discs(rt->cylinders[i]);
 		i++;
 	}

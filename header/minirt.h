@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/13 11:58:38 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 09:40:13 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,6 +263,12 @@ void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp);
 void	shift_camera(t_master *master, mlx_key_data_t keydata);
 void	rotate_camera(t_master *master, mlx_key_data_t keydata);
 void	update_camera_matrix(t_camera *camera);
+
+// Quaternions
+t_quat	get_rot_quat(t_vect3f axis, double angle);
+t_quat	get_point_quat(t_vect3f axis);
+t_quat	get_inverse_quat(t_quat quat);
+t_quat	mult_quat(t_quat i, t_quat j);
 
 t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
 

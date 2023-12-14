@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 09:19:51 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:18:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ void	init_planes(t_rt *rt, int *ids)
 	int	i;
 
 	i = 0;
-	rt->planes = malloc(sizeof(t_plane *) * (ids[4] + 1));
+	rt->planes = ft_calloc(ids[4] + 1, sizeof(t_plane *));
 	rt->n_planes = 0;
 	while (i < (ids[4]))
 	{
-		rt->planes[i] = malloc(sizeof(t_plane));
-		rt->planes[i]->coords = malloc(sizeof(double) * 3);
-		rt->planes[i]->nvect = malloc(sizeof(double) * 3);
-		rt->planes[i]->rgb = malloc(sizeof(int) * 3);
-		rt->planes[i++]->normal = malloc(sizeof(t_vect3f));
+		rt->planes[i] = ft_calloc(1, sizeof(t_plane));
+		rt->planes[i]->coords = ft_calloc(3, sizeof(double));
+		rt->planes[i]->nvect = ft_calloc(3, sizeof(double));
+		rt->planes[i]->rgb = ft_calloc(3, sizeof(int));
+		rt->planes[i++]->normal = ft_calloc(1, sizeof(t_vect3f));
 	}
 	rt->planes[i] = NULL;
 }

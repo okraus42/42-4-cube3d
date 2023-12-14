@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/13 16:19:59 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:27:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,8 @@ int	main(int ac, char *av[])
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 
-	master = malloc(sizeof(t_master));
-	rt = NULL;
-	rt = malloc(sizeof(t_rt));
+	master = ft_calloc(1, sizeof(t_master));
+	rt = ft_calloc(1, sizeof(t_rt));
 	if (!rt)
 		return (1);
 	if (ac != 2)

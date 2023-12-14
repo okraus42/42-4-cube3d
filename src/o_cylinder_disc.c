@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/11 16:18:28 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:21:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 void	init_discs(t_cylinder *cylinder)
 {
-	cylinder->botcap = malloc(sizeof(t_disc));
-	cylinder->topcap = malloc(sizeof(t_disc));
-	cylinder->botcap->coords = malloc(sizeof(double) * 3);
-	cylinder->topcap->coords = malloc(sizeof(double) * 3);
-	cylinder->botcap->nvect = malloc(sizeof(double) * 3);
-	cylinder->topcap->nvect = malloc(sizeof(double) * 3);
-	cylinder->botcap->rgb = malloc(sizeof(int) * 3);
-	cylinder->topcap->rgb = malloc(sizeof(int) * 3);
-	cylinder->botcap->normal = malloc(sizeof(t_vect3f));
-	cylinder->topcap->normal = malloc(sizeof(t_vect3f));
+	cylinder->botcap = ft_calloc(1, sizeof(t_disc));
+	cylinder->topcap = ft_calloc(1, sizeof(t_disc));
+	cylinder->botcap->coords = ft_calloc(3, sizeof(double));
+	cylinder->topcap->coords = ft_calloc(3, (sizeof(double)));
+	cylinder->botcap->nvect = ft_calloc(3, sizeof(double));
+	cylinder->topcap->nvect = ft_calloc(3, sizeof(double));
+	cylinder->botcap->rgb = ft_calloc(3, sizeof(int));
+	cylinder->topcap->rgb = ft_calloc(3, sizeof(int));
+	cylinder->botcap->normal = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->topcap->normal = ft_calloc(1, sizeof(t_vect3f));
 }
 
 void	define_botcap(t_cylinder *cylinder)

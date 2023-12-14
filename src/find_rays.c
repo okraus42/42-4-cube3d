@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/13 09:28:18 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 10:04:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,15 +159,12 @@ int	test_plane(t_ray ray, t_plane *plane, double *t)
 	{
 		diff = subtract_vect3f(point, ray.origin);
 		*t = dot_product(diff, normal) / denom;
-		//printf("aaaa");
-
 		return (*t >= 0);
 	}
 	if (denom < -1e-6) // means they're nearly or completely parallel
 	{
 		diff = subtract_vect3f(point, ray.origin);
 		*t = dot_product(diff, normal) / denom;
-		//*t = absf(*t);
 		return (*t >= 0);
 	}
 	return (0);
@@ -387,16 +384,9 @@ void	find_rays(t_master *master)
 	void	*object_ptr;
 	t_ray	**rays;
 	t_vect3f	origin;
-	//double	**camera_matrix;
 	t_vect3f	direction;
 
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
-	x = 0;
-	while (x < WIDTH)
-	{
-		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));
-		x++;
-	}
 	t_near = (double)INT_MAX;
 	t = (double)INT_MAX;
 	i = 0;
@@ -404,11 +394,11 @@ void	find_rays(t_master *master)
 	y = 0;
 	fov = master->rt->camera->fov;
 	ratio = (double)WIDTH / (double)HEIGHT; // assuming WIDTH > HEIGHT
-	//camera_matrix = set_camera(master->rt->camera); // create camera matrix
 	update_camera_matrix(master->rt->camera);
 	origin = shift_origin(master->rt->camera->matrix); // translate camera position
 	while (x < WIDTH)
 	{
+		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));
 		y = 0;
 		while (y < HEIGHT)
 		{

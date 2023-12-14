@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_camera.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/13 09:19:34 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:26:40 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 void	init_camera(t_rt *rt)
 {
-	rt->camera = malloc(sizeof(t_camera));
-	rt->camera->coords = malloc(sizeof(double) * 3);
-	rt->camera->nvect = malloc(sizeof(double) * 3);
-	rt->camera->normal = malloc(sizeof(t_vect3f));
-	rt->camera->right = malloc(sizeof(t_vect3f));
-	rt->camera->up = malloc(sizeof(t_vect3f));
-	rt->camera->matrix = malloc(sizeof(double *) * 4);
-	rt->camera->matrix[0] = malloc(sizeof(double) * 4);
-	rt->camera->matrix[1] = malloc(sizeof(double) * 4);
-	rt->camera->matrix[2] = malloc(sizeof(double) * 4);
-	rt->camera->matrix[3] = malloc(sizeof(double) * 4);
+	rt->camera = ft_calloc(1, sizeof(t_camera));
+	rt->camera->coords = ft_calloc(3, sizeof(double));
+	rt->camera->nvect = ft_calloc(1, sizeof(double));
+	rt->camera->normal = ft_calloc(1, sizeof(t_vect3f));
+	rt->camera->right = ft_calloc(1, sizeof(t_vect3f));
+	rt->camera->up = ft_calloc(1, sizeof(t_vect3f));
+	rt->camera->matrix = ft_calloc(4, sizeof(double *));
+	rt->camera->matrix[0] = ft_calloc(4, sizeof(double));
+	rt->camera->matrix[1] = ft_calloc(4, sizeof(double));
+	rt->camera->matrix[2] = ft_calloc(4, sizeof(double));
+	rt->camera->matrix[3] = ft_calloc(4, sizeof(double));
 }
 
 int	check_format_camera(char **split)
