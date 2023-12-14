@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 11:26:40 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:56:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	init_camera(t_rt *rt)
 {
 	rt->camera = ft_calloc(1, sizeof(t_camera));
 	rt->camera->coords = ft_calloc(3, sizeof(double));
-	rt->camera->nvect = ft_calloc(1, sizeof(double));
+	rt->camera->nvect = ft_calloc(3, sizeof(double));
 	rt->camera->normal = ft_calloc(1, sizeof(t_vect3f));
 	rt->camera->right = ft_calloc(1, sizeof(t_vect3f));
 	rt->camera->up = ft_calloc(1, sizeof(t_vect3f));
@@ -51,8 +51,8 @@ int	fill_camera(t_rt *rt, char **split)
 	get_coords(rt->camera->coords, split[1]);
 	if (!get_nvect(rt->camera->nvect, split[2]))
 		return (id_err("C", E_VECT_RANGE, E_RANGE_NORM));
-	normalize(rt->camera->normal, rt->camera->nvect[X], rt->camera->nvect[Y], \
-				rt->camera->nvect[Z]);
+	*rt->camera->normal = get_normal(rt->camera->nvect[X],\
+		rt->camera->nvect[Y], rt->camera->nvect[Z]);
 	rt->camera->fov = ft_atoi(split[3]);
 	if (rt->camera->fov < 0 || rt->camera->fov > 180)
 		return (id_err("C", E_FOV_RANGE, "a value in range (0;180)"));

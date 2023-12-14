@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/14 09:40:13 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:46:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,8 @@ void	find_rays(t_master *master);
 
 double	deg(double rad);
 double	rad(double deg);
-void	normalize(t_vect3f *vect, double px, double py, double pz);
+void	normalize(t_vect3f *vect);
+t_vect3f	get_normal(double px, double py, double pz);
 
 // Cylinder caps functions
 void	init_discs(t_cylinder *cylinder);

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 11:23:01 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:40:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 	get_coords(rt->cylinders[i]->coords, split[1]);
 	if (!get_nvect(rt->cylinders[i]->nvect, split[2]))
 		return (id_err("cy", E_VECT_RANGE, E_RANGE_NORM));
-	normalize(rt->cylinders[i]->normal, rt->cylinders[i]->nvect[X], \
+	*rt->cylinders[i]->normal = get_normal(rt->cylinders[i]->nvect[X], \
 			rt->cylinders[i]->nvect[Y], rt->cylinders[i]->nvect[Z]);
 	rt->cylinders[i]->diameter = ft_atof(split[3]);
 	if (rt->cylinders[i]->diameter <= 0)

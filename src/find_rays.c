@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 10:04:38 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:37:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,15 +46,27 @@ double	absf(double n)
 		return (n);
 }
 
-// will fail for 0,0,0!
-void	normalize(t_vect3f *vect, double px, double py, double pz)
+t_vect3f	get_normal(double px, double py, double pz)
 {
+	t_vect3f	normal;
 	double	magnitude;
 
 	magnitude = sqrt(pow(px, 2) + pow(py, 2) + pow(pz, 2));
-	vect->x = px / magnitude;
-	vect->y = py / magnitude;
-	vect->z = pz / magnitude;
+	normal.x = px / magnitude;
+	normal.y = py / magnitude;
+	normal.z = pz / magnitude;
+	return (normal);
+}
+
+// will fail for 0,0,0!
+void	normalize(t_vect3f *vect)
+{
+	double	magnitude;
+
+	magnitude = sqrt(pow(vect->x, 2) + pow(vect->y, 2) + pow(vect->z, 2));
+	vect->x = vect->x / magnitude;
+	vect->y = vect->y / magnitude;
+	vect->z = vect->z / magnitude;
 }
 
 double	dot_product(t_vect3f vect1, t_vect3f vect2)

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 10:33:44 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 11:38:13 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	set_camera(t_camera *camera)
 	else
 	{
 		*right = cross_product(tmp, *forward);
-		normalize(right, right->x, right->y, right->z);
+		normalize(right);
 		*up = cross_product(*forward, *right);
-		normalize(up, up->x, up->y, up->z);
+		normalize(up);
 	}
 }
 
@@ -115,7 +115,7 @@ void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
 	direction->x = temp.x * cam[0][0] + temp.y * cam[1][0] + temp.z * cam[2][0];
 	direction->y = temp.x * cam[0][1] + temp.y * cam[1][1] + temp.z * cam[2][1];
 	direction->z = temp.x * cam[0][2] + temp.y * cam[1][2] + temp.z * cam[2][2];
-	normalize(direction, direction->x, direction->y, direction->z);
+	normalize(direction);
 }
 
 // rotation along right/x-axis
@@ -214,12 +214,9 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 		cant(master->rt->camera, 5);
 	else if (keydata.key == MLX_KEY_E)
 		cant(master->rt->camera, -5);
-	normalize(master->rt->camera->normal, master->rt->camera->normal->x,\
-	master->rt->camera->normal->y, master->rt->camera->normal->z);
-	normalize(master->rt->camera->right, master->rt->camera->right->x,\
-	master->rt->camera->right->y, master->rt->camera->right->z);
-	normalize(master->rt->camera->up, master->rt->camera->up->x,\
-	master->rt->camera->up->y, master->rt->camera->up->z);
+	normalize(master->rt->camera->normal);
+	normalize(master->rt->camera->right);
+	normalize(master->rt->camera->up);
 	find_rays(master);
 }
 
