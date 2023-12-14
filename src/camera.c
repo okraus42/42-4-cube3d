@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 17:32:42 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:20:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,31 +20,18 @@ void	set_camera(t_camera *camera)
 	t_vect3f	*up;
 
 	forward = camera->normal;
-	tmp.x = 0;
-	tmp.y = 1;
-	tmp.z = 0;
-	forward->x = camera->normal->x;
-	forward->y = camera->normal->y;
-	forward->z = camera->normal->z;
 	right = camera->right;
 	up = camera->up;
+	tmp = (t_vect3f){0, 1, 0};
 	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
 	{
-		right->x = 1;
-		right->y = 0;
-		right->z = 0;
-		up->x = 0;
-		up->y = 0;
-		up->z = -1;
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, -1};
 	}
 	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
 	{
-		right->x = 1;
-		right->y = 0;
-		right->z = 0;
-		up->x = 0;
-		up->y = 0;
-		up->z = 1;
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
@@ -61,10 +48,10 @@ void	display_camera_matrix(t_camera *camera)
 
 	matrix = camera->matrix;
 	printf("WorldToCamera:\nR: %.5f %.5f %.5f;\
-	\nU: %.5f %.5f %.5f;\nF: %.5f %.5f %.5f;\nC: %.5f %.5f %.5f;\n",\
-	matrix[0][0], matrix[0][1], matrix[0][2],\
-	matrix[1][0], matrix[1][1], matrix[1][2],\
-	matrix[2][0], matrix[2][1], matrix[2][2],\
+	\nU: %.5f %.5f %.5f;\nF: %.5f %.5f %.5f;\nC: %.5f %.5f %.5f;\n", \
+	matrix[0][0], matrix[0][1], matrix[0][2], \
+	matrix[1][0], matrix[1][1], matrix[1][2], \
+	matrix[2][0], matrix[2][1], matrix[2][2], \
 	matrix[3][0], matrix[3][1], matrix[3][2]);
 }
 
@@ -143,6 +130,7 @@ void	tilt(t_camera *camera, double angle)
 	camera->up->y = res2.q2;
 	camera->up->z = res2.q3;
 }
+
 // rotation along up/y-axis
 void	pan(t_camera *camera, double angle)
 {	
@@ -220,48 +208,6 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 	find_rays(master);
 }
 
-void	move_right(t_camera *camera)
-{
-	camera->coords[X] += (camera->right->x * 3);
-	camera->coords[Y] += (camera->right->y * 3);
-	camera->coords[Z] += (camera->right->z * 3);
-}
-
-void	move_left(t_camera *camera)
-{
-	camera->coords[X] -= (camera->right->x * 3);
-	camera->coords[Y] -= (camera->right->y * 3);
-	camera->coords[Z] -= (camera->right->z * 3); 
-}
-
-void	move_forward(t_camera *camera)
-{
-	camera->coords[X] -= (camera->normal->x * 3);
-	camera->coords[Y] -= (camera->normal->y * 3);
-	camera->coords[Z] -= (camera->normal->z * 3);
-}
-
-void	move_backward(t_camera *camera)
-{
-	camera->coords[X] += (camera->normal->x * 3);
-	camera->coords[Y] += (camera->normal->y * 3);
-	camera->coords[Z] += (camera->normal->z * 3);
-}
-
-void	move_up(t_camera *camera)
-{
-	camera->coords[X] += (camera->up->x * 3);
-	camera->coords[Y] += (camera->up->y * 3);
-	camera->coords[Z] += (camera->up->z * 3);
-}
-
-void	move_down(t_camera *camera)
-{
-	camera->coords[X] -= (camera->up->x * 3);
-	camera->coords[Y] -= (camera->up->y * 3);
-	camera->coords[Z] -= (camera->up->z * 3);
-}
-
 void	shift_camera(t_master *master, mlx_key_data_t keydata)
 {
 	if (keydata.key == MLX_KEY_RIGHT)
@@ -272,7 +218,6 @@ void	shift_camera(t_master *master, mlx_key_data_t keydata)
 		move_forward(master->rt->camera);
 	if (keydata.key == MLX_KEY_DOWN)
 		move_backward(master->rt->camera);
-	// maybe actually bind this to a superkey later
 	if (keydata.key == MLX_KEY_PAGE_UP)
 		move_up(master->rt->camera);
 	if (keydata.key == MLX_KEY_PAGE_DOWN)

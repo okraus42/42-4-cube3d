@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 11:44:43 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:57:49 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
 	botcap->radius = cylinder->diameter / 2;
-	*botcap->normal = get_normal(botcap->nvect[X],\
+	*botcap->normal = get_normal(botcap->nvect[X], \
 		botcap->nvect[Y], botcap->nvect[Z]);
 }
 
@@ -50,9 +50,12 @@ void	define_topcap(t_cylinder *cylinder)
 	t_disc	*topcap;
 
 	topcap = cylinder->topcap;
-	topcap->coords[X] = cylinder->coords[X] + cylinder->height * cylinder->nvect[X];
-	topcap->coords[Y] = cylinder->coords[Y] + cylinder->height * cylinder->nvect[Y];
-	topcap->coords[Z] = cylinder->coords[Z] + cylinder->height * cylinder->nvect[Z];
+	topcap->coords[X] = cylinder->coords[X] \
+			+ cylinder->height * cylinder->nvect[X];
+	topcap->coords[Y] = cylinder->coords[Y] \
+			+ cylinder->height * cylinder->nvect[Y];
+	topcap->coords[Z] = cylinder->coords[Z] \
+			+ cylinder->height * cylinder->nvect[Z];
 	topcap->nvect[X] = cylinder->nvect[X];
 	topcap->nvect[Y] = cylinder->nvect[Y];
 	topcap->nvect[Z] = cylinder->nvect[Z];
@@ -60,7 +63,7 @@ void	define_topcap(t_cylinder *cylinder)
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
 	cylinder->topcap->radius = cylinder->diameter / 2;
-	*topcap->normal = get_normal(topcap->nvect[X],\
+	*topcap->normal = get_normal(topcap->nvect[X], \
 		topcap->nvect[Y], topcap->nvect[Z]);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 09:42:06 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:58:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 t_quat	get_rot_quat(t_vect3f axis, double angle)
 {
 	t_quat	rot;
-	
-	//camera->quat = malloc(sizeof(malloc));
+
 	rot.q0 = cos(rad(angle) / 2);
 	rot.q1 = axis.x * sin(rad(angle) / 2);
 	rot.q2 = axis.y * sin(rad(angle) / 2);
@@ -53,7 +52,7 @@ t_quat	get_inverse_quat(t_quat quat)
 t_quat	mult_quat(t_quat i, t_quat j)
 {
 	t_quat	res;
-	
+
 	res.q0 = i.q0 * j.q0 - i.q1 * j.q1 - i.q2 * j.q2 - i.q3 * j.q3;
 	res.q1 = i.q0 * j.q1 + i.q1 * j.q0 - i.q2 * j.q3 + i.q3 * j.q2;
 	res.q2 = i.q0 * j.q2 + i.q1 * j.q3 + i.q2 * j.q0 - i.q3 * j.q1;

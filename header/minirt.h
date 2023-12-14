@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/14 16:45:09 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:27:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,22 @@ t_quat	get_rot_quat(t_vect3f axis, double angle);
 t_quat	get_point_quat(t_vect3f axis);
 t_quat	get_inverse_quat(t_quat quat);
 t_quat	mult_quat(t_quat i, t_quat j);
+
+// Camera movements
+void	move_right(t_camera *camera);
+void	move_left(t_camera *camera);
+void	move_up(t_camera *camera);
+void	move_down(t_camera *camera);
+void	move_forward(t_camera *camera);
+void	move_backward(t_camera *camera);
+
+// Intersections
+int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t);
+void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f);
+int	intersect_plane(t_ray ray, void *object, double *t, t_object flag);
+int	intersect_disc(t_ray ray, t_disc *disc, double *t);
+int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
+int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t);
 
 t_vect3f	array_to_vect(double *array);
 

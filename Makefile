@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/14 12:21:00 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/14 18:27:18 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,9 @@ SRC_S		=	minirt.c \
 				quaternions.c \
 				vector_ops.c \
 				utils1.c \
-				math_utils.c
+				math_utils.c \
+				movements.c \
+				intersections.c
 
 # Formating
 

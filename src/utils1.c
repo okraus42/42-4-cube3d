@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:20:14 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 14:04:24 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:04:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_swapf(double *a, double *b)
 {
-	double temp;
+	double	temp;
 
 	temp = *a;
 	*a = *b;

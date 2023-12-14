@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_ops.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:04:07 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 12:16:04 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:05:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 t_vect3f	get_normal(double px, double py, double pz)
 {
 	t_vect3f	normal;
-	double	magnitude;
+	double		magnitude;
 
 	magnitude = sqrt(pow(px, 2) + pow(py, 2) + pow(pz, 2));
 	normal.x = px / magnitude;

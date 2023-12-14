@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:02:47 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 17:11:18 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 18:00:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	two_roots(double *t, t_quadterms quad)
 {
 	double	q;
 	double	res[2];
-	
+
 	if (quad.b > 0)
 		q = -0.5 * (quad.b + sqrt(quad.discr));
 	else
@@ -68,7 +68,7 @@ int	solve_quad(double *t, t_quadterms quad)
 		return (0);
 	else if (quad.discr == 0)
 	{
-		res[0] = - 0.5 * quad.b / quad.a;
+		res[0] = -0.5 * quad.b / quad.a;
 		res[1] = res[0];
 		*t = res[0];
 		return (1);
@@ -123,7 +123,7 @@ int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder)
 		return (0);
 	else if (quad.discr == 0)
 	{
-		res[0] = - 0.5 * quad.b / quad.a;
+		res[0] = -0.5 * quad.b / quad.a;
 		res[1] = res[0];
 		if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[0]))
 		{
@@ -134,5 +134,5 @@ int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder)
 			return (0);
 	}
 	else
-		return(two_roots_cyl(t, quad, ray, cylinder));
+		return (two_roots_cyl(t, quad, ray, cylinder));
 }

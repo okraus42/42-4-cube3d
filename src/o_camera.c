@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_camera.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 11:56:12 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:58:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	fill_camera(t_rt *rt, char **split)
 	get_coords(rt->camera->coords, split[1]);
 	if (!get_nvect(rt->camera->nvect, split[2]))
 		return (id_err("C", E_VECT_RANGE, E_RANGE_NORM));
-	*rt->camera->normal = get_normal(rt->camera->nvect[X],\
+	*rt->camera->normal = get_normal(rt->camera->nvect[X], \
 		rt->camera->nvect[Y], rt->camera->nvect[Z]);
 	rt->camera->fov = ft_atoi(split[3]);
 	if (rt->camera->fov < 0 || rt->camera->fov > 180)
