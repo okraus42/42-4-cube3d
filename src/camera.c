@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 11:38:13 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 17:32:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,46 +220,63 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 	find_rays(master);
 }
 
+void	move_right(t_camera *camera)
+{
+	camera->coords[X] += (camera->right->x * 3);
+	camera->coords[Y] += (camera->right->y * 3);
+	camera->coords[Z] += (camera->right->z * 3);
+}
+
+void	move_left(t_camera *camera)
+{
+	camera->coords[X] -= (camera->right->x * 3);
+	camera->coords[Y] -= (camera->right->y * 3);
+	camera->coords[Z] -= (camera->right->z * 3); 
+}
+
+void	move_forward(t_camera *camera)
+{
+	camera->coords[X] -= (camera->normal->x * 3);
+	camera->coords[Y] -= (camera->normal->y * 3);
+	camera->coords[Z] -= (camera->normal->z * 3);
+}
+
+void	move_backward(t_camera *camera)
+{
+	camera->coords[X] += (camera->normal->x * 3);
+	camera->coords[Y] += (camera->normal->y * 3);
+	camera->coords[Z] += (camera->normal->z * 3);
+}
+
+void	move_up(t_camera *camera)
+{
+	camera->coords[X] += (camera->up->x * 3);
+	camera->coords[Y] += (camera->up->y * 3);
+	camera->coords[Z] += (camera->up->z * 3);
+}
+
+void	move_down(t_camera *camera)
+{
+	camera->coords[X] -= (camera->up->x * 3);
+	camera->coords[Y] -= (camera->up->y * 3);
+	camera->coords[Z] -= (camera->up->z * 3);
+}
 
 void	shift_camera(t_master *master, mlx_key_data_t keydata)
 {
 	if (keydata.key == MLX_KEY_RIGHT)
-	{
-		master->rt->camera->coords[X] += (master->rt->camera->right->x * 5);
-		master->rt->camera->coords[Y] += (master->rt->camera->right->y * 5);
-		master->rt->camera->coords[Z] += (master->rt->camera->right->z * 5);
-	}
+		move_right(master->rt->camera);
 	if (keydata.key == MLX_KEY_LEFT)
-	{
-		master->rt->camera->coords[X] -= (master->rt->camera->right->x * 5);
-		master->rt->camera->coords[Y] -= (master->rt->camera->right->y * 5);
-		master->rt->camera->coords[Z] -= (master->rt->camera->right->z * 5); 
-	}
+		move_left(master->rt->camera);
 	if (keydata.key == MLX_KEY_UP)
-	{
-		master->rt->camera->coords[X] += (master->rt->camera->up->x * 5);
-		master->rt->camera->coords[Y] += (master->rt->camera->up->y * 5);
-		master->rt->camera->coords[Z] += (master->rt->camera->up->z * 5);
-	}
+		move_forward(master->rt->camera);
 	if (keydata.key == MLX_KEY_DOWN)
-	{
-		master->rt->camera->coords[X] -= (master->rt->camera->up->x * 5);
-		master->rt->camera->coords[Y] -= (master->rt->camera->up->y * 5);
-		master->rt->camera->coords[Z] -= (master->rt->camera->up->z * 5);
-	}
+		move_backward(master->rt->camera);
 	// maybe actually bind this to a superkey later
 	if (keydata.key == MLX_KEY_PAGE_UP)
-	{
-		master->rt->camera->coords[X] -= (master->rt->camera->normal->x * 5);
-		master->rt->camera->coords[Y] -= (master->rt->camera->normal->y * 5);
-		master->rt->camera->coords[Z] -= (master->rt->camera->normal->z * 5);
-	}
+		move_up(master->rt->camera);
 	if (keydata.key == MLX_KEY_PAGE_DOWN)
-	{
-		master->rt->camera->coords[X] += (master->rt->camera->normal->x * 5);
-		master->rt->camera->coords[Y] += (master->rt->camera->normal->y * 5);
-		master->rt->camera->coords[Z] += (master->rt->camera->normal->z * 5);
-	}
+		move_down(master->rt->camera);
 	if (keydata.key == MLX_KEY_KP_ADD)
 		master->rt->camera->fov += 5;
 	if (keydata.key == MLX_KEY_KP_SUBTRACT)

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/14 11:46:20 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/14 16:45:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@
 # include <math.h>
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
+
+
+typedef struct s_quadterms
+{
+	double	a;
+	double	b;
+	double	c;
+	double	discr;
+	double	res[2];
+}			t_quadterms;
 
 typedef enum e_object
 {
@@ -180,6 +190,13 @@ typedef struct s_master
 	t_rt		*rt;
 }				t_master;
 
+typedef union u_shape
+{
+	t_disc	*disc;
+	t_plane	*plane;
+}				t_shape;
+
+
 // Initialize objects
 void	init_ambient(t_rt *rt);
 void	init_light(t_rt *rt);
@@ -242,15 +259,23 @@ void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
 
 // Ray casting
-//void	cast_rays(t_master *master);
 void	find_rays(t_master *master);
 
-double	deg(double rad);
-double	rad(double deg);
-void	normalize(t_vect3f *vect);
+int	solve_quad(double *t, t_quadterms quad);
+int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder);
+double		deg(double rad);
+double		rad(double deg);
+void		ft_swapf(double *a, double *b);
+double		absf(double n);
+void		normalize(t_vect3f *vect);
 t_vect3f	get_normal(double px, double py, double pz);
+t_vect3f	subtract_center(t_vect3f vect1, double *coords);
+t_vect3f	subtract_vect3f(t_vect3f vect1, t_vect3f vect2);
+double		dot_product(t_vect3f vect1, t_vect3f vect2);
+t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
 
 // Cylinder caps functions
+int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
 void	init_discs(t_cylinder *cylinder);
 void	define_botcap(t_cylinder *cylinder);
 void	define_topcap(t_cylinder *cylinder);
@@ -271,6 +296,6 @@ t_quat	get_point_quat(t_vect3f axis);
 t_quat	get_inverse_quat(t_quat quat);
 t_quat	mult_quat(t_quat i, t_quat j);
 
-t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
+t_vect3f	array_to_vect(double *array);
 
 #endif
