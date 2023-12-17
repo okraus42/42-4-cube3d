@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/14 17:58:57 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:56:25 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minirt.h"
+#include "../../header/minirt.h"
 
 // axis = axis along which we're rotating
 t_quat	get_rot_quat(t_vect3f axis, double angle)
