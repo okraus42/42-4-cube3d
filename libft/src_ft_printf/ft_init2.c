@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:39 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/15 17:45:35 by okraus           ###   ########.fr       */
+/*   Updated: 2023/11/17 11:24:42 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,7 @@ int	ft_init_int(char c, t_pf_info *data, va_list arg)
 		data->type_flag |= LOWERCASE_D;
 	else if (c == 'i')
 		data->type_flag |= LOWERCASE_I;
+	else if (c == 'P')
+		data->type_flag |= UPPERCASE_P;
 	return (ft_get_int_value(data, arg));
 }

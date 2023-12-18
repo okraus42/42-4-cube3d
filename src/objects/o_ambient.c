@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ambient.c                                          :+:      :+:    :+:   */
+/*   o_ambient.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 14:54:05 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 15:29:27 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minirt.h"
+#include "../../header/minirt.h"
 
 void	init_ambient(t_rt *rt)
 {
-	rt->ambient = malloc(sizeof(t_ambient));
-	rt->ambient->rgb = malloc(sizeof(int) * 3);
+	rt->ambient = ft_calloc(1, sizeof(t_ambient));
+	rt->ambient->rgb = ft_calloc(3, sizeof(int));
 }
 
 int	check_format_ambient(char **split)

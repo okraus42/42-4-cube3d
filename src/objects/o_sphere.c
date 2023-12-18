@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   o_sphere.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 15:41:43 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minirt.h"
+#include "../../header/minirt.h"
 
 void	init_spheres(t_rt *rt, int *ids)
 {
 	int	i;
 
 	i = 0;
-	rt->spheres = malloc(sizeof(t_sphere *) * (ids[3] + 1));
+	rt->spheres = ft_calloc(ids[3] + 1, sizeof(t_sphere *));
 	rt->n_spheres = 0;
 	while (i < (ids[3]))
 	{
-		rt->spheres[i] = malloc(sizeof(t_sphere));
-		rt->spheres[i]->coords = malloc(sizeof(double) * 3);
-		rt->spheres[i++]->rgb = malloc(sizeof(int) * 3);
+		rt->spheres[i] = ft_calloc(1, sizeof(t_sphere));
+		rt->spheres[i]->coords = ft_calloc(3, sizeof(double));
+		rt->spheres[i++]->rgb = ft_calloc(3, sizeof(int));
 	}
 	rt->spheres[i] = NULL;
 }

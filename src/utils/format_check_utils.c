@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 16:05:31 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minirt.h"
+#include "../../header/minirt.h"
 
 static int	iter_float_triad(char *str, int *i, int *j, int flag)
 {

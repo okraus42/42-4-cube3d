@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 16:00:58 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/18 11:17:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
+# define HEIGHT 720
+# define WIDTH 1280
 # define X 0
 # define Y 1
 # define Z 2
@@ -61,6 +63,52 @@
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
 
+
+typedef struct s_quadterms
+{
+	double	a;
+	double	b;
+	double	c;
+	double	discr;
+	double	res[2];
+}			t_quadterms;
+
+typedef enum e_object
+{
+	EMPTY,
+	SPHERE,
+	PLANE,
+	CYLINDER,
+	DISC
+}				t_object;
+
+typedef struct s_vect2f
+{
+	double	x;
+	double	y;
+}				t_vect2f;
+
+typedef struct s_vect3f
+{
+	double	x;
+	double	y;
+	double	z;
+}				t_vect3f;
+
+typedef struct s_quat
+{
+	double	q0;
+	double	q1;
+	double	q2;
+	double	q3;
+}				t_quat;
+
+typedef struct s_ray
+{
+	t_vect3f	origin;
+	t_vect3f	direction;
+}				t_ray;
+
 typedef struct s_ambient
 {
 	double	ratio; // 0.0-1.0
@@ -72,6 +120,11 @@ typedef struct s_camera
 	double	*coords; // x,y,z coordinates of viewpoint
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		fov; // 0-180
+	t_vect3f	*normal;
+	t_vect3f	*right;
+	t_vect3f	*up;
+	double		**matrix;
+	t_quat		*quat;
 }				t_camera;
 
 typedef struct s_light
@@ -93,7 +146,17 @@ typedef struct s_plane
 	double	*coords; // x,y,z coordinates of point
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		*rgb;
+	t_vect3f	*normal;
 }				t_plane;
+
+typedef	struct s_disc
+{
+	double	*coords; // x,y,z coordinates of center
+	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	double	radius;
+	int		*rgb;
+	t_vect3f	*normal;
+}				t_disc;
 
 typedef struct s_cylinder
 {
@@ -102,6 +165,9 @@ typedef struct s_cylinder
 	double	diameter;
 	double	height;
 	int		*rgb;
+	t_disc	*botcap;
+	t_disc	*topcap;
+	t_vect3f	*normal;
 }				t_cylinder;
 
 typedef struct s_rt
@@ -123,6 +189,28 @@ typedef struct s_master
 	mlx_image_t	*img;
 	t_rt		*rt;
 }				t_master;
+
+typedef union u_shape
+{
+	t_disc	*disc;
+	t_plane	*plane;
+}				t_shape;
+
+typedef	struct s_rayfinder
+{
+	double		fov;
+	double		ratio;
+	double		scale;
+	double		t_near;
+	double		t;
+	double		object_flag;
+	void		*object_ptr;
+	uint32_t	clr;
+	t_vect3f	origin;
+	double		**cam_mat;
+}				t_rayfinder;
+
+
 
 // Initialize objects
 void	init_ambient(t_rt *rt);
@@ -164,7 +252,7 @@ int		fill_camera(t_rt *rt, char **split);
 int		fill_light(t_rt *rt, char **split);
 int		fill_plane(t_rt *rt, char **split);
 int		fill_sphere(t_rt *rt, char **split);
-int		fill_cylinder(t_rt *rt, char **split);;
+int		fill_cylinder(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -184,5 +272,61 @@ void	free_camera(t_rt *rt);
 void	free_spheres(t_rt *rt);
 void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
+
+// Ray casting
+void	find_rays(t_master *master);
+
+int	solve_quad(double *t, t_quadterms quad);
+int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder);
+double		deg(double rad);
+double		rad(double deg);
+void		ft_swapf(double *a, double *b);
+double		absf(double n);
+void		normalize(t_vect3f *vect);
+t_vect3f	get_normal(double px, double py, double pz);
+t_vect3f	subtract_center(t_vect3f vect1, double *coords);
+t_vect3f	subtract_vect3f(t_vect3f vect1, t_vect3f vect2);
+double		dot_product(t_vect3f vect1, t_vect3f vect2);
+t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
+
+// Cylinder caps functions
+int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
+void	init_discs(t_cylinder *cylinder);
+void	define_botcap(t_cylinder *cylinder);
+void	define_topcap(t_cylinder *cylinder);
+void	get_discs(t_cylinder *cylinder);
+void	free_discs(t_cylinder *cylinder);
+
+// Camera
+void	set_camera(t_camera *camera);
+t_vect3f	shift_origin(double **cam);
+void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp);
+void	shift_camera(t_master *master, mlx_key_data_t keydata);
+void	rotate_camera(t_master *master, mlx_key_data_t keydata);
+void	update_camera_matrix(t_camera *camera);
+
+// Quaternions
+t_quat	get_rot_quat(t_vect3f axis, double angle);
+t_quat	get_point_quat(t_vect3f axis);
+t_quat	get_inverse_quat(t_quat quat);
+t_quat	mult_quat(t_quat i, t_quat j);
+
+// Camera movements
+void	move_right(t_camera *camera);
+void	move_left(t_camera *camera);
+void	move_up(t_camera *camera);
+void	move_down(t_camera *camera);
+void	move_forward(t_camera *camera);
+void	move_backward(t_camera *camera);
+
+// Intersections
+int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t);
+void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f);
+int	intersect_plane(t_ray ray, void *object, double *t, t_object flag);
+int	intersect_disc(t_ray ray, t_disc *disc, double *t);
+int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
+int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t);
+
+t_vect3f	array_to_vect(double *array);
 
 #endif
