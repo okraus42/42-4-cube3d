@@ -6,11 +6,21 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/18 11:27:10 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/18 13:21:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
+
+void	update_object_ref(t_rayfinder *rf, void *object, t_object flag)
+{
+	if (rf->t < rf->t_near)
+	{
+		rf->t_near = rf->t;
+		rf->object_flag = flag;
+		rf->object_ptr = object;
+	}
+}
 
 void	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf)
 {
@@ -20,70 +30,25 @@ void	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf)
 	while (i < master->rt->n_spheres)
 	{
 		if (intersect_sphere(ray, master->rt->spheres[i], &rf->t))
-		{
-			if (rf->t < rf->t_near)
-			{
-				rf->t_near = rf->t;
-				rf->object_flag = SPHERE;
-				rf->object_ptr = master->rt->spheres[i];
-			}
-		}
+			update_object_ref(rf, master->rt->spheres[i], SPHERE);
 		i++;
 	}
 	i = 0;
 	while (i < master->rt->n_planes)
 	{
 		if (intersect_plane(ray, master->rt->planes[i], &rf->t, PLANE))
-		{
-			if (rf->t < rf->t_near)
-			{
-				rf->t_near = rf->t;
-				rf->object_flag = PLANE;
-				rf->object_ptr = master->rt->planes[i];
-			}
-		}
+			update_object_ref(rf, master->rt->planes[i], PLANE);
 		i++;
 	}
 	i = 0;
 	while (i < master->rt->n_cylinders)
 	{
 		if (intersect_cylinder(ray, master->rt->cylinders[i], &rf->t))
-		{
-			if (rf->t < rf->t_near)
-			{
-				rf->t_near = rf->t;
-				rf->object_flag = CYLINDER;
-				rf->object_ptr = master->rt->cylinders[i];
-			}
-		}
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cylinders)
-	{
+			update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
 		if (intersect_disc(ray, master->rt->cylinders[i]->topcap, &rf->t))
-		{
-			if (rf->t < rf->t_near)
-			{
-				rf->t_near = rf->t;
-				rf->object_flag = DISC;
-				rf->object_ptr = master->rt->cylinders[i]->topcap;
-			}
-		}
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cylinders)
-	{
+			update_object_ref(rf, master->rt->cylinders[i]->topcap, DISC);
 		if (intersect_disc(ray, master->rt->cylinders[i]->botcap, &rf->t))
-		{
-			if (rf->t < rf->t_near)
-			{
-				rf->t_near = rf->t;
-				rf->object_flag = DISC;
-				rf->object_ptr = master->rt->cylinders[i]->botcap;
-			}
-		}
+			update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
 }
