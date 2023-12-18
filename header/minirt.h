@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/14 18:27:37 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/18 11:17:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,21 @@ typedef union u_shape
 	t_disc	*disc;
 	t_plane	*plane;
 }				t_shape;
+
+typedef	struct s_rayfinder
+{
+	double		fov;
+	double		ratio;
+	double		scale;
+	double		t_near;
+	double		t;
+	double		object_flag;
+	void		*object_ptr;
+	uint32_t	clr;
+	t_vect3f	origin;
+	double		**cam_mat;
+}				t_rayfinder;
+
 
 
 // Initialize objects

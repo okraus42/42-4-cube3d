@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/17 17:55:20 by okraus           ###   ########.fr        #
+#    Updated: 2023/12/18 11:34:46 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,8 @@ SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
 				$(addprefix $(SRC_MDIR), $(SRC_M)) \
 				$(addprefix $(SRC_ODIR), $(SRC_O)) \
 				$(addprefix $(SRC_RDIR), $(SRC_R)) \
-				$(addprefix $(SRC_UDIR), $(SRC_U))
+				$(addprefix $(SRC_UDIR), $(SRC_U)) \
+				$(addprefix $(SRC_CDIR), $(SRC_C))
 
 # Source directories
 
@@ -60,12 +61,11 @@ SRC_MDIR	=	src/maths/
 SRC_ODIR	=	src/objects/
 SRC_RDIR	=	src/rays/
 SRC_UDIR	=	src/utils/
+SRC_CDIR	=	src/camera/
 
 # miniRT functions
 
-SRC_S		=	minirt.c \
-				camera.c \
-				movements.c
+SRC_S		=	minirt.c
 
 SRC_M		=	ft_atof.c \
 				quaternions.c \
@@ -91,7 +91,9 @@ SRC_U		=	check_identifiers_helpers.c \
 				math_utils.c \
 				print_contents.c \
 				utils1.c
-				
+
+SRC_C		= 	camera.c \
+				movements.c
 
 
 # Formating
@@ -122,7 +124,8 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_M:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_O:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_R:.c=.o)) \
-				$(addprefix $(OBJ_DIR), $(SRC_U:.c=.o))
+				$(addprefix $(OBJ_DIR), $(SRC_U:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_C:.c=.o))
 
 # RULES
 
@@ -189,6 +192,15 @@ $(OBJ_DIR)%.o:	$(SRC_RDIR)%.c $(HEADER)
 				@$(ECHO)
 
 $(OBJ_DIR)%.o:	$(SRC_UDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_CDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
