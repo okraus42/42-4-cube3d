@@ -6,7 +6,7 @@
 #    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/14 18:27:18 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/18 11:34:46 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,38 +47,54 @@ SLEEP		=	#sleep 0.5
 #	@$(CCC) $(OBJS) $(LIBS) $(LHEADERS) -o $(NAME)
 # SOURCES
 
-SRC			=	$(addprefix $(SRC_DIR), $(SRC_S))
+SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
+				$(addprefix $(SRC_MDIR), $(SRC_M)) \
+				$(addprefix $(SRC_ODIR), $(SRC_O)) \
+				$(addprefix $(SRC_RDIR), $(SRC_R)) \
+				$(addprefix $(SRC_UDIR), $(SRC_U)) \
+				$(addprefix $(SRC_CDIR), $(SRC_C))
 
 # Source directories
 
 SRC_DIR		=	src/
+SRC_MDIR	=	src/maths/
+SRC_ODIR	=	src/objects/
+SRC_RDIR	=	src/rays/
+SRC_UDIR	=	src/utils/
+SRC_CDIR	=	src/camera/
 
 # miniRT functions
 
-SRC_S		=	minirt.c \
-				ft_atof.c \
+SRC_S		=	minirt.c
+
+SRC_M		=	ft_atof.c \
+				quaternions.c \
+				vector_ops.c
+
+SRC_O		=	fill_object_getters.c \
+				o_ambient.c \
+				o_camera.c \
+				o_light.c \
+				o_cylinder.c \
+				o_cylinder_disc.c \
+				o_plane.c \
+				o_sphere.c \
+				object_handler.c
+				
+SRC_R		=	find_rays.c \
+				intersections.c
+
+SRC_U		=	check_identifiers_helpers.c \
 				error.c \
-				check_identifiers_helpers.c \
 				format_check_utils.c \
 				format_check_utils2.c \
-				print_contents.c \
-				fill_object_getters.c \
-				o_ambient.c \
-				o_light.c \
-				o_camera.c \
-				o_sphere.c \
-				o_plane.c \
-				o_cylinder.c \
-				object_handler.c \
-				find_rays.c \
-				o_cylinder_disc.c \
-				camera.c \
-				quaternions.c \
-				vector_ops.c \
-				utils1.c \
 				math_utils.c \
-				movements.c \
-				intersections.c
+				print_contents.c \
+				utils1.c
+
+SRC_C		= 	camera.c \
+				movements.c
+
 
 # Formating
 
@@ -104,7 +120,12 @@ PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
 
 # Objects
 
-OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o))
+OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_M:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_O:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_R:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_U:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_C:.c=.o))
 
 # RULES
 
@@ -135,6 +156,51 @@ libmlx:
 # COMPILATION
 
 $(OBJ_DIR)%.o:	$(SRC_DIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_MDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_ODIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_RDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_UDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_CDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2023/11/20 16:04:11 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../header/minirt.h"
+#include "../../header/minirt.h"
 
 int	*init_ids(void)
 {
