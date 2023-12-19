@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/18 13:21:27 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/19 17:04:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,26 +53,66 @@ void	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf)
 	}
 }
 
-void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr)
+void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *rf, t_ray ray)
 {
 	t_sphere	*sphere;
 	t_plane		*plane;
 	t_cylinder	*cylinder;
 	t_disc		*disc;
+	t_vect3f		hit_normal;
+	t_vect3f		intersection;
+	t_vect3f		view_dir;
+	double			facing_ratio;
+	double				r;
+	double				g;
+	double				b;
 
 	sphere = NULL;
 	plane = NULL;
 	cylinder = NULL;
 	disc = NULL;
+	intersection.x = ray.origin.x + rf->t_near * ray.direction.x;
+	intersection.y = ray.origin.y + rf->t_near * ray.direction.y;
+	intersection.z = ray.origin.z + rf->t_near * ray.direction.z;
 	if (flag == SPHERE)
 	{
 		sphere = (t_sphere *)object_ptr;
-		*clr = (sphere->rgb[0] << 24 | sphere->rgb[1] << 16 | sphere->rgb[2] << 8 | 0xFF);
+		hit_normal.x = intersection.x - sphere->coords[X];
+		hit_normal.y = intersection.y - sphere->coords[Y];
+		hit_normal.z = intersection.z - sphere->coords[Z];
+		normalize(&hit_normal);
+		view_dir = (t_vect3f){ray.direction.x * -1, ray.direction.y * -1, ray.direction.z * -1};
+		facing_ratio = dot_product(hit_normal, view_dir);
+		if (facing_ratio < 0)
+			facing_ratio = 0;
+		r = sphere->rgb[R] * facing_ratio;
+		g = sphere->rgb[G] * facing_ratio;
+		b = sphere->rgb[B] * facing_ratio;
+		*clr = ((int)r << 24
+				| (int)g << 16
+				| (int)b << 8
+				| 0xFF);
 	}
 	else if (flag == PLANE)
 	{
 		plane = (t_plane *)object_ptr;
-		*clr = (plane->rgb[0] << 24 | plane->rgb[1] << 16 | plane->rgb[2] << 8 | 0xFF);
+/* 		hit_normal.x = intersection.x - plane->coords[X];
+		hit_normal.y = intersection.y - plane->coords[Y];
+		hit_normal.z = intersection.z - plane->coords[Z]; */
+		hit_normal = *plane->normal;
+		normalize(&hit_normal);
+		view_dir = (t_vect3f){ray.direction.x * -1, ray.direction.y * -1, ray.direction.z * -1};
+		facing_ratio = dot_product(hit_normal, view_dir);
+		if (facing_ratio < 0)
+			facing_ratio = 0;
+		r = plane->rgb[R] * facing_ratio;
+		g = plane->rgb[G] * facing_ratio;
+		b = plane->rgb[B] * facing_ratio;
+		*clr = ((int)r << 24
+				| (int)g << 16
+				| (int)b << 8
+				| 0xFF);
+		//*clr = (plane->rgb[0] << 24 | plane->rgb[1] << 16 | plane->rgb[2] << 8 | 0xFF);
 	}
 	else if (flag == CYLINDER)
 	{
@@ -82,7 +122,20 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr)
 	else if (flag == DISC)
 	{
 		disc = (t_disc *)object_ptr;
-		*clr = 0xff00ffff;
+		hit_normal = *disc->normal;
+		normalize(&hit_normal);
+		view_dir = (t_vect3f){ray.direction.x * -1, ray.direction.y * -1, ray.direction.z * -1};
+		facing_ratio = dot_product(hit_normal, view_dir);
+		if (facing_ratio < 0)
+			facing_ratio = 0;
+		r = disc->rgb[R] * facing_ratio;
+		g = disc->rgb[G] * facing_ratio;
+		b = disc->rgb[B] * facing_ratio;
+		*clr = ((int)r << 24
+				| (int)g << 16
+				| (int)b << 8
+				| 0xFF);
+		//*clr = 0xff00ffff;
 		(void)disc;
 	}
 }
@@ -147,7 +200,7 @@ void	find_rays(t_master *master)
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
 			find_intersections(master, rays[x][y], &rf);
-			get_nearest_object(rf.object_flag, rf.object_ptr, &rf.clr);
+			get_nearest_object(rf.object_flag, rf.object_ptr, &rf.clr, &rf, rays[x][y]);
 			mlx_put_pixel(master->img, x, y, rf.clr);
 			y++;
 		}
