@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/19 11:47:08 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/19 11:50:30 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,11 @@ int	main(int ac, char *av[])
 		ft_printf("Should open map: %s\n", av[1]);
 		fd = open_file(av[1]);
 		if (fd < 0)
+		{
+			free(rt);
+			free(master);
 			return (EXIT_FAILURE);
+		}
 		if (!load_file(av[1], rt, fd))
 		{
 			print_contents(rt);		
