@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/19 09:43:51 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/19 11:42:10 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define R 0
 # define G 1
 # define B 2
+# define E_FILE "Invalid file"
+# define E_FILE_EXT "Invalid file extension"
 # define E_SPEC "Invalid number of specifiers"
 # define E_RATIO "Invalid ratio format"
 # define E_RGB "Invalid RGB format"

@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/19 10:20:34 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/19 11:47:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ void	load_data(t_rt *rt, char *file, int *flag)
 	close(fd);
 }
 
-int	load_file(char *file, t_rt *rt)
+int	load_file(char *file, t_rt *rt, int fd)
 {
-	int		fd;
 	int		flag;
 	int		*ids;
 
 	flag = 0;
-	fd = open(file, O_RDONLY);
 	ids = init_ids();
 	check_identifiers(fd, ids, &flag);
 	close(fd);
@@ -58,6 +56,33 @@ int	load_file(char *file, t_rt *rt)
 	if (!flag)
 		load_data(rt, file, &flag);
 	return (flag);
+}
+
+int	open_file(char *path)
+{
+	int		fd;
+	char	*extension;
+
+	fd = -1;
+	extension = ft_strrchr(path, '.');
+	if (extension != NULL)
+	{
+		if (ft_strlen(extension) != 3 || ft_strncmp(extension, ".rt", 3))
+		{
+			id_err("File", E_FILE_EXT, ".rt");
+			return (fd);
+		}
+	}
+	else
+	{
+		id_err("File", E_FILE_EXT, ".rt");
+		return (fd);
+	}
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		id_err("File", "Invalid file", NULL);
+	return (fd);
 }
 
 void	keyhook(mlx_key_data_t keydata, void *param)
@@ -100,11 +125,13 @@ int	main(int ac, char *av[])
 	t_master	*master;
 	mlx_t		*mlx;
 	mlx_image_t	*img;
+	int			fd;
 
+	fd = 0;
 	master = ft_calloc(1, sizeof(t_master));
 	rt = ft_calloc(1, sizeof(t_rt));
 	if (!rt || !master)
-		return (1);
+		return (EXIT_FAILURE);
 	if (ac != 2)
 	{
 		id_err(NULL, "Incorrect number of parameters", NULL);
@@ -115,7 +142,10 @@ int	main(int ac, char *av[])
 	else
 	{
 		ft_printf("Should open map: %s\n", av[1]);
-		if (!load_file(av[1], rt))
+		fd = open_file(av[1]);
+		if (fd < 0)
+			return (EXIT_FAILURE);
+		if (!load_file(av[1], rt, fd))
 		{
 			print_contents(rt);		
 			mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
@@ -134,5 +164,5 @@ int	main(int ac, char *av[])
 	free_objects(rt);
 	free(rt);
 	free(master);
-	return (0);
+	return (EXIT_SUCCESS);
 }
