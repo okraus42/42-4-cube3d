@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/18 11:17:34 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/19 09:43:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define E_RGB "Invalid RGB format"
 # define E_COORD "Invalid coordinate format"
 # define E_VECT "Invalid vector format"
+# define E_NORM_ZERO "Vector magnitude must not equal 0"
 # define E_FOV "Invalid FOV format"
 # define E_BRIGHT "Invalid brightness format"
 # define E_DIA "Invalid diameter format"

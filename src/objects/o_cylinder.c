@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:28:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ int	fill_cylinder(t_rt *rt, char **split)
 	get_coords(rt->cylinders[i]->coords, split[1]);
 	if (!get_nvect(rt->cylinders[i]->nvect, split[2]))
 		return (id_err("cy", E_VECT_RANGE, E_RANGE_NORM));
+	if (rt->cylinders[i]->nvect[X] == 0 && rt->cylinders[i]->nvect[Y] == 0
+		&& rt->cylinders[i]->nvect[Z] == 0)
+		return (id_err("cy", E_NORM_ZERO, NULL));
 	*rt->cylinders[i]->normal = get_normal(rt->cylinders[i]->nvect[X], \
 			rt->cylinders[i]->nvect[Y], rt->cylinders[i]->nvect[Z]);
 	rt->cylinders[i]->diameter = ft_atof(split[3]);

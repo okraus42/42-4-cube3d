@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:32:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ int	fill_plane(t_rt *rt, char **split)
 	get_coords(rt->planes[i]->coords, split[1]);
 	if (!get_nvect(rt->planes[i]->nvect, split[2]))
 		return (id_err("pl", E_VECT_RANGE, E_RANGE_NORM));
+	if (rt->planes[i]->nvect[X] == 0 && rt->planes[i]->nvect[Y] == 0
+		&& rt->planes[i]->nvect[Z] == 0)
+		return (id_err("pl", E_NORM_ZERO, NULL));
 	*rt->planes[i]->normal = get_normal(rt->planes[i]->nvect[X], \
 			rt->planes[i]->nvect[Y], rt->planes[i]->nvect[Z]);
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))

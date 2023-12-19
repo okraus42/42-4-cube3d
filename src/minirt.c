@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:41 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:20:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,35 +103,36 @@ int	main(int ac, char *av[])
 
 	master = ft_calloc(1, sizeof(t_master));
 	rt = ft_calloc(1, sizeof(t_rt));
-	if (!rt)
+	if (!rt || !master)
 		return (1);
 	if (ac != 2)
 	{
 		id_err(NULL, "Incorrect number of parameters", NULL);
 		free(rt);
+		free(master);
 		return (1);
 	}
 	else
 	{
 		ft_printf("Should open map: %s\n", av[1]);
 		if (!load_file(av[1], rt))
-			print_contents(rt);
-		//wrong map name segfaults!!
-		
-		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-		mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
-		img = mlx_new_image(mlx, mlx->width, mlx->height);
-		mlx_image_to_window(mlx, img, 0, 0);
-		master->mlx = mlx;
-		master->img = img;
-		master->rt = rt;
-		find_rays(master);
-		loop(mlx, master);
+		{
+			print_contents(rt);		
+			mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+			mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
+			img = mlx_new_image(mlx, mlx->width, mlx->height);
+			mlx_image_to_window(mlx, img, 0, 0);
+			master->mlx = mlx;
+			master->img = img;
+			master->rt = rt;
+			find_rays(master);
+			loop(mlx, master);
+			mlx_delete_image(mlx, img);
+			mlx_terminate(mlx);
+		}
 	}
 	free_objects(rt);
 	free(rt);
 	free(master);
-	mlx_delete_image(mlx, img);
-	mlx_terminate(mlx);
 	return (0);
 }
