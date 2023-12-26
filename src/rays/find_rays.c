@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/26 16:32:48 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 16:42:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,11 +172,25 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		b = plane->rgb[B] * light_ratio * master->rt->light->brightness;
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
+		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		if (find_intersections(master, shadowray, rf))
 		{
-			rgb[R] = plane->rgb_ambient[R];
-			rgb[G] = plane->rgb_ambient[G];
-			rgb[B] = plane->rgb_ambient[B];
+			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
+			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
+			shadow_inter.z = shadowray.origin.z + rf->t_near * shadowray.direction.z;
+			inter_dist = point_distance(shadow_inter, shadowray.origin);
+			if (inter_dist < light_dist)
+			{
+				rgb[R] = plane->rgb_ambient[R];
+				rgb[G] = plane->rgb_ambient[G];
+				rgb[B] = plane->rgb_ambient[B];
+			}
+			else
+			{
+				rgb[R] = ft_max((int)r, plane->rgb_ambient[R]);
+				rgb[G] = ft_max((int)g, plane->rgb_ambient[G]);
+				rgb[B] = ft_max((int)b, plane->rgb_ambient[B]);
+			}
 		}
 		else
 		{
@@ -202,11 +216,25 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		b = cylinder->rgb[B] * light_ratio * master->rt->light->brightness;
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
+		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		if (find_intersections(master, shadowray, rf))
 		{
-			rgb[R] = cylinder->rgb_ambient[R];
-			rgb[G] = cylinder->rgb_ambient[G];
-			rgb[B] = cylinder->rgb_ambient[B];
+			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
+			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
+			shadow_inter.z = shadowray.origin.z + rf->t_near * shadowray.direction.z;
+			inter_dist = point_distance(shadow_inter, shadowray.origin);
+			if (inter_dist < light_dist)
+			{
+				rgb[R] = cylinder->rgb_ambient[R];
+				rgb[G] = cylinder->rgb_ambient[G];
+				rgb[B] = cylinder->rgb_ambient[B];
+			}
+			else
+			{
+				rgb[R] = ft_max((int)r, cylinder->rgb_ambient[R]);
+				rgb[G] = ft_max((int)g, cylinder->rgb_ambient[G]);
+				rgb[B] = ft_max((int)b, cylinder->rgb_ambient[B]);
+			}
 		}
 		else
 		{
@@ -232,11 +260,25 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		b = disc->rgb[B] * light_ratio * master->rt->light->brightness;
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
+		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		if (find_intersections(master, shadowray, rf))
 		{
-			rgb[R] = disc->rgb_ambient[R];
-			rgb[G] = disc->rgb_ambient[G];
-			rgb[B] = disc->rgb_ambient[B];
+			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
+			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
+			shadow_inter.z = shadowray.origin.z + rf->t_near * shadowray.direction.z;
+			inter_dist = point_distance(shadow_inter, shadowray.origin);
+			if (inter_dist < light_dist)
+			{
+				rgb[R] = disc->rgb_ambient[R];
+				rgb[G] = disc->rgb_ambient[G];
+				rgb[B] = disc->rgb_ambient[B];
+			}
+			else
+			{
+				rgb[R] = ft_max((int)r, disc->rgb_ambient[R]);
+				rgb[G] = ft_max((int)g, disc->rgb_ambient[G]);
+				rgb[B] = ft_max((int)b, disc->rgb_ambient[B]);
+			}
 		}
 		else
 		{
