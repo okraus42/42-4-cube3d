@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/26 16:47:20 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 19:05:48 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	update_object_ref(t_rayfinder *rf, void *object, t_object flag)
 	return (1);
 }
 
-int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf)
+int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type)
 {
 	int	i;
 	int	flag;
@@ -54,6 +54,8 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf)
 			flag = update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
+	if (type != SHADOW && intersect_sphere(ray, master->rt->light_sphere, &rf->t))
+		flag = update_object_ref(rf, master->rt->light_sphere, LIGHT);
 	return (flag);
 }
 
@@ -130,7 +132,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		rf->t_near = (double)INT_MAX;
-		if (find_intersections(master, shadowray, rf))
+		if (find_intersections(master, shadowray, rf, SHADOW))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
 			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
@@ -175,7 +177,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		rf->t_near = (double)INT_MAX;
-		if (find_intersections(master, shadowray, rf))
+		if (find_intersections(master, shadowray, rf, SHADOW))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
 			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
@@ -220,7 +222,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		rf->t_near = (double)INT_MAX;
-		if (find_intersections(master, shadowray, rf))
+		if (find_intersections(master, shadowray, rf, SHADOW))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
 			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
@@ -265,7 +267,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
 		rf->t_near = (double)INT_MAX;
-		if (find_intersections(master, shadowray, rf))
+		if (find_intersections(master, shadowray, rf, SHADOW))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
 			shadow_inter.y = shadowray.origin.y + rf->t_near * shadowray.direction.y;
@@ -290,6 +292,17 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 			rgb[G] = ft_max((int)g, disc->rgb_ambient[G]);
 			rgb[B] = ft_max((int)b, disc->rgb_ambient[B]);
 		}
+		*clr = (rgb[R] << 24 | rgb[G] << 16 | rgb[B] << 8 | 0xFF);
+	}
+	else if (flag == LIGHT)
+	{
+		sphere = (t_sphere *)object_ptr;
+		r = sphere->rgb[R] * master->rt->light->brightness;
+		g = sphere->rgb[G] * master->rt->light->brightness;
+		b = sphere->rgb[B] * master->rt->light->brightness;
+		rgb[R] = ft_max((int)r, sphere->rgb_ambient[R]);
+		rgb[G] = ft_max((int)g, sphere->rgb_ambient[G]);
+		rgb[B] = ft_max((int)b, sphere->rgb_ambient[B]);
 		*clr = (rgb[R] << 24 | rgb[G] << 16 | rgb[B] << 8 | 0xFF);
 	}
 }
@@ -365,7 +378,7 @@ void	precompute_ambient(t_rt *rt)
 		get_ambient_clr(rt->ambient, rt->cylinders[i]->topcap->rgb_ambient, rt->cylinders[i]->rgb);
 		i++;
 	}
-	
+	//get_ambient_clr(rt->ambient, rt->light_sphere->rgb_ambient, rt->light_sphere->rgb);
 }
 
 void	find_rays(t_master *master)
@@ -388,7 +401,7 @@ void	find_rays(t_master *master)
 		{
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
-			find_intersections(master, rays[x][y], &rf);
+			find_intersections(master, rays[x][y], &rf, PRIMARY);
 			get_nearest_object(rf.object_flag, rf.object_ptr, &rf.clr, &rf, rays[x][y], master);
 			mlx_put_pixel(master->img, x, y, rf.clr);
 			y++;

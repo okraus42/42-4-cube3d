@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/26 16:32:30 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 17:23:25 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,8 @@ int	main(int ac, char *av[])
 		}
 		if (!load_file(av[1], rt, fd))
 		{
-			print_contents(rt);		
+			fill_light_sphere(rt);
+			print_contents(rt);
 			mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 			mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
 			img = mlx_new_image(mlx, mlx->width, mlx->height);

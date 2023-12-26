@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/26 18:46:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init_objects(t_rt *rt, int *ids)
 	init_spheres(rt, ids);
 	init_planes(rt, ids);
 	init_cylinders(rt, ids);
+	init_light_sphere(rt);
 }
 
 int	check_identifiers(int fd, int *ids, int *flag)
@@ -88,4 +89,5 @@ void	free_objects(t_rt *rt)
 	free_spheres(rt);
 	free_planes(rt);
 	free_cylinders(rt);
+	free_light_sphere(rt);
 }

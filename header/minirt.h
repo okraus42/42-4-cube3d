@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/26 16:33:17 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 18:58:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,16 @@ typedef enum e_object
 	SPHERE,
 	PLANE,
 	CYLINDER,
-	DISC
+	DISC,
+	LIGHT
 }				t_object;
+
+typedef enum e_raytype
+{
+	PRIMARY,
+	SECONDARY,
+	SHADOW
+}			t_raytype;
 
 typedef struct s_vect2f
 {
@@ -185,6 +193,7 @@ typedef struct s_rt
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;
+	t_sphere	*light_sphere;
 	int			n_spheres;
 	int			n_planes;
 	int			n_cylinders;
@@ -226,6 +235,7 @@ void	init_camera(t_rt *rt);
 void	init_spheres(t_rt *rt, int *ids);
 void	init_planes(t_rt *rt, int *ids);
 void	init_cylinders(t_rt *rt, int *ids);
+void	init_light_sphere(t_rt *rt);
 
 // Identifier check
 int	*init_ids(void);
@@ -259,7 +269,9 @@ int		fill_camera(t_rt *rt, char **split);
 int		fill_light(t_rt *rt, char **split);
 int		fill_plane(t_rt *rt, char **split);
 int		fill_sphere(t_rt *rt, char **split);
+int		fill_light_sphere(t_rt *rt);
 int		fill_cylinder(t_rt *rt, char **split);
+int		fill_light_sphere(t_rt *rt);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -279,6 +291,7 @@ void	free_camera(t_rt *rt);
 void	free_spheres(t_rt *rt);
 void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
+void	free_light_sphere(t_rt *rt);
 
 // Ray casting
 void	find_rays(t_master *master);
