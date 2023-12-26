@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/26 16:42:35 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 16:47:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
+		rf->t_near = (double)INT_MAX;
 		if (find_intersections(master, shadowray, rf))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
@@ -173,6 +174,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
+		rf->t_near = (double)INT_MAX;
 		if (find_intersections(master, shadowray, rf))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
@@ -217,6 +219,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
+		rf->t_near = (double)INT_MAX;
 		if (find_intersections(master, shadowray, rf))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
@@ -261,6 +264,7 @@ void	get_nearest_object(int flag, void *object_ptr, uint32_t *clr, t_rayfinder *
 		shadowray.direction = light_dir;
 		shadowray.origin = add_vect3f(intersection, scale_vect3f(shadow_bias, hit_normal));
 		light_dist = point_distance(shadowray.origin, array_to_vect(master->rt->light->coords));
+		rf->t_near = (double)INT_MAX;
 		if (find_intersections(master, shadowray, rf))
 		{
 			shadow_inter.x = shadowray.origin.x + rf->t_near * shadowray.direction.x;
