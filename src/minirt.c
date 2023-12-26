@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/19 11:50:30 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 16:32:30 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ int	main(int ac, char *av[])
 			master->mlx = mlx;
 			master->img = img;
 			master->rt = rt;
+			precompute_ambient(master->rt);
 			find_rays(master);
 			loop(mlx, master);
 			mlx_delete_image(mlx, img);

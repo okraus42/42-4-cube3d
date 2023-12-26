@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/19 11:42:10 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/26 16:33:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ typedef struct s_sphere
 	double	*coords; // x,y,z coordinates of center
 	double	diameter;
 	int		*rgb;
+	int		*rgb_ambient;
 }				t_sphere;
 
 typedef struct s_plane
@@ -149,6 +150,7 @@ typedef struct s_plane
 	double	*coords; // x,y,z coordinates of point
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		*rgb;
+	int		*rgb_ambient;
 	t_vect3f	*normal;
 }				t_plane;
 
@@ -158,6 +160,7 @@ typedef	struct s_disc
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	double	radius;
 	int		*rgb;
+	int		*rgb_ambient;
 	t_vect3f	*normal;
 }				t_disc;
 
@@ -168,6 +171,7 @@ typedef struct s_cylinder
 	double	diameter;
 	double	height;
 	int		*rgb;
+	int		*rgb_ambient;
 	t_disc	*botcap;
 	t_disc	*topcap;
 	t_vect3f	*normal;
@@ -288,7 +292,9 @@ double		absf(double n);
 void		normalize(t_vect3f *vect);
 t_vect3f	get_normal(double px, double py, double pz);
 t_vect3f	subtract_center(t_vect3f vect1, double *coords);
+t_vect3f	add_vect3f(t_vect3f vect1, t_vect3f vect2);
 t_vect3f	subtract_vect3f(t_vect3f vect1, t_vect3f vect2);
+t_vect3f	scale_vect3f(double scale, t_vect3f vect);
 double		dot_product(t_vect3f vect1, t_vect3f vect2);
 t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
 
@@ -331,5 +337,6 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
 int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t);
 
 t_vect3f	array_to_vect(double *array);
-
+void	precompute_ambient(t_rt *rt);
+void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
 #endif

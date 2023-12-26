@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/21 15:50:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->nvect = ft_calloc(3, sizeof(double));
 	cylinder->botcap->rgb = ft_calloc(3, sizeof(int));
 	cylinder->topcap->rgb = ft_calloc(3, sizeof(int));
+	cylinder->botcap->rgb_ambient = ft_calloc(3, sizeof(int));
+	cylinder->topcap->rgb_ambient = ft_calloc(3, sizeof(int));
 	cylinder->botcap->normal = ft_calloc(1, sizeof(t_vect3f));
 	cylinder->topcap->normal = ft_calloc(1, sizeof(t_vect3f));
 }
@@ -40,6 +42,9 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->rgb[R] = cylinder->rgb[R];
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
+	botcap->rgb_ambient[R] = cylinder->rgb_ambient[R];
+	botcap->rgb_ambient[G] = cylinder->rgb_ambient[G];
+	botcap->rgb_ambient[B] = cylinder->rgb_ambient[B];
 	botcap->radius = cylinder->diameter / 2;
 	*botcap->normal = get_normal(botcap->nvect[X], \
 		botcap->nvect[Y], botcap->nvect[Z]);
@@ -62,6 +67,9 @@ void	define_topcap(t_cylinder *cylinder)
 	topcap->rgb[R] = cylinder->rgb[R];
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
+	topcap->rgb_ambient[R] = cylinder->rgb_ambient[R];
+	topcap->rgb_ambient[G] = cylinder->rgb_ambient[G];
+	topcap->rgb_ambient[B] = cylinder->rgb_ambient[B];
 	cylinder->topcap->radius = cylinder->diameter / 2;
 	*topcap->normal = get_normal(topcap->nvect[X], \
 		topcap->nvect[Y], topcap->nvect[Z]);
@@ -78,10 +86,12 @@ void	free_discs(t_cylinder *cylinder)
 	free(cylinder->botcap->coords);
 	free(cylinder->botcap->nvect);
 	free(cylinder->botcap->rgb);
+	free(cylinder->botcap->rgb_ambient);
 	free(cylinder->botcap->normal);
 	free(cylinder->topcap->coords);
 	free(cylinder->topcap->nvect);
 	free(cylinder->topcap->rgb);
+	free(cylinder->topcap->rgb_ambient);
 	free(cylinder->topcap->normal);
 	free(cylinder->botcap);
 	free(cylinder->topcap);

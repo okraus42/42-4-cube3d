@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:02:47 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/21 13:26:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ int	check_caps(double *t, t_ray ray, t_cylinder *cylinder, double *res)
 		*t = res[0];
 		return (1);
 	}
-	if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[1]))
+	/* if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[1]))
 	{
 		*t = res[1];
 		return (1);
-	}
+	} */
 	return (0);
 }
 
