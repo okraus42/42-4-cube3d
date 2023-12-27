@@ -6,7 +6,7 @@
 #    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2023/12/26 18:49:37 by plouda           ###   ########.fr        #
+#    Updated: 2023/12/27 17:47:38 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,8 @@ SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
 				$(addprefix $(SRC_ODIR), $(SRC_O)) \
 				$(addprefix $(SRC_RDIR), $(SRC_R)) \
 				$(addprefix $(SRC_UDIR), $(SRC_U)) \
-				$(addprefix $(SRC_CDIR), $(SRC_C))
+				$(addprefix $(SRC_CDIR), $(SRC_C)) \
+				$(addprefix $(SRC_SHDIR), $(SRC_SH))
 
 # Source directories
 
@@ -62,6 +63,7 @@ SRC_ODIR	=	src/objects/
 SRC_RDIR	=	src/rays/
 SRC_UDIR	=	src/utils/
 SRC_CDIR	=	src/camera/
+SRC_SHDIR	=	src/shader/
 
 # miniRT functions
 
@@ -96,6 +98,9 @@ SRC_U		=	check_identifiers_helpers.c \
 SRC_C		= 	camera.c \
 				movements.c
 
+SRC_SH		=	object_shaders.c \
+				shader_utils.c
+
 
 # Formating
 
@@ -126,7 +131,8 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_O:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_R:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_U:.c=.o)) \
-				$(addprefix $(OBJ_DIR), $(SRC_C:.c=.o))
+				$(addprefix $(OBJ_DIR), $(SRC_C:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_SH:.c=.o))
 
 # RULES
 
@@ -202,6 +208,15 @@ $(OBJ_DIR)%.o:	$(SRC_UDIR)%.c $(HEADER)
 				@$(ECHO)
 
 $(OBJ_DIR)%.o:	$(SRC_CDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_SHDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"

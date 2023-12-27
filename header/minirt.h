@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/26 18:58:06 by plouda           ###   ########.fr       */
+/*   Updated: 2023/12/27 17:51:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,13 @@ typedef	struct s_rayfinder
 	uint32_t	clr;
 	t_vect3f	origin;
 	double		**cam_mat;
+	t_ray		shadowray;
+	t_vect3f	hit_normal;
+	t_vect3f	light_dir;
+	double		light_ratio;
+	double		light_dist;
+	t_vect3f	shadow_inter;
+	double		inter_dist;
 }				t_rayfinder;
 
 
@@ -348,8 +355,27 @@ int	intersect_plane(t_ray ray, void *object, double *t, t_object flag);
 int	intersect_disc(t_ray ray, t_disc *disc, double *t);
 int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
 int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t);
+t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t);
+int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type);
+
+// Shaders
+void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
+void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
+void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray);
+void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
+void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
+
+// Shader utils
+uint32_t	get_clr_int(int *rgb);
+uint32_t	ft_max_clr(uint32_t a, uint32_t b);
+void		clamp(double min, double max, double *value);
+double		point_distance(t_vect3f p1, t_vect3f p2);
+void		get_clr_components(int *light, int *rgb, double ratio, double bright);
+t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder);
+void		trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light);
 
 t_vect3f	array_to_vect(double *array);
 void	precompute_ambient(t_rt *rt);
 void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
+
 #endif
