@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/27 17:43:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:21:04 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	normalize(&rf->light_dir);
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
 	clamp(0, 1, &rf->light_ratio);
-	get_clr_components(rgb_light_arr, sphere->rgb, \
+	get_clr_components(rgb_light_arr, sphere->rgb_light, \
 	rf->light_ratio, master->rt->light->brightness);
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(sphere->rgb_ambient);
@@ -50,7 +50,7 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	normalize(&rf->light_dir);
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
 	clamp(0, 1, &rf->light_ratio);
-	get_clr_components(rgb_light_arr, plane->rgb, \
+	get_clr_components(rgb_light_arr, plane->rgb_light, \
 	rf->light_ratio, master->rt->light->brightness);
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(plane->rgb_ambient);
@@ -74,7 +74,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	normalize(&rf->light_dir);
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
 	clamp(0, 1, &rf->light_ratio);
-	get_clr_components(rgb_light_arr, cylinder->rgb, \
+	get_clr_components(rgb_light_arr, cylinder->rgb_light, \
 	rf->light_ratio, master->rt->light->brightness);
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(cylinder->rgb_ambient);
@@ -98,7 +98,7 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	normalize(&rf->light_dir);
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
 	clamp(0, 1, &rf->light_ratio);
-	get_clr_components(rgb_light_arr, disc->rgb, \
+	get_clr_components(rgb_light_arr, disc->rgb_light, \
 	rf->light_ratio, master->rt->light->brightness);
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(disc->rgb_ambient);

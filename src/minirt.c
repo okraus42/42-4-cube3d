@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/26 17:23:25 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:11:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,17 +90,17 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	t_master	*master;
 
 	master = param;
-	if ((keydata.key == MLX_KEY_RIGHT
+	if (!keydata.modifier && keydata.action != MLX_RELEASE && 
+			(keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
 			|| keydata.key == MLX_KEY_KP_ADD
 			|| keydata.key == MLX_KEY_KP_SUBTRACT
 			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN)
-		&& keydata.action != MLX_RELEASE)
+			|| keydata.key == MLX_KEY_PAGE_DOWN))
 		shift_camera(master, keydata);
-	if ((keydata.key == MLX_KEY_A
+	else if (!keydata.modifier && (keydata.key == MLX_KEY_A
 			|| keydata.key == MLX_KEY_D
 			|| keydata.key == MLX_KEY_W
 			|| keydata.key == MLX_KEY_S
@@ -108,9 +108,13 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_E)
 		&& keydata.action != MLX_RELEASE)
 		rotate_camera(master, keydata);
-	if ((keydata.key == MLX_KEY_ESCAPE)
+	else if ((keydata.key == MLX_KEY_ESCAPE)
 		&& keydata.action != MLX_RELEASE)
 		mlx_close_window(master->mlx);
+	else if (mlx_is_key_down(master->mlx, MLX_KEY_LEFT_SHIFT)
+			&& keydata.key == MLX_KEY_UP 
+			&& keydata.action != MLX_RELEASE)
+		rotate_objects(master, keydata);
 }
 
 static void	loop(mlx_t *mlx, t_master *master)
@@ -161,6 +165,7 @@ int	main(int ac, char *av[])
 			master->img = img;
 			master->rt = rt;
 			precompute_ambient(master->rt);
+			precompute_light(master->rt);
 			find_rays(master);
 			loop(mlx, master);
 			mlx_delete_image(mlx, img);

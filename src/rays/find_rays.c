@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/27 17:50:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:20:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,40 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 				* rf->scale;
 	ray->direction.z = -1; // change to calibrate focal length, should be -1
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
+}
+
+void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
+{
+
+	rgb_light[R] = ((int)((rgb[R] + 1) * (light->rgb[R] * light->brightness + 1)) - 1) >> 8;
+	rgb_light[G] = ((int)((rgb[G] + 1) * (light->rgb[G] * light->brightness + 1)) - 1) >> 8;
+	rgb_light[B] = ((int)((rgb[B] + 1) * (light->rgb[B] * light->brightness + 1)) - 1) >> 8;
+}
+
+void	precompute_light(t_rt *rt)
+{
+	int	i;
+
+	i = 0;
+	while (i < rt->n_spheres)
+	{
+		get_light_clr(rt->light, rt->spheres[i]->rgb_light, rt->spheres[i]->rgb);
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_planes)
+	{
+		get_light_clr(rt->light, rt->planes[i]->rgb_light, rt->planes[i]->rgb);
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_cylinders)
+	{
+		get_light_clr(rt->light, rt->cylinders[i]->rgb_light, rt->cylinders[i]->rgb);
+		get_light_clr(rt->light, rt->cylinders[i]->botcap->rgb_light, rt->cylinders[i]->rgb);
+		get_light_clr(rt->light, rt->cylinders[i]->topcap->rgb_light, rt->cylinders[i]->rgb);
+		i++;
+	}
 }
 
 void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb)

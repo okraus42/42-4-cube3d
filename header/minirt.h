@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2023/12/27 17:51:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:20:21 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct s_sphere
 	double	diameter;
 	int		*rgb;
 	int		*rgb_ambient;
+	int		*rgb_light;
 }				t_sphere;
 
 typedef struct s_plane
@@ -159,6 +160,7 @@ typedef struct s_plane
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		*rgb;
 	int		*rgb_ambient;
+	int		*rgb_light;
 	t_vect3f	*normal;
 }				t_plane;
 
@@ -169,6 +171,7 @@ typedef	struct s_disc
 	double	radius;
 	int		*rgb;
 	int		*rgb_ambient;
+	int		*rgb_light;
 	t_vect3f	*normal;
 }				t_disc;
 
@@ -180,6 +183,7 @@ typedef struct s_cylinder
 	double	height;
 	int		*rgb;
 	int		*rgb_ambient;
+	int		*rgb_light;
 	t_disc	*botcap;
 	t_disc	*topcap;
 	t_vect3f	*normal;
@@ -376,6 +380,9 @@ void		trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light);
 
 t_vect3f	array_to_vect(double *array);
 void	precompute_ambient(t_rt *rt);
+void	precompute_light(t_rt *rt);
 void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
+
+void	rotate_objects(t_master *master, mlx_key_data_t keydata);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/21 17:46:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:16:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i]->nvect = ft_calloc(3, sizeof(double));
 		rt->cylinders[i]->rgb = ft_calloc(3, sizeof(double));
 		rt->cylinders[i]->rgb_ambient = ft_calloc(3, sizeof(double));
+		rt->cylinders[i]->rgb_light = ft_calloc(3, sizeof(double));
 		rt->cylinders[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		init_discs(rt->cylinders[i]);
 		i++;
@@ -97,6 +98,7 @@ void	free_cylinders(t_rt *rt)
 		free(rt->cylinders[i]->nvect);
 		free(rt->cylinders[i]->rgb);
 		free(rt->cylinders[i]->rgb_ambient);
+		free(rt->cylinders[i]->rgb_light);
 		free_discs(rt->cylinders[i]);
 		free(rt->cylinders[i]->normal);
 		free(rt->cylinders[i++]);

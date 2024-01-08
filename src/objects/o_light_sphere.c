@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_light_sphere.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/26 19:09:40 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:22:47 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	init_light_sphere(t_rt *rt)
 	rt->light_sphere->coords = ft_calloc(3, sizeof(double));
 	rt->light_sphere->rgb = ft_calloc(3, sizeof(int));
 	rt->light_sphere->rgb_ambient = ft_calloc(3, sizeof(int));
+	rt->light_sphere->rgb_light = ft_calloc(3, sizeof(int));
 }
 
 int	fill_light_sphere(t_rt *rt)
@@ -37,5 +38,6 @@ void	free_light_sphere(t_rt *rt)
 	free(rt->light_sphere->coords);
 	free(rt->light_sphere->rgb);
 	free(rt->light_sphere->rgb_ambient);
+	free(rt->light_sphere->rgb_light);
 	free(rt->light_sphere);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/21 17:46:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/08 15:17:46 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i]->nvect = ft_calloc(3, sizeof(double));
 		rt->planes[i]->rgb = ft_calloc(3, sizeof(int));
 		rt->planes[i]->rgb_ambient = ft_calloc(3, sizeof(int));
+		rt->planes[i]->rgb_light = ft_calloc(3, sizeof(int));
 		rt->planes[i++]->normal = ft_calloc(1, sizeof(t_vect3f));
 	}
 	rt->planes[i] = NULL;
@@ -80,6 +81,7 @@ void	free_planes(t_rt *rt)
 		free(rt->planes[i]->nvect);
 		free(rt->planes[i]->rgb);
 		free(rt->planes[i]->rgb_ambient);
+		free(rt->planes[i]->rgb_light);
 		free(rt->planes[i]->normal);
 		free(rt->planes[i++]);
 	}
