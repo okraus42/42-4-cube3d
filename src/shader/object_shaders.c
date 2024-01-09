@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:21:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 11:07:04 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,12 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	normalize(&rf->light_dir);
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
-	clamp(0, 1, &rf->light_ratio);
+	//clamp(0, 1, &rf->light_ratio);
+	if (rf->light_ratio < 0)
+	{
+		rf->light_ratio = rf->light_ratio * -1;
+		rf->hit_normal = invert_vect3f(rf->hit_normal); // because shadowray's origin will be shadowed by the plane itself otherwise
+	}
 	get_clr_components(rgb_light_arr, plane->rgb_light, \
 	rf->light_ratio, master->rt->light->brightness);
 	rgb_light = get_clr_int(rgb_light_arr);

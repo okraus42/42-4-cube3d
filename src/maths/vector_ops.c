@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector_ops.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:04:07 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/21 12:55:34 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 11:05:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,14 @@ t_vect3f	scale_vect3f(double scale, t_vect3f vect)
 	res.y = scale * vect.y;
 	res.z = scale * vect.z;
 	return (res);
+}
+
+t_vect3f	invert_vect3f(t_vect3f vect)
+{
+	t_vect3f	inv;
+
+	inv.x = vect.x * -1;
+	inv.y = vect.y * -1;
+	inv.z = vect.z * -1;
+	return (inv);
 }
