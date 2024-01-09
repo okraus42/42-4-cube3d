@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:17:46 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 12:22:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i]->rgb = ft_calloc(3, sizeof(int));
 		rt->planes[i]->rgb_ambient = ft_calloc(3, sizeof(int));
 		rt->planes[i]->rgb_light = ft_calloc(3, sizeof(int));
-		rt->planes[i++]->normal = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i]->normal = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i]->right = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i++]->mode = DEFAULT;
 	}
 	rt->planes[i] = NULL;
 }
@@ -66,6 +69,7 @@ int	fill_plane(t_rt *rt, char **split)
 			rt->planes[i]->nvect[Y], rt->planes[i]->nvect[Z]);
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));
+	set_plane_vects(rt->planes[i]);
 	rt->n_planes++;
 	return (0);
 }
@@ -83,6 +87,8 @@ void	free_planes(t_rt *rt)
 		free(rt->planes[i]->rgb_ambient);
 		free(rt->planes[i]->rgb_light);
 		free(rt->planes[i]->normal);
+		free(rt->planes[i]->right);
+		free(rt->planes[i]->up);
 		free(rt->planes[i++]);
 	}
 	free(rt->planes);

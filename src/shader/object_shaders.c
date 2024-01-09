@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 11:07:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 14:39:47 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	uint32_t	rgb_ambient;
 	
 	sphere = (t_sphere *)object_ptr;
+	if (sphere->mode == HIGHLIGHT)
+	{
+		rf->clr = 0x00FF00FF;
+		return ;
+	}
 	rf->hit_normal = subtract_vect3f(intersection, array_to_vect(sphere->coords));
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	normalize(&rf->hit_normal);
@@ -45,6 +50,11 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	uint32_t	rgb_ambient;
 	
 	plane = (t_plane *)object_ptr;
+	if (plane->mode == HIGHLIGHT)
+	{
+		rf->clr = 0x00FF00FF;
+		return ;
+	}
 	rf->hit_normal = *plane->normal;
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	normalize(&rf->light_dir);
@@ -74,6 +84,11 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	uint32_t	rgb_ambient;
 	
 	cylinder = (t_cylinder *)object_ptr;
+	if (cylinder->mode == HIGHLIGHT)
+	{
+		rf->clr = 0x00FF00FF;
+		return ;
+	}
 	rf->hit_normal = get_hit_normal(rf, ray, intersection, *cylinder);
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	normalize(&rf->light_dir);
@@ -98,6 +113,11 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	uint32_t	rgb_ambient;
 	
 	disc = (t_disc *)object_ptr;
+	if (disc->mode == HIGHLIGHT)
+	{
+		rf->clr = 0x00FF00FF;
+		return ;
+	}
 	rf->hit_normal = *disc->normal;
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	normalize(&rf->light_dir);

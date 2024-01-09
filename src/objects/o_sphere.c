@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:18:15 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 12:23:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	init_spheres(t_rt *rt, int *ids)
 		rt->spheres[i]->coords = ft_calloc(3, sizeof(double));
 		rt->spheres[i]->rgb = ft_calloc(3, sizeof(int));
 		rt->spheres[i]->rgb_ambient = ft_calloc(3, sizeof(int));
-		rt->spheres[i++]->rgb_light = ft_calloc(3, sizeof(int));
+		rt->spheres[i]->rgb_light = ft_calloc(3, sizeof(int));
+		rt->spheres[i++]->mode = DEFAULT;
 	}
 	rt->spheres[i] = NULL;
 }

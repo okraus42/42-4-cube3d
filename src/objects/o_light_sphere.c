@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:22:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 12:22:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	init_light_sphere(t_rt *rt)
 	rt->light_sphere->rgb = ft_calloc(3, sizeof(int));
 	rt->light_sphere->rgb_ambient = ft_calloc(3, sizeof(int));
 	rt->light_sphere->rgb_light = ft_calloc(3, sizeof(int));
+	rt->light_sphere->mode = DEFAULT;
 }
 
 int	fill_light_sphere(t_rt *rt)

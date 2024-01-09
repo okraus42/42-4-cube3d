@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/09 11:02:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 15:37:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,14 @@
 # include "../.MLX42/include/MLX42/MLX42.h"
 # include "../libft/header/libft.h"
 
+typedef enum e_mode
+{
+	DEFAULT,
+	OBJECT_CHOICE,
+	HIGHLIGHT,
+	LIGHTING,
+	CAMERA
+}			t_mode;
 
 typedef struct s_quadterms
 {
@@ -92,12 +100,6 @@ typedef enum e_raytype
 	SECONDARY,
 	SHADOW
 }			t_raytype;
-
-typedef struct s_vect2f
-{
-	double	x;
-	double	y;
-}				t_vect2f;
 
 typedef struct s_vect3f
 {
@@ -152,6 +154,7 @@ typedef struct s_sphere
 	int		*rgb;
 	int		*rgb_ambient;
 	int		*rgb_light;
+	t_mode	mode;
 }				t_sphere;
 
 typedef struct s_plane
@@ -164,6 +167,7 @@ typedef struct s_plane
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_mode		mode;
 }				t_plane;
 
 typedef	struct s_disc
@@ -177,6 +181,7 @@ typedef	struct s_disc
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_mode		mode;
 }				t_disc;
 
 typedef struct s_cylinder
@@ -193,6 +198,7 @@ typedef struct s_cylinder
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_mode		mode;
 }				t_cylinder;
 
 typedef struct s_rt
@@ -209,18 +215,22 @@ typedef struct s_rt
 	int			n_cylinders;
 }				t_rt;
 
+typedef struct s_options
+{
+	t_mode		mode;
+	void		*object;
+	t_object	object_flag;
+	int			object_id;
+}				t_options;
+
+
 typedef struct s_master
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	t_rt		*rt;
+	t_options	*options;
 }				t_master;
-
-typedef union u_shape
-{
-	t_disc	*disc;
-	t_plane	*plane;
-}				t_shape;
 
 typedef	struct s_rayfinder
 {
@@ -392,5 +402,7 @@ void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
 
 void	rotate_objects(t_master *master, mlx_key_data_t keydata);
 void	set_plane_vects(t_plane *plane);
+void	choose_object(t_master *master, mlx_key_data_t keydata);
+void	reset_to_default(t_master *master);
 
 #endif

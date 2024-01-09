@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/01/08 13:30:01 by plouda           ###   ########.fr        #
+#    Updated: 2024/01/09 12:48:00 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,8 @@ SRC_O		=	fill_object_getters.c \
 				o_sphere.c \
 				o_light_sphere.c \
 				object_handler.c \
-				rotate_objects.c
+				rotate_objects.c \
+				choose_object.c
 				
 SRC_R		=	find_rays.c \
 				intersections.c

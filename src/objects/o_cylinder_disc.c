@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:26:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/09 12:21:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->rgb_light = ft_calloc(3, sizeof(int));
 	cylinder->botcap->normal = ft_calloc(1, sizeof(t_vect3f));
 	cylinder->topcap->normal = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->botcap->right = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->topcap->right = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->botcap->up = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->topcap->up = ft_calloc(1, sizeof(t_vect3f));
+	cylinder->botcap->mode = DEFAULT;
+	cylinder->topcap->mode = DEFAULT;
+
 }
 
 void	define_botcap(t_cylinder *cylinder)
@@ -38,9 +45,9 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->coords[X] = cylinder->coords[X];
 	botcap->coords[Y] = cylinder->coords[Y];
 	botcap->coords[Z] = cylinder->coords[Z];
-	botcap->nvect[X] = cylinder->nvect[X] * -1;
-	botcap->nvect[Y] = cylinder->nvect[Y] * -1;
-	botcap->nvect[Z] = cylinder->nvect[Z] * -1;
+	botcap->nvect[X] = cylinder->normal->x * -1;
+	botcap->nvect[Y] = cylinder->normal->y * -1;
+	botcap->nvect[Z] = cylinder->normal->z * -1;
 	botcap->rgb[R] = cylinder->rgb[R];
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
@@ -61,14 +68,14 @@ void	define_topcap(t_cylinder *cylinder)
 
 	topcap = cylinder->topcap;
 	topcap->coords[X] = cylinder->coords[X] \
-			+ cylinder->height * cylinder->nvect[X];
+			+ cylinder->height * cylinder->normal->x;
 	topcap->coords[Y] = cylinder->coords[Y] \
-			+ cylinder->height * cylinder->nvect[Y];
+			+ cylinder->height * cylinder->normal->y;
 	topcap->coords[Z] = cylinder->coords[Z] \
-			+ cylinder->height * cylinder->nvect[Z];
-	topcap->nvect[X] = cylinder->nvect[X];
-	topcap->nvect[Y] = cylinder->nvect[Y];
-	topcap->nvect[Z] = cylinder->nvect[Z];
+			+ cylinder->height * cylinder->normal->z;
+	topcap->nvect[X] = cylinder->normal->x;
+	topcap->nvect[Y] = cylinder->normal->y;
+	topcap->nvect[Z] = cylinder->normal->z;
 	topcap->rgb[R] = cylinder->rgb[R];
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
@@ -97,12 +104,16 @@ void	free_discs(t_cylinder *cylinder)
 	free(cylinder->botcap->rgb_ambient);
 	free(cylinder->botcap->rgb_light);
 	free(cylinder->botcap->normal);
+	free(cylinder->botcap->right);
+	free(cylinder->botcap->up);
+	free(cylinder->botcap);
 	free(cylinder->topcap->coords);
 	free(cylinder->topcap->nvect);
 	free(cylinder->topcap->rgb);
 	free(cylinder->topcap->rgb_ambient);
 	free(cylinder->topcap->rgb_light);
 	free(cylinder->topcap->normal);
-	free(cylinder->botcap);
+	free(cylinder->topcap->right);
+	free(cylinder->topcap->up);
 	free(cylinder->topcap);
 }
