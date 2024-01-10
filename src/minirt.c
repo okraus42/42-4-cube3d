@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/09 16:02:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:50:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
-			|| keydata.key == MLX_KEY_KP_ADD
-			|| keydata.key == MLX_KEY_KP_SUBTRACT
+			|| keydata.key == MLX_KEY_MINUS
+			|| keydata.key == MLX_KEY_EQUAL
 			|| keydata.key == MLX_KEY_PAGE_UP
 			|| keydata.key == MLX_KEY_PAGE_DOWN))
 		shift_camera(master, keydata);
@@ -112,22 +112,35 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 		rotate_camera(master, keydata);
 	else if (keydata.modifier == MLX_CONTROL && keydata.key == MLX_KEY_O
 		&& keydata.action != MLX_RELEASE && master->options->mode == DEFAULT)
-		master->options->mode = OBJECT_CHOICE;
-/* 	else if (keydata.modifier == MLX_CONTROL && keydata.key == MLX_KEY_L
-		&& keydata.action != MLX_RELEASE && master->options->mode == DEFAULT)
-		master->options->mode = LIGHT; */
+		{
+			master->options->mode = OBJECT_CHOICE;
+			choose_object(master, keydata);
+		}
 	else if ((master->options->mode == OBJECT_CHOICE 
 			|| master->options->mode == HIGHLIGHT)
+			&& !keydata.modifier
 			&& keydata.key == MLX_KEY_UP
 			&& keydata.action != MLX_RELEASE)
 		choose_object(master, keydata);
-/* 	else if (master->options->mode == LIGHT
-			&& keydata.action != MLX_RELEASE) */
-	//rotate_objects(master, keydata);
+	else if (master->options->mode == HIGHLIGHT
+			&& keydata.action != MLX_RELEASE
+			&& keydata.modifier == MLX_SHIFT
+			&& (keydata.key == MLX_KEY_RIGHT
+			|| keydata.key == MLX_KEY_LEFT
+			|| keydata.key == MLX_KEY_UP
+			|| keydata.key == MLX_KEY_DOWN
+			|| keydata.key == MLX_KEY_PAGE_UP
+			|| keydata.key == MLX_KEY_PAGE_DOWN
+			|| keydata.key == MLX_KEY_A
+			|| keydata.key == MLX_KEY_D
+			|| keydata.key == MLX_KEY_W
+			|| keydata.key == MLX_KEY_S
+			|| keydata.key == MLX_KEY_Q
+			|| keydata.key == MLX_KEY_E))
+		rotate_objects(master, keydata);
 	else if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
 		reset_to_default(master);
-	else if ((keydata.key == MLX_KEY_ESCAPE)
-		&& keydata.action != MLX_RELEASE)
+	else if ((keydata.key == MLX_KEY_ESCAPE) && keydata.action != MLX_RELEASE)
 		mlx_close_window(master->mlx);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   choose_object.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 16:01:19 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:55:10 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,12 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 					return ;
 				}
 				else
-				{
-					master->options->mode = DEFAULT;
-					flag = 1;
 					break ;
-				}
 			}
 			i++;
 		}
 		master->options->mode = OBJECT_CHOICE;
+		choose_object(master, keydata);
 	}
 	find_rays(master);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/01/09 12:48:00 by plouda           ###   ########.fr        #
+#    Updated: 2024/01/10 14:48:09 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,7 +98,8 @@ SRC_U		=	check_identifiers_helpers.c \
 				utils1.c
 
 SRC_C		= 	camera.c \
-				movements.c
+				movements.c \
+				rotations.c
 
 SRC_SH		=	object_shaders.c \
 				shader_utils.c

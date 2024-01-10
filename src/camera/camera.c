@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/18 11:29:58 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:04:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,82 +105,6 @@ void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
 	normalize(direction);
 }
 
-// rotation along right/x-axis
-// p' = q−1 pq
-void	tilt(t_camera *camera, double angle)
-{
-	t_quat	res1;
-	t_quat	res2;
-	t_quat	point;
-	t_quat	inv;
-	t_quat	rot;
-
-	rot = get_rot_quat(*camera->right, angle);
-	inv = get_inverse_quat(rot);
-	point = get_point_quat(*camera->normal);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->normal->x = res2.q1;
-	camera->normal->y = res2.q2;
-	camera->normal->z = res2.q3;
-	point = get_point_quat(*camera->up);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->up->x = res2.q1;
-	camera->up->y = res2.q2;
-	camera->up->z = res2.q3;
-}
-
-// rotation along up/y-axis
-void	pan(t_camera *camera, double angle)
-{	
-	t_quat	res1;
-	t_quat	res2;
-	t_quat	point;
-	t_quat	inv;
-	t_quat	rot;
-
-	rot = get_rot_quat(*camera->up, angle);
-	inv = get_inverse_quat(rot);
-	point = get_point_quat(*camera->normal);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->normal->x = res2.q1;
-	camera->normal->y = res2.q2;
-	camera->normal->z = res2.q3;
-	point = get_point_quat(*camera->right);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->right->x = res2.q1;
-	camera->right->y = res2.q2;
-	camera->right->z = res2.q3;
-}
-
-// rotation along forward/z-axis
-void	cant(t_camera *camera, double angle)
-{
-	t_quat	res1;
-	t_quat	res2;
-	t_quat	point;
-	t_quat	inv;
-	t_quat	rot;
-
-	rot = get_rot_quat(*camera->normal, angle);
-	inv = get_inverse_quat(rot);
-	point = get_point_quat(*camera->right);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->right->x = res2.q1;
-	camera->right->y = res2.q2;
-	camera->right->z = res2.q3;
-	point = get_point_quat(*camera->up);
-	res1 = mult_quat(inv, point);
-	res2 = mult_quat(res1, rot);
-	camera->up->x = res2.q1;
-	camera->up->y = res2.q2;
-	camera->up->z = res2.q3;
-}
-
 /*
 Rotating camera basically means rotating two of its defining axes
 along the third. It is theoretically possible to rotate all three
@@ -190,46 +114,25 @@ coordinate system.
 */
 void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 {
-	if (keydata.key == MLX_KEY_A)
-		pan(master->rt->camera, 5);
-	else if (keydata.key == MLX_KEY_D)
-		pan(master->rt->camera, -5);
-	else if (keydata.key == MLX_KEY_W)
-		tilt(master->rt->camera, 5);
-	else if (keydata.key == MLX_KEY_S)
-		tilt(master->rt->camera, -5);
-	else if (keydata.key == MLX_KEY_Q)
-		cant(master->rt->camera, 5);
-	else if (keydata.key == MLX_KEY_E)
-		cant(master->rt->camera, -5);
-	normalize(master->rt->camera->normal);
-	normalize(master->rt->camera->right);
-	normalize(master->rt->camera->up);
+	t_camera	*camera;
+
+	camera = master->rt->camera;
+	rotate(keydata.key, camera->normal, camera->right, camera->up);
+	/* normalize(camera->normal);
+	normalize(camera->right);
+	normalize(camera->up); */
+	master->rt->camera = camera;
 	find_rays(master);
 }
 
 void	shift_camera(t_master *master, mlx_key_data_t keydata)
 {
-	if (keydata.key == MLX_KEY_RIGHT)
-		move_right(master->rt->camera);
-	if (keydata.key == MLX_KEY_LEFT)
-		move_left(master->rt->camera);
-	if (keydata.key == MLX_KEY_UP)
-		move_forward(master->rt->camera);
-	if (keydata.key == MLX_KEY_DOWN)
-		move_backward(master->rt->camera);
-	if (keydata.key == MLX_KEY_PAGE_UP)
-		move_up(master->rt->camera);
-	if (keydata.key == MLX_KEY_PAGE_DOWN)
-		move_down(master->rt->camera);
-	if (keydata.key == MLX_KEY_KP_ADD)
-		master->rt->camera->fov += 5;
-	if (keydata.key == MLX_KEY_KP_SUBTRACT)
+	move(keydata.key, master->rt->camera, master->rt->camera->coords);
+	if (keydata.key == MLX_KEY_MINUS)
 		master->rt->camera->fov -= 5;
-	if (master->rt->camera->fov <= 0)
-		master->rt->camera->fov = 1;
-	else if (master->rt->camera->fov >= 180)
-		master->rt->camera->fov = 179;
+	if (keydata.key == MLX_KEY_EQUAL)
+		master->rt->camera->fov += 5;
+	clamp(1, 179, &master->rt->camera->fov);
 	printf("FOV: %d\n", master->rt->camera->fov);
 	find_rays(master);
 }

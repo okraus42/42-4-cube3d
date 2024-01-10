@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 12:21:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:31:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 	if (!get_rgb(rt->cylinders[i]->rgb, split[5]))
 		return (id_err("cy", E_RGB_RANGE, E_RANGE_INT));
 	get_discs(rt->cylinders[i]);
+	set_cylinder_vects(rt->cylinders[i]);
 	rt->n_cylinders++;
 	return (0);
 }

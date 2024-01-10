@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/09 15:37:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:31:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,12 +362,19 @@ t_quat	get_inverse_quat(t_quat quat);
 t_quat	mult_quat(t_quat i, t_quat j);
 
 // Camera movements
-void	move_right(t_camera *camera);
-void	move_left(t_camera *camera);
-void	move_up(t_camera *camera);
-void	move_down(t_camera *camera);
-void	move_forward(t_camera *camera);
-void	move_backward(t_camera *camera);
+void	move(keys_t key, t_camera *camera, double *coords);
+void	move_right(t_camera *camera, double *coords);
+void	move_left(t_camera *camera, double *coords);
+void	move_up(t_camera *camera, double *coords);
+void	move_down(t_camera *camera, double *coords);
+void	move_forward(t_camera *camera, double *coords);
+void	move_backward(t_camera *camera, double *coords);
+
+// Rotations
+void	rotate(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up);
+void	tilt(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle);
+void	pan(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle);
+void	cant(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle);
 
 // Intersections
 int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t);
@@ -389,7 +396,7 @@ void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
 // Shader utils
 uint32_t	get_clr_int(int *rgb);
 uint32_t	ft_max_clr(uint32_t a, uint32_t b);
-void		clamp(double min, double max, double *value);
+void		clampf(double min, double max, double *value);
 double		point_distance(t_vect3f p1, t_vect3f p2);
 void		get_clr_components(int *light, int *rgb, double ratio, double bright);
 t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder);
@@ -402,7 +409,10 @@ void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
 
 void	rotate_objects(t_master *master, mlx_key_data_t keydata);
 void	set_plane_vects(t_plane *plane);
+void	set_cylinder_vects(t_cylinder *cylinder);
+void	set_disc_vects(t_disc *disc);
 void	choose_object(t_master *master, mlx_key_data_t keydata);
 void	reset_to_default(t_master *master);
+void	clamp(int min, int max, int *value);
 
 #endif

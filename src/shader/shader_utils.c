@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/08 15:03:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 13:10:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,15 @@ uint32_t	ft_max_clr(uint32_t a, uint32_t b)
 	return (c);
 }
 
-void	clamp(double min, double max, double *value)
+void	clamp(int min, int max, int *value)
+{
+	if (*value < min)
+		*value = min;
+	else if (*value > max)
+		*value = max;
+}
+
+void	clampf(double min, double max, double *value)
 {
 	if (*value < min)
 		*value = min;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 12:21:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/10 15:33:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->radius = cylinder->diameter / 2;
 	*botcap->normal = get_normal(botcap->nvect[X], \
 		botcap->nvect[Y], botcap->nvect[Z]);
+	set_disc_vects(botcap);
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -88,6 +89,7 @@ void	define_topcap(t_cylinder *cylinder)
 	cylinder->topcap->radius = cylinder->diameter / 2;
 	*topcap->normal = get_normal(topcap->nvect[X], \
 		topcap->nvect[Y], topcap->nvect[Z]);
+	set_disc_vects(topcap);
 }
 
 void	get_discs(t_cylinder *cylinder)
