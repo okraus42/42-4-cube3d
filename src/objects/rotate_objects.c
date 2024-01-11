@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate_objects.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 15:40:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:07:49 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,25 @@ void	set_disc_vects(t_disc *disc)
 	}
 }
 
+void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera)
+{
+	if (key == MLX_KEY_A)
+		pan(forward, right, camera->up, 5);
+	else if (key == MLX_KEY_D)
+		pan(forward, right, camera->up, -5);
+	else if (key == MLX_KEY_W)
+		tilt(forward, camera->right, up, 5);
+	else if (key == MLX_KEY_S)
+		tilt(forward, camera->right, up, -5);
+	else if (key == MLX_KEY_Q)
+		cant(camera->normal, right, up, 5);
+	else if (key == MLX_KEY_E)
+		cant(camera->normal, right, up, -5);
+	normalize(forward);
+	normalize(right);
+	normalize(up);
+}
+
 void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, sphere->coords);
@@ -111,13 +130,13 @@ void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, plane->coords);
-	rotate(keydata.key, plane->normal, plane->right, plane->up);
+	rotate_o(keydata.key, plane->normal, plane->right, plane->up, rt->camera);
 }
 
 void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, cylinder->coords);
-	rotate(keydata.key, cylinder->normal, cylinder->right, cylinder->up);
+	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
 	get_discs(cylinder);
 }
 

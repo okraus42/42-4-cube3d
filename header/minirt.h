@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/10 15:31:59 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:07:32 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,5 +414,7 @@ void	set_disc_vects(t_disc *disc);
 void	choose_object(t_master *master, mlx_key_data_t keydata);
 void	reset_to_default(t_master *master);
 void	clamp(int min, int max, int *value);
+
+void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera);
 
 #endif
