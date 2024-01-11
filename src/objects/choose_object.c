@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   choose_object.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 15:55:10 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:20:44 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			master->rt->cylinders[i]->topcap->mode = HIGHLIGHT;
 		}
 		master->options->mode = HIGHLIGHT;
+		find_rays(master);
+		return ;
 	}
 	else
 	{
@@ -137,8 +139,8 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			}
 			i++;
 		}
-		master->options->mode = OBJECT_CHOICE;
-		choose_object(master, keydata);
 	}
+	master->options->mode = OBJECT_CHOICE;
+	choose_object(master, keydata);
 	find_rays(master);
 }
