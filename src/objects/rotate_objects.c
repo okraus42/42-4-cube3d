@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/11 13:07:49 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:55:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,5 +179,12 @@ void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
 void	rotate_objects(t_master *master, mlx_key_data_t keydata)
 {
 	manipulate_highlighted_object(master->rt, keydata);
+	find_rays(master);
+}
+
+void	manipulate_light(t_master *master, mlx_key_data_t keydata)
+{
+	move(keydata.key, master->rt->camera, master->rt->light_sphere->coords);
+	move(keydata.key, master->rt->camera, master->rt->light->coords);
 	find_rays(master);
 }

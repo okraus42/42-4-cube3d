@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 13:09:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:45:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,11 @@ void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master)
 	int			rgb_light_arr[3];
 	
 	sphere = (t_sphere *)object_ptr;
+	if (sphere->mode == HIGHLIGHT)
+	{
+		rf->clr = 0x00FF00FF;
+		return ;
+	}
 	get_clr_components(rgb_light_arr, sphere->rgb, 1, master->rt->light->brightness);
 	rf->clr = get_clr_int(rgb_light_arr);
 }

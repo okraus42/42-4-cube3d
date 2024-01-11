@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 13:07:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 13:54:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_Q
 			|| keydata.key == MLX_KEY_E))
 		rotate_camera(master, keydata);
-	else if (keydata.modifier == MLX_CONTROL && keydata.key == MLX_KEY_O
-		&& keydata.action != MLX_RELEASE && master->options->mode == DEFAULT)
+	else if (keydata.modifier == MLX_CONTROL 
+			&& keydata.key == MLX_KEY_O
+			&& keydata.action != MLX_RELEASE
+			&& master->options->mode == DEFAULT)
 		{
 			master->options->mode = OBJECT_CHOICE;
 			choose_object(master, keydata);
@@ -138,6 +140,25 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_Q
 			|| keydata.key == MLX_KEY_E))
 		rotate_objects(master, keydata);
+	else if (keydata.modifier == MLX_CONTROL 
+			&& keydata.key == MLX_KEY_L
+			&& keydata.action != MLX_RELEASE
+			&& master->options->mode == DEFAULT)
+		{
+			master->options->mode = LIGHTING;
+			master->rt->light_sphere->mode = HIGHLIGHT;
+			manipulate_light(master, keydata);
+		}
+	else if (master->options->mode == LIGHTING
+			&& keydata.action != MLX_RELEASE
+			&& keydata.modifier == MLX_SHIFT
+			&& (keydata.key == MLX_KEY_RIGHT
+			|| keydata.key == MLX_KEY_LEFT
+			|| keydata.key == MLX_KEY_UP
+			|| keydata.key == MLX_KEY_DOWN
+			|| keydata.key == MLX_KEY_PAGE_UP
+			|| keydata.key == MLX_KEY_PAGE_DOWN))
+		manipulate_light(master, keydata);
 	else if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
 		reset_to_default(master);
 	else if ((keydata.key == MLX_KEY_ESCAPE) && keydata.action != MLX_RELEASE)
