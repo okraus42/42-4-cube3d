@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 13:10:17 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 17:14:17 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ uint32_t	get_clr_int(int *rgb)
 	return (clr);
 }
 
-#define MAX(a,b) (((a) > (b)) * (a) + ((b) >= (a)) * (b))
+//#define MAX(a,b) (((a) > (b)) * (a) + ((b) >= (a)) * (b))
 
 uint32_t	ft_max_clr(uint32_t a, uint32_t b)
 {

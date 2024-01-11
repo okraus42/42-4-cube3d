@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 13:54:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 16:48:12 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,80 @@ int	open_file(char *path)
 	if (fd < 0)
 		id_err("File", "Invalid file", NULL);
 	return (fd);
+}
+
+int	iterate_highlighted_object(t_rt *rt)
+{
+	int	i;
+
+	i = 0;
+	while (i < rt->n_spheres)
+	{
+		if (rt->spheres[i]->mode == HIGHLIGHT)
+		{
+			return (SPHERE | (i << 8));
+		}
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_planes)
+	{
+		if (rt->planes[i]->mode == HIGHLIGHT)
+		{
+			return (PLANE | (i << 8));
+		}
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_cylinders)
+	{
+		if (rt->cylinders[i]->mode == HIGHLIGHT)
+		{
+			return (CYLINDER | (i << 8));
+		}
+		i++;
+	}
+	if (rt->light_sphere->mode == HIGHLIGHT)
+	{
+		return (LIGHT | (i << 8));
+	}
+	return (0);
+}
+
+void	ft_draw_string(t_master *master)
+{
+	int	i;
+
+	char	*s[STRINGS];
+
+	if (master->options->mode == DEFAULT)
+		s[0] = ft_strdup("MODE: DEFAULT");
+	else if (master->options->mode == OBJECT_CHOICE)
+		s[0] = ft_strdup("MODE: OBJECT_CHOICE");
+	else if (master->options->mode == HIGHLIGHT)
+		s[0] = ft_strdup("MODE: HIGHLIGHT");
+	else if (master->options->mode == LIGHTING)
+		s[0] = ft_strdup("MODE: LIGHTING");
+	else if (master->options->mode == CAMERA)
+		s[0] = ft_strdup("MODE: CAMERA");
+	else
+		s[0] = ft_strdup("UNKNOWN MODE");
+	i = iterate_highlighted_object(master->rt);
+	if ((i & 0xFF) == SPHERE)
+		ft_sprintf(master->str[1], "HIGHLIGHTED: SPHERE: %i", i >> 8);
+	else if ((i & 0xFF) == PLANE)
+		ft_sprintf(master->str[1], "HIGHLIGHTED: PLANE: %i", i >> 8);
+	else if ((i & 0xFF) == CYLINDER)
+		ft_sprintf(master->str[1], "HIGHLIGHTED: CYLINDER: %i", i >> 8);
+	else if ((i & 0xFF) == LIGHT)
+		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT");
+	else
+		ft_sprintf(master->str[1], " ");
+	mlx_delete_image(master->mlx, master->string[0]);
+	mlx_delete_image(master->mlx, master->string[1]);
+	master->string[0] = mlx_put_string(master->mlx, s[0], 10, 5);
+	master->string[1] = mlx_put_string(master->mlx, master->str[1], 10, 25);
+	free (s[0]);
 }
 
 void	keyhook(mlx_key_data_t keydata, void *param)
@@ -163,6 +237,7 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 		reset_to_default(master);
 	else if ((keydata.key == MLX_KEY_ESCAPE) && keydata.action != MLX_RELEASE)
 		mlx_close_window(master->mlx);
+	ft_draw_string(master);
 }
 
 static void	loop(mlx_t *mlx, t_master *master)
@@ -190,6 +265,7 @@ int	main(int ac, char *av[])
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	int			fd;
+	int			i;
 
 	fd = 0;
 	master = ft_calloc(1, sizeof(t_master));
@@ -225,6 +301,13 @@ int	main(int ac, char *av[])
 			master->mlx = mlx;
 			master->img = img;
 			master->rt = rt;
+			i = 0;
+			while (i < STRINGS)
+			{
+				ft_sprintf(master->str[i], "");
+				master->string[i] = mlx_put_string(master->mlx, master->str[i], 10, 5 + 20 * i);
+				++i;
+			}
 			precompute_ambient(master->rt);
 			precompute_light(master->rt);
 			find_rays(master);

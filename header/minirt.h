@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 13:50:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/11 16:41:51 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 # define E_RANGE_POS "a value in range (0.0;1.0)"
 # define E_RANGE_NORM "values in range (-1.0;1.0)"
 # define E_RANGE_STRICT "a strictly positive value"
-
+# define STRINGS 16
 // INCLUDES
 
 # include <stdio.h>
@@ -230,6 +230,8 @@ typedef struct s_master
 	mlx_image_t	*img;
 	t_rt		*rt;
 	t_options	*options;
+	char		str[STRINGS][1024];
+	mlx_image_t	*string[STRINGS];
 }				t_master;
 
 typedef	struct s_rayfinder
