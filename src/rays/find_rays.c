@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 12:59:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/12 13:44:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,22 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
 }
 
-void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
+/* void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
 {
 
 	rgb_light[R] = ((int)((rgb[R] + 1) * (light->rgb[R] * light->brightness + 1)) - 1) >> 8;
 	rgb_light[G] = ((int)((rgb[G] + 1) * (light->rgb[G] * light->brightness + 1)) - 1) >> 8;
 	rgb_light[B] = ((int)((rgb[B] + 1) * (light->rgb[B] * light->brightness + 1)) - 1) >> 8;
+} */
+
+void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
+{
+
+	rgb_light[R] = ((int)((rgb[R] + 1) * (light->rgb[R] + 1)) - 1) >> 8;
+	rgb_light[G] = ((int)((rgb[G] + 1) * (light->rgb[G] + 1)) - 1) >> 8;
+	rgb_light[B] = ((int)((rgb[B] + 1) * (light->rgb[B] + 1)) - 1) >> 8;
 }
+
 
 void	precompute_light(t_rt *rt)
 {
