@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 09:26:01 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:47:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t)
 	return (intersection);
 }
 
-void	get_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray, t_master *master)
+void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray, t_master *master)
 {
 	t_vect3f	intersection;
 
@@ -134,83 +134,6 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
 }
 
-/* void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
-{
-
-	rgb_light[R] = ((int)((rgb[R] + 1) * (light->rgb[R] * light->brightness + 1)) - 1) >> 8;
-	rgb_light[G] = ((int)((rgb[G] + 1) * (light->rgb[G] * light->brightness + 1)) - 1) >> 8;
-	rgb_light[B] = ((int)((rgb[B] + 1) * (light->rgb[B] * light->brightness + 1)) - 1) >> 8;
-} */
-
-void	get_light_clr(t_light *light, int *rgb_light, int *rgb)
-{
-
-	rgb_light[R] = ((int)((rgb[R] + 1) * (light->rgb[R] + 1)) - 1) >> 8;
-	rgb_light[G] = ((int)((rgb[G] + 1) * (light->rgb[G] + 1)) - 1) >> 8;
-	rgb_light[B] = ((int)((rgb[B] + 1) * (light->rgb[B] + 1)) - 1) >> 8;
-}
-
-
-void	precompute_light(t_rt *rt)
-{
-	int	i;
-
-	i = 0;
-	while (i < rt->n_spheres)
-	{
-		get_light_clr(rt->light, rt->spheres[i]->rgb_light, rt->spheres[i]->rgb);
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_planes)
-	{
-		get_light_clr(rt->light, rt->planes[i]->rgb_light, rt->planes[i]->rgb);
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_cylinders)
-	{
-		get_light_clr(rt->light, rt->cylinders[i]->rgb_light, rt->cylinders[i]->rgb);
-		get_light_clr(rt->light, rt->cylinders[i]->botcap->rgb_light, rt->cylinders[i]->rgb);
-		get_light_clr(rt->light, rt->cylinders[i]->topcap->rgb_light, rt->cylinders[i]->rgb);
-		i++;
-	}
-}
-
-void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb)
-{
-
-	rgb_ambient[R] = ((int)((rgb[R] + 1) * (ambient->rgb[R] * ambient->ratio + 1)) - 1) >> 8;
-	rgb_ambient[G] = ((int)((rgb[G] + 1) * (ambient->rgb[G] * ambient->ratio + 1)) - 1) >> 8;
-	rgb_ambient[B] = ((int)((rgb[B] + 1) * (ambient->rgb[B] * ambient->ratio + 1)) - 1) >> 8;
-}
-
-void	precompute_ambient(t_rt *rt)
-{
-	int	i;
-
-	i = 0;
-	while (i < rt->n_spheres)
-	{
-		get_ambient_clr(rt->ambient, rt->spheres[i]->rgb_ambient, rt->spheres[i]->rgb);
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_planes)
-	{
-		get_ambient_clr(rt->ambient, rt->planes[i]->rgb_ambient, rt->planes[i]->rgb);
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_cylinders)
-	{
-		get_ambient_clr(rt->ambient, rt->cylinders[i]->rgb_ambient, rt->cylinders[i]->rgb);
-		get_ambient_clr(rt->ambient, rt->cylinders[i]->botcap->rgb_ambient, rt->cylinders[i]->rgb);
-		get_ambient_clr(rt->ambient, rt->cylinders[i]->topcap->rgb_ambient, rt->cylinders[i]->rgb);
-		i++;
-	}
-}
-
 void	find_rays(t_master *master)
 {
 	int		x;
@@ -232,7 +155,7 @@ void	find_rays(t_master *master)
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
 			find_intersections(master, rays[x][y], &rf, PRIMARY);
-			get_nearest_object(rf.object_flag, rf.object_ptr, &rf, rays[x][y], master);
+			shade_nearest_object(rf.object_flag, rf.object_ptr, &rf, rays[x][y], master);
 			mlx_put_pixel(master->img, x, y, rf.clr);
 			y++;
 		}

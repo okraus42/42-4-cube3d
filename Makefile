@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/01/10 14:48:09 by plouda           ###   ########.fr        #
+#    Updated: 2024/01/16 09:44:47 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,7 +83,7 @@ SRC_O		=	fill_object_getters.c \
 				o_sphere.c \
 				o_light_sphere.c \
 				object_handler.c \
-				rotate_objects.c \
+				manipulate_objects.c \
 				choose_object.c
 				
 SRC_R		=	find_rays.c \
@@ -102,7 +102,8 @@ SRC_C		= 	camera.c \
 				rotations.c
 
 SRC_SH		=	object_shaders.c \
-				shader_utils.c
+				shader_utils.c \
+				color_math.c
 
 
 # Formating
