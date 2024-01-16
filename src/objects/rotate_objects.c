@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotate_objects.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/11 15:21:41 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:29:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,5 +186,11 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 {
 	move(keydata.key, master->rt->camera, master->rt->light_sphere->coords);
 	move(keydata.key, master->rt->camera, master->rt->light->coords);
+	if (keydata.key == MLX_KEY_COMMA)
+		master->options->light_intensity -= 15;
+	else if (keydata.key == MLX_KEY_PERIOD)
+		master->options->light_intensity += 15;
+	clamp(0, INT_MAX - 22, &master->options->light_intensity);
+	printf("Light intensity: %d\n", master->options->light_intensity);
 	find_rays(master);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 16:48:12 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:24:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,7 +231,9 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
 			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN))
+			|| keydata.key == MLX_KEY_PAGE_DOWN
+			|| keydata.key == MLX_KEY_COMMA
+			|| keydata.key == MLX_KEY_PERIOD))
 		manipulate_light(master, keydata);
 	else if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
 		reset_to_default(master);
@@ -252,9 +254,7 @@ void	init_options(t_master *master)
 
 	options = ft_calloc(1, sizeof(t_options));
 	options->mode = DEFAULT;
-	options->object = NULL;
-	options->object_flag = EMPTY;
-	options->object_id = 0;
+	options->light_intensity = 100;
 	master->options = options;
 }
 
@@ -277,6 +277,7 @@ int	main(int ac, char *av[])
 	{
 		id_err(NULL, "Incorrect number of parameters", NULL);
 		free(rt);
+		free(master->options);
 		free(master);
 		return (1);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 16:41:51 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:25:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define MINIRT_H
 # define HEIGHT 720
-# define WIDTH 1280
+# define WIDTH 1080
 # define X 0
 # define Y 1
 # define Z 2
@@ -215,12 +215,17 @@ typedef struct s_rt
 	int			n_cylinders;
 }				t_rt;
 
+
+/*
+Light intensity actually corresponds to the hypothetical light sphere's raidus,
+meaning the light will be fully bright between (0; light_intensity), and will start
+falling off according to the square inverse law at light_intensity + 1.
+*/
 typedef struct s_options
 {
 	t_mode		mode;
-	void		*object;
-	t_object	object_flag;
-	int			object_id;
+	int			light_intensity;
+
 }				t_options;
 
 
@@ -253,6 +258,7 @@ typedef	struct s_rayfinder
 	double		light_dist;
 	t_vect3f	shadow_inter;
 	double		inter_dist;
+	int			light_intensity;
 }				t_rayfinder;
 
 

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/12 13:44:38 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:26:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ t_rayfinder	init_rayfinder(t_master	*master)
 	rf.light_dist = 0;
 	rf.shadow_inter = (t_vect3f){};
 	rf.inter_dist = 0;
+	rf.light_intensity = master->options->light_intensity;
 	return (rf);
 }
 

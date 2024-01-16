@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/12 16:25:18 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:26:44 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 		rf->light_dist = 0.00001;
 
 	get_clr_components_t(rgb_light_arr, sphere->rgb_light, \
-	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / 100, 2), 1));
+	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1));
 	
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(sphere->rgb_ambient);
@@ -87,7 +87,7 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	rf->t_near = (double)INT_MAX;
 
 	get_clr_components_t(rgb_light_arr, plane->rgb_light, \
-	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / 100, 2), 1));
+	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1));
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(plane->rgb_ambient);
 	trace_shadow(master, rf, rgb_ambient, rgb_light);
@@ -120,7 +120,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	rf->t_near = (double)INT_MAX;
 
 	get_clr_components_t(rgb_light_arr, cylinder->rgb_light, \
-	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / 100, 2), 1));
+	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1));
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(cylinder->rgb_ambient);
 	trace_shadow(master, rf, rgb_ambient, rgb_light);
@@ -154,7 +154,7 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	rf->t_near = (double)INT_MAX;
 
 	get_clr_components_t(rgb_light_arr, disc->rgb_light, \
-	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / 100, 2), 1));
+	rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1));
 	rgb_light = get_clr_int(rgb_light_arr);
 	rgb_ambient = get_clr_int(disc->rgb_ambient);
 	
