@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/16 09:24:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/16 09:59:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,13 +194,13 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 		}
 	else if ((master->options->mode == OBJECT_CHOICE 
 			|| master->options->mode == HIGHLIGHT)
-			&& !keydata.modifier
+			&& keydata.modifier == MLX_SHIFT
 			&& keydata.key == MLX_KEY_UP
 			&& keydata.action != MLX_RELEASE)
 		choose_object(master, keydata);
 	else if (master->options->mode == HIGHLIGHT
 			&& keydata.action != MLX_RELEASE
-			&& keydata.modifier == MLX_SHIFT
+			&& !keydata.modifier
 			&& (keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
@@ -225,7 +225,7 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 		}
 	else if (master->options->mode == LIGHTING
 			&& keydata.action != MLX_RELEASE
-			&& keydata.modifier == MLX_SHIFT
+			&& !keydata.modifier
 			&& (keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
