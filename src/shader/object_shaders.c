@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 17:27:22 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/16 23:09:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,29 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	}
 	rf->hit_normal = subtract_vect3f(intersection, array_to_vect(sphere->coords));
 	rf->light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
-	view_dir = invert_vect3f(intersection);
-	//view_dir.x = master->rt->camera->coords[X] - intersection.x;
-	//view_dir.y = master->rt->camera->coords[Y] - intersection.y;
-	//view_dir.z = master->rt->camera->coords[Z] - intersection.z;
+	//view_dir = invert_vect3f(intersection);
+	view_dir.x = master->rt->camera->coords[X] - intersection.x;
+	view_dir.y = master->rt->camera->coords[Y] - intersection.y;
+	view_dir.z = master->rt->camera->coords[Z] - intersection.z;
 	normalize(&view_dir);
 	normalize(&rf->hit_normal);
 	normalize(&rf->light_dir);
 	incident_light = invert_vect3f(rf->light_dir);
+	//incident_light = rf->light_dir;
 	dot_reflect = dot_product(rf->hit_normal, incident_light); //  MAX(dot, 0) expands the white to the whole sphere
-	reflect_vect.x = 2 * dot_reflect * rf->hit_normal.x - incident_light.x;
+	//clampf(0, 1, &dot_reflect);
+	/* reflect_vect.x = 2 * dot_reflect * rf->hit_normal.x - incident_light.x;
 	reflect_vect.y = 2 * dot_reflect * rf->hit_normal.y - incident_light.y;
-	reflect_vect.z = 2 * dot_reflect * rf->hit_normal.z - incident_light.z;
+	reflect_vect.z = 2 * dot_reflect * rf->hit_normal.z - incident_light.z; */
+	reflect_vect.x = incident_light.x - 2 * dot_reflect * rf->hit_normal.x;
+	reflect_vect.y = incident_light.y - 2 * dot_reflect * rf->hit_normal.y;
+	reflect_vect.z = incident_light.z - 2 * dot_reflect * rf->hit_normal.z;
 	normalize(&reflect_vect);
 	
 	/* rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
 	clampf(0, 1, &rf->light_ratio); */
-	rf->light_ratio = pow(dot_product(view_dir, reflect_vect), 32);
-	clampf(0, 1, &rf->light_ratio);
+	rf->light_ratio = pow(MAX(dot_product(view_dir, reflect_vect), 0), 32);
+	//clampf(0, 1, &rf->light_ratio);
 	
 	rf->shadowray.direction = rf->light_dir;
 	rf->shadowray.origin = add_vect3f(intersection, scale_vect3f(1e-4, rf->hit_normal));
