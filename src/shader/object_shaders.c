@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/17 11:58:52 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/17 12:48:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,16 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	normalize(&rf->hit_normal);
 	normalize(&rf->light_dir);
 	incident_light = invert_vect3f(rf->light_dir);
+	incident_light = rf->light_dir;
 	//incident_light = rf->light_dir;
-	dot_reflect = dot_product(rf->hit_normal, incident_light); //  MAX(dot, 0) expands the white to the whole sphere
-	//clampf(0, 1, &dot_reflect);
-	reflect_vect.x = incident_light.x - 2 * dot_reflect * rf->hit_normal.x;
+	dot_reflect = MAX(dot_product(rf->hit_normal, incident_light), 0); //  MAX(dot, 0) expands the white to the whole sphere
+	//clampf(-1, 0, &dot_reflect);
+	/* reflect_vect.x = incident_light.x - 2 * dot_reflect * rf->hit_normal.x;
 	reflect_vect.y = incident_light.y - 2 * dot_reflect * rf->hit_normal.y;
-	reflect_vect.z = incident_light.z - 2 * dot_reflect * rf->hit_normal.z;
+	reflect_vect.z = incident_light.z - 2 * dot_reflect * rf->hit_normal.z; */
+	reflect_vect.x = 2 * dot_reflect * rf->hit_normal.x - incident_light.x;
+	reflect_vect.y = 2 * dot_reflect * rf->hit_normal.y - incident_light.y;
+	reflect_vect.z = 2 * dot_reflect * rf->hit_normal.z - incident_light.z;
 	normalize(&reflect_vect);
 	
 	rf->light_ratio = dot_product(rf->hit_normal, rf->light_dir);
@@ -104,7 +108,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 		rf->light_dist = 0.00001;
 	get_clr_components_t(rgb_light_arr, sphere->rgb_light, \
 		rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1));
-	rf->light_ratio = pow(MAX(dot_product(view_dir, reflect_vect), 0), 4);
+	rf->light_ratio = pow(MAX(dot_product(view_dir, reflect_vect), 0), 120);
 	get_clr_components_t(rgb_spec_arr, master->rt->light->rgb, \
 		rf->light_ratio, master->rt->light->brightness, MAX(pow(rf->light_dist / rf->light_intensity, 2), 1)); // needs protection against 0 in light_intensity
 
