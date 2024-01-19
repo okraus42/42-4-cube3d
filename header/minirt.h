@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/19 16:17:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:55:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,15 +253,31 @@ typedef	struct s_rayfinder
 	t_vect3f	origin;
 	double		**cam_mat;
 	t_ray		shadowray;
-	t_vect3f	hit_normal;
-	t_vect3f	light_dir;
+	t_vect3f	hit_normal; // shader
+	t_vect3f	light_dir; // shader
 	double		light_ratio;
 	double		light_dist;
 	t_vect3f	shadow_inter;
 	double		inter_dist;
-	int			light_intensity;
+	int			light_intensity; // shader
 }				t_rayfinder;
 
+typedef	struct s_shader
+{
+	int			rgb_diffuse_arr[3];
+	int			rgb_specular_arr[3];
+	uint32_t	rgb_diffuse;
+	uint32_t	rgb_specular;
+	uint32_t	rgb_ambient;
+	t_vect3f	hit_normal;
+	t_vect3f	light_dir;
+	t_vect3f	incident_light;
+	t_vect3f	reflect_vect;
+	t_vect3f	view_dir;
+	double		dot_reflect;
+	double		falloff;
+	int			light_intensity;
+}				t_shader;
 
 
 // Initialize objects
