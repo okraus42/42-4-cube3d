@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/19 16:21:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:51:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,9 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_PAGE_UP
 			|| keydata.key == MLX_KEY_PAGE_DOWN
 			|| keydata.key == MLX_KEY_COMMA
-			|| keydata.key == MLX_KEY_PERIOD))
+			|| keydata.key == MLX_KEY_PERIOD
+			|| keydata.key == MLX_KEY_G
+			|| keydata.key == MLX_KEY_H))
 		manipulate_light(master, keydata);
 	else if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
 		reset_to_default(master);
@@ -255,7 +257,7 @@ void	init_options(t_master *master)
 	options = ft_calloc(1, sizeof(t_options));
 	options->mode = DEFAULT;
 	options->light_intensity = 100;
-	options->spec_highlight_size = 400;
+	options->spec_highlight_size = 512;
 	options->glossiness = 0.5;
 	master->options = options;
 }

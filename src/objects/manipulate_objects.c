@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 16:32:41 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 17:00:52 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,29 @@ void	rotate_objects(t_master *master, mlx_key_data_t keydata)
 	find_rays(master);
 }
 
+void	specular_options(t_master *master, keys_t key)
+{
+	double	glossiness;
+	double	highlight_size;
+
+	glossiness = master->options->glossiness;
+	highlight_size = master->options->spec_highlight_size;
+	if (key == MLX_KEY_G)
+	{
+		glossiness += 0.05; 
+		if (glossiness >= 1.01)
+			glossiness = 0.05;
+	}
+	else if (key == MLX_KEY_H)
+	{
+		highlight_size /= 2;
+		if (highlight_size <= 2)
+			highlight_size = 1024;
+	}
+	master->options->glossiness = glossiness;
+	master->options->spec_highlight_size = highlight_size;
+}
+
 void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 {
 	move(keydata.key, master->rt->camera, master->rt->light_sphere->coords);
@@ -190,7 +213,9 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 		master->options->light_intensity -= 15;
 	else if (keydata.key == MLX_KEY_PERIOD)
 		master->options->light_intensity += 15;
+	specular_options(master, keydata.key);
 	clamp(0, INT_MAX - 22, &master->options->light_intensity);
 	printf("Light intensity: %d\n", master->options->light_intensity);
+	printf("Glossiness: %.2f\n", master->options->glossiness);
 	find_rays(master);
 }

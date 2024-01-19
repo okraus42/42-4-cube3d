@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 09:12:13 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:49:23 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	display_camera_matrix(t_camera *camera)
 	double		**matrix;
 
 	matrix = camera->matrix;
-	printf("WorldToCamera:\nR: %.5f %.5f %.5f;\
-	\nU: %.5f %.5f %.5f;\nF: %.5f %.5f %.5f;\nC: %.5f %.5f %.5f;\n", \
+	printf("WorldToCamera:\nR: %.2f %.2f %.2f;\
+	\nU: %.2f %.2f %.2f;\nF: %.2f %.2f %.2f;\nC: %.2f %.2f %.2f;\n", \
 	matrix[0][0], matrix[0][1], matrix[0][2], \
 	matrix[1][0], matrix[1][1], matrix[1][2], \
 	matrix[2][0], matrix[2][1], matrix[2][2], \
