@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 15:33:09 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 10:06:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	define_botcap(t_cylinder *cylinder)
 	t_disc	*botcap;
 
 	botcap = cylinder->botcap;
-	botcap->coords[X] = cylinder->coords[X];
-	botcap->coords[Y] = cylinder->coords[Y];
-	botcap->coords[Z] = cylinder->coords[Z];
+	botcap->coords[X] = cylinder->coords[X] + (-1 * cylinder->normal->x * cylinder->height / 2);
+	botcap->coords[Y] = cylinder->coords[Y] + (-1 * cylinder->normal->y * cylinder->height / 2);
+	botcap->coords[Z] = cylinder->coords[Z] + (-1 * cylinder->normal->z * cylinder->height / 2);
 	botcap->nvect[X] = cylinder->normal->x * -1;
 	botcap->nvect[Y] = cylinder->normal->y * -1;
 	botcap->nvect[Z] = cylinder->normal->z * -1;
@@ -69,11 +69,11 @@ void	define_topcap(t_cylinder *cylinder)
 
 	topcap = cylinder->topcap;
 	topcap->coords[X] = cylinder->coords[X] \
-			+ cylinder->height * cylinder->normal->x;
+			+ cylinder->height / 2 * cylinder->normal->x;
 	topcap->coords[Y] = cylinder->coords[Y] \
-			+ cylinder->height * cylinder->normal->y;
+			+ cylinder->height / 2 * cylinder->normal->y;
 	topcap->coords[Z] = cylinder->coords[Z] \
-			+ cylinder->height * cylinder->normal->z;
+			+ cylinder->height / 2 * cylinder->normal->z;
 	topcap->nvect[X] = cylinder->normal->x;
 	topcap->nvect[Y] = cylinder->normal->y;
 	topcap->nvect[Z] = cylinder->normal->z;

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/17 11:39:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:17:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,8 @@ typedef struct s_options
 {
 	t_mode		mode;
 	int			light_intensity;
-
+	int			spec_highlight_size;
+	double		glossiness;
 }				t_options;
 
 

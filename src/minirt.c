@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/16 09:59:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:21:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,8 @@ void	init_options(t_master *master)
 	options = ft_calloc(1, sizeof(t_options));
 	options->mode = DEFAULT;
 	options->light_intensity = 100;
+	options->spec_highlight_size = 400;
+	options->glossiness = 0.5;
 	master->options = options;
 }
 
