@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/19 17:55:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/22 08:36:03 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,8 +255,8 @@ typedef	struct s_rayfinder
 	t_ray		shadowray;
 	t_vect3f	hit_normal; // shader
 	t_vect3f	light_dir; // shader
-	double		light_ratio;
-	double		light_dist;
+	double		light_ratio; // shader
+	double		light_dist; // shader
 	t_vect3f	shadow_inter;
 	double		inter_dist;
 	int			light_intensity; // shader
@@ -276,6 +276,9 @@ typedef	struct s_shader
 	t_vect3f	view_dir;
 	double		dot_reflect;
 	double		falloff;
+	double		light_dist;
+	double		diffuse_ratio;
+	double		specular_ratio;
 	int			light_intensity;
 }				t_shader;
 
