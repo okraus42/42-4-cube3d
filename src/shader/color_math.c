@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 09:43:58 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 22:11:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:27:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	precompute_light(t_rt *rt)
 		get_light_clr(rt->light, rt->cylinders[i]->topcap->rgb_light, rt->cylinders[i]->rgb);
 		i++;
 	}
+	i = 0;
 	while (i < rt->n_cones)
 	{
 		get_light_clr(rt->light, rt->cones[i]->rgb_light, rt->cones[i]->rgb);
@@ -87,6 +88,7 @@ void	precompute_ambient(t_rt *rt)
 		get_ambient_clr(rt->ambient, rt->cylinders[i]->topcap->rgb_ambient, rt->cylinders[i]->rgb);
 		i++;
 	}
+	i = 0;
 	while (i < rt->n_cones)
 	{
 		get_ambient_clr(rt->ambient, rt->cones[i]->rgb_ambient, rt->cones[i]->rgb);

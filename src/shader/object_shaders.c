@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/23 11:14:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:34:04 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,6 +312,7 @@ t_vect3f	get_cone_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, 
 	return (hit_normal);
 }
 
+// wrong normal calculation
 void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray)
 {
 	t_cone	*cone;
