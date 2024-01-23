@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/22 08:36:03 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/22 21:57:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ typedef enum e_object
 	PLANE,
 	CYLINDER,
 	DISC,
+	CONE,
 	LIGHT
 }				t_object;
 
@@ -201,6 +202,23 @@ typedef struct s_cylinder
 	t_mode		mode;
 }				t_cylinder;
 
+typedef struct s_cone
+{
+	double	*coords; // x,y,z coordinates of center
+	double	*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
+	double	diameter;
+	double	height;
+	int		*rgb;
+	int		*rgb_ambient;
+	int		*rgb_light;
+	t_disc	*base;
+	t_disc	*pinnacle;
+	t_vect3f	*normal;
+	t_vect3f	*right;
+	t_vect3f	*up;
+	t_mode		mode;
+}				t_cone;
+
 typedef struct s_rt
 {
 	t_ambient	*ambient;
@@ -209,10 +227,12 @@ typedef struct s_rt
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;
+	t_cone		**cones;
 	t_sphere	*light_sphere;
 	int			n_spheres;
 	int			n_planes;
 	int			n_cylinders;
+	int			n_cones;
 }				t_rt;
 
 
@@ -375,6 +395,15 @@ void	define_topcap(t_cylinder *cylinder);
 void	get_discs(t_cylinder *cylinder);
 void	free_discs(t_cylinder *cylinder);
 
+// Cone
+void	init_cones(t_rt *rt, int *ids);
+int	check_format_cone(char **split);
+int	fill_cone(t_rt *rt, char **split);
+void	free_cones(t_rt *rt);
+void	init_cone_discs(t_cone *cone);
+void	get_cone_discs(t_cone *cone);
+void	free_cone_discs(t_cone *cone);
+
 // Camera
 void	set_camera(t_camera *camera);
 t_vect3f	shift_origin(double **cam);
@@ -413,12 +442,16 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
 int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t);
 t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t);
 int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type);
+int	solve_quad_cone(double *t, t_quadterms quad, t_ray ray, t_cone *cone);
+int	intersect_cone(t_ray ray, t_cone *cone, double *t);
+void	set_cone_vects(t_cone *cone);
 
 // Shaders
 void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
 void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
 void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray);
 void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
+void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray);
 void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
 
 // Shader utils

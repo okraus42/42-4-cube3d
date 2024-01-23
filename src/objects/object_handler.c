@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/26 18:46:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/22 10:09:40 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	*init_ids(void)
 	int		i;
 
 	i = 0;
-	ids = malloc(sizeof(int) * 6);
-	while (i < 6)
+	ids = malloc(sizeof(int) * 7);
+	while (i < 7)
 		ids[i++] = 0;
 	return (ids);
 }
@@ -32,6 +32,7 @@ void	init_objects(t_rt *rt, int *ids)
 	init_spheres(rt, ids);
 	init_planes(rt, ids);
 	init_cylinders(rt, ids);
+	init_cones(rt, ids);
 	init_light_sphere(rt);
 }
 
@@ -74,6 +75,8 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 			*flag = fill_plane(rt, split);
 		else if (!ft_strncmp(split[0], "cy", 2))
 			*flag = fill_cylinder(rt, split);
+		else if (!ft_strncmp(split[0], "co", 2))
+			*flag = fill_cone(rt, split);
 		else
 			*flag = 1;
 	}
@@ -89,5 +92,6 @@ void	free_objects(t_rt *rt)
 	free_spheres(rt);
 	free_planes(rt);
 	free_cylinders(rt);
+	free_cones(rt);
 	free_light_sphere(rt);
 }

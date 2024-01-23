@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/22 10:21:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	get_identifiers(char **split, int *ids, int *flag)
 			ids[4]++;
 		else if (!ft_strncmp(split[0], "cy", 2))
 			ids[5]++;
+		else if (!ft_strncmp(split[0], "co", 2))
+			ids[6]++;
 		else
 			*flag = 1;
 	}

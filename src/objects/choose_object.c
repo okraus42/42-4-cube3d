@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 09:12:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/22 10:52:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,20 @@ void	reset_to_default(t_master *master)
 		master->rt->cylinders[i]->topcap->mode = DEFAULT;
 		i++;
 	}
+	while (i < master->rt->n_cones)
+	{
+		master->rt->cones[i]->mode = DEFAULT;
+		master->rt->cones[i]->base->mode = DEFAULT;
+		master->rt->cones[i]->pinnacle->mode = DEFAULT;
+		i++;
+	}
 	master->rt->light_sphere->mode = DEFAULT;
 	master->options->mode = DEFAULT;
 	find_rays(master);
 }
 
+
+// add cones
 void	choose_object(t_master *master, mlx_key_data_t keydata)
 {
 	int	i;

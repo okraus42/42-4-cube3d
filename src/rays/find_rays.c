@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/16 09:47:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 10:42:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,16 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 			flag = update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
+	while (i < master->rt->n_cones)
+	{
+		if (intersect_cone(ray, master->rt->cones[i], &rf->t))
+			flag = update_object_ref(rf, master->rt->cones[i], CONE);
+		if (intersect_disc(ray, master->rt->cones[i]->pinnacle, &rf->t))
+			flag = update_object_ref(rf, master->rt->cones[i]->pinnacle, DISC);
+		if (intersect_disc(ray, master->rt->cones[i]->base, &rf->t))
+			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
+		i++;
+	}
 	if (type != SHADOW && intersect_sphere(ray, master->rt->light_sphere, &rf->t))
 		flag = update_object_ref(rf, master->rt->light_sphere, LIGHT);
 	return (flag);
@@ -82,6 +92,8 @@ void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray
 		cylinder_shader(rf, intersection, object_ptr, master, ray);
 	else if (flag == DISC)
 		disc_shader(rf, intersection, object_ptr, master);
+	else if (flag == CONE)
+		cone_shader(rf, intersection, object_ptr, master, ray);
 	else if (flag == LIGHT)
 		light_shader(rf, object_ptr, master);
 }

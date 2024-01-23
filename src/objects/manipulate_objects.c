@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/19 17:21:16 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/22 10:07:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,36 @@ void	set_disc_vects(t_disc *disc)
 	forward = disc->normal;
 	right = disc->right;
 	up = disc->up;
+	tmp = (t_vect3f){0, 1, 0};
+	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	{
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, -1};
+	}
+	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	{
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		*right = cross_product(tmp, *forward);
+		normalize(right);
+		*up = cross_product(*forward, *right);
+		normalize(up);
+	}
+}
+
+void	set_cone_vects(t_cone *cone)
+{
+	t_vect3f	tmp;
+	t_vect3f	*forward;
+	t_vect3f	*right;
+	t_vect3f	*up;
+
+	forward = cone->normal;
+	right = cone->right;
+	up = cone->up;
 	tmp = (t_vect3f){0, 1, 0};
 	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
 	{

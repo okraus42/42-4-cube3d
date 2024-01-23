@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersections.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:06:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,3 +153,46 @@ int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 			- pow(cylinder->diameter / 2, 2);
 	return (solve_quad_cyl(t, quad, ray, cylinder));
 }
+
+/* int	intersect_cone(t_ray ray, t_cone *cone, double *t)
+{
+	t_quadterms	quad;
+	double		half_angle;
+	t_vect3f	centered;
+	t_vect3f	axis;
+	t_vect3f	dir;
+
+	dir = ray.direction;
+	axis = invert_vect3f(*cone->normal);
+	centered = subtract_center(ray.origin, cone->coords);
+	half_angle = atan2(cone->diameter / 2, cone->height);
+
+	quad.a = dot_product(dir, dir) - (1 + half_angle * half_angle) * pow(dot_product(dir, axis), 2);
+	quad.b = 2 * ((dot_product(dir, centered)) - (1 + half_angle * half_angle) * (dot_product(dir, axis) * dot_product(centered, axis)));
+	quad.c = dot_product(centered, centered) - (1 + half_angle * half_angle) * pow(dot_product(centered, axis), 2);
+	return (solve_quad_cone(t, quad, ray, cone));
+} */
+
+int	intersect_cone(t_ray ray, t_cone *cone, double *t)
+{
+	t_quadterms	quad;
+	double		half_angle;
+	t_vect3f	centered;
+	t_vect3f	axis;
+	t_vect3f	dir;
+	t_vect3f	centered_cos;
+
+	dir = ray.direction;
+	axis = invert_vect3f(*cone->normal);
+	centered = subtract_center(ray.origin, cone->coords);
+	half_angle = atan2(cone->diameter / 2, cone->height);
+	centered_cos.x = centered.x * pow(cos(half_angle), 2);
+	centered_cos.y = centered.y * pow(cos(half_angle), 2);
+	centered_cos.z = centered.z * pow(cos(half_angle), 2);
+
+	quad.a = pow(dot_product(dir, axis), 2) - pow(cos(half_angle), 2);
+	quad.b = 2 * (dot_product(dir, axis) * dot_product(centered, axis) - dot_product(dir, centered_cos));
+	quad.c = pow(dot_product(centered, axis), 2) - dot_product(centered, centered_cos);
+	return (solve_quad_cone(t, quad, ray, cone));
+}
+

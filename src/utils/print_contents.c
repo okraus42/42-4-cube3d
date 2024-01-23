@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_contents.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:02:07 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/01/22 10:11:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,19 @@ int	print_contents(t_rt *rt)
 				"Vector:", rt->cylinders[i]->topcap->nvect[0], rt->cylinders[i]->topcap->nvect[1], rt->cylinders[i]->topcap->nvect[2], \
 				"Radius:", rt->cylinders[i]->topcap->radius, \
 				"RGB:", rt->cylinders[i]->rgb[0], rt->cylinders[i]->rgb[1], rt->cylinders[i]->rgb[2]);
+		printf("=================================================\n");
+		i++;
+	}
+	i = 0;
+	while (rt->n_cones > i)
+	{
+		printf("CONE %i\n", i + 1);
+		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %.2f\n%-11s %i,%i,%i\n", \
+				"Coords:", rt->cones[i]->coords[0], rt->cones[i]->coords[1], rt->cones[i]->coords[2], \
+				"Vector:", rt->cones[i]->nvect[0], rt->cones[i]->nvect[1], rt->cones[i]->nvect[2], \
+				"Diameter:", rt->cones[i]->diameter, \
+				"Height:", rt->cones[i]->height, \
+				"RGB:", rt->cones[i]->rgb[0], rt->cones[i]->rgb[1], rt->cones[i]->rgb[2]);
 		printf("=================================================\n");
 		i++;
 	}
