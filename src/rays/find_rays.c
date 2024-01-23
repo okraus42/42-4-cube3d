@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/23 10:42:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:18:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,13 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 			flag = update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
+	i = 0;
 	while (i < master->rt->n_cones)
 	{
 		if (intersect_cone(ray, master->rt->cones[i], &rf->t))
 			flag = update_object_ref(rf, master->rt->cones[i], CONE);
-		if (intersect_disc(ray, master->rt->cones[i]->pinnacle, &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i]->pinnacle, DISC);
+		/* if (intersect_disc(ray, master->rt->cones[i]->pinnacle, &rf->t))
+			flag = update_object_ref(rf, master->rt->cones[i]->pinnacle, DISC); */
 		if (intersect_disc(ray, master->rt->cones[i]->base, &rf->t))
 			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
 		i++;
