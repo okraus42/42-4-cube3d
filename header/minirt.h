@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/22 21:57:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:44:52 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -451,7 +451,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
 void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray);
 void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
-void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray);
+void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master);
 void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
 
 // Shader utils

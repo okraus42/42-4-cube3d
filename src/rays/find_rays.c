@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/23 12:18:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:45:21 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray
 	else if (flag == DISC)
 		disc_shader(rf, intersection, object_ptr, master);
 	else if (flag == CONE)
-		cone_shader(rf, intersection, object_ptr, master, ray);
+		cone_shader(rf, intersection, object_ptr, master);
 	else if (flag == LIGHT)
 		light_shader(rf, object_ptr, master);
 }

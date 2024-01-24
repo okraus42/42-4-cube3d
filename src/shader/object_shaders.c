@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/23 12:34:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/24 10:46:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,27 +293,29 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	trace_shadow_t(master, rf, shader);
 }
 
-t_vect3f	get_cone_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cone cone)
+t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 {
-	t_vect3f	hit_normal;
-	t_vect3f	centered;
+	double	dist;
+	double	half_angle;
 	t_vect3f	axis;
-	double		half_angle;
-	double			m; // a scalar that determines the closest point on the axis to the hit point
+	t_vect3f	a;
+	double		d;
+	t_vect3f	normal;
 
 	axis = invert_vect3f(*cone.normal);
 	half_angle = atan2(cone.diameter / 2, cone.height);
-	centered = subtract_center(ray.origin, cone.coords);
-	m = (dot_product(ray.direction, axis) * rf->t_near) + dot_product(centered, axis);
-	hit_normal.x = intersection.x - cone.coords[X] - ((1 + half_angle * half_angle) * axis.x * m);
-	hit_normal.y = intersection.y - cone.coords[Y] - ((1 + half_angle * half_angle) * axis.y * m);
-	hit_normal.z = intersection.z - cone.coords[Z] - ((1 + half_angle * half_angle) * axis.z * m) * m;
-	normalize(&hit_normal);
-	return (hit_normal);
+	dist = point_distance(intersection, array_to_vect(cone.coords));
+	d = dist * sqrt(1 + pow(half_angle, 2));
+	a.x = cone.coords[X] + axis.x * d;
+	a.y = cone.coords[Y] + axis.y * d;
+	a.z = cone.coords[Z] + axis.z * d;
+	normal = subtract_vect3f(intersection, a);
+	normalize(&normal);
+	return (normal);
 }
 
 // wrong normal calculation
-void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master, t_ray ray)
+void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master)
 {
 	t_cone	*cone;
 	t_shader	shader;
@@ -325,7 +327,7 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 		return ;
 	} */
 	shader.light_intensity = rf->light_intensity;
-	shader.hit_normal = get_cone_hit_normal(rf, ray, intersection, *cone);
+	shader.hit_normal = get_cone_hit_normal(intersection, *cone);
 	shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light->coords), intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
