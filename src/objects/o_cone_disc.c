@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 21:44:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:35:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	define_cone_base(t_cone *cone)
 	t_disc	*base;
 
 	base = cone->base;
-	base->coords[X] = cone->coords[X] + (-1 * cone->normal->x * cone->height);
-	base->coords[Y] = cone->coords[Y] + (-1 * cone->normal->y * cone->height);
-	base->coords[Z] = cone->coords[Z] + (-1 * cone->normal->z * cone->height);
+	base->coords[X] = cone->coords[X] + (-1 * cone->normal->x * cone->height / 2);
+	base->coords[Y] = cone->coords[Y] + (-1 * cone->normal->y * cone->height / 2);
+	base->coords[Z] = cone->coords[Z] + (-1 * cone->normal->z * cone->height / 2);
 	base->nvect[X] = cone->normal->x * -1;
 	base->nvect[Y] = cone->normal->y * -1;
 	base->nvect[Z] = cone->normal->z * -1;
@@ -68,9 +68,9 @@ void	define_cone_pinnacle(t_cone *cone)
 	t_disc	*pinnacle;
 
 	pinnacle = cone->pinnacle;
-	pinnacle->coords[X] = cone->coords[X];
-	pinnacle->coords[Y] = cone->coords[Y];
-	pinnacle->coords[Z] = cone->coords[Z];
+	pinnacle->coords[X] = cone->coords[X] + (cone->normal->x * cone->height / 2);
+	pinnacle->coords[Y] = cone->coords[Y] + (cone->normal->y * cone->height / 2);
+	pinnacle->coords[Z] = cone->coords[Z] + (cone->normal->z * cone->height / 2);
 	pinnacle->nvect[X] = cone->normal->x;
 	pinnacle->nvect[Y] = cone->normal->y;
 	pinnacle->nvect[Z] = cone->normal->z;

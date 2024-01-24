@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/23 12:06:08 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:36:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int	intersect_cone(t_ray ray, t_cone *cone, double *t)
 
 	dir = ray.direction;
 	axis = invert_vect3f(*cone->normal);
-	centered = subtract_center(ray.origin, cone->coords);
+	centered = subtract_center(ray.origin, cone->pinnacle->coords);
 	half_angle = atan2(cone->diameter / 2, cone->height);
 	centered_cos.x = centered.x * pow(cos(half_angle), 2);
 	centered_cos.y = centered.y * pow(cos(half_angle), 2);

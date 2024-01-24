@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/24 10:46:02 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:40:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,11 +244,12 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	normalize(&shader.light_dir);
 
 	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
-	if (shader.diffuse_ratio < 0)
+	clampf(0, 1, &shader.diffuse_ratio);
+	/* if (shader.diffuse_ratio < 0)
 	{
 		shader.diffuse_ratio = shader.diffuse_ratio * -1;
-		shader.hit_normal = invert_vect3f(shader.hit_normal); // because shadowray's origin will be shadowed by the plane itself otherwise
-	}
+		shader.hit_normal = invert_vect3f(shader.hit_normal); // because shadowray's origin will be shadowed by the plane itself otherwise, change if not necessary for discs
+	} */
 
 	shader.incident_light = shader.light_dir;
 	shader.dot_reflect = MAX(dot_product(shader.hit_normal, shader.incident_light), 0);
@@ -304,17 +305,16 @@ t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 
 	axis = invert_vect3f(*cone.normal);
 	half_angle = atan2(cone.diameter / 2, cone.height);
-	dist = point_distance(intersection, array_to_vect(cone.coords));
+	dist = point_distance(intersection, array_to_vect(cone.pinnacle->coords));
 	d = dist * sqrt(1 + pow(half_angle, 2));
-	a.x = cone.coords[X] + axis.x * d;
-	a.y = cone.coords[Y] + axis.y * d;
-	a.z = cone.coords[Z] + axis.z * d;
+	a.x = cone.pinnacle->coords[X] + axis.x * d;
+	a.y = cone.pinnacle->coords[Y] + axis.y * d;
+	a.z = cone.pinnacle->coords[Z] + axis.z * d;
 	normal = subtract_vect3f(intersection, a);
 	normalize(&normal);
 	return (normal);
 }
 
-// wrong normal calculation
 void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master)
 {
 	t_cone	*cone;
