@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/24 11:40:41 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/25 10:40:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
 	normalize(&shader.light_dir);
+
+	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+	if (shader.diffuse_ratio < 0)
+	{
+		shader.diffuse_ratio = shader.diffuse_ratio * -1;
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
+	}
 	shader.incident_light = shader.light_dir;
 	shader.dot_reflect = MAX(dot_product(shader.hit_normal, shader.incident_light), 0);
 	shader.reflect_vect.x = 2 * shader.dot_reflect * shader.hit_normal.x - shader.incident_light.x;
@@ -84,8 +91,8 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	if (shader.light_intensity != 0)
 	{
 		shader.falloff = MAX(pow(shader.light_dist / shader.light_intensity, 2), 1);
-		shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
-		clampf(0, 1, &shader.diffuse_ratio);
+		//shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+		//clampf(0, 1, &shader.diffuse_ratio);
 		get_clr_components_t(shader.rgb_diffuse_arr, sphere->rgb_light, \
 			shader.diffuse_ratio, master->rt->light->brightness, shader.falloff);
 		shader.specular_ratio = master->options->glossiness * pow(MAX(dot_product(shader.view_dir, shader.reflect_vect), 0), master->options->spec_highlight_size);
@@ -186,6 +193,14 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
 	normalize(&shader.light_dir);
+
+	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+	if (shader.diffuse_ratio < 0)
+	{
+		shader.diffuse_ratio = shader.diffuse_ratio * -1;
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
+	}
+
 	shader.incident_light = shader.light_dir;
 	shader.dot_reflect = MAX(dot_product(shader.hit_normal, shader.incident_light), 0);
 	shader.reflect_vect.x = 2 * shader.dot_reflect * shader.hit_normal.x - shader.incident_light.x;
@@ -203,8 +218,8 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	if (shader.light_intensity != 0)
 	{
 		shader.falloff = MAX(pow(shader.light_dist / shader.light_intensity, 2), 1);
-		shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
-		clampf(0, 1, &shader.diffuse_ratio);
+		/* shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+		clampf(0, 1, &shader.diffuse_ratio); */
 		get_clr_components_t(shader.rgb_diffuse_arr, cylinder->rgb_light, \
 			shader.diffuse_ratio, master->rt->light->brightness, shader.falloff);
 		shader.specular_ratio = master->options->glossiness * pow(MAX(dot_product(shader.view_dir, shader.reflect_vect), 0), master->options->spec_highlight_size);
@@ -244,12 +259,12 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	normalize(&shader.light_dir);
 
 	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
-	clampf(0, 1, &shader.diffuse_ratio);
-	/* if (shader.diffuse_ratio < 0)
+	//clampf(0, 1, &shader.diffuse_ratio);
+	if (shader.diffuse_ratio < 0)
 	{
 		shader.diffuse_ratio = shader.diffuse_ratio * -1;
 		shader.hit_normal = invert_vect3f(shader.hit_normal); // because shadowray's origin will be shadowed by the plane itself otherwise, change if not necessary for discs
-	} */
+	}
 
 	shader.incident_light = shader.light_dir;
 	shader.dot_reflect = MAX(dot_product(shader.hit_normal, shader.incident_light), 0);
@@ -333,6 +348,13 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
 	normalize(&shader.light_dir);
+	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+	if (shader.diffuse_ratio < 0)
+	{
+		shader.diffuse_ratio = shader.diffuse_ratio * -1;
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
+	}
+	
 	shader.incident_light = shader.light_dir;
 	shader.dot_reflect = MAX(dot_product(shader.hit_normal, shader.incident_light), 0);
 	shader.reflect_vect.x = 2 * shader.dot_reflect * shader.hit_normal.x - shader.incident_light.x;
@@ -350,8 +372,8 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	if (shader.light_intensity != 0)
 	{
 		shader.falloff = MAX(pow(shader.light_dist / shader.light_intensity, 2), 1);
-		shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
-		clampf(0, 1, &shader.diffuse_ratio);
+		/* shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+		clampf(0, 1, &shader.diffuse_ratio); */
 		get_clr_components_t(shader.rgb_diffuse_arr, cone->rgb_light, \
 			shader.diffuse_ratio, master->rt->light->brightness, shader.falloff);
 		shader.specular_ratio = master->options->glossiness * pow(MAX(dot_product(shader.view_dir, shader.reflect_vect), 0), master->options->spec_highlight_size);
