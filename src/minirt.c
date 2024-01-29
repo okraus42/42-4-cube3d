@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/19 16:51:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/29 12:05:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,15 @@ int	iterate_highlighted_object(t_rt *rt)
 		}
 		i++;
 	}
+	i = 0;
+	while (i < rt->n_cones)
+	{
+		if (rt->cones[i]->mode == HIGHLIGHT)
+		{
+			return (CONE | (i << 8));
+		}
+		i++;
+	}
 	if (rt->light_sphere->mode == HIGHLIGHT)
 	{
 		return (LIGHT | (i << 8));
@@ -148,6 +157,8 @@ void	ft_draw_string(t_master *master)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: PLANE: %i", i >> 8);
 	else if ((i & 0xFF) == CYLINDER)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: CYLINDER: %i", i >> 8);
+	else if ((i & 0xFF) == CONE)
+		ft_sprintf(master->str[1], "HIGHLIGHTED: CONE: %i", i >> 8);
 	else if ((i & 0xFF) == LIGHT)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT");
 	else
@@ -262,6 +273,76 @@ void	init_options(t_master *master)
 	master->options = options;
 }
 
+void	print_list(void *content, t_object flag)
+{
+	printf("Address of obj %i: %p\n", flag, content);
+}
+
+void	create_object_list(t_master *master)
+{
+	int			i;
+	t_objlist	*object;
+	t_objlist	*tmp;
+
+	//master->obj_list = ft_calloc(1, sizeof(t_objlist));
+	master->obj_list = NULL;
+	i = 0;
+	while (i < master->rt->n_spheres)
+	{
+		object = ft_objlst_new(master->rt->spheres[i], SPHERE);
+		ft_objlst_add_back(&master->obj_list, object);
+		i++;
+	}
+	i = 0;
+	while (i < master->rt->n_planes)
+	{
+		object = ft_objlst_new(master->rt->planes[i], PLANE);
+		ft_objlst_add_back(&master->obj_list, object);
+		i++;
+	}
+	i = 0;
+	while (i < master->rt->n_cylinders)
+	{
+		object = ft_objlst_new(master->rt->cylinders[i], CYLINDER);
+		ft_objlst_add_back(&master->obj_list, object);
+		object = ft_objlst_new(master->rt->cylinders[i]->botcap, DISC);
+		ft_objlst_add_back(&master->obj_list, object);
+		object = ft_objlst_new(master->rt->cylinders[i]->topcap, DISC);
+		ft_objlst_add_back(&master->obj_list, object);
+		i++;
+	}
+	i = 0;
+	while (i < master->rt->n_cones)
+	{
+		object = ft_objlst_new(master->rt->cones[i], CONE);
+		ft_objlst_add_back(&master->obj_list, object);
+		object = ft_objlst_new(master->rt->cones[i]->base, DISC);
+		ft_objlst_add_back(&master->obj_list, object);
+		object = ft_objlst_new(master->rt->cones[i]->pinnacle, DISC);
+		ft_objlst_add_back(&master->obj_list, object);
+		i++;
+	}
+	if (master->rt->light_sphere)
+	{
+		object = ft_objlst_new(master->rt->light_sphere, LIGHT);
+		ft_objlst_add_back(&master->obj_list, object);
+	}
+
+	tmp = master->obj_list;
+	//ft_objlst_iter(tmp, &print_list);
+
+	/* i = 0;
+	if (tmp)
+	{
+		while (tmp)
+		{
+			printf("Flag no. %i of object: %i\n", i++, tmp->object);
+			tmp = tmp->next;
+		}
+	} */
+	//printf("Flag no. %i of object: %i\n", i++, master->obj_list->next->object);
+}
+
 int	main(int ac, char *av[])
 {
 	t_rt		*rt;
@@ -313,6 +394,7 @@ int	main(int ac, char *av[])
 				master->string[i] = mlx_put_string(master->mlx, master->str[i], 10, 5 + 20 * i);
 				++i;
 			}
+			create_object_list(master);
 			precompute_ambient(master->rt);
 			precompute_light(master->rt);
 			find_rays(master);

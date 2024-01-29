@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/01/22 10:49:39 by plouda           ###   ########.fr        #
+#    Updated: 2024/01/29 10:41:33 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,8 @@ SRC_SHDIR	=	src/shader/
 
 # miniRT functions
 
-SRC_S		=	minirt.c
+SRC_S		=	minirt.c \
+				objlist.c
 
 SRC_M		=	ft_atof.c \
 				quaternions.c \

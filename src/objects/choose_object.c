@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:52:01 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:00:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	reset_to_default(t_master *master)
 		master->rt->cylinders[i]->topcap->mode = DEFAULT;
 		i++;
 	}
+	i = 0;
 	while (i < master->rt->n_cones)
 	{
 		master->rt->cones[i]->mode = DEFAULT;
@@ -68,6 +69,12 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			master->rt->cylinders[i]->mode = HIGHLIGHT;
 			master->rt->cylinders[i]->botcap->mode = HIGHLIGHT;
 			master->rt->cylinders[i]->topcap->mode = HIGHLIGHT;
+		}
+		else if (i < master->rt->n_cones)
+		{
+			master->rt->cones[i]->mode = HIGHLIGHT;
+			master->rt->cones[i]->base->mode = HIGHLIGHT;
+			master->rt->cones[i]->pinnacle->mode = HIGHLIGHT;
 		}
 		master->options->mode = HIGHLIGHT;
 		find_rays(master);
@@ -141,6 +148,38 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 					master->rt->cylinders[i+1]->mode = HIGHLIGHT;
 					master->rt->cylinders[i+1]->botcap->mode = HIGHLIGHT;
 					master->rt->cylinders[i+1]->topcap->mode = HIGHLIGHT;
+					find_rays(master);
+					return ;
+				}
+				else
+				{
+					flag = 1;
+					break ;
+				}
+			}
+			i++;
+		}
+		i = 0;
+		while (i < master->rt->n_cones)
+		{
+			if (flag)
+			{
+				master->rt->cones[i]->mode = HIGHLIGHT;
+				master->rt->cones[i]->base->mode = HIGHLIGHT;
+				master->rt->cones[i]->pinnacle->mode = HIGHLIGHT;
+				find_rays(master);
+				return ;
+			}
+			if (master->rt->cones[i]->mode == HIGHLIGHT)
+			{
+				master->rt->cones[i]->mode = DEFAULT;
+				master->rt->cones[i]->base->mode = DEFAULT;
+				master->rt->cones[i]->pinnacle->mode = DEFAULT;
+				if (i + 1 < master->rt->n_cones)
+				{
+					master->rt->cones[i+1]->mode = HIGHLIGHT;
+					master->rt->cones[i+1]->base->mode = HIGHLIGHT;
+					master->rt->cones[i+1]->pinnacle->mode = HIGHLIGHT;
 					find_rays(master);
 					return ;
 				}

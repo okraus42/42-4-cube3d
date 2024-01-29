@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/23 12:44:52 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/29 12:05:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,13 @@ typedef enum e_object
 	CONE,
 	LIGHT
 }				t_object;
+
+typedef	struct s_objlist
+{
+	void				*content;
+	struct s_objlist	*next;
+	t_object				object;
+}				t_objlist;
 
 typedef enum e_raytype
 {
@@ -258,6 +265,7 @@ typedef struct s_master
 	t_options	*options;
 	char		str[STRINGS][1024];
 	mlx_image_t	*string[STRINGS];
+	t_objlist	*obj_list;
 }				t_master;
 
 typedef	struct s_rayfinder
@@ -404,6 +412,7 @@ void	init_cone_discs(t_cone *cone);
 void	get_cone_discs(t_cone *cone);
 void	free_cone_discs(t_cone *cone);
 
+
 // Camera
 void	set_camera(t_camera *camera);
 t_vect3f	shift_origin(double **cam);
@@ -478,5 +487,12 @@ void	clamp(int min, int max, int *value);
 
 void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera);
 void	manipulate_light(t_master *master, mlx_key_data_t keydata);
+
+// List functions
+t_objlist	*ft_objlst_new(void *content, t_object flag);
+void	ft_objlst_add_back(t_objlist **lst, t_objlist *new);
+void	ft_objlst_clear(t_objlist **lst, void (*del)(void *));
+void	ft_objlst_delone(t_objlist *lst, void (*del)(void *));
+void	ft_objlst_iter(t_objlist *lst, void (*f)(void *, t_object));
 
 #endif

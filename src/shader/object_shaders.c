@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/25 10:40:18 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:06:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,6 +349,7 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	normalize(&shader.hit_normal);
 	normalize(&shader.light_dir);
 	shader.diffuse_ratio = dot_product(shader.hit_normal, shader.light_dir);
+	//clampf(0, 1, &shader.diffuse_ratio);
 	if (shader.diffuse_ratio < 0)
 	{
 		shader.diffuse_ratio = shader.diffuse_ratio * -1;

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:07:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/29 09:38:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,13 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 	get_discs(cylinder);
 }
 
+void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
+{
+	move(keydata.key, rt->camera, cone->coords);
+	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
+	get_cone_discs(cone);
+}
+
 void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
 {
 	int	i;
@@ -200,6 +207,16 @@ void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
 		if (rt->cylinders[i]->mode == HIGHLIGHT)
 		{
 			manipulate_cylinder(rt, rt->cylinders[i], keydata);
+			return ;
+		}
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_cones)
+	{
+		if (rt->cones[i]->mode == HIGHLIGHT)
+		{
+			manipulate_cone(rt, rt->cones[i], keydata);
 			return ;
 		}
 		i++;
