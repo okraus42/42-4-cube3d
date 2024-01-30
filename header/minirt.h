@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/29 12:05:37 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:15:39 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,5 +494,11 @@ void	ft_objlst_add_back(t_objlist **lst, t_objlist *new);
 void	ft_objlst_clear(t_objlist **lst, void (*del)(void *));
 void	ft_objlst_delone(t_objlist *lst, void (*del)(void *));
 void	ft_objlst_iter(t_objlist *lst, void (*f)(void *, t_object));
+
+
+void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
+t_rayfinder	init_rayfinder(t_master	*master);
+void	set_highlight_from_reference(t_master *master, t_rayfinder rf);
+void	ft_draw_string(t_master *master);
 
 #endif

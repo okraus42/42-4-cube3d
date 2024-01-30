@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/29 10:00:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:32:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,4 +192,99 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 	master->options->mode = OBJECT_CHOICE;
 	choose_object(master, keydata);
 	find_rays(master);
+}
+
+void	connect_disc_to_object(t_rt *rt, void *object_ptr)
+{
+	int	i;
+
+	i = 0;
+	while (i < rt->n_cylinders)
+	{
+		if (rt->cylinders[i]->botcap == object_ptr ||
+			rt->cylinders[i]->topcap == object_ptr)
+		{
+			rt->cylinders[i]->mode = HIGHLIGHT;
+			rt->cylinders[i]->botcap->mode = HIGHLIGHT;
+			rt->cylinders[i]->topcap->mode = HIGHLIGHT;
+		}
+		i++;
+	}
+	i = 0;
+	while (i < rt->n_cones)
+	{
+		if (rt->cones[i]->base == object_ptr ||
+			rt->cones[i]->pinnacle == object_ptr)
+		{
+			rt->cones[i]->mode = HIGHLIGHT;
+			rt->cones[i]->base->mode = HIGHLIGHT;
+			rt->cones[i]->pinnacle->mode = HIGHLIGHT;
+		}
+		i++;
+	}
+	
+}
+
+void	set_highlight_from_reference(t_master *master, t_rayfinder rf)
+{
+	int	i;
+
+	i = 0;
+	if (rf.object_flag == EMPTY)
+		return ;
+	else if (rf.object_flag == SPHERE)
+	{
+		while (i < master->rt->n_spheres)
+		{
+			if (master->rt->spheres[i] == rf.object_ptr)
+				master->rt->spheres[i]->mode = HIGHLIGHT;
+			i++;
+		}
+	}
+	else if (rf.object_flag == PLANE)
+	{
+		while (i < master->rt->n_planes)
+		{
+			if (master->rt->planes[i] == rf.object_ptr)
+				master->rt->planes[i]->mode = HIGHLIGHT;
+			i++;
+		}
+		
+	}
+	else if (rf.object_flag == CYLINDER)
+	{
+		while (i < master->rt->n_cylinders)
+		{
+			if (master->rt->cylinders[i] == rf.object_ptr)
+			{
+				master->rt->cylinders[i]->mode = HIGHLIGHT;
+				master->rt->cylinders[i]->botcap->mode = HIGHLIGHT;
+				master->rt->cylinders[i]->topcap->mode = HIGHLIGHT;
+			}
+			i++;
+		}
+	}
+	else if (rf.object_flag == CONE)
+	{
+		while (i < master->rt->n_cones)
+		{
+			if (master->rt->cones[i] == rf.object_ptr)
+			{
+				master->rt->cones[i]->mode = HIGHLIGHT;
+				master->rt->cones[i]->base->mode = HIGHLIGHT;
+				master->rt->cones[i]->pinnacle->mode = HIGHLIGHT;
+			}
+			i++;
+		}
+	}
+	else if (rf.object_flag == DISC)
+		connect_disc_to_object(master->rt, rf.object_ptr);
+	else if (rf.object_flag == LIGHT)
+		{
+			master->options->mode = LIGHTING;
+			master->rt->light_sphere->mode = HIGHLIGHT;
+			return ;
+		}
+	master->options->mode = HIGHLIGHT;
+	//find_rays(master);
 }

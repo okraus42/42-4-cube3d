@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/29 09:38:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/30 09:39:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	set_cone_vects(t_cone *cone)
 
 void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera)
 {
-	if (key == MLX_KEY_A)
+	/* if (key == MLX_KEY_A)
 		pan(forward, right, camera->up, 5);
 	else if (key == MLX_KEY_D)
 		pan(forward, right, camera->up, -5);
@@ -146,6 +146,22 @@ void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_ca
 		cant(camera->normal, right, up, 5);
 	else if (key == MLX_KEY_E)
 		cant(camera->normal, right, up, -5);
+	normalize(forward);
+	normalize(right);
+	normalize(up); */
+	(void)camera->coords;
+	if (key == MLX_KEY_A)
+		pan(forward, right, up, 5);
+	else if (key == MLX_KEY_D)
+		pan(forward, right, up, -5);
+	else if (key == MLX_KEY_W)
+		tilt(forward, right, up, 5);
+	else if (key == MLX_KEY_S)
+		tilt(forward, right, up, -5);
+	else if (key == MLX_KEY_Q)
+		cant(forward, right, up, 5);
+	else if (key == MLX_KEY_E)
+		cant(forward, right, up, -5);
 	normalize(forward);
 	normalize(right);
 	normalize(up);

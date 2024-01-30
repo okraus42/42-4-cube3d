@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/29 12:05:56 by plouda           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:16:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,38 @@ void	ft_draw_string(t_master *master)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT");
 	else
 		ft_sprintf(master->str[1], " ");
+	//ft_sprintf(master->str[2], "");
+	/* if (master->rt->cones[0])
+		sprintf(master->str[2], "Cone normal   x %8f y %8f z %8f", master->rt->cones[0]->normal->x, master->rt->cones[0]->normal->y, master->rt->cones[0]->normal->z);
+	if (master->rt->cones[0])
+		sprintf(master->str[3], "Cone right    x %8f y %8f z %8f", master->rt->cones[0]->right->x, master->rt->cones[0]->right->y, master->rt->cones[0]->right->z);
+	if (master->rt->cones[0])
+		sprintf(master->str[4], "Cone up       x %8f y %8f z %8f", master->rt->cones[0]->up->x, master->rt->cones[0]->up->y, master->rt->cones[0]->up->z);
+	if (master->rt->cones[0])
+		sprintf(master->str[5], "Camera normal x %8f y %8f z %8f", master->rt->camera->normal->x, master->rt->camera->normal->y, master->rt->camera->normal->z);
+	if (master->rt->cones[0])
+		sprintf(master->str[6], "Camera right  x %8f y %8f z %8f", master->rt->camera->right->x, master->rt->camera->right->y, master->rt->camera->right->z);
+	if (master->rt->cones[0])
+		sprintf(master->str[7], "Camera up     x %8f y %8f z %8f", master->rt->camera->up->x, master->rt->camera->up->y, master->rt->camera->up->z);
+	//ft_sprintf(master->str[8], "WHAT IS GOING ON???"); */
 	mlx_delete_image(master->mlx, master->string[0]);
 	mlx_delete_image(master->mlx, master->string[1]);
+	/* mlx_delete_image(master->mlx, master->string[2]);
+	mlx_delete_image(master->mlx, master->string[3]);
+	mlx_delete_image(master->mlx, master->string[4]);
+	mlx_delete_image(master->mlx, master->string[5]);
+	mlx_delete_image(master->mlx, master->string[6]);
+	mlx_delete_image(master->mlx, master->string[7]); */
+	//mlx_delete_image(master->mlx, master->string[8]);
 	master->string[0] = mlx_put_string(master->mlx, s[0], 10, 5);
 	master->string[1] = mlx_put_string(master->mlx, master->str[1], 10, 25);
+	/* master->string[2] = mlx_put_string(master->mlx, master->str[2], 10, 45);
+	master->string[3] = mlx_put_string(master->mlx, master->str[3], 10, 65);
+	master->string[4] = mlx_put_string(master->mlx, master->str[4], 10, 85);
+	master->string[5] = mlx_put_string(master->mlx, master->str[5], 10, 105);
+	master->string[6] = mlx_put_string(master->mlx, master->str[6], 10, 125);
+	master->string[7] = mlx_put_string(master->mlx, master->str[7], 10, 145); */
+	//master->string[8] = mlx_put_string(master->mlx, master->str[8], 10, 165);
 	free (s[0]);
 }
 
@@ -255,9 +283,46 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	ft_draw_string(master);
 }
 
+t_rayfinder	trace_object_ray_singular(t_master *master, int32_t xpos, int32_t ypos)
+{
+	t_rayfinder	rf;
+	t_ray	*ray;
+
+	ray = malloc(sizeof(t_ray));
+	update_camera_matrix(master->rt->camera);
+	rf = init_rayfinder(master);
+	update_ray_direction(&rf, ray, xpos, ypos);
+	find_intersections(master, *ray, &rf, PRIMARY);
+	printf("object ptr: %p\n", rf.object_ptr);
+	free(ray);
+	return (rf);
+}
+
+void	mousehook(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
+{
+	t_master	*master;
+	int32_t		xpos;
+	int32_t		ypos;
+	t_rayfinder	rf;
+
+	master = param;
+	(void)mods;
+	if (button == MLX_MOUSE_BUTTON_LEFT
+		&& (action != MLX_RELEASE && action != MLX_REPEAT))
+	{
+		mlx_get_mouse_pos(master->mlx, &xpos, &ypos);
+		//printf("CURSOR\nxpos: %i\nypos: %i\n", xpos, ypos);
+		rf = trace_object_ray_singular(master, xpos, ypos);
+		reset_to_default(master);
+		set_highlight_from_reference(master, rf);
+		ft_draw_string(master);
+	}
+}
+
 static void	loop(mlx_t *mlx, t_master *master)
 {
 	mlx_key_hook(mlx, &keyhook, master);
+	mlx_mouse_hook(mlx, &mousehook, master);
 	mlx_loop(mlx);
 }
 
@@ -351,6 +416,8 @@ int	main(int ac, char *av[])
 	mlx_image_t	*img;
 	int			fd;
 	int			i;
+	//int32_t	xpos;
+	//int32_t	ypos;
 
 	fd = 0;
 	master = ft_calloc(1, sizeof(t_master));
@@ -398,6 +465,9 @@ int	main(int ac, char *av[])
 			precompute_ambient(master->rt);
 			precompute_light(master->rt);
 			find_rays(master);
+			ft_draw_string(master); // maybe here?
+			//mlx_get_window_pos(master->mlx, &xpos, &ypos);
+			//printf("xpos: %i\nypos: %i\n", xpos, ypos);
 			loop(mlx, master);
 			mlx_delete_image(mlx, img);
 			mlx_terminate(mlx);
