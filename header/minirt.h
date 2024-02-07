@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/30 11:15:39 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:25:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,6 +308,11 @@ typedef	struct s_shader
 	double		diffuse_ratio;
 	double		specular_ratio;
 	int			light_intensity;
+	double		illumination[3];
+	int			pix_color[3];
+	double		id;
+	double		is;
+	double		ia;
 }				t_shader;
 
 
@@ -470,7 +475,7 @@ void		clampf(double min, double max, double *value);
 double		point_distance(t_vect3f p1, t_vect3f p2);
 void		get_clr_components(int *light, int *rgb, double ratio, double bright);
 t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder);
-void		trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light);
+//void		trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light);
 
 t_vect3f	array_to_vect(double *array);
 void	precompute_ambient(t_rt *rt);

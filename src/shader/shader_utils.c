@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/17 11:40:16 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/06 11:18:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cyl
 	return (hit_normal);
 }
 
-void	trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light)
+/* void	trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light)
 {
 	if (find_intersections(m, rf->shadowray, rf, SHADOW))
 	{
@@ -89,4 +89,4 @@ void	trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light)
 	}
 	else
 		rf->clr = ft_max_clr(amb, light);
-}
+} */

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/30 11:16:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/01 10:05:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,7 @@ void	create_object_list(t_master *master)
 {
 	int			i;
 	t_objlist	*object;
-	t_objlist	*tmp;
+	//t_objlist	*tmp;
 
 	//master->obj_list = ft_calloc(1, sizeof(t_objlist));
 	master->obj_list = NULL;
@@ -393,7 +393,7 @@ void	create_object_list(t_master *master)
 		ft_objlst_add_back(&master->obj_list, object);
 	}
 
-	tmp = master->obj_list;
+	//tmp = master->obj_list;
 	//ft_objlst_iter(tmp, &print_list);
 
 	/* i = 0;
