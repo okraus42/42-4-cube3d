@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:09:40 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 12:16:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	*init_ids(void)
 void	init_objects(t_rt *rt, int *ids)
 {
 	init_ambient(rt);
-	init_light(rt);
+	init_light(rt, ids);
 	init_camera(rt);
 	init_spheres(rt, ids);
 	init_planes(rt, ids);
 	init_cylinders(rt, ids);
 	init_cones(rt, ids);
-	init_light_sphere(rt);
+	init_light_sphere(rt, ids);
 }
 
 int	check_identifiers(int fd, int *ids, int *flag)

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/30 09:39:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 16:30:04 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,8 +270,17 @@ void	specular_options(t_master *master, keys_t key)
 
 void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 {
-	move(keydata.key, master->rt->camera, master->rt->light_sphere->coords);
-	move(keydata.key, master->rt->camera, master->rt->light->coords);
+	int	i;
+
+	i = 0;
+	while (i < master->rt->n_lights)
+	{
+		if (master->rt->light_spheres[i]->mode == HIGHLIGHT)
+			break ;
+		i++;
+	}
+	move(keydata.key, master->rt->camera, master->rt->light_spheres[i]->coords);
+	move(keydata.key, master->rt->camera, master->rt->lights[i]->coords);
 	if (keydata.key == MLX_KEY_COMMA)
 		master->options->light_intensity -= 15;
 	else if (keydata.key == MLX_KEY_PERIOD)

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/01 10:05:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 17:17:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,13 @@ int	iterate_highlighted_object(t_rt *rt)
 		}
 		i++;
 	}
-	if (rt->light_sphere->mode == HIGHLIGHT)
+	while (i < rt->n_lights)
 	{
-		return (LIGHT | (i << 8));
+		if (rt->light_spheres[i]->mode == HIGHLIGHT)
+		{
+			return (LIGHT | (i << 8));
+		}
+		i++;
 	}
 	return (0);
 }
@@ -160,7 +164,7 @@ void	ft_draw_string(t_master *master)
 	else if ((i & 0xFF) == CONE)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: CONE: %i", i >> 8);
 	else if ((i & 0xFF) == LIGHT)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT");
+		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT: %i", i >> 8);
 	else
 		ft_sprintf(master->str[1], " ");
 	//ft_sprintf(master->str[2], "");
@@ -257,11 +261,16 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			&& keydata.key == MLX_KEY_L
 			&& keydata.action != MLX_RELEASE
 			&& master->options->mode == DEFAULT)
-		{
-			master->options->mode = LIGHTING;
-			master->rt->light_sphere->mode = HIGHLIGHT;
-			manipulate_light(master, keydata);
-		}
+			{
+				master->options->mode = LIGHTING;
+				if (master->rt->n_lights > 0)
+					master->rt->light_spheres[0]->mode = HIGHLIGHT;
+			}
+	else if ((master->options->mode == LIGHTING)
+			&& keydata.modifier == MLX_SHIFT
+			&& keydata.key == MLX_KEY_UP
+			&& keydata.action != MLX_RELEASE)
+		choose_object(master, keydata);
 	else if (master->options->mode == LIGHTING
 			&& keydata.action != MLX_RELEASE
 			&& !keydata.modifier
@@ -283,7 +292,7 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	ft_draw_string(master);
 }
 
-t_rayfinder	trace_object_ray_singular(t_master *master, int32_t xpos, int32_t ypos)
+t_rayfinder	trace_singular_object_ray(t_master *master, int32_t xpos, int32_t ypos)
 {
 	t_rayfinder	rf;
 	t_ray	*ray;
@@ -311,8 +320,7 @@ void	mousehook(mouse_key_t button, action_t action, modifier_key_t mods, void *p
 		&& (action != MLX_RELEASE && action != MLX_REPEAT))
 	{
 		mlx_get_mouse_pos(master->mlx, &xpos, &ypos);
-		//printf("CURSOR\nxpos: %i\nypos: %i\n", xpos, ypos);
-		rf = trace_object_ray_singular(master, xpos, ypos);
+		rf = trace_singular_object_ray(master, xpos, ypos);
 		reset_to_default(master);
 		set_highlight_from_reference(master, rf);
 		ft_draw_string(master);
@@ -387,10 +395,12 @@ void	create_object_list(t_master *master)
 		ft_objlst_add_back(&master->obj_list, object);
 		i++;
 	}
-	if (master->rt->light_sphere)
+	i = 0;
+	while (i < master->rt->n_lights)
 	{
-		object = ft_objlst_new(master->rt->light_sphere, LIGHT);
+		object = ft_objlst_new(master->rt->light_spheres[i], LIGHT);
 		ft_objlst_add_back(&master->obj_list, object);
+		i++;
 	}
 
 	//tmp = master->obj_list;
@@ -462,8 +472,8 @@ int	main(int ac, char *av[])
 				++i;
 			}
 			create_object_list(master);
-			precompute_ambient(master->rt);
-			precompute_light(master->rt);
+			//precompute_ambient(master->rt);
+			//precompute_light(master->rt);
 			find_rays(master);
 			ft_draw_string(master); // maybe here?
 			//mlx_get_window_pos(master->mlx, &xpos, &ypos);

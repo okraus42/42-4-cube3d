@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/06 11:18:58 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 13:48:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	clampf(double min, double max, double *value)
 
 t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder)
 {
-	t_vect3f	hit_normal;
+	/* t_vect3f	hit_normal;
 	t_vect3f	centered;
 	double			m; // a scalar that determines the closest point on the axis to the hit point
 
@@ -72,7 +72,18 @@ t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cyl
 	hit_normal.y = intersection.y - cylinder.coords[Y] - cylinder.normal->y * m;
 	hit_normal.z = intersection.z - cylinder.coords[Z] - cylinder.normal->z * m;
 	normalize(&hit_normal);
-	return (hit_normal);
+	return (hit_normal); */
+
+	double t;
+	t_vect3f	normal;
+
+	(void)rf;
+	(void)ray;
+	t = dot_product(*cylinder.normal, subtract_vect3f(intersection, array_to_vect(cylinder.botcap->coords)));
+	normal = subtract_vect3f(intersection, scale_vect3f(t, *cylinder.normal));
+	normal = subtract_vect3f(normal, array_to_vect(cylinder.botcap->coords));
+	normalize(&normal);
+	return (normal);
 }
 
 /* void	trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light)

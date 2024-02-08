@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/07 11:25:38 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 12:45:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,16 +230,17 @@ typedef struct s_rt
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
-	t_light		*light;
+	t_light		**lights;
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;
 	t_cone		**cones;
-	t_sphere	*light_sphere;
+	t_sphere	**light_spheres;
 	int			n_spheres;
 	int			n_planes;
 	int			n_cylinders;
 	int			n_cones;
+	int			n_lights;
 }				t_rt;
 
 
@@ -318,12 +319,12 @@ typedef	struct s_shader
 
 // Initialize objects
 void	init_ambient(t_rt *rt);
-void	init_light(t_rt *rt);
+void	init_light(t_rt *rt, int *ids);
 void	init_camera(t_rt *rt);
 void	init_spheres(t_rt *rt, int *ids);
 void	init_planes(t_rt *rt, int *ids);
 void	init_cylinders(t_rt *rt, int *ids);
-void	init_light_sphere(t_rt *rt);
+void	init_light_sphere(t_rt *rt, int *ids);
 
 // Identifier check
 int	*init_ids(void);
@@ -478,9 +479,9 @@ t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cyl
 //void		trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light);
 
 t_vect3f	array_to_vect(double *array);
-void	precompute_ambient(t_rt *rt);
+/* void	precompute_ambient(t_rt *rt);
 void	precompute_light(t_rt *rt);
-void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb);
+void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb); */
 
 void	rotate_objects(t_master *master, mlx_key_data_t keydata);
 void	set_plane_vects(t_plane *plane);

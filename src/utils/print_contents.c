@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:02:07 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:11:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 12:18:32 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	print_contents(t_rt *rt)
 			"Vector:", rt->camera->nvect[0], rt->camera->nvect[1], rt->camera->nvect[2], \
 			"FoV:", rt->camera->fov);
 	printf("=================================================\n");
-	printf("LIGHT\n");
+/* 	printf("LIGHT\n");
 	printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %i,%i,%i\n", \
 			"Coords:", rt->light->coords[0], rt->light->coords[1], rt->light->coords[2], \
 			"Brightness:", rt->light->brightness,
 			"RGB:", rt->light->rgb[0], rt->light->rgb[1], rt->light->rgb[2]);
-	printf("=================================================\n");
+	printf("=================================================\n"); */
 	while (rt->n_spheres > i)
 	{
 		printf("SPHERE %i\n", i + 1);

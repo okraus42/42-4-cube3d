@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:21:59 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:26:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	check_duplicates(int *ids, int *flag)
 		id_err(NULL, "Duplicate identifier: A", NULL);
 	else if (ids[1] > 1)
 		id_err(NULL, "Duplicate identifier: C", NULL);
-	else if (ids[2] > 1)
-		id_err(NULL, "Duplicate identifier: L", NULL);
-	if (ids[0] > 1 || ids[1] > 1 || ids[2] > 1)
+	/* else if (ids[2] > 1)
+		id_err(NULL, "Duplicate identifier: L", NULL); */
+	if (ids[0] > 1 || ids[1] > 1)
 		*flag = 1;
 }
 

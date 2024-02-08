@@ -3,20 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   o_light.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:29:51 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/08 12:30:40 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
 
-void	init_light(t_rt *rt)
+void	init_light(t_rt *rt, int *ids)
 {
-	rt->light = ft_calloc(1, sizeof(t_light));
-	rt->light->coords = ft_calloc(3, sizeof(double));
-	rt->light->rgb = ft_calloc(3, sizeof(int));
+	int	i;
+
+	i = 0;
+	rt->lights = ft_calloc(ids[2] + 1, sizeof(t_light *));
+	rt->n_lights = 0;
+	while (i < (ids[2]))
+	{
+		rt->lights[i] = ft_calloc(1, sizeof(t_light));
+		rt->lights[i]->coords = ft_calloc(3, sizeof(double));
+		rt->lights[i++]->rgb = ft_calloc(3, sizeof(int));
+	}
+	rt->lights[i] = NULL;
 }
 
 int	check_format_light(char **split)
@@ -38,20 +47,31 @@ int	check_format_light(char **split)
 
 int	fill_light(t_rt *rt, char **split)
 {
+	int			i;
+
+	i = rt->n_lights;
 	if (check_format_light(split))
 		return (1);
-	get_coords(rt->light->coords, split[1]);
-	rt->light->brightness = ft_atof(split[2]);
-	if (rt->light->brightness < 0.0 || rt->light->brightness > 1.0)
+	get_coords(rt->lights[i]->coords, split[1]);
+	rt->lights[i]->brightness = ft_atof(split[2]);
+	if (rt->lights[i]->brightness < 0.0 || rt->lights[i]->brightness > 1.0)
 		return (id_err("L", E_BRIGHT_RANGE, E_RANGE_POS));
-	if (!get_rgb(rt->light->rgb, split[3]))
+	if (!get_rgb(rt->lights[i]->rgb, split[3]))
 		return (id_err("L", E_RGB_RANGE, E_RANGE_INT));
+	rt->n_lights++;
 	return (0);
 }
 
 void	free_light(t_rt *rt)
 {
-	free(rt->light->coords);
-	free(rt->light->rgb);
-	free(rt->light);
+	int	i;
+
+	i = 0;
+	while (rt->lights[i] != NULL)
+	{
+			free(rt->lights[i]->coords);
+			free(rt->lights[i]->rgb);
+			free(rt->lights[i++]);
+	}
+	free(rt->lights);
 }

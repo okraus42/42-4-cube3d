@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/30 09:54:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:40:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,13 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
 		i++;
 	}
-	if (type != SHADOW && intersect_sphere(ray, master->rt->light_sphere, &rf->t))
-		flag = update_object_ref(rf, master->rt->light_sphere, LIGHT);
+	i = 0;
+	while (i < master->rt->n_lights)
+	{
+		if (type != SHADOW && intersect_sphere(ray, master->rt->light_spheres[i], &rf->t))
+			flag = update_object_ref(rf, master->rt->light_spheres[i], LIGHT);
+		i++;
+	}
 	return (flag);
 }
 
