@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 12:16:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:33:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	*init_ids(void)
 void	init_objects(t_rt *rt, int *ids)
 {
 	init_ambient(rt);
-	init_light(rt, ids);
+	init_light_sphere(rt, ids);
+	//init_light(rt, ids);
 	init_camera(rt);
 	init_spheres(rt, ids);
 	init_planes(rt, ids);
 	init_cylinders(rt, ids);
 	init_cones(rt, ids);
-	init_light_sphere(rt, ids);
 }
 
 int	check_identifiers(int fd, int *ids, int *flag)
@@ -63,7 +63,7 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 		else if (!ft_strncmp(split[0], "C", 1))
 			*flag = fill_camera(rt, split);
 		else if (!ft_strncmp(split[0], "L", 1))
-			*flag = fill_light(rt, split);
+			*flag = fill_light_sphere(rt, split);
 		else
 			*flag = 1;
 	}
@@ -87,7 +87,7 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 void	free_objects(t_rt *rt)
 {
 	free_ambient(rt);
-	free_light(rt);
+	//free_light(rt);
 	free_camera(rt);
 	free_spheres(rt);
 	free_planes(rt);

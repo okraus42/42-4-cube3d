@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/08 17:17:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:27:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -455,7 +455,7 @@ int	main(int ac, char *av[])
 		}
 		if (!load_file(av[1], rt, fd))
 		{
-			fill_light_sphere(rt);
+			//fill_light_sphere(rt);
 			print_contents(rt);
 			mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 			mlx_set_window_limit(mlx, 250, 250, 10000, 10000);

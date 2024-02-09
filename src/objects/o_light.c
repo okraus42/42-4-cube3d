@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   o_light.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:29:51 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 12:30:40 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:53:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
 
-void	init_light(t_rt *rt, int *ids)
+/* void	init_light(t_rt *rt, int *ids)
 {
 	int	i;
 
@@ -75,3 +75,4 @@ void	free_light(t_rt *rt)
 	}
 	free(rt->lights);
 }
+ */

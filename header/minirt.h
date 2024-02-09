@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/08 12:45:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:02:19 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,12 @@ typedef struct s_camera
 	t_quat		*quat;
 }				t_camera;
 
-typedef struct s_light
+/* typedef struct s_light
 {
 	double	*coords; // x,y,z coordinates of lightpoint
 	double	brightness; // 0.0-1.0
 	int		*rgb;
-}				t_light;
+}				t_light; */
 
 typedef struct s_sphere
 {
@@ -162,6 +162,7 @@ typedef struct s_sphere
 	int		*rgb;
 	int		*rgb_ambient;
 	int		*rgb_light;
+	double	brightness; // only relevant for light-emitting spheres
 	t_mode	mode;
 }				t_sphere;
 
@@ -230,7 +231,7 @@ typedef struct s_rt
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
-	t_light		**lights;
+	//t_light		**lights;
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;
@@ -358,9 +359,8 @@ int		fill_camera(t_rt *rt, char **split);
 int		fill_light(t_rt *rt, char **split);
 int		fill_plane(t_rt *rt, char **split);
 int		fill_sphere(t_rt *rt, char **split);
-int		fill_light_sphere(t_rt *rt);
+int		fill_light_sphere(t_rt *rt, char **split);
 int		fill_cylinder(t_rt *rt, char **split);
-int		fill_light_sphere(t_rt *rt);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -375,7 +375,7 @@ int	print_contents(t_rt *rt);
 
 // Free objects
 void	free_ambient(t_rt *rt);
-void	free_light(t_rt *rt);
+//void	free_light(t_rt *rt);
 void	free_camera(t_rt *rt);
 void	free_spheres(t_rt *rt);
 void	free_planes(t_rt *rt);

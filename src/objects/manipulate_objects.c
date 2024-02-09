@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 16:30:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:57:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,7 +280,6 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 		i++;
 	}
 	move(keydata.key, master->rt->camera, master->rt->light_spheres[i]->coords);
-	move(keydata.key, master->rt->camera, master->rt->lights[i]->coords);
 	if (keydata.key == MLX_KEY_COMMA)
 		master->options->light_intensity -= 15;
 	else if (keydata.key == MLX_KEY_PERIOD)

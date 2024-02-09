@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 13:11:08 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 15:32:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,34 +27,11 @@ void	get_comb_clr(int *rgb_comb, int *rgb_light, int *rgb_spec)
 	rgb_comb[B] = ((int)((rgb_light[B] + 1) * (rgb_spec[B] + 1)) - 1) >> 8;
 } */
 
-/* void	trace_shadow_t(t_master *m, t_rayfinder *rf, t_shader shader)
-{
-	if (find_intersections(m, rf->shadowray, rf, SHADOW))
-	{
-		rf->shadow_inter = get_intersection(rf->shadowray.origin, \
-		rf->shadowray.direction, rf->t_near);
-		rf->inter_dist = point_distance(rf->shadow_inter, rf->shadowray.origin);
-		if (rf->inter_dist < shader.light_dist)
-			rf->clr = shader.rgb_ambient;
-		else
-		{
-			rf->clr = ft_max_clr(shader.rgb_ambient, shader.rgb_diffuse);
-			rf->clr = ft_max_clr(rf->clr, shader.rgb_specular);
-		}
-	}
-	else
-	{
-		rf->clr = ft_max_clr(shader.rgb_ambient, shader.rgb_diffuse);
-		rf->clr = ft_max_clr(rf->clr, shader.rgb_specular);
-	}
-} */
-
-
-void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_shader *shader, t_light *light)
+void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_shader *shader, double *light_pos)
 {
 	rf->shadowray.direction = shader->light_dir;
 	rf->shadowray.origin = add_vect3f(intersection, scale_vect3f(1e-4, shader->hit_normal));
-	shader->light_dist = point_distance(rf->shadowray.origin, array_to_vect(light->coords)); // change rt->light to light through arg
+	shader->light_dist = point_distance(rf->shadowray.origin, array_to_vect(light_pos)); // change rt->light to light through arg
 	rf->t_near = (double)INT_MAX;
 	if (shader->light_dist < 1e-6)
 		shader->light_dist = 1e-6;
@@ -71,7 +48,7 @@ void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_sh
 	}
 }
 
-void	phong_illumination(t_shader *shader, t_rt *rt, int *object_unit_rgb, t_light *light) // change rt->light to light through arg
+void	phong_illumination(t_shader *shader, t_rt *rt, int *object_unit_rgb, t_sphere *light) // change rt->light to light through arg
 {
 	shader->ia = rt->ambient->rgb[R] / 255. * rt->ambient->ratio * object_unit_rgb[R] / 255. ;
 	shader->id = object_unit_rgb[R] / 255. * light->brightness * light->rgb[R] / 255. ;
@@ -136,15 +113,15 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	{
 		shader.light_intensity = rf->light_intensity;
 		shader.hit_normal = subtract_vect3f(intersection, array_to_vect(sphere->coords));
-		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->lights[i]->coords), intersection);
+		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
 		shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 		normalize(&shader.view_dir);
 		normalize(&shader.hit_normal);
 		normalize(&shader.light_dir);
 
 		diff_and_spec_ratios(&shader, *master->options);
-		trace_shadow(master, rf, intersection, &shader, master->rt->lights[i]);
-		phong_illumination(&shader, master->rt, sphere->rgb, master->rt->lights[i]);
+		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(&shader, master->rt, sphere->rgb, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -184,15 +161,15 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	{
 		shader.light_intensity = rf->light_intensity;
 		shader.hit_normal = *plane->normal;
-		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->lights[i]->coords), intersection);
+		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
 		shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 		normalize(&shader.view_dir);
 		normalize(&shader.hit_normal);
 		normalize(&shader.light_dir);
 
 		diff_and_spec_ratios(&shader, *master->options);
-		trace_shadow(master, rf, intersection, &shader, master->rt->lights[i]);
-		phong_illumination(&shader, master->rt, plane->rgb, master->rt->lights[i]);
+		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(&shader, master->rt, plane->rgb, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -231,15 +208,15 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	{
 		shader.light_intensity = rf->light_intensity;
 		shader.hit_normal = get_hit_normal(rf, ray, intersection, *cylinder);
-		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->lights[i]->coords), intersection);
+		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
 		shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 		normalize(&shader.view_dir);
 		normalize(&shader.hit_normal);
 		normalize(&shader.light_dir);
 
 		diff_and_spec_ratios(&shader, *master->options);
-		trace_shadow(master, rf, intersection, &shader, master->rt->lights[i]);
-		phong_illumination(&shader, master->rt, cylinder->rgb, master->rt->lights[i]);
+		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(&shader, master->rt, cylinder->rgb, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -278,15 +255,15 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	{
 		shader.light_intensity = rf->light_intensity;
 		shader.hit_normal = *disc->normal;
-		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->lights[i]->coords), intersection);
+		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
 		shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 		normalize(&shader.view_dir);
 		normalize(&shader.hit_normal);
 		normalize(&shader.light_dir);
 
 		diff_and_spec_ratios(&shader, *master->options);
-		trace_shadow(master, rf, intersection, &shader, master->rt->lights[i]);
-		phong_illumination(&shader, master->rt, disc->rgb, master->rt->lights[i]);
+		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(&shader, master->rt, disc->rgb, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -346,15 +323,15 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	{
 		shader.light_intensity = rf->light_intensity;
 		shader.hit_normal = get_cone_hit_normal(intersection, *cone);
-		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->lights[i]->coords), intersection);
+		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
 		shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 		normalize(&shader.view_dir);
 		normalize(&shader.hit_normal);
 		normalize(&shader.light_dir);
 
 		diff_and_spec_ratios(&shader, *master->options);
-		trace_shadow(master, rf, intersection, &shader, master->rt->lights[i]);
-		phong_illumination(&shader, master->rt, cone->rgb, master->rt->lights[i]);
+		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(&shader, master->rt, cone->rgb, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
