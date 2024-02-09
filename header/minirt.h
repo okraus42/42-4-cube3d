@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/09 16:02:19 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:09:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,20 +148,11 @@ typedef struct s_camera
 	t_quat		*quat;
 }				t_camera;
 
-/* typedef struct s_light
-{
-	double	*coords; // x,y,z coordinates of lightpoint
-	double	brightness; // 0.0-1.0
-	int		*rgb;
-}				t_light; */
-
 typedef struct s_sphere
 {
 	double	*coords; // x,y,z coordinates of center
 	double	diameter;
 	int		*rgb;
-	int		*rgb_ambient;
-	int		*rgb_light;
 	double	brightness; // only relevant for light-emitting spheres
 	t_mode	mode;
 }				t_sphere;
@@ -171,8 +162,6 @@ typedef struct s_plane
 	double	*coords; // x,y,z coordinates of point
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int		*rgb;
-	int		*rgb_ambient;
-	int		*rgb_light;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -185,8 +174,6 @@ typedef	struct s_disc
 	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	double	radius;
 	int		*rgb;
-	int		*rgb_ambient;
-	int		*rgb_light;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -200,8 +187,6 @@ typedef struct s_cylinder
 	double	diameter;
 	double	height;
 	int		*rgb;
-	int		*rgb_ambient;
-	int		*rgb_light;
 	t_disc	*botcap;
 	t_disc	*topcap;
 	t_vect3f	*normal;
@@ -217,8 +202,6 @@ typedef struct s_cone
 	double	diameter;
 	double	height;
 	int		*rgb;
-	int		*rgb_ambient;
-	int		*rgb_light;
 	t_disc	*base;
 	t_disc	*pinnacle;
 	t_vect3f	*normal;
@@ -231,7 +214,6 @@ typedef struct s_rt
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
-	//t_light		**lights;
 	t_sphere	**spheres;
 	t_plane		**planes;
 	t_cylinder	**cylinders;

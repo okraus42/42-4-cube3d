@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 15:51:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:12:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	init_light_sphere(t_rt *rt, int *ids)
 		rt->light_spheres[i] = ft_calloc(1, sizeof(t_sphere));
 		rt->light_spheres[i]->coords = ft_calloc(3, sizeof(double));
 		rt->light_spheres[i]->rgb = ft_calloc(3, sizeof(int));
-		rt->light_spheres[i]->rgb_ambient = ft_calloc(3, sizeof(int));
-		rt->light_spheres[i]->rgb_light = ft_calloc(3, sizeof(int));
 		//rt->light_spheres[i]->brightness = 1;
 		rt->light_spheres[i++]->mode = DEFAULT;
 	}
@@ -93,8 +91,6 @@ void	free_light_sphere(t_rt *rt)
 	{
 		free(rt->light_spheres[i]->coords);
 		free(rt->light_spheres[i]->rgb);
-		free(rt->light_spheres[i]->rgb_ambient);
-		free(rt->light_spheres[i]->rgb_light);
 		free(rt->light_spheres[i++]);
 	}
 	free(rt->light_spheres);

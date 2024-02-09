@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_sphere.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 12:23:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:12:49 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	init_spheres(t_rt *rt, int *ids)
 		rt->spheres[i] = ft_calloc(1, sizeof(t_sphere));
 		rt->spheres[i]->coords = ft_calloc(3, sizeof(double));
 		rt->spheres[i]->rgb = ft_calloc(3, sizeof(int));
-		rt->spheres[i]->rgb_ambient = ft_calloc(3, sizeof(int));
-		rt->spheres[i]->rgb_light = ft_calloc(3, sizeof(int));
 		rt->spheres[i++]->mode = DEFAULT;
 	}
 	rt->spheres[i] = NULL;
@@ -74,8 +72,6 @@ void	free_spheres(t_rt *rt)
 	{
 		free(rt->spheres[i]->coords);
 		free(rt->spheres[i]->rgb);
-		free(rt->spheres[i]->rgb_ambient);
-		free(rt->spheres[i]->rgb_light);
 		free(rt->spheres[i++]);
 	}
 	free(rt->spheres);

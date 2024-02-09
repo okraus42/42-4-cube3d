@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/08 17:16:48 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/09 16:04:31 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,6 @@ SRC_M		=	ft_atof.c \
 SRC_O		=	fill_object_getters.c \
 				o_ambient.c \
 				o_camera.c \
-				o_light.c \
 				o_cylinder.c \
 				o_cylinder_disc.c \
 				o_plane.c \

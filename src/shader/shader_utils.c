@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 13:48:17 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:15:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,6 @@ void	clampf(double min, double max, double *value)
 
 t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder)
 {
-	/* t_vect3f	hit_normal;
-	t_vect3f	centered;
-	double			m; // a scalar that determines the closest point on the axis to the hit point
-
-	centered = subtract_center(ray.origin, cylinder.coords);
-	m = (dot_product(ray.direction, *cylinder.normal) * rf->t_near) + dot_product(centered, *cylinder.normal);
-	hit_normal.x = intersection.x - cylinder.coords[X] - cylinder.normal->x * m;
-	hit_normal.y = intersection.y - cylinder.coords[Y] - cylinder.normal->y * m;
-	hit_normal.z = intersection.z - cylinder.coords[Z] - cylinder.normal->z * m;
-	normalize(&hit_normal);
-	return (hit_normal); */
 
 	double t;
 	t_vect3f	normal;
@@ -85,19 +74,3 @@ t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cyl
 	normalize(&normal);
 	return (normal);
 }
-
-/* void	trace_shadow(t_master *m, t_rayfinder *rf, uint32_t amb, uint32_t light)
-{
-	if (find_intersections(m, rf->shadowray, rf, SHADOW))
-	{
-		rf->shadow_inter = get_intersection(rf->shadowray.origin, \
-		rf->shadowray.direction, rf->t_near);
-		rf->inter_dist = point_distance(rf->shadow_inter, rf->shadowray.origin);
-		if (rf->inter_dist < rf->light_dist)
-			rf->clr = amb;
-		else
-			rf->clr = ft_max_clr(amb, light);
-	}
-	else
-		rf->clr = ft_max_clr(amb, light);
-} */

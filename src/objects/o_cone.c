@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/22 10:21:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/09 16:11:13 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ void	init_cones(t_rt *rt, int *ids)
 		rt->cones[i]->coords = ft_calloc(3, sizeof(double));
 		rt->cones[i]->nvect = ft_calloc(3, sizeof(double));
 		rt->cones[i]->rgb = ft_calloc(3, sizeof(double));
-		rt->cones[i]->rgb_ambient = ft_calloc(3, sizeof(double));
-		rt->cones[i]->rgb_light = ft_calloc(3, sizeof(double));
 		rt->cones[i]->normal = ft_calloc(1, sizeof(t_vect3f));
         rt->cones[i]->pinnacle = ft_calloc(1, sizeof(t_disc));
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
@@ -102,8 +100,6 @@ void	free_cones(t_rt *rt)
 		free(rt->cones[i]->coords);
 		free(rt->cones[i]->nvect);
 		free(rt->cones[i]->rgb);
-		free(rt->cones[i]->rgb_ambient);
-		free(rt->cones[i]->rgb_light);
 		free_cone_discs(rt->cones[i]);
 		free(rt->cones[i]->normal);
 		free(rt->cones[i]->right);
