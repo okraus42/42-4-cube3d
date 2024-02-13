@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 11:26:41 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/11 18:45:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ void	get_identifiers(char **split, int *ids, int *flag)
 			ids[5]++;
 		else if (!ft_strncmp(split[0], "co", 2))
 			ids[6]++;
+		else
+			*flag = 1;
+	}
+	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5) // allows storing up to 99 checkerboards, but will only report Unknown identifier if too long
+	{
+		if (!ft_strncmp(split[0], ".ch/", 4))
+			ids[7]++;
 		else
 			*flag = 1;
 	}

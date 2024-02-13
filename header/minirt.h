@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/09 16:09:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/11 19:17:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ typedef struct s_ambient
 
 typedef struct s_camera
 {
-	double	*coords; // x,y,z coordinates of viewpoint
-	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
-	int		fov; // 0-180
+	double		*coords; // x,y,z coordinates of viewpoint
+	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	int			fov; // 0-180
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -159,9 +159,9 @@ typedef struct s_sphere
 
 typedef struct s_plane
 {
-	double	*coords; // x,y,z coordinates of point
-	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
-	int		*rgb;
+	double		*coords; // x,y,z coordinates of point
+	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	int			*rgb;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -170,10 +170,10 @@ typedef struct s_plane
 
 typedef	struct s_disc
 {
-	double	*coords; // x,y,z coordinates of center
-	double	*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
-	double	radius;
-	int		*rgb;
+	double		*coords; // x,y,z coordinates of center
+	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
+	double		radius;
+	int			*rgb;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -182,13 +182,13 @@ typedef	struct s_disc
 
 typedef struct s_cylinder
 {
-	double	*coords; // x,y,z coordinates of center
-	double	*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	double	diameter;
-	double	height;
-	int		*rgb;
-	t_disc	*botcap;
-	t_disc	*topcap;
+	double		*coords; // x,y,z coordinates of center
+	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
+	double		diameter;
+	double		height;
+	int			*rgb;
+	t_disc		*botcap;
+	t_disc		*topcap;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -197,18 +197,26 @@ typedef struct s_cylinder
 
 typedef struct s_cone
 {
-	double	*coords; // x,y,z coordinates of center
-	double	*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	double	diameter;
-	double	height;
-	int		*rgb;
-	t_disc	*base;
-	t_disc	*pinnacle;
+	double		*coords; // x,y,z coordinates of center
+	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
+	double		diameter;
+	double		height;
+	int			*rgb;
+	t_disc		*base;
+	t_disc		*pinnacle;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
 	t_mode		mode;
 }				t_cone;
+
+typedef struct s_checkerboard
+{
+	int			*rgb1;
+	int			*rgb2;
+	double		magnitude;
+	int			id;
+}				t_checkerboard;
 
 typedef struct s_rt
 {
@@ -219,11 +227,13 @@ typedef struct s_rt
 	t_cylinder	**cylinders;
 	t_cone		**cones;
 	t_sphere	**light_spheres;
+	t_checkerboard **checkerboards;
 	int			n_spheres;
 	int			n_planes;
 	int			n_cylinders;
 	int			n_cones;
 	int			n_lights;
+	int			n_checkerboards;
 }				t_rt;
 
 
@@ -302,12 +312,13 @@ typedef	struct s_shader
 
 // Initialize objects
 void	init_ambient(t_rt *rt);
-void	init_light(t_rt *rt, int *ids);
+//void	init_light(t_rt *rt, int *ids);
 void	init_camera(t_rt *rt);
 void	init_spheres(t_rt *rt, int *ids);
 void	init_planes(t_rt *rt, int *ids);
 void	init_cylinders(t_rt *rt, int *ids);
 void	init_light_sphere(t_rt *rt, int *ids);
+void	init_checkerboards(t_rt *rt, int *ids);
 
 // Identifier check
 int	*init_ids(void);
@@ -325,6 +336,7 @@ int	is_integer(char *str);
 int	float_in_range(char *str); // format 9999.99999 allowed
 int	triad_in_range(char *triad);
 int	has_spec_count(char **split, int target);
+int	has_valid_id_attribute(char *str); //ex. .ch/03;
 
 int	check_format_ambient(char **split);
 int	check_format_camera(char **split);
@@ -332,6 +344,7 @@ int	check_format_light(char **split);
 int	check_format_sphere(char **split);
 int	check_format_plane(char **split);
 int	check_format_cylinder(char **split);
+int	check_format_checkerboard(char **split);
 
 // Data loading
 void	get_data_from_line(char *line, t_rt *rt, int *flag);
@@ -343,6 +356,7 @@ int		fill_plane(t_rt *rt, char **split);
 int		fill_sphere(t_rt *rt, char **split);
 int		fill_light_sphere(t_rt *rt, char **split);
 int		fill_cylinder(t_rt *rt, char **split);
+int		fill_checkerboard(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -363,6 +377,7 @@ void	free_spheres(t_rt *rt);
 void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
 void	free_light_sphere(t_rt *rt);
+void	free_checkerboards(t_rt *rt);
 
 // Ray casting
 void	find_rays(t_master *master);

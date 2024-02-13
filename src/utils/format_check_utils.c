@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/11 19:17:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,19 @@ int	has_spec_count(char **split, int target)
 		num++;
 	if (num != target)
 		return (0);
+	return (1);
+}
+
+int	has_valid_id_attribute(char *str) //ex. .ch/03
+{
+	int	i;
+
+	i = 4;
+	while (i < (int)ft_strlen(str))
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
 	return (1);
 }

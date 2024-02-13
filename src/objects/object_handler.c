@@ -6,7 +6,7 @@
 /*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 15:33:58 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/11 19:25:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,10 @@ int	*init_ids(void)
 	int		i;
 
 	i = 0;
-	ids = malloc(sizeof(int) * 7);
-	while (i < 7)
+	ids = malloc(sizeof(int) * 8);
+	while (i < 8)
 		ids[i++] = 0;
 	return (ids);
-}
-
-void	init_objects(t_rt *rt, int *ids)
-{
-	init_ambient(rt);
-	init_light_sphere(rt, ids);
-	//init_light(rt, ids);
-	init_camera(rt);
-	init_spheres(rt, ids);
-	init_planes(rt, ids);
-	init_cylinders(rt, ids);
-	init_cones(rt, ids);
 }
 
 int	check_identifiers(int fd, int *ids, int *flag)
@@ -52,6 +40,19 @@ int	check_identifiers(int fd, int *ids, int *flag)
 		check_missing(ids, flag);
 	free(line);
 	return (0);
+}
+
+void	init_objects(t_rt *rt, int *ids)
+{
+	init_ambient(rt);
+	init_light_sphere(rt, ids);
+	//init_light(rt, ids);
+	init_camera(rt);
+	init_spheres(rt, ids);
+	init_planes(rt, ids);
+	init_cylinders(rt, ids);
+	init_cones(rt, ids);
+	init_checkerboards(rt, ids);
 }
 
 void	fill_objects(t_rt *rt, char **split, int *flag)
@@ -80,6 +81,8 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 		else
 			*flag = 1;
 	}
+	else if (!ft_strncmp(split[0], ".ch/", 4))
+		*flag = fill_checkerboard(rt, split);
 	else
 		*flag = 1;
 }
@@ -94,4 +97,5 @@ void	free_objects(t_rt *rt)
 	free_cylinders(rt);
 	free_cones(rt);
 	free_light_sphere(rt);
+	free_checkerboards(rt);
 }
