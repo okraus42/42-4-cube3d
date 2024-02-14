@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/11 19:16:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:54:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,39 @@ void	load_data(t_rt *rt, char *file, int *flag)
 	close(fd);
 }
 
+void	get_texture_data_from_line(char *line, t_rt *rt, int *flag)
+{
+	char	**split;
+	char	*trimmed;
+
+	trimmed = ft_strtrim(line, " \n");
+	split = ft_split(trimmed, ' ');
+	free(trimmed);
+	if (ft_strlen(split[0]) > 0)
+	{
+		if (!ft_strncmp(split[0], ".ch/", 4))
+			*flag = fill_checkerboard(rt, split);
+	}
+	ft_free_split(&split);
+}
+
+void	get_texture_data(t_rt *rt, char *file, int *flag)
+{
+	int		fd;
+	char	*line;
+
+	fd = open(file, O_RDONLY);
+	line = get_next_line(fd);
+	while (line && !(*flag))
+	{
+		get_texture_data_from_line(line, rt, flag);
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
+	close(fd);
+}
+
 int	load_file(char *file, t_rt *rt, int fd)
 {
 	int		flag;
@@ -53,6 +86,8 @@ int	load_file(char *file, t_rt *rt, int fd)
 	close(fd);
 	init_objects(rt, ids);
 	free(ids);
+	if (!flag)
+		get_texture_data(rt, file, &flag);
 	if (!flag)
 		load_data(rt, file, &flag);
 	return (flag);

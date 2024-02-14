@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_checkerboard.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 18:21:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/11 19:26:52 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:35:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,30 @@ int	check_format_checkerboard(char **split)
 	return (0);
 }
 
+int	get_checkerboard_id(t_checkerboard *checkerboard, char *specifier)
+{
+	char	**split;
+	int		i;
+	int		flag;
+
+	i = 0;
+	flag = 0;
+	while (specifier[i])
+	{
+		if (specifier[i] == '/')
+			flag = 1;
+		i++;
+	}
+	if (!flag)
+		return (flag);
+	split = ft_split(specifier, '/');
+	checkerboard->id = ft_atoi(split[1]);
+	free(split[0]);
+	free(split[1]);
+	free(split);
+	return (flag);
+}
+
 int	fill_checkerboard(t_rt *rt, char **split)
 {
 	int			i;
@@ -59,7 +83,8 @@ int	fill_checkerboard(t_rt *rt, char **split)
 	rt->checkerboards[i]->magnitude = ft_atof(split[3]);
 	if (rt->checkerboards[i]->magnitude <= 0)
 		return (id_err(".ch", "Magnitude value too low", E_RANGE_STRICT));
-	//rt->checkerboards[i]-id = id;
+	if (!get_checkerboard_id(rt->checkerboards[i], split[0]))
+		return (id_err(".ch", "Invalid .ch specification", NULL));
 	rt->n_checkerboards++;
 	return (0);
 }

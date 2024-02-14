@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/11 19:18:23 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/14 13:31:25 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,7 +87,8 @@ SRC_O		=	fill_object_getters.c \
 				o_checkerboard.c \
 				object_handler.c \
 				manipulate_objects.c \
-				choose_object.c
+				choose_object.c \
+				get_checkerboard_pointer.c
 				
 SRC_R		=	find_rays.c \
 				intersections.c

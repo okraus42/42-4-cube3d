@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:12:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:32:55 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->planes[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->planes[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i]->checkerboard = NULL;
 		rt->planes[i++]->mode = DEFAULT;
 	}
 	rt->planes[i] = NULL;
@@ -68,6 +69,7 @@ int	fill_plane(t_rt *rt, char **split)
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));
 	set_plane_vects(rt->planes[i]);
+	get_checkerboard_pointer(rt, split, &rt->planes[i]->checkerboard);
 	rt->n_planes++;
 	return (0);
 }

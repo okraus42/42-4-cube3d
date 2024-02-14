@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:11:13 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:34:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_cones(t_rt *rt, int *ids)
         rt->cones[i]->pinnacle = ft_calloc(1, sizeof(t_disc));
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->cones[i]->checkerboard = NULL;
 		rt->cones[i]->mode = DEFAULT;
 		init_cone_discs(rt->cones[i]);
 		i++;
@@ -86,6 +87,7 @@ int	fill_cone(t_rt *rt, char **split)
 		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
 	get_cone_discs(rt->cones[i]);
 	set_cone_vects(rt->cones[i]);
+	get_checkerboard_pointer(rt, split, &rt->cones[i]->checkerboard);
 	rt->n_cones++;
 	return (0);
 }

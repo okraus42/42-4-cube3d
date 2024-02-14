@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/11 19:17:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 12:11:13 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,11 @@ int	has_spec_count(char **split, int target)
 	num = 0;
 	while (split[num])
 		num++;
+	if (num == target + 1)
+	{
+		if (!ft_strncmp(split[num-1], ".ch/", 4))
+			return (1);
+	}
 	if (num != target)
 		return (0);
 	return (1);

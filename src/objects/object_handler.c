@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/11 19:25:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:53:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 		else
 			*flag = 1;
 	}
-	else if (!ft_strncmp(split[0], ".ch/", 4))
-		*flag = fill_checkerboard(rt, split);
+ 	else if (!ft_strncmp(split[0], ".ch/", 4)) // ignoring texture call during object parsing
+		return ;
 	else
 		*flag = 1;
 }

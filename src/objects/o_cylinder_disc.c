@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:11:44 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:34:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->up = ft_calloc(1, sizeof(t_vect3f));
 	cylinder->botcap->mode = DEFAULT;
 	cylinder->topcap->mode = DEFAULT;
+	cylinder->botcap->checkerboard = NULL;
+	cylinder->botcap->checkerboard = NULL;
 
 }
 
@@ -51,6 +53,7 @@ void	define_botcap(t_cylinder *cylinder)
 	*botcap->normal = get_normal(botcap->nvect[X], \
 		botcap->nvect[Y], botcap->nvect[Z]);
 	set_disc_vects(botcap);
+	botcap->checkerboard = cylinder->checkerboard;
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -74,6 +77,7 @@ void	define_topcap(t_cylinder *cylinder)
 	*topcap->normal = get_normal(topcap->nvect[X], \
 		topcap->nvect[Y], topcap->nvect[Z]);
 	set_disc_vects(topcap);
+	topcap->checkerboard = cylinder->checkerboard;
 }
 
 void	get_discs(t_cylinder *cylinder)

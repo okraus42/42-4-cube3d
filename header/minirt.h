@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/11 19:17:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:31:04 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,13 @@ typedef enum e_mode
 	CAMERA
 }			t_mode;
 
+typedef enum e_texture
+{
+	PLAIN,
+	CHECKERBOARD,
+	TEXTURE
+}			t_texture;
+
 typedef struct s_quadterms
 {
 	double	a;
@@ -130,6 +137,14 @@ typedef struct s_ray
 	t_vect3f	direction;
 }				t_ray;
 
+typedef struct s_checkerboard
+{
+	int			*rgb1;
+	int			*rgb2;
+	double		magnitude;
+	int			id;
+}				t_checkerboard;
+
 typedef struct s_ambient
 {
 	double	ratio; // 0.0-1.0
@@ -155,6 +170,8 @@ typedef struct s_sphere
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
 	t_mode	mode;
+	t_texture	texture_flag;
+	t_checkerboard	*checkerboard;
 }				t_sphere;
 
 typedef struct s_plane
@@ -166,6 +183,8 @@ typedef struct s_plane
 	t_vect3f	*right;
 	t_vect3f	*up;
 	t_mode		mode;
+	t_texture	texture_flag;
+	t_checkerboard	*checkerboard;
 }				t_plane;
 
 typedef	struct s_disc
@@ -178,6 +197,8 @@ typedef	struct s_disc
 	t_vect3f	*right;
 	t_vect3f	*up;
 	t_mode		mode;
+	t_texture	texture_flag;
+	t_checkerboard	*checkerboard;
 }				t_disc;
 
 typedef struct s_cylinder
@@ -193,6 +214,8 @@ typedef struct s_cylinder
 	t_vect3f	*right;
 	t_vect3f	*up;
 	t_mode		mode;
+	t_texture	texture_flag;
+	t_checkerboard	*checkerboard;
 }				t_cylinder;
 
 typedef struct s_cone
@@ -208,15 +231,9 @@ typedef struct s_cone
 	t_vect3f	*right;
 	t_vect3f	*up;
 	t_mode		mode;
+	t_texture	texture_flag;
+	t_checkerboard	*checkerboard;
 }				t_cone;
-
-typedef struct s_checkerboard
-{
-	int			*rgb1;
-	int			*rgb2;
-	double		magnitude;
-	int			id;
-}				t_checkerboard;
 
 typedef struct s_rt
 {
@@ -503,5 +520,6 @@ void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
 t_rayfinder	init_rayfinder(t_master	*master);
 void	set_highlight_from_reference(t_master *master, t_rayfinder rf);
 void	ft_draw_string(t_master *master);
+void	get_checkerboard_pointer(t_rt *rt, char **split, t_checkerboard **ptr);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:11:59 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:33:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->cylinders[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cylinders[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->cylinders[i]->checkerboard = NULL;
 		rt->cylinders[i]->mode = DEFAULT;
 		init_discs(rt->cylinders[i]);
 		i++;
@@ -85,6 +86,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 		return (id_err("cy", E_RGB_RANGE, E_RANGE_INT));
 	get_discs(rt->cylinders[i]);
 	set_cylinder_vects(rt->cylinders[i]);
+	get_checkerboard_pointer(rt, split, &rt->cylinders[i]->checkerboard);
 	rt->n_cylinders++;
 	return (0);
 }
