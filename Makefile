@@ -3,21 +3,21 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: petrlouda <petrlouda@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/14 13:31:25 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/15 09:25:10 by petrlouda        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-ifndef ECHO
-HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
-HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
-HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
-HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
-PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
-ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
-endif
+# ifndef ECHO
+# HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
+# HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
+# HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
+# HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
+# PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
+# ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
+# endif
 
 NAME		=	miniRT
 LIBFT_F		=	libft/
@@ -25,6 +25,7 @@ LIBFT		=	libft.a
 HEADER		=	header/minirt.h
 LIBMLX		=	./.MLX42
 LIBS		=	$(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
+#LIBS		=	$(LIBMLX)/build/libmlx42.a -Iinclude -lglfw
 LHEADERS	=	-I ./include -I $(LIBMLX)/include
 CC 			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
@@ -121,15 +122,15 @@ RETURN		=	\033[1F\r\033[2K
 
 # Printing
 
-BAR_LENGTH	:=	50
-PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
-PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
-					if [ $$num -le $(PERC) ] ; then \
-						printf "$(REVERSE) $(NRM_FORMAT)" ; \
-					else \
-						printf " " ; \
-        			fi \
-    			done
+# BAR_LENGTH	:=	50
+# PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
+# PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
+# 					if [ $$num -le $(PERC) ] ; then \
+# 						printf "$(REVERSE) $(NRM_FORMAT)" ; \
+# 					else \
+# 						printf " " ; \
+#         			fi \
+#     			done
 
 # Objects
 

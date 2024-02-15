@@ -3,22 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
+#    By: petrlouda <petrlouda@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/14 13:43:18 by okraus            #+#    #+#              #
-#    Updated: 2023/12/30 15:55:32 by okraus           ###   ########.fr        #
+#    Updated: 2024/02/15 09:18:49 by petrlouda        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # https://stackoverflow.com/questions/451413/make-makefile-progress-indication
-ifndef ECHO
-HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
-HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
-HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
-HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
-PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
-ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
-endif
+# ifndef ECHO
+# HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
+# HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
+# HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
+# HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
+# PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
+# ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
+# endif
 
 NAME		=	libft.a
 INCS		=	header/libft.h
@@ -165,15 +165,15 @@ RETURN		=	\033[1F\r\033[2K
 
 # Printing
 
-BAR_LENGTH	:=	50
-PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
-PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
-					if [ $$num -le $(PERC) ] ; then \
-						printf "$(REVERSE) $(NRM_FORMAT)" ; \
-					else \
-						printf " " ; \
-        			fi \
-    			done
+# BAR_LENGTH	:=	50
+# PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
+# PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
+# 					if [ $$num -le $(PERC) ] ; then \
+# 						printf "$(REVERSE) $(NRM_FORMAT)" ; \
+# 					else \
+# 						printf " " ; \
+#         			fi \
+#     			done
 
 # Objects
 

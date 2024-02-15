@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_checkerboard_pointer.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: petrlouda <petrlouda@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:30:20 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 13:30:55 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 09:19:42 by petrlouda        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 static int	find_checkerboard_id(char **split)
 {
 	int	i;
-	int	j;
 	int	id;
 	char	**specifier;
 
 	i = 0;
-	j = 0;
 	id = -1;
 	while (split[i])
 		i++;
