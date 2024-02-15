@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 11:55:32 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 17:32:43 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,172 @@ t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 	return (normal);
 }
 
-void	set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio, int *object_rgb)
+// void	set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio, int *object_rgb)
+// {
+// 	shader->illumination[R] = ambient_rgb[R] / 255. * ambient_ratio * object_rgb[R] / 255.;
+// 	shader->illumination[G] = ambient_rgb[G] / 255. * ambient_ratio * object_rgb[G] / 255.;
+// 	shader->illumination[B] = ambient_rgb[B] / 255. * ambient_ratio * object_rgb[B] / 255.;
+// }
+
+void	get_plane_uv(t_vect3f p, long long *u, long long *v, int scale[2])
 {
-	shader->illumination[R] = ambient_rgb[R] / 255. * ambient_ratio * object_rgb[R] / 255.;
-	shader->illumination[G] = ambient_rgb[G] / 255. * ambient_ratio * object_rgb[G] / 255.;
-	shader->illumination[B] = ambient_rgb[B] / 255. * ambient_ratio * object_rgb[B] / 255.;
+	double		uu;
+	double		vv;
+
+	uu = p.x / 16;	//to make bigger checkerboard
+	vv = p.y / 16;
+	*u = (long long)(uu * scale[0] + 2147483648LL); //offset to not get weird stuff around 0
+	*v = (long long)(vv * scale[1] + 2147483648LL);
+	// to work well on negative coordinates
+}
+
+void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
+{
+	long long	u;
+	long long	v;
+	int			s[2];
+	t_vect3f	p;
+
+	if (plane->checkerboard)
+	{
+		p.x = intersection.x - plane->coords[X];
+		p.y = intersection.y - plane->coords[Y];
+		p.z = intersection.z - plane->coords[Z];
+		s[0] = (int)plane->checkerboard->magnitude;
+		s[1] = (int)plane->checkerboard->magnitude;
+		get_plane_uv(p, &u, &v, s);
+		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		{
+			shader->rgb_object[R] = plane->checkerboard->rgb1[R];
+			shader->rgb_object[G] = plane->checkerboard->rgb1[G];
+			shader->rgb_object[B] = plane->checkerboard->rgb1[B];
+		}
+		else
+		{
+			shader->rgb_object[R] = plane->checkerboard->rgb2[R];
+			shader->rgb_object[G] = plane->checkerboard->rgb2[G];
+			shader->rgb_object[B] = plane->checkerboard->rgb2[B];
+		}
+	}
+	else
+	{
+		shader->rgb_object[R] = plane->rgb[R];
+		shader->rgb_object[G] = plane->rgb[G];
+		shader->rgb_object[B] = plane->rgb[B];
+	}
+}
+
+void	get_sphere_uv(t_vect3f p, int *u, int *v, int scale[2])
+{
+	double		uu;
+	double		vv;
+
+	normalize(&p);
+	uu = 0.5 + (atan2(p.z, p.x) / (6.28318530718));	
+	vv = 0.5 + (asin(p.y) / 3.14159265358979);
+	*u = (int)(uu * scale[0]);
+	*v = (int)(vv * scale[1]);
+}
+
+void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
+{
+	int			u;
+	int			v;
+	int			s[2];
+	t_vect3f	p;
+
+	if (sphere->checkerboard)
+	{
+		p.x = intersection.x - sphere->coords[X];
+		p.y = intersection.y - sphere->coords[Y];
+		p.z = intersection.z - sphere->coords[Z];
+		s[0] = (int)sphere->checkerboard->magnitude;
+		s[1] = (int)sphere->checkerboard->magnitude;
+		get_sphere_uv(p, &u, &v, s);
+		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		{
+			shader->rgb_object[R] = sphere->checkerboard->rgb1[R];
+			shader->rgb_object[G] = sphere->checkerboard->rgb1[G];
+			shader->rgb_object[B] = sphere->checkerboard->rgb1[B];
+		}
+		else
+		{
+			shader->rgb_object[R] = sphere->checkerboard->rgb2[R];
+			shader->rgb_object[G] = sphere->checkerboard->rgb2[G];
+			shader->rgb_object[B] = sphere->checkerboard->rgb2[B];
+		}
+	}
+	else
+	{
+		shader->rgb_object[R] = sphere->rgb[R];
+		shader->rgb_object[G] = sphere->rgb[G];
+		shader->rgb_object[B] = sphere->rgb[B];
+	}
+}
+
+void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
+{
+	shader->rgb_object[R] = cone->rgb[R];
+	shader->rgb_object[G] = cone->rgb[G];
+	shader->rgb_object[B] = cone->rgb[B];
+	(void)intersection;
+}
+
+void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
+{
+	if (disc->checkerboard)
+	{
+		if (intersection.x > 10)
+		{
+			shader->rgb_object[R] = disc->checkerboard->rgb1[R];
+			shader->rgb_object[G] = disc->checkerboard->rgb1[G];
+			shader->rgb_object[B] = disc->checkerboard->rgb1[B];
+		}
+		else
+		{
+			shader->rgb_object[R] = disc->checkerboard->rgb2[R];
+			shader->rgb_object[G] = disc->checkerboard->rgb2[G];
+			shader->rgb_object[B] = disc->checkerboard->rgb2[B];
+		}
+		
+	}
+	else
+	{
+		shader->rgb_object[R] = disc->rgb[R];
+		shader->rgb_object[G] = disc->rgb[G];
+		shader->rgb_object[B] = disc->rgb[B];
+	}
+}
+
+void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersection)
+{
+	if (cylinder->checkerboard)
+	{
+		if (intersection.x > 10)
+		{
+			shader->rgb_object[R] = cylinder->checkerboard->rgb1[R];
+			shader->rgb_object[G] = cylinder->checkerboard->rgb1[G];
+			shader->rgb_object[B] = cylinder->checkerboard->rgb1[B];
+		}
+		else
+		{
+			shader->rgb_object[R] = cylinder->checkerboard->rgb2[R];
+			shader->rgb_object[G] = cylinder->checkerboard->rgb2[G];
+			shader->rgb_object[B] = cylinder->checkerboard->rgb2[B];
+		}
+		
+	}
+	else
+	{
+		shader->rgb_object[R] = cylinder->rgb[R];
+		shader->rgb_object[G] = cylinder->rgb[G];
+		shader->rgb_object[B] = cylinder->rgb[B];
+	}
+}
+
+void	set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio)
+{
+	shader->illumination[R] = ambient_rgb[R] / 255. * ambient_ratio * shader->rgb_object[R] / 255.;
+	shader->illumination[G] = ambient_rgb[G] / 255. * ambient_ratio * shader->rgb_object[G] / 255.;
+	shader->illumination[B] = ambient_rgb[B] / 255. * ambient_ratio * shader->rgb_object[B] / 255.;
 }

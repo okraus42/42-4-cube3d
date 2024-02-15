@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/15 12:08:58 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/15 14:53:44 by okraus           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -119,7 +119,7 @@ GREEN		=	\033[1;32m
 YELLOW		=	\033[1;93m
 RED			=	\033[1;31m
 REVERSE		=	\033[7m
-RETURN		=	\033[1F\r\033[2K
+RETURN		=	#\033[1F\r\033[2K
 
 # Printing
 

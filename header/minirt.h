@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/15 12:46:07 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:31:51 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,8 @@ typedef struct s_ray
 
 typedef struct s_checkerboard
 {
-	int			*rgb1;
-	int			*rgb2;
+	int			*rgb1;	//array of three colours [R]==[0], [G]==[1], [B]==[2]
+	int			*rgb2;  //array of three colours
 	double		magnitude;
 	int			id;
 }				t_checkerboard;
@@ -316,6 +316,7 @@ typedef	struct s_rayfinder
 
 typedef	struct s_shader
 {
+	int			rgb_object[3];
 	int			rgb_diffuse_arr[3];
 	int			rgb_specular_arr[3];
 	uint32_t	rgb_diffuse;
@@ -496,7 +497,7 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 void	light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
 
 // Shader utils
-void		set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio, int *object_rgb);
+void		set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio);
 uint32_t	get_clr_int(int *rgb);
 uint32_t	ft_max_clr(uint32_t a, uint32_t b);
 void		clampf(double min, double max, double *value);
@@ -504,6 +505,11 @@ double		point_distance(t_vect3f p1, t_vect3f p2);
 void		get_clr_components(int *light, int *rgb, double ratio, double bright);
 t_vect3f	get_cylinder_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder);
 t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone);
+void		set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersection);
+void		set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection);
+void		set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection);
+void		set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection);
+void		set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection);
 
 t_vect3f	array_to_vect(double *array);
 
@@ -534,7 +540,7 @@ void	ft_draw_string(t_master *master);
 void	get_checkerboard_pointer(t_rt *rt, char **split, t_checkerboard **ptr);
 
 // Phong model
-void	phong_illumination(t_shader *shader, int *object_unit_rgb, t_sphere *light);
+void	phong_illumination(t_shader *shader, t_sphere *light);
 void	get_reflection_vector(t_shader *shader);
 void	diff_and_spec_ratios(t_shader *shader, t_options options);
 void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_shader *shader, double *light_pos);

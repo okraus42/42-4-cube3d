@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 12:40:29 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:32:18 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 
 	sphere = (t_sphere *)object_ptr;
 	i = 0;
-	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio, sphere->rgb); // ambient light as default
+	set_sphere_rgb(&shader, sphere, intersection);
+	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity; // unused at the moment
 	shader.hit_normal = subtract_vect3f(intersection, array_to_vect(sphere->coords)); // specific to object
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
@@ -32,7 +33,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 		normalize(&shader.light_dir);
 		diff_and_spec_ratios(&shader, *master->options);
 		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
-		phong_illumination(&shader, sphere->rgb, master->rt->light_spheres[i]);
+		phong_illumination(&shader, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -49,7 +50,8 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	
 	plane = (t_plane *)object_ptr;
 	i = 0;
-	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio, plane->rgb); // ambient light as default
+	set_plane_rgb(&shader, plane, intersection);
+	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = *plane->normal;
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
@@ -61,7 +63,7 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 		normalize(&shader.light_dir);
 		diff_and_spec_ratios(&shader, *master->options);
 		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
-		phong_illumination(&shader, plane->rgb, master->rt->light_spheres[i]);
+		phong_illumination(&shader, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -78,7 +80,8 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	
 	cylinder = (t_cylinder *)object_ptr;
 	i = 0;
-	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio, cylinder->rgb); // ambient light as default
+	set_cylinder_rgb(&shader, cylinder, intersection);
+	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = get_cylinder_hit_normal(rf, ray, intersection, *cylinder);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
@@ -90,7 +93,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 		normalize(&shader.light_dir);
 		diff_and_spec_ratios(&shader, *master->options);
 		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
-		phong_illumination(&shader, cylinder->rgb, master->rt->light_spheres[i]);
+		phong_illumination(&shader, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -107,7 +110,8 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	
 	disc = (t_disc *)object_ptr;
 	i = 0;
-	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio, disc->rgb); // ambient light as default
+	set_disc_rgb(&shader, disc, intersection);
+	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = *disc->normal;
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
@@ -119,7 +123,7 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 		normalize(&shader.light_dir);
 		diff_and_spec_ratios(&shader, *master->options);
 		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
-		phong_illumination(&shader, disc->rgb, master->rt->light_spheres[i]);
+		phong_illumination(&shader, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];
@@ -137,7 +141,8 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	cone = (t_cone *)object_ptr;
 	i = 0;
 	
-	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio, cone->rgb); // ambient light as default
+	set_cone_rgb(&shader, cone, intersection);
+	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = get_cone_hit_normal(intersection, *cone);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
@@ -149,7 +154,7 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 		normalize(&shader.light_dir);
 		diff_and_spec_ratios(&shader, *master->options);
 		trace_shadow(master, rf, intersection, &shader, master->rt->light_spheres[i]->coords);
-		phong_illumination(&shader, cone->rgb, master->rt->light_spheres[i]);
+		phong_illumination(&shader, master->rt->light_spheres[i]);
 		i++;
 	}
 	shader.pix_color[R] = 255 * shader.illumination[R];

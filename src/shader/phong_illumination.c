@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   phong_illumination.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:37:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 12:17:46 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 15:31:30 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_sh
 	}
 }
 
-void	phong_illumination(t_shader *shader, int *object_unit_rgb, t_sphere *light)
+void	phong_illumination(t_shader *shader, t_sphere *light)
 {
-	shader->id = object_unit_rgb[R] / 255. * light->brightness * light->rgb[R] / 255. ;
+	shader->id = shader->rgb_object[R] / 255. * light->brightness * light->rgb[R] / 255. ;
 	shader->is = light->rgb[R] / 255. * light->brightness;
 	shader->illumination[R] += (shader->diffuse_ratio * shader->id + shader->specular_ratio * shader->is);
 
-	shader->id = object_unit_rgb[G] / 255. * light->brightness * light->rgb[G] / 255. ;
+	shader->id = shader->rgb_object[G] / 255. * light->brightness * light->rgb[G] / 255. ;
 	shader->is = light->rgb[G] / 255. * light->brightness;
 	shader->illumination[G] += (shader->diffuse_ratio * shader->id + shader->specular_ratio * shader->is);
 
-	shader->id =object_unit_rgb[B] / 255. * light->brightness * light->rgb[B] / 255. ;
+	shader->id =shader->rgb_object[B] / 255. * light->brightness * light->rgb[B] / 255. ;
 	shader->is = light->rgb[B] / 255. * light->brightness;
 	shader->illumination[B] += (shader->diffuse_ratio * shader->id + shader->specular_ratio * shader->is);
 
