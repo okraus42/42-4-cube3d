@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 09:15:13 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/19 10:13:52 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:32:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 int	id_err(char *id, char *err_str, char *details)
 {
 	if (id == NULL)
-		ft_dprintf(2, "%.*CError: %s\n%C", 0xE74C3C, err_str);
+		dprintf(2, "%sError: %s\n%s", RED, err_str, CRESET);
 	else if (details == NULL)
-		ft_dprintf(2, "%.*CError: %s: %s\n%C", \
-		0xE74C3C, id, err_str);
+		dprintf(2, "%sError: %s: %s\n%s", RED, id, err_str, CRESET);
 	else
-		ft_dprintf(2, "%.*CError: %s: %s, expected %s\n%C", \
-		0xE74C3C, id, err_str, details);
+		dprintf(2, "%sError: %s: %s, expected %s\n%s", RED, id, err_str, details, CRESET);
 	return (1);
 }

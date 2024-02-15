@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 15:57:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:20:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
+
+void	set_sphere_vects(t_sphere *sphere)
+{
+	t_vect3f	tmp;
+	t_vect3f	*forward;
+	t_vect3f	*right;
+	t_vect3f	*up;
+
+	forward = sphere->normal;
+	right = sphere->right;
+	up = sphere->up;
+	tmp = (t_vect3f){0, 1, 0};
+	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	{
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, -1};
+	}
+	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	{
+		*right = (t_vect3f){1, 0, 0};
+		*up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		*right = cross_product(tmp, *forward);
+		normalize(right);
+		*up = cross_product(*forward, *right);
+		normalize(up);
+	}
+}
 
 void	set_plane_vects(t_plane *plane)
 {
@@ -170,7 +200,7 @@ void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_ca
 void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, sphere->coords);
-	//rotate(keydata.key, rt->camera->normal, rt->camera->right, rt->camera->up); -> no vectors to rotate yet
+	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
 }
 
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)

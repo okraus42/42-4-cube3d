@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/14 13:31:04 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:08:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,16 @@
 # define E_RANGE_NORM "values in range (-1.0;1.0)"
 # define E_RANGE_STRICT "a strictly positive value"
 # define STRINGS 16
+#define BLK "\e[0;30m"
+#define RED "\e[0;31m"
+#define GRN "\e[0;32m"
+#define YEL "\e[0;33m"
+#define BLU "\e[0;34m"
+#define MAG "\e[0;35m"
+#define CYN "\e[0;36m"
+#define WHT "\e[0;37m"
+#define CRESET "\e[0m"
+
 // INCLUDES
 
 # include <stdio.h>
@@ -169,6 +179,9 @@ typedef struct s_sphere
 	double	diameter;
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
+	t_vect3f	*normal;
+	t_vect3f	*right;
+	t_vect3f	*up;
 	t_mode	mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
@@ -498,6 +511,7 @@ void	precompute_light(t_rt *rt);
 void	get_ambient_clr(t_ambient *ambient, int *rgb_ambient, int *rgb); */
 
 void	rotate_objects(t_master *master, mlx_key_data_t keydata);
+void	set_sphere_vects(t_sphere *sphere);
 void	set_plane_vects(t_plane *plane);
 void	set_cylinder_vects(t_cylinder *cylinder);
 void	set_disc_vects(t_disc *disc);

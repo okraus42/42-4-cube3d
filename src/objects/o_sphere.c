@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 13:32:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:15:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ void	init_spheres(t_rt *rt, int *ids)
 		rt->spheres[i] = ft_calloc(1, sizeof(t_sphere));
 		rt->spheres[i]->coords = ft_calloc(3, sizeof(double));
 		rt->spheres[i]->rgb = ft_calloc(3, sizeof(int));
+		rt->spheres[i]->normal = ft_calloc(1, sizeof(t_vect3f));
+		rt->spheres[i]->right = ft_calloc(1, sizeof(t_vect3f));
+		rt->spheres[i]->up = ft_calloc(1, sizeof(t_vect3f));
 		//rt->spheres[i]->checkerboard = ft_calloc(1, sizeof(t_checkerboard *));
 		rt->spheres[i]->checkerboard = NULL;
-		//rt->spheres[i]->texture_flag = PLAIN;
 		rt->spheres[i++]->mode = DEFAULT;
 	}
 	rt->spheres[i] = NULL;
@@ -62,6 +64,8 @@ int	fill_sphere(t_rt *rt, char **split)
 		return (id_err("sp", E_DIA_RANGE, E_RANGE_STRICT));
 	if (!get_rgb(rt->spheres[i]->rgb, split[3]))
 		return (id_err("sp", E_RGB_RANGE, E_RANGE_INT));
+	*rt->spheres[i]->normal = (t_vect3f){0, 0, 1};
+	set_sphere_vects(rt->spheres[i]);
 	get_checkerboard_pointer(rt, split, &rt->spheres[i]->checkerboard);
 	rt->n_spheres++;
 	return (0);
@@ -76,6 +80,9 @@ void	free_spheres(t_rt *rt)
 	{
 		free(rt->spheres[i]->coords);
 		free(rt->spheres[i]->rgb);
+		free(rt->spheres[i]->normal);
+		free(rt->spheres[i]->right);
+		free(rt->spheres[i]->up);
 		free(rt->spheres[i++]);
 	}
 	free(rt->spheres);
