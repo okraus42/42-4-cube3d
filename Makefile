@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/15 09:36:49 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/15 12:08:58 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,7 +107,8 @@ SRC_C		= 	camera.c \
 				rotations.c
 
 SRC_SH		=	object_shaders.c \
-				shader_utils.c
+				shader_utils.c \
+				phong_illumination.c
 
 
 # Formating

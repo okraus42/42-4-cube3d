@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:15:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 11:55:32 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	clampf(double min, double max, double *value)
 		*value = max;
 }
 
-t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder)
+t_vect3f	get_cylinder_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cylinder cylinder)
 {
 
 	double t;
@@ -73,4 +73,32 @@ t_vect3f	get_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersection, t_cyl
 	normal = subtract_vect3f(normal, array_to_vect(cylinder.botcap->coords));
 	normalize(&normal);
 	return (normal);
+}
+
+t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
+{
+	double	dist;
+	double	half_angle;
+	t_vect3f	axis;
+	t_vect3f	a;
+	double		d;
+	t_vect3f	normal;
+
+	axis = invert_vect3f(*cone.normal);
+	half_angle = atan2(cone.diameter / 2, cone.height);
+	dist = point_distance(intersection, array_to_vect(cone.pinnacle->coords));
+	d = dist * sqrt(1 + pow(half_angle, 2));
+	a.x = cone.pinnacle->coords[X] + axis.x * d;
+	a.y = cone.pinnacle->coords[Y] + axis.y * d;
+	a.z = cone.pinnacle->coords[Z] + axis.z * d;
+	normal = subtract_vect3f(intersection, a);
+	normalize(&normal);
+	return (normal);
+}
+
+void	set_ambient_intensity(t_shader *shader, int *ambient_rgb, double ambient_ratio, int *object_rgb)
+{
+	shader->illumination[R] = ambient_rgb[R] / 255. * ambient_ratio * object_rgb[R] / 255.;
+	shader->illumination[G] = ambient_rgb[G] / 255. * ambient_ratio * object_rgb[G] / 255.;
+	shader->illumination[B] = ambient_rgb[B] / 255. * ambient_ratio * object_rgb[B] / 255.;
 }
