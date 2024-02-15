@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 11:53:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 13:02:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 			*flag = fill_camera(rt, split);
 		else if (!ft_strncmp(split[0], "L", 1))
 			*flag = fill_light_sphere(rt, split);
+		else if (!ft_strncmp(split[0], "#", 1))
+			return ;
 		else
 			*flag = 1;
 	}

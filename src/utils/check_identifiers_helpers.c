@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/11 18:45:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 13:00:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	get_identifiers(char **split, int *ids, int *flag)
 			ids[1]++;
 		else if (!ft_strncmp(split[0], "L", 1))
 			ids[2]++;
+		else if (!ft_strncmp(split[0], "#", 1))
+			return ;
 		else
 			*flag = 1;
 	}
