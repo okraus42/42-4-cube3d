@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:02:47 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 12:36:24 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:53:21 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	solve_quad(double *t, t_quadterms quad)
 		return (two_roots(t, quad));
 }
 
-int	check_caps(double *t, t_ray ray, t_cylinder *cylinder, double *res)
+int	check_cylinder_caps(double *t, t_ray ray, t_cylinder *cylinder, double *res)
 {
 	if (is_between_caps(cylinder->botcap, cylinder->topcap, ray, res[0]))
 	{
@@ -111,7 +111,7 @@ int	two_roots_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder)
 		if (res[0] < 0)
 			return (0);
 	}
-	return (check_caps(t, ray, cylinder, res));
+	return (check_cylinder_caps(t, ray, cylinder, res));
 }
 
 int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder)
@@ -137,7 +137,7 @@ int	solve_quad_cyl(double *t, t_quadterms quad, t_ray ray, t_cylinder *cylinder)
 		return (two_roots_cyl(t, quad, ray, cylinder));
 }
 
-int	check_caps_cone(double *t, t_ray ray, t_cone *cone, double *res)
+int	check_cone_caps(double *t, t_ray ray, t_cone *cone, double *res)
 {
 	if (is_between_caps(cone->base, cone->pinnacle, ray, res[0]))
 	{
@@ -171,7 +171,7 @@ int	two_roots_cone(double *t, t_quadterms quad, t_ray ray, t_cone *cone)
 		if (res[0] < 0)
 			return (0);
 	}
-	return (check_caps_cone(t, ray, cone, res));
+	return (check_cone_caps(t, ray, cone, res));
 }
 
 int	solve_quad_cone(double *t, t_quadterms quad, t_ray ray, t_cone *cone)

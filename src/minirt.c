@@ -6,13 +6,13 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/14 11:54:06 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:46:07 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
 
-void	get_data_from_line(char *line, t_rt *rt, int *flag)
+void	get_object_data_from_line(char *line, t_rt *rt, int *flag)
 {
 	char	**split;
 	char	*trimmed;
@@ -25,7 +25,7 @@ void	get_data_from_line(char *line, t_rt *rt, int *flag)
 	ft_free_split(&split);
 }
 
-void	load_data(t_rt *rt, char *file, int *flag)
+void	get_object_data(t_rt *rt, char *file, int *flag)
 {
 	int		fd;
 	char	*line;
@@ -34,7 +34,7 @@ void	load_data(t_rt *rt, char *file, int *flag)
 	line = get_next_line(fd);
 	while (line && !(*flag))
 	{
-		get_data_from_line(line, rt, flag);
+		get_object_data_from_line(line, rt, flag);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -89,7 +89,7 @@ int	load_file(char *file, t_rt *rt, int fd)
 	if (!flag)
 		get_texture_data(rt, file, &flag);
 	if (!flag)
-		load_data(rt, file, &flag);
+		get_object_data(rt, file, &flag);
 	return (flag);
 }
 
@@ -291,7 +291,7 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_S
 			|| keydata.key == MLX_KEY_Q
 			|| keydata.key == MLX_KEY_E))
-		rotate_objects(master, keydata);
+		manipulate_objects(master, keydata);
 	else if (keydata.modifier == MLX_CONTROL 
 			&& keydata.key == MLX_KEY_L
 			&& keydata.action != MLX_RELEASE

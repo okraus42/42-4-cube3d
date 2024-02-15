@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/15 12:15:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:46:07 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,7 +376,7 @@ int	check_format_cylinder(char **split);
 int	check_format_checkerboard(char **split);
 
 // Data loading
-void	get_data_from_line(char *line, t_rt *rt, int *flag);
+//void	get_data_from_line(char *line, t_rt *rt, int *flag);
 void	fill_objects(t_rt *rt, char **split, int *flag);
 int		fill_ambient(t_rt *rt, char **split);
 int		fill_camera(t_rt *rt, char **split);
@@ -507,7 +507,7 @@ t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone);
 
 t_vect3f	array_to_vect(double *array);
 
-void	rotate_objects(t_master *master, mlx_key_data_t keydata);
+void	manipulate_objects(t_master *master, mlx_key_data_t keydata);
 void	set_sphere_vects(t_sphere *sphere);
 void	set_plane_vects(t_plane *plane);
 void	set_cylinder_vects(t_cylinder *cylinder);
