@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 17:32:43 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:05:19 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	get_plane_uv(t_vect3f p, long long *u, long long *v, int scale[2])
 
 	uu = p.x / 16;	//to make bigger checkerboard
 	vv = p.y / 16;
+	// rewrite to get values 0 - (scale[0] - 1)
 	*u = (long long)(uu * scale[0] + 2147483648LL); //offset to not get weird stuff around 0
 	*v = (long long)(vv * scale[1] + 2147483648LL);
 	// to work well on negative coordinates
@@ -199,19 +200,91 @@ void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
 	}
 }
 
+void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
+{
+	double		uu;
+	double		vv;
+
+	vv = (p.z + scale[2] / 2) / scale[2];
+	normalize(&p);
+	uu = 0.5 + (atan2(p.y, p.x) / (6.28318530718));	
+	*u = (int)(uu * scale[0]);
+	*v = (int)(vv * scale[1]);
+}
+
 void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 {
-	shader->rgb_object[R] = cone->rgb[R];
-	shader->rgb_object[G] = cone->rgb[G];
-	shader->rgb_object[B] = cone->rgb[B];
-	(void)intersection;
+	int			u;
+	int			v;
+	double		s[3];
+	t_vect3f	p;
+
+	if (cone->checkerboard)
+	{
+		p.x = intersection.x - cone->coords[X];
+		p.y = intersection.y - cone->coords[Y];
+		p.z = intersection.z - cone->coords[Z];
+		s[0] = (int)cone->checkerboard->magnitude;
+		s[1] = (int)cone->checkerboard->magnitude;
+		s[2] = cone->height;
+		printf("%f %f %f\n",intersection.z, p.z, cone->coords[Z]);
+		get_cone_uv(p, &u, &v, s);
+		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		{
+			shader->rgb_object[R] = cone->checkerboard->rgb1[R];
+			shader->rgb_object[G] = cone->checkerboard->rgb1[G];
+			shader->rgb_object[B] = cone->checkerboard->rgb1[B];
+		}
+		else
+		{
+			shader->rgb_object[R] = cone->checkerboard->rgb2[R];
+			shader->rgb_object[G] = cone->checkerboard->rgb2[G];
+			shader->rgb_object[B] = cone->checkerboard->rgb2[B];
+		}
+		// if (intersection.z < 0)
+		// {
+		// 	shader->rgb_object[R] = 255;
+		// 	shader->rgb_object[G] = 0;
+		// 	shader->rgb_object[B] = 255;
+		// }
+	}
+	else
+	{
+		shader->rgb_object[R] = cone->rgb[R];
+		shader->rgb_object[G] = cone->rgb[G];
+		shader->rgb_object[B] = cone->rgb[B];
+	}
+}
+
+void	get_disc_uv(t_vect3f p, long long *u, long long *v, double scale[3])
+{
+	double		uu;
+	double		vv;
+
+	uu = (p.x + scale[2]) / (2 * scale[2]);	//to make bigger checkerboard
+	vv = (p.y + scale[2]) / (2 * scale[2]);
+	*u = (long long)(uu * scale[0]); //offset to not get weird stuff around 0
+	*v = (long long)(vv * scale[1]);
+	// to work well on negative coordinates
 }
 
 void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 {
+	long long	u;
+	long long	v;
+	double		s[3];
+	t_vect3f	p;
+
 	if (disc->checkerboard)
 	{
-		if (intersection.x > 10)
+		p.x = intersection.x - disc->coords[X];
+		p.y = intersection.y - disc->coords[Y];
+		p.z = intersection.z - disc->coords[Z];
+		s[0] = (int)disc->checkerboard->magnitude;
+		s[1] = (int)disc->checkerboard->magnitude;
+		s[2] = 1 * disc->radius;
+		get_disc_uv(p, &u, &v, s);
+		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
 		{
 			shader->rgb_object[R] = disc->checkerboard->rgb1[R];
 			shader->rgb_object[G] = disc->checkerboard->rgb1[G];
@@ -223,7 +296,6 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 			shader->rgb_object[G] = disc->checkerboard->rgb2[G];
 			shader->rgb_object[B] = disc->checkerboard->rgb2[B];
 		}
-		
 	}
 	else
 	{
@@ -233,11 +305,36 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 	}
 }
 
+void	get_cylinder_uv(t_vect3f p, int *u, int *v, double scale[2])
+{
+	double		uu;
+	double		vv;
+
+	vv = (p.z + scale[2] / 2) / scale[2];
+	normalize(&p);
+	uu = 0.5 + (atan2(p.y, p.x) / (6.28318530718));	
+	*u = (int)(uu * scale[0]);
+	*v = (int)(vv * scale[1]);
+}
+
 void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersection)
 {
+	int			u;
+	int			v;
+	double		s[3];
+	t_vect3f	p;
+
 	if (cylinder->checkerboard)
 	{
-		if (intersection.x > 10)
+		p.x = intersection.x - cylinder->coords[X];
+		p.y = intersection.y - cylinder->coords[Y];
+		p.z = intersection.z - cylinder->coords[Z];
+		s[0] = (int)cylinder->checkerboard->magnitude;
+		s[1] = (int)cylinder->checkerboard->magnitude;
+		s[2] = cylinder->height;
+		printf("%f %f %f\n",intersection.z, p.z, cylinder->coords[Z]);
+		get_cylinder_uv(p, &u, &v, s);
+		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
 		{
 			shader->rgb_object[R] = cylinder->checkerboard->rgb1[R];
 			shader->rgb_object[G] = cylinder->checkerboard->rgb1[G];
@@ -249,7 +346,12 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 			shader->rgb_object[G] = cylinder->checkerboard->rgb2[G];
 			shader->rgb_object[B] = cylinder->checkerboard->rgb2[B];
 		}
-		
+		// if (intersection.z < 0)
+		// {
+		// 	shader->rgb_object[R] = 255;
+		// 	shader->rgb_object[G] = 0;
+		// 	shader->rgb_object[B] = 255;
+		// }
 	}
 	else
 	{

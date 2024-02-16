@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone_disc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 13:35:50 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:07:58 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	define_cone_base(t_cone *cone)
 	*base->normal = get_normal(base->nvect[X], \
 		base->nvect[Y], base->nvect[Z]);
 	set_disc_vects(base);
-	base->checkerboard = NULL;
+	base->checkerboard = cone->checkerboard;
 }
 
 void	define_cone_pinnacle(t_cone *cone)
