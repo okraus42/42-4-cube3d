@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/15 15:31:51 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/17 16:58:50 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,8 @@ typedef struct s_sphere
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
-	t_mode	mode;
+	t_quat		q;
+	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
 }				t_sphere;
@@ -195,6 +196,7 @@ typedef struct s_plane
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_quat		q;
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
@@ -209,6 +211,7 @@ typedef	struct s_disc
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_quat		q;
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
@@ -225,6 +228,7 @@ typedef struct s_cylinder
 	t_disc		*topcap;
 	t_vect3f	*normal;
 	t_vect3f	*right;
+	t_quat		q;
 	t_vect3f	*up;
 	t_mode		mode;
 	t_texture	texture_flag;
@@ -243,6 +247,7 @@ typedef struct s_cone
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
+	t_quat		q;
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
@@ -459,6 +464,10 @@ t_quat	get_rot_quat(t_vect3f axis, double angle);
 t_quat	get_point_quat(t_vect3f axis);
 t_quat	get_inverse_quat(t_quat quat);
 t_quat	mult_quat(t_quat i, t_quat j);
+void	rotate_vect(t_vect3f *vect, t_quat *q);
+t_quat	get_rotvect_quat(t_vect3f v1, t_vect3f v2);
+t_quat	get_obj_quat(t_vect3f norm, t_vect3f up);
+
 
 // Camera movements
 void	move(keys_t key, t_camera *camera, double *coords);

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/16 16:05:19 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/17 16:57:02 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,11 @@ void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
 		p.x = intersection.x - sphere->coords[X];
 		p.y = intersection.y - sphere->coords[Y];
 		p.z = intersection.z - sphere->coords[Z];
+		printf("Q %f %f %f %f\n", sphere->q.q0, sphere->q.q1, sphere->q.q2, sphere->q.q3);
+		printf("N %f %f %f \n", sphere->normal->x, sphere->normal->y, sphere->normal->z);
+		printf("P1 %f %f %f \n", p.x, p.y, p.z);
+		rotate_vect(&p, &sphere->q);
+		printf("P2 %f %f %f \n", p.x, p.y, p.z);
 		s[0] = (int)sphere->checkerboard->magnitude;
 		s[1] = (int)sphere->checkerboard->magnitude;
 		get_sphere_uv(p, &u, &v, s);
@@ -332,7 +337,7 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 		s[0] = (int)cylinder->checkerboard->magnitude;
 		s[1] = (int)cylinder->checkerboard->magnitude;
 		s[2] = cylinder->height;
-		printf("%f %f %f\n",intersection.z, p.z, cylinder->coords[Z]);
+		//printf("%f %f %f\n",intersection.z, p.z, cylinder->coords[Z]);
 		get_cylinder_uv(p, &u, &v, s);
 		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
 		{

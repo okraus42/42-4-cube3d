@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 12:46:07 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/17 16:51:42 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	set_sphere_vects(t_sphere *sphere)
 		*up = cross_product(*forward, *right);
 		normalize(up);
 	}
+	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
 }
 
 void	set_plane_vects(t_plane *plane)
@@ -201,6 +202,7 @@ void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, sphere->coords);
 	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
+	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
 }
 
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)

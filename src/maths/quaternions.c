@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:25 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/17 16:59:17 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,3 +69,96 @@ res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot
 res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
 res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
 res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0; */
+
+//	vector a = crossproduct(v1, v2);
+//	q.xyz = a;
+//	q.w = sqrt((v1.Length ^ 2) * (v2.Length ^ 2)) + dotproduct(v1, v2);
+
+static double	get_quat_length(t_quat q)
+{
+	double	l;
+
+	l = sqrt(pow(q.q0, 2) + pow(q.q1, 2) + pow(q.q2, 2) + pow(q.q3, 2));
+	return (l);
+}
+
+void	normalize_quat(t_quat *q)
+{
+	double	l;
+
+	l = get_quat_length(*q);
+	q->q0 /= l;
+	q->q1 /= l;
+	q->q2 /= l;
+	q->q3 /= l;
+}
+
+static double	get_vector_length(t_vect3f v)
+{
+	double	l;
+
+	l = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
+	return (l);
+}
+
+t_quat	get_rotvect_quat(t_vect3f v1, t_vect3f v2)
+{
+	t_quat		q;
+	t_vect3f	v;
+
+	v = cross_product(v1, v2);
+	q = get_point_quat(v);
+	q.q0 = sqrt(pow(get_vector_length(v1), 2) + pow(get_vector_length(v2), 2))
+		+ dot_product(v1, v2);
+	normalize_quat(&q);
+	return (q);
+}
+
+void	rotate_vect(t_vect3f *vect, t_quat *q)
+{
+	t_quat	i;
+	t_quat	point;
+	t_quat	result;
+
+	point = get_point_quat(*vect);
+	i = get_inverse_quat(*q);
+	result = mult_quat(mult_quat(*q, point), i);
+	vect->x = result.q1;
+	vect->y = result.q2;
+	vect->z = result.q3;
+}
+
+t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
+{
+	t_quat		q;
+	t_quat		first;
+	t_quat		second;
+	t_quat		upq;
+	t_vect3f	z;
+	t_vect3f	y;
+	t_vect3f	newup;
+
+	// rotate norm to z 0,0,1
+	z.x = 0;
+	z.y = 0;
+	z.z = 1;
+	first = get_rotvect_quat(norm, z);
+	// rotate up to y 0,1,0
+	y.x = 0;
+	y.y = 1;
+	y.z = 0;
+	upq = get_point_quat(up);
+	//rotate newup by first quat
+	newup.x = up.x;
+	newup.y = up.y;
+	newup.z = up.z;
+	rotate_vect(&newup, &first);
+	second = get_rotvect_quat(newup, y);
+	// calculate the whole quaternion
+	
+	q = mult_quat(first, second);
+	printf("Q1 %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
+	normalize_quat(&q);
+	printf("Q2 %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
+	return (q);
+}
