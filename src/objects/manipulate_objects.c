@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/17 16:51:42 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/18 16:15:51 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	set_plane_vects(t_plane *plane)
 		*up = cross_product(*forward, *right);
 		normalize(up);
 	}
+	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
 }
 
 void	set_cylinder_vects(t_cylinder *cylinder)
@@ -101,6 +102,9 @@ void	set_cylinder_vects(t_cylinder *cylinder)
 		*up = cross_product(*forward, *right);
 		normalize(up);
 	}
+	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	cylinder->topcap->q = cylinder->q;
+	cylinder->botcap->q = cylinder->q;
 }
 
 void	set_disc_vects(t_disc *disc)
@@ -161,6 +165,9 @@ void	set_cone_vects(t_cone *cone)
 		*up = cross_product(*forward, *right);
 		normalize(up);
 	}
+	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
+	cone->base->q = cone->q;
+	cone->pinnacle->q = cone->q;
 }
 
 void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera)
@@ -209,6 +216,7 @@ void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 {
 	move(keydata.key, rt->camera, plane->coords);
 	rotate_o(keydata.key, plane->normal, plane->right, plane->up, rt->camera);
+	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
 }
 
 void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
@@ -216,6 +224,9 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 	move(keydata.key, rt->camera, cylinder->coords);
 	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
 	get_discs(cylinder);
+	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	cylinder->topcap->q = cylinder->q;
+	cylinder->botcap->q = cylinder->q;
 }
 
 void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
@@ -223,6 +234,9 @@ void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 	move(keydata.key, rt->camera, cone->coords);
 	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
 	get_cone_discs(cone);
+	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
+	cone->base->q = cone->q;
+	cone->pinnacle->q = cone->q;
 }
 
 void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
