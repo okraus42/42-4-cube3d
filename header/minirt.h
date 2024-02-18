@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/17 16:58:50 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/18 15:34:54 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,7 +464,7 @@ t_quat	get_rot_quat(t_vect3f axis, double angle);
 t_quat	get_point_quat(t_vect3f axis);
 t_quat	get_inverse_quat(t_quat quat);
 t_quat	mult_quat(t_quat i, t_quat j);
-void	rotate_vect(t_vect3f *vect, t_quat *q);
+void	rotate_vect(t_vect3f *vect, t_quat q);
 t_quat	get_rotvect_quat(t_vect3f v1, t_vect3f v2);
 t_quat	get_obj_quat(t_vect3f norm, t_vect3f up);
 

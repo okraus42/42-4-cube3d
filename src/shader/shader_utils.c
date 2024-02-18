@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/17 16:57:02 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/18 15:34:35 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,8 @@ void	get_sphere_uv(t_vect3f p, int *u, int *v, int scale[2])
 	double		vv;
 
 	normalize(&p);
-	uu = 0.5 + (atan2(p.z, p.x) / (6.28318530718));	
-	vv = 0.5 + (asin(p.y) / 3.14159265358979);
+	uu = 1 - (0.5 + (atan2(p.z, p.x) / (6.28318530718)));	
+	vv = 1 - (0.5 + (asin(p.y) / 3.14159265358979));
 	*u = (int)(uu * scale[0]);
 	*v = (int)(vv * scale[1]);
 }
@@ -176,11 +176,11 @@ void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
 		p.x = intersection.x - sphere->coords[X];
 		p.y = intersection.y - sphere->coords[Y];
 		p.z = intersection.z - sphere->coords[Z];
-		printf("Q %f %f %f %f\n", sphere->q.q0, sphere->q.q1, sphere->q.q2, sphere->q.q3);
-		printf("N %f %f %f \n", sphere->normal->x, sphere->normal->y, sphere->normal->z);
-		printf("P1 %f %f %f \n", p.x, p.y, p.z);
-		rotate_vect(&p, &sphere->q);
-		printf("P2 %f %f %f \n", p.x, p.y, p.z);
+		//printf("Q %f %f %f %f\n", sphere->q.q0, sphere->q.q1, sphere->q.q2, sphere->q.q3);
+		//printf("N %f %f %f \n", sphere->normal->x, sphere->normal->y, sphere->normal->z);
+		//printf("P1 %f %f %f \n", p.x, p.y, p.z);
+		rotate_vect(&p, sphere->q);
+		//printf("P2 %f %f %f \n", p.x, p.y, p.z);
 		s[0] = (int)sphere->checkerboard->magnitude;
 		s[1] = (int)sphere->checkerboard->magnitude;
 		get_sphere_uv(p, &u, &v, s);
@@ -195,6 +195,39 @@ void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
 			shader->rgb_object[R] = sphere->checkerboard->rgb2[R];
 			shader->rgb_object[G] = sphere->checkerboard->rgb2[G];
 			shader->rgb_object[B] = sphere->checkerboard->rgb2[B];
+		}
+		if (!u)
+		{
+			if (!v)
+			{
+				shader->rgb_object[R] = 0;
+				shader->rgb_object[G] = 255;
+				shader->rgb_object[B] = 255;
+			}
+			else if (v == 1)
+			{
+				shader->rgb_object[R] = 255;
+				shader->rgb_object[G] = 0;
+				shader->rgb_object[B] = 255;
+			}
+			else if (v == 2)
+			{
+				shader->rgb_object[R] = 255;
+				shader->rgb_object[G] = 255;
+				shader->rgb_object[B] = 0;
+			}
+		}
+		if (u == 1 && !v)
+		{
+			shader->rgb_object[R] = 255;
+			shader->rgb_object[G] = 0;
+			shader->rgb_object[B] = 255;
+		}
+		if (u == 2 && !v)
+		{
+			shader->rgb_object[R] = 0;
+			shader->rgb_object[G] = 0;
+			shader->rgb_object[B] = 0;
 		}
 	}
 	else
