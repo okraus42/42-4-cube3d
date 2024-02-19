@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 15:42:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 17:45:25 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	define_botcap(t_cylinder *cylinder)
 	set_disc_vects(botcap);
 	botcap->checkerboard = cylinder->checkerboard;
 	botcap->texture = cylinder->texture;
+	botcap->tx_disc = cylinder->texture->tx_bot;
+	//botcap->texture->tx_main = cylinder->texture->tx_bot;
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -82,6 +84,8 @@ void	define_topcap(t_cylinder *cylinder)
 	set_disc_vects(topcap);
 	topcap->checkerboard = cylinder->checkerboard;
 	topcap->texture = cylinder->texture;
+	topcap->tx_disc = cylinder->texture->tx_top;
+	//topcap->texture->tx_main = cylinder->texture->tx_top;
 }
 
 void	get_discs(t_cylinder *cylinder)

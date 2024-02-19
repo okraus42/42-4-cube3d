@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/19 15:38:38 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 17:40:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,9 @@ typedef struct s_texture
 	char	topcap_tx_path[1024];
 	char	botcap_tx_path[1024];
 	int		id;
+	mlx_texture_t	*tx_main;
+	mlx_texture_t	*tx_top;
+	mlx_texture_t	*tx_bot;
 }				t_texture;
 
 typedef struct s_vector_map
@@ -227,6 +230,7 @@ typedef	struct s_disc
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
 	t_texture	*texture;
+	mlx_texture_t	*tx_disc;
 }				t_disc;
 
 typedef struct s_cylinder

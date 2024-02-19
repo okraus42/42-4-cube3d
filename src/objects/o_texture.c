@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_texture.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 15:30:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 16:17:29 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,53 @@ int	set_texture_paths(t_texture *texture, char *str)
 	return (1);
 }
 
+void	ft_load_texture(t_texture *tx)
+{
+	if (tx->tx_path[0])
+	{
+		if (access(tx->tx_path, R_OK) < 0)
+		{
+			dprintf(2, "Cannot open texture %s\n", tx->tx_path);
+			exit(-3);
+		}
+		tx->tx_main = mlx_load_png(tx->tx_path);
+		if (!tx->tx_main)
+		{
+			dprintf(2, "Error loading texture %s\n", tx->tx_path);
+			exit(-4);
+		}
+	}
+	if (tx->topcap_tx_path[0])
+	{
+		if (access(tx->topcap_tx_path, R_OK) < 0)
+		{
+			dprintf(2, "Cannot open texture %s\n", tx->topcap_tx_path);
+			exit(-3);
+		}
+		tx->tx_top = mlx_load_png(tx->topcap_tx_path);
+		if (!tx->tx_top)
+		{
+			dprintf(2, "Error loading texture %s\n", tx->topcap_tx_path);
+			exit(-4);
+		}
+	}
+	if (tx->botcap_tx_path[0])
+	{
+		if (access(tx->botcap_tx_path, R_OK) < 0)
+		{
+			dprintf(2, "Cannot open texture %s\n", tx->botcap_tx_path);
+			exit(-3);
+		}
+		tx->tx_bot = mlx_load_png(tx->botcap_tx_path);
+		if (!tx->tx_bot)
+		{
+			dprintf(2, "Error loading texture %s\n", tx->botcap_tx_path);
+			exit(-4);
+		}
+	}
+}
+
+
 int	fill_texture(t_rt *rt, char **split)
 {
 	int			i;
@@ -121,6 +168,7 @@ int	fill_texture(t_rt *rt, char **split)
 	write(1, "\n", 1);
 	ft_putstr_fd(rt->textures[i]->topcap_tx_path, 1);
 	write(1, "\n", 1);
+	ft_load_texture(rt->textures[i]);
 	rt->n_textures++;
 	return (0);
 }

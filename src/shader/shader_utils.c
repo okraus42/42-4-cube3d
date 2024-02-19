@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/18 16:32:59 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/19 17:43:21 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,30 @@ void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 	long long	u;
 	long long	v;
 	int			s[2];
+	int			w;
 	t_vect3f	p;
 
-	if (plane->checkerboard)
+	if (plane->texture)
+	{
+		shader->rgb_object[R] = 255;
+		shader->rgb_object[G] = 0;
+		shader->rgb_object[B] = 255;
+		if (plane->texture->tx_main)
+		{
+			p.x = intersection.x - plane->coords[X];
+			p.y = intersection.y - plane->coords[Y];
+			p.z = intersection.z - plane->coords[Z];
+			rotate_vect(&p, plane->q);
+			s[0] = plane->texture->tx_main->width;
+			s[1] = plane->texture->tx_main->height;
+			get_plane_uv(p, &u, &v, s);
+			w = s[0] * 4;
+			shader->rgb_object[R] = plane->texture->tx_main->pixels[(v * w) + (u * 4)];
+			shader->rgb_object[G] = plane->texture->tx_main->pixels[(v * w) + (u * 4) + 1];
+			shader->rgb_object[B] = plane->texture->tx_main->pixels[(v * w) + (u * 4) + 2];
+		}
+	}
+	else if (plane->checkerboard)
 	{
 		p.x = intersection.x - plane->coords[X];
 		p.y = intersection.y - plane->coords[Y];
@@ -202,10 +223,31 @@ void	set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection)
 {
 	int			u;
 	int			v;
+	int			w;
 	int			s[2];
 	t_vect3f	p;
 
-	if (sphere->checkerboard)
+	if (sphere->texture)
+	{
+		shader->rgb_object[R] = 255;
+		shader->rgb_object[G] = 0;
+		shader->rgb_object[B] = 255;
+		if (sphere->texture->tx_main)
+		{
+			p.x = intersection.x - sphere->coords[X];
+			p.y = intersection.y - sphere->coords[Y];
+			p.z = intersection.z - sphere->coords[Z];
+			rotate_vect(&p, sphere->q);
+			s[0] = sphere->texture->tx_main->width;
+			s[1] = sphere->texture->tx_main->height;
+			get_sphere_uv(p, &u, &v, s);
+			w = s[0] * 4;
+			shader->rgb_object[R] = sphere->texture->tx_main->pixels[(v * w) + (u * 4)];
+			shader->rgb_object[G] = sphere->texture->tx_main->pixels[(v * w) + (u * 4) + 1];
+			shader->rgb_object[B] = sphere->texture->tx_main->pixels[(v * w) + (u * 4) + 2];
+		}
+	}
+	else if (sphere->checkerboard)
 	{
 		p.x = intersection.x - sphere->coords[X];
 		p.y = intersection.y - sphere->coords[Y];
@@ -278,6 +320,7 @@ void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
 	double		vv;
 
 	vv = 1 - ((p.z + scale[2] / 2) / scale[2]);
+	//printf ("%f %f %f\n", p.z, vv, scale[2]);
 	normalize(&p);
 	uu = 0.5 + (atan2(p.y, p.x) / (6.28318530718));	
 	*u = (int)(uu * scale[0]);
@@ -288,10 +331,32 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 {
 	int			u;
 	int			v;
+	int			w;
 	double		s[3];
 	t_vect3f	p;
 
-	if (cone->checkerboard)
+	if (cone->texture)
+	{
+		shader->rgb_object[R] = 255;
+		shader->rgb_object[G] = 0;
+		shader->rgb_object[B] = 255;
+		if (cone->texture->tx_main)
+		{
+			p.x = intersection.x - cone->coords[X];
+			p.y = intersection.y - cone->coords[Y];
+			p.z = intersection.z - cone->coords[Z];
+			rotate_vect(&p, cone->q);
+			s[0] = cone->texture->tx_main->width;
+			s[1] = cone->texture->tx_main->height;
+			s[2] = cone->height;
+			get_cone_uv(p, &u, &v, s);
+			w = s[0] * 4;
+			shader->rgb_object[R] = cone->texture->tx_main->pixels[(v * w) + (u * 4)];
+			shader->rgb_object[G] = cone->texture->tx_main->pixels[(v * w) + (u * 4) + 1];
+			shader->rgb_object[B] = cone->texture->tx_main->pixels[(v * w) + (u * 4) + 2];
+		}
+	}
+	else if (cone->checkerboard)
 	{
 		p.x = intersection.x - cone->coords[X];
 		p.y = intersection.y - cone->coords[Y];
@@ -379,10 +444,33 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 {
 	long long	u;
 	long long	v;
+	int			w;
 	double		s[3];
 	t_vect3f	p;
 
-	if (disc->checkerboard)
+	if (disc->texture)
+	{
+		//printf("disc has texture\n");
+		shader->rgb_object[R] = 255;
+		shader->rgb_object[G] = 0;
+		shader->rgb_object[B] = 255;
+		if (disc->tx_disc)
+		{
+			p.x = intersection.x - disc->coords[X];
+			p.y = intersection.y - disc->coords[Y];
+			p.z = intersection.z - disc->coords[Z];
+			rotate_vect(&p, disc->q);
+			s[0] = disc->tx_disc->width;
+			s[1] = disc->tx_disc->height;
+			s[2] = 1 * disc->radius;
+			get_disc_uv(p, &u, &v, s);
+			w = s[0] * 4;
+			shader->rgb_object[R] = disc->tx_disc->pixels[(v * w) + (u * 4)];
+			shader->rgb_object[G] = disc->tx_disc->pixels[(v * w) + (u * 4) + 1];
+			shader->rgb_object[B] = disc->tx_disc->pixels[(v * w) + (u * 4) + 2];
+		}
+	}
+	else if (disc->checkerboard)
 	{
 		p.x = intersection.x - disc->coords[X];
 		p.y = intersection.y - disc->coords[Y];
@@ -429,10 +517,32 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 {
 	int			u;
 	int			v;
+	int			w;
 	double		s[3];
 	t_vect3f	p;
 
-	if (cylinder->checkerboard)
+	if (cylinder->texture)
+	{
+		shader->rgb_object[R] = 255;
+		shader->rgb_object[G] = 0;
+		shader->rgb_object[B] = 255;
+		if (cylinder->texture->tx_main)
+		{
+			p.x = intersection.x - cylinder->coords[X];
+			p.y = intersection.y - cylinder->coords[Y];
+			p.z = intersection.z - cylinder->coords[Z];
+			rotate_vect(&p, cylinder->q);
+			s[0] = cylinder->texture->tx_main->width;
+			s[1] = cylinder->texture->tx_main->height;
+			s[2] = cylinder->height;
+			get_cylinder_uv(p, &u, &v, s);
+			w = s[0] * 4;
+			shader->rgb_object[R] = cylinder->texture->tx_main->pixels[(v * w) + (u * 4)];
+			shader->rgb_object[G] = cylinder->texture->tx_main->pixels[(v * w) + (u * 4) + 1];
+			shader->rgb_object[B] = cylinder->texture->tx_main->pixels[(v * w) + (u * 4) + 2];
+		}
+	}
+	else if (cylinder->checkerboard)
 	{
 		p.x = intersection.x - cylinder->coords[X];
 		p.y = intersection.y - cylinder->coords[Y];
