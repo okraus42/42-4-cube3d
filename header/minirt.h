@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/18 15:34:54 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/19 15:38:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,6 @@ typedef enum e_mode
 	CAMERA
 }			t_mode;
 
-typedef enum e_texture
-{
-	PLAIN,
-	CHECKERBOARD,
-	TEXTURE
-}			t_texture;
-
 typedef struct s_quadterms
 {
 	double	a;
@@ -155,6 +148,22 @@ typedef struct s_checkerboard
 	int			id;
 }				t_checkerboard;
 
+typedef struct s_texture
+{
+	char	tx_path[1024];
+	char	topcap_tx_path[1024];
+	char	botcap_tx_path[1024];
+	int		id;
+}				t_texture;
+
+typedef struct s_vector_map
+{
+	char	vm_path[1024];
+	char	topcap_tx_path[1024];
+	char	botcap_tx_path[1024];
+	int		id;
+}				t_vector_map;
+
 typedef struct s_ambient
 {
 	double	ratio; // 0.0-1.0
@@ -186,6 +195,7 @@ typedef struct s_sphere
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
+	t_texture	*texture;
 }				t_sphere;
 
 typedef struct s_plane
@@ -200,6 +210,7 @@ typedef struct s_plane
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
+	t_texture	*texture;
 }				t_plane;
 
 typedef	struct s_disc
@@ -215,6 +226,7 @@ typedef	struct s_disc
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
+	t_texture	*texture;
 }				t_disc;
 
 typedef struct s_cylinder
@@ -233,6 +245,7 @@ typedef struct s_cylinder
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
+	t_texture	*texture;
 }				t_cylinder;
 
 typedef struct s_cone
@@ -251,6 +264,7 @@ typedef struct s_cone
 	t_mode		mode;
 	t_texture	texture_flag;
 	t_checkerboard	*checkerboard;
+	t_texture	*texture;
 }				t_cone;
 
 typedef struct s_rt
@@ -263,12 +277,16 @@ typedef struct s_rt
 	t_cone		**cones;
 	t_sphere	**light_spheres;
 	t_checkerboard **checkerboards;
+	t_texture	**textures;
+	t_vector_map	**vector_maps;
 	int			n_spheres;
 	int			n_planes;
 	int			n_cylinders;
 	int			n_cones;
 	int			n_lights;
 	int			n_checkerboards;
+	int			n_textures;
+	int			n_vector_maps;
 }				t_rt;
 
 
@@ -354,6 +372,7 @@ void	init_planes(t_rt *rt, int *ids);
 void	init_cylinders(t_rt *rt, int *ids);
 void	init_light_sphere(t_rt *rt, int *ids);
 void	init_checkerboards(t_rt *rt, int *ids);
+void	init_textures(t_rt *rt, int *ids);
 
 // Identifier check
 int	*init_ids(void);
@@ -371,7 +390,10 @@ int	is_integer(char *str);
 int	float_in_range(char *str); // format 9999.99999 allowed
 int	triad_in_range(char *triad);
 int	has_spec_count(char **split, int target);
+int	has_spec_count_strict(char **split, int target);
 int	has_valid_id_attribute(char *str); //ex. .ch/03;
+int	contains_valid_key_value_pair(char *str); //ex. 1="hello"
+int	is_valid_texture_file(char *str);
 
 int	check_format_ambient(char **split);
 int	check_format_camera(char **split);
@@ -392,6 +414,7 @@ int		fill_sphere(t_rt *rt, char **split);
 int		fill_light_sphere(t_rt *rt, char **split);
 int		fill_cylinder(t_rt *rt, char **split);
 int		fill_checkerboard(t_rt *rt, char **split);
+int		fill_texture(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
@@ -547,6 +570,7 @@ t_rayfinder	init_rayfinder(t_master	*master);
 void	set_highlight_from_reference(t_master *master, t_rayfinder rf);
 void	ft_draw_string(t_master *master);
 void	get_checkerboard_pointer(t_rt *rt, char **split, t_checkerboard **ptr);
+void	set_texture_pointer(t_rt *rt, char **split, t_texture **ptr);
 
 // Phong model
 void	phong_illumination(t_shader *shader, t_sphere *light);

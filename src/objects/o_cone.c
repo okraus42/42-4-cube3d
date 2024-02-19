@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 15:40:26 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/19 15:43:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_cones(t_rt *rt, int *ids)
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->up = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->checkerboard = NULL;
+		rt->cones[i]->texture = NULL;
 		rt->cones[i]->mode = DEFAULT;
 		init_cone_discs(rt->cones[i]);
 		i++;
@@ -87,6 +88,7 @@ int	fill_cone(t_rt *rt, char **split)
 		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
 	set_cone_vects(rt->cones[i]);
 	get_checkerboard_pointer(rt, split, &rt->cones[i]->checkerboard);
+	set_texture_pointer(rt, split, &rt->cones[i]->texture);
 	get_cone_discs(rt->cones[i]);
 	rt->n_cones++;
 	return (0);

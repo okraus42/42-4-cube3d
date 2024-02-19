@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 13:34:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 15:42:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->botcap->mode = DEFAULT;
 	cylinder->topcap->mode = DEFAULT;
 	cylinder->botcap->checkerboard = NULL;
-	cylinder->botcap->checkerboard = NULL;
+	cylinder->topcap->checkerboard = NULL;
+	cylinder->botcap->texture = NULL;
+	cylinder->topcap->texture = NULL;
 
 }
 
@@ -54,6 +56,7 @@ void	define_botcap(t_cylinder *cylinder)
 		botcap->nvect[Y], botcap->nvect[Z]);
 	set_disc_vects(botcap);
 	botcap->checkerboard = cylinder->checkerboard;
+	botcap->texture = cylinder->texture;
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -78,6 +81,7 @@ void	define_topcap(t_cylinder *cylinder)
 		topcap->nvect[Y], topcap->nvect[Z]);
 	set_disc_vects(topcap);
 	topcap->checkerboard = cylinder->checkerboard;
+	topcap->texture = cylinder->texture;
 }
 
 void	get_discs(t_cylinder *cylinder)

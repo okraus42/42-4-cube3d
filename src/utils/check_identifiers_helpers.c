@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 13:00:51 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:29:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,14 @@ void	get_identifiers(char **split, int *ids, int *flag)
 		else
 			*flag = 1;
 	}
-	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5) // allows storing up to 99 checkerboards, but will only report Unknown identifier if too long
+	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5) // allows storing up to 99 checkerboards/textures, but will only report Unknown identifier if too long
 	{
 		if (!ft_strncmp(split[0], ".ch/", 4))
 			ids[7]++;
+		else if (!ft_strncmp(split[0], ".tx/", 4))
+			ids[8]++;
+		else if (!ft_strncmp(split[0], ".vm/", 4))
+			ids[9]++;
 		else
 			*flag = 1;
 	}

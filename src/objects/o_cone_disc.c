@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone_disc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/16 16:07:58 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/19 15:43:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,10 @@ void	init_cone_discs(t_cone *cone)
 	cone->pinnacle->up = ft_calloc(1, sizeof(t_vect3f));
 	cone->base->mode = DEFAULT;
 	cone->pinnacle->mode = DEFAULT;
+	cone->pinnacle->checkerboard = NULL;
 	cone->base->checkerboard = NULL;
-	cone->base->checkerboard = NULL;
+	cone->pinnacle->texture = NULL;
+	cone->base->texture = NULL;
 
 }
 
@@ -54,6 +56,7 @@ void	define_cone_base(t_cone *cone)
 		base->nvect[Y], base->nvect[Z]);
 	set_disc_vects(base);
 	base->checkerboard = cone->checkerboard;
+	base->texture = cone->texture;
 }
 
 void	define_cone_pinnacle(t_cone *cone)
@@ -75,6 +78,7 @@ void	define_cone_pinnacle(t_cone *cone)
 		pinnacle->nvect[Y], pinnacle->nvect[Z]);
 	set_disc_vects(pinnacle);
 	pinnacle->checkerboard = NULL;
+	pinnacle->texture = cone->texture;
 }
 
 void	get_cone_discs(t_cone *cone)

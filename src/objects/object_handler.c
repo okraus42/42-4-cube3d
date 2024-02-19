@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 13:02:22 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:26:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	*init_ids(void)
 	int		i;
 
 	i = 0;
-	ids = malloc(sizeof(int) * 8);
-	while (i < 8)
+	ids = malloc(sizeof(int) * 10);
+	while (i < 10)
 		ids[i++] = 0;
 	return (ids);
 }
@@ -46,13 +46,13 @@ void	init_objects(t_rt *rt, int *ids)
 {
 	init_ambient(rt);
 	init_light_sphere(rt, ids);
-	//init_light(rt, ids);
 	init_camera(rt);
 	init_spheres(rt, ids);
 	init_planes(rt, ids);
 	init_cylinders(rt, ids);
 	init_cones(rt, ids);
 	init_checkerboards(rt, ids);
+	init_textures(rt, ids);
 }
 
 void	fill_objects(t_rt *rt, char **split, int *flag)
@@ -83,7 +83,11 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 		else
 			*flag = 1;
 	}
- 	else if (!ft_strncmp(split[0], ".ch/", 4)) // ignoring texture call during object parsing
+ 	else if (!ft_strncmp(split[0], ".ch/", 4)) // ignoring checkerboard call during object parsing
+		return ;
+	else if (!ft_strncmp(split[0], ".tx/", 4)) // ignoring texture call during object parsing
+		return ;
+	else if (!ft_strncmp(split[0], ".vm/", 4)) // ignoring vector map call during object parsing
 		return ;
 	else
 		*flag = 1;
@@ -92,7 +96,6 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 void	free_objects(t_rt *rt)
 {
 	free_ambient(rt);
-	//free_light(rt);
 	free_camera(rt);
 	free_spheres(rt);
 	free_planes(rt);

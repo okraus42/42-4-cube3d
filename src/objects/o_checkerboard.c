@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 18:21:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 11:35:15 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/19 10:22:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	init_checkerboards(t_rt *rt, int *ids)
 
 int	check_format_checkerboard(char **split)
 {
-	if (!has_spec_count(split, 4))
+	if (!has_spec_count_strict(split, 4))
 		return (id_err(".ch", E_SPEC, "3"));
 	if (!has_valid_id_attribute(split[0]))
 		return (id_err(".ch", "Invalid checkerboard ID", NULL));

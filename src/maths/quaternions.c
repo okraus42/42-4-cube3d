@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/18 17:09:07 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/19 08:44:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 	t_quat		q;
 	t_quat		first;
 	t_quat		second;
-	t_quat		upq;
+	//t_quat		upq;
 	t_vect3f	z;
 	t_vect3f	y;
 	t_vect3f	newup;
@@ -163,7 +163,7 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 	y.x = 0.;
 	y.y = 1.;
 	y.z = 0.;
-	upq = get_point_quat(up);
+	//upq = get_point_quat(up);
 	//rotate newup by first quat
 	// newnorm.x = norm.x;
 	// newnorm.y = norm.y;
