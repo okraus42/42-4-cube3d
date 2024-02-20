@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/19 12:35:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:13:18 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	get_texture_data_from_line(char *line, t_rt *rt, int *flag)
 			*flag = fill_checkerboard(rt, split);
 		if (!ft_strncmp(split[0], ".tx/", 4))
 			*flag = fill_texture(rt, split);
+		if (!ft_strncmp(split[0], ".tx/", 4))
+			*flag = fill_vector_map(rt, split);
 	}
 	ft_free_split(&split);
 }

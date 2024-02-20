@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 15:40:08 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:00:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i]->up = ft_calloc(1, sizeof(t_vect3f));
 		rt->planes[i]->checkerboard = NULL;
 		rt->planes[i]->texture = NULL;
+		rt->planes[i]->vector_map = NULL;
 		rt->planes[i++]->mode = DEFAULT;
 	}
 	rt->planes[i] = NULL;
@@ -70,7 +71,7 @@ int	fill_plane(t_rt *rt, char **split)
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));
 	set_plane_vects(rt->planes[i]);
-	get_checkerboard_pointer(rt, split, &rt->planes[i]->checkerboard);
+	set_checkerboard_pointer(rt, split, &rt->planes[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->planes[i]->texture);
 	rt->n_planes++;
 	return (0);

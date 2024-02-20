@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 11:26:15 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:26:55 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	init_objects(t_rt *rt, int *ids)
 	init_cones(rt, ids);
 	init_checkerboards(rt, ids);
 	init_textures(rt, ids);
+	init_vector_maps(rt, ids);
 }
 
 void	fill_objects(t_rt *rt, char **split, int *flag)

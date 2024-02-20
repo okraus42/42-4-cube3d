@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 15:39:34 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:00:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_spheres(t_rt *rt, int *ids)
 		//rt->spheres[i]->checkerboard = ft_calloc(1, sizeof(t_checkerboard *));
 		rt->spheres[i]->checkerboard = NULL;
 		rt->spheres[i]->texture = NULL;
+		rt->spheres[i]->vector_map = NULL;
 		rt->spheres[i++]->mode = DEFAULT;
 	}
 	rt->spheres[i] = NULL;
@@ -67,7 +68,7 @@ int	fill_sphere(t_rt *rt, char **split)
 		return (id_err("sp", E_RGB_RANGE, E_RANGE_INT));
 	*rt->spheres[i]->normal = (t_vect3f){0, 0, 1};
 	set_sphere_vects(rt->spheres[i]);
-	get_checkerboard_pointer(rt, split, &rt->spheres[i]->checkerboard);
+	set_checkerboard_pointer(rt, split, &rt->spheres[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->spheres[i]->texture);
 	rt->n_spheres++;
 	return (0);

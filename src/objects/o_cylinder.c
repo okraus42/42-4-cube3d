@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 15:40:49 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:59:49 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i]->up = ft_calloc(1, sizeof(t_vect3f));
 		rt->cylinders[i]->checkerboard = NULL;
 		rt->cylinders[i]->texture = NULL;
+		rt->cylinders[i]->vector_map = NULL;
 		rt->cylinders[i]->mode = DEFAULT;
 		init_discs(rt->cylinders[i]);
 		i++;
@@ -86,7 +87,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 	if (!get_rgb(rt->cylinders[i]->rgb, split[5]))
 		return (id_err("cy", E_RGB_RANGE, E_RANGE_INT));
 	set_cylinder_vects(rt->cylinders[i]);
-	get_checkerboard_pointer(rt, split, &rt->cylinders[i]->checkerboard);
+	set_checkerboard_pointer(rt, split, &rt->cylinders[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->cylinders[i]->texture);
 	get_discs(rt->cylinders[i]);
 	rt->n_cylinders++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone_disc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 17:45:18 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:20:29 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	init_cone_discs(t_cone *cone)
 	cone->base->checkerboard = NULL;
 	cone->pinnacle->texture = NULL;
 	cone->base->texture = NULL;
-
+	cone->pinnacle->vector_map = NULL;
+	cone->base->vector_map = NULL;
 }
 
 void	define_cone_base(t_cone *cone)
@@ -57,7 +58,15 @@ void	define_cone_base(t_cone *cone)
 	set_disc_vects(base);
 	base->checkerboard = cone->checkerboard;
 	base->texture = cone->texture;
-	base->tx_disc = cone->texture->tx_bot;
+	if (base->texture)
+		base->tx_disc = cone->texture->tx_bot;
+	else
+		base->tx_disc = NULL;
+	base->vector_map = cone->vector_map;
+	if (base->vector_map)
+		base->vm_disc = cone->vector_map->vm_bot;
+	else
+		base->vm_disc = NULL;
 }
 
 void	define_cone_pinnacle(t_cone *cone)
@@ -80,7 +89,15 @@ void	define_cone_pinnacle(t_cone *cone)
 	set_disc_vects(pinnacle);
 	pinnacle->checkerboard = NULL;
 	pinnacle->texture = cone->texture;
-	pinnacle->tx_disc = cone->texture->tx_top;
+	if (pinnacle->texture)
+		pinnacle->tx_disc = cone->texture->tx_top;
+	else
+		pinnacle->tx_disc = NULL;
+	pinnacle->vector_map = cone->vector_map;
+	if (pinnacle->vector_map)
+		pinnacle->vm_disc = cone->vector_map->vm_top;
+	else
+		pinnacle->vm_disc = NULL;
 }
 
 void	get_cone_discs(t_cone *cone)
