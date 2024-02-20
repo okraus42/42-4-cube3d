@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:30:20 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:29:08 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 11:25:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,26 @@ static int	find_checkerboard_id(char **split)
 {
 	int	i;
 	int	id;
+	int	len;
 	char	**specifier;
 
 	i = 0;
 	id = -1;
+	len = 0;
 	while (split[i])
 		i++;
 	if (!ft_strncmp(split[i-1], ".ch/", 4))
 	{
 		specifier = ft_split(split[i-1], '/');
+		while (specifier[1][len])
+		{
+			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			{
+				ft_free_split(&specifier);
+				return (id);
+			}
+			len++;
+		}
 		id = ft_atoi(specifier[1]);
 		ft_free_split(&specifier);
 	}
@@ -55,15 +66,26 @@ static int	find_texture_id(char **split)
 {
 	int	i;
 	int	id;
+	int	len;
 	char	**specifier;
 
 	i = 0;
 	id = -1;
+	len = 0;
 	while (split[i])
 		i++;
 	if (!ft_strncmp(split[i-1], ".tx/", 4))
 	{
 		specifier = ft_split(split[i-1], '/');
+		while (specifier[1][len])
+		{
+			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			{
+				ft_free_split(&specifier);
+				return (id);
+			}
+			len++;
+		}
 		id = ft_atoi(specifier[1]);
 		ft_free_split(&specifier);
 	}
@@ -94,15 +116,26 @@ static int	find_vector_map_id(char **split)
 {
 	int	i;
 	int	id;
+	int	len;
 	char	**specifier;
 
 	i = 0;
 	id = -1;
+	len = 0;
 	while (split[i])
 		i++;
 	if (!ft_strncmp(split[i-1], ".vm/", 4))
 	{
 		specifier = ft_split(split[i-1], '/');
+		while (specifier[1][len])
+		{
+			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			{
+				ft_free_split(&specifier);
+				return (id);
+			}
+			len++;
+		}
 		id = ft_atoi(specifier[1]);
 		ft_free_split(&specifier);
 	}

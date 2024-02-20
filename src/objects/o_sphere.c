@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:35:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 11:02:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	fill_sphere(t_rt *rt, char **split)
 	set_sphere_vects(rt->spheres[i]);
 	set_checkerboard_pointer(rt, split, &rt->spheres[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->spheres[i]->texture);
+	set_vector_map_pointer(rt, split, &rt->spheres[i]->vector_map);
 	rt->n_spheres++;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:32:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 11:01:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	fill_cone(t_rt *rt, char **split)
 	set_cone_vects(rt->cones[i]);
 	set_checkerboard_pointer(rt, split, &rt->cones[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->cones[i]->texture);
+	set_vector_map_pointer(rt, split, &rt->cones[i]->vector_map);
 	get_cone_discs(rt->cones[i]);
 	rt->n_cones++;
 	return (0);

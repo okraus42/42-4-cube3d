@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:35:36 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 11:02:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int	fill_plane(t_rt *rt, char **split)
 	set_plane_vects(rt->planes[i]);
 	set_checkerboard_pointer(rt, split, &rt->planes[i]->checkerboard);
 	set_texture_pointer(rt, split, &rt->planes[i]->texture);
+	set_vector_map_pointer(rt, split, &rt->planes[i]->vector_map);
 	rt->n_planes++;
 	return (0);
 }
