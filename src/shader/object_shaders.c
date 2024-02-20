@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:37:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 17:25:46 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity; // unused at the moment
 	shader.hit_normal = subtract_vect3f(intersection, array_to_vect(sphere->coords)); // specific to object
+	set_sphere_normal(&shader, sphere, intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
@@ -56,6 +57,7 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = *plane->normal;
+	set_plane_normal(&shader, plane, intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
@@ -87,6 +89,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = get_cylinder_hit_normal(rf, ray, intersection, *cylinder);
+	set_cylinder_normal(&shader, cylinder, intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
@@ -118,6 +121,7 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = *disc->normal;
+	set_disc_normal(&shader, disc, intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
@@ -149,6 +153,7 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;
 	shader.hit_normal = get_cone_hit_normal(intersection, *cone);
+	set_cone_normal(&shader, cone, intersection);
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);

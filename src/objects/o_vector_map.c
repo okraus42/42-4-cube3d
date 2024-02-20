@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_vector_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:41 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:30:47 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 16:09:01 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	init_vector_maps(t_rt *rt, int *ids)
 	int	i;
 
 	i = 0;
-	rt->vector_maps = ft_calloc(ids[8] + 1, sizeof(t_vector_map *));
+	rt->vector_maps = ft_calloc(ids[9] + 1, sizeof(t_vector_map *));
 	rt->n_vector_maps = 0;
-	while (i < (ids[8]))
+	while (i < (ids[9]))
 	{
 		rt->vector_maps[i] = ft_calloc(1, sizeof(t_vector_map));
 		//rt->vector_maps[i]->tx_path = NULL;
@@ -89,7 +89,9 @@ int	set_vector_map_paths(t_vector_map *vector_map, char *str)
 	value = key_value_pair[1];
 	path = ft_strtrim(value, "\"");
 	if (key[0] == '0' && !vector_map->vm_path[0])
+	{
 		ft_strlcpy(vector_map->vm_path, path, ft_strlen(path) + 1);
+	}
 	else if (key[0] == '1' && !vector_map->botcap_vm_path[0])
 		ft_strlcpy(vector_map->botcap_vm_path, path, ft_strlen(path) + 1);
 	else if (key[0] == '2' && !vector_map->topcap_vm_path[0])
@@ -158,7 +160,7 @@ int	fill_vector_map(t_rt *rt, char **split)
 	{
 		set_vector_map_paths(rt->vector_maps[i], split[j]);
 		j++;
-	}	
+	}
 	if (!set_vector_map_id(rt->vector_maps[i], split[0]))
 		return (id_err(".vm", "Invalid .vm specification", NULL));
 	ft_putstr_fd(rt->vector_maps[i]->vm_path, 1);
@@ -168,6 +170,7 @@ int	fill_vector_map(t_rt *rt, char **split)
 	ft_putstr_fd(rt->vector_maps[i]->topcap_vm_path, 1);
 	write(1, "\n", 1);
 	ft_load_vector_map(rt->vector_maps[i]);
+	//printf("vm->botcap_vm_path %s\n", rt->vector_maps[i]->topcap_vm_path);
 	rt->n_vector_maps++;
 	return (0);
 }

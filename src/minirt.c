@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/20 10:51:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 15:51:15 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	get_texture_data_from_line(char *line, t_rt *rt, int *flag)
 			*flag = fill_checkerboard(rt, split);
 		if (!ft_strncmp(split[0], ".tx/", 4))
 			*flag = fill_texture(rt, split);
-		if (!ft_strncmp(split[0], ".tx/", 4))
+		if (!ft_strncmp(split[0], ".vm/", 4))
 			*flag = fill_vector_map(rt, split);
 	}
 	ft_free_split(&split);

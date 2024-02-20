@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/20 10:51:38 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 17:29:52 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -558,6 +558,13 @@ void		set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection);
 void		set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection);
 void		set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection);
 void		set_sphere_rgb(t_shader *shader, t_sphere *sphere, t_vect3f intersection);
+void		set_sphere_normal(t_shader *shader, t_sphere *sphere, t_vect3f intersection);
+void		set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f intersection);
+void		set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection);
+void		set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection);
+void		set_plane_normal(t_shader *shader, t_plane *plane, t_vect3f intersection);
+
+
 
 t_vect3f	array_to_vect(double *array);
 
