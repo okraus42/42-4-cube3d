@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 15:32:18 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:37:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	int			i;
 
 	sphere = (t_sphere *)object_ptr;
+	shader.obj_glossiness = sphere->glossiness;
 	i = 0;
 	set_sphere_rgb(&shader, sphere, intersection);
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
@@ -49,6 +50,7 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	int			i;
 	
 	plane = (t_plane *)object_ptr;
+	shader.obj_glossiness = plane->glossiness;
 	i = 0;
 	set_plane_rgb(&shader, plane, intersection);
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
@@ -79,6 +81,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	int			i;
 	
 	cylinder = (t_cylinder *)object_ptr;
+	shader.obj_glossiness = cylinder->glossiness;
 	i = 0;
 	set_cylinder_rgb(&shader, cylinder, intersection);
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
@@ -109,6 +112,7 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	int			i;
 	
 	disc = (t_disc *)object_ptr;
+	shader.obj_glossiness = disc->glossiness;
 	i = 0;
 	set_disc_rgb(&shader, disc, intersection);
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
@@ -139,8 +143,8 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	int			i;
 	
 	cone = (t_cone *)object_ptr;
+	shader.obj_glossiness = cone->glossiness;
 	i = 0;
-	
 	set_cone_rgb(&shader, cone, intersection);
 	set_ambient_intensity(&shader, master->rt->ambient->rgb, master->rt->ambient->ratio); // ambient light as default
 	shader.light_intensity = rf->light_intensity;

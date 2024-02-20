@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:12:38 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:35:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	define_botcap(t_cylinder *cylinder)
 	t_disc	*botcap;
 
 	botcap = cylinder->botcap;
+	botcap->glossiness = cylinder->glossiness;
 	botcap->coords[X] = cylinder->coords[X] + (-1 * cylinder->normal->x * cylinder->height / 2);
 	botcap->coords[Y] = cylinder->coords[Y] + (-1 * cylinder->normal->y * cylinder->height / 2);
 	botcap->coords[Z] = cylinder->coords[Z] + (-1 * cylinder->normal->z * cylinder->height / 2);
@@ -76,6 +77,7 @@ void	define_topcap(t_cylinder *cylinder)
 	t_disc	*topcap;
 
 	topcap = cylinder->topcap;
+	topcap->glossiness = cylinder->glossiness;
 	topcap->coords[X] = cylinder->coords[X] \
 			+ cylinder->height / 2 * cylinder->normal->x;
 	topcap->coords[Y] = cylinder->coords[Y] \

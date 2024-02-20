@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/18 16:15:51 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:52:49 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,8 +205,19 @@ void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_ca
 	normalize(up);
 }
 
+static void	change_glossiness(double *glossiness, keys_t key)
+{
+	if (key == MLX_KEY_G)
+	{
+		*glossiness += 0.05; 
+		if (*glossiness >= 1.01)
+			*glossiness = 0.05;
+	}
+}
+
 void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
+	change_glossiness(&sphere->glossiness, keydata.key);
 	move(keydata.key, rt->camera, sphere->coords);
 	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
 	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
@@ -214,6 +225,7 @@ void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 {
+	change_glossiness(&plane->glossiness, keydata.key);
 	move(keydata.key, rt->camera, plane->coords);
 	rotate_o(keydata.key, plane->normal, plane->right, plane->up, rt->camera);
 	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
@@ -221,6 +233,7 @@ void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 
 void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 {
+	change_glossiness(&cylinder->glossiness, keydata.key);
 	move(keydata.key, rt->camera, cylinder->coords);
 	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
 	get_discs(cylinder);
@@ -231,6 +244,7 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 
 void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 {
+	change_glossiness(&cone->glossiness, keydata.key);
 	move(keydata.key, rt->camera, cone->coords);
 	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
 	get_cone_discs(cone);
@@ -293,24 +307,24 @@ void	manipulate_objects(t_master *master, mlx_key_data_t keydata)
 
 void	specular_options(t_master *master, keys_t key)
 {
-	double	glossiness;
+	//double	glossiness;
 	double	highlight_size;
 
-	glossiness = master->options->glossiness;
+	//glossiness = master->options->glossiness;
 	highlight_size = master->options->spec_highlight_size;
-	if (key == MLX_KEY_G)
-	{
-		glossiness += 0.05; 
-		if (glossiness >= 1.01)
-			glossiness = 0.05;
-	}
-	else if (key == MLX_KEY_H)
+	// if (key == MLX_KEY_G)
+	// {
+	// 	glossiness += 0.05; 
+	// 	if (glossiness >= 1.01)
+	// 		glossiness = 0.05;
+	// }
+	if (key == MLX_KEY_H)
 	{
 		highlight_size /= 2;
 		if (highlight_size <= 2)
 			highlight_size = 1024;
 	}
-	master->options->glossiness = glossiness;
+	//master->options->glossiness = glossiness;
 	master->options->spec_highlight_size = highlight_size;
 }
 
@@ -333,6 +347,6 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 	clamp(0, INT_MAX - 100, &master->options->light_intensity);
 	specular_options(master, keydata.key);
 	printf("Light intensity: %d\n", master->options->light_intensity);
-	printf("Glossiness: %.2f\n", master->options->glossiness);
+	//printf("Glossiness: %.2f\n", master->options->glossiness);
 	find_rays(master);
 }

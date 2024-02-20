@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:00:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:35:36 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_planes(t_rt *rt, int *ids)
 		rt->planes[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->planes[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->planes[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->planes[i]->glossiness = 0.5;
 		rt->planes[i]->checkerboard = NULL;
 		rt->planes[i]->texture = NULL;
 		rt->planes[i]->vector_map = NULL;

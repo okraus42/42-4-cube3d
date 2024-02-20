@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/20 09:13:18 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:51:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,8 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_W
 			|| keydata.key == MLX_KEY_S
 			|| keydata.key == MLX_KEY_Q
-			|| keydata.key == MLX_KEY_E))
+			|| keydata.key == MLX_KEY_E
+			|| keydata.key == MLX_KEY_G))
 		manipulate_objects(master, keydata);
 	else if (keydata.modifier == MLX_CONTROL 
 			&& keydata.key == MLX_KEY_L
@@ -381,7 +382,7 @@ void	init_options(t_master *master)
 	options->mode = DEFAULT;
 	options->light_intensity = 100;
 	options->spec_highlight_size = 512;
-	options->glossiness = 0.5;
+	//options->glossiness = 0.5;
 	master->options = options;
 }
 

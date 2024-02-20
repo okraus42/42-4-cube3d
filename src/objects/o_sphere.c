@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:00:26 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:35:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	init_spheres(t_rt *rt, int *ids)
 		rt->spheres[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->spheres[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->spheres[i]->up = ft_calloc(1, sizeof(t_vect3f));
-		//rt->spheres[i]->checkerboard = ft_calloc(1, sizeof(t_checkerboard *));
+		rt->spheres[i]->glossiness = 0.5;
 		rt->spheres[i]->checkerboard = NULL;
 		rt->spheres[i]->texture = NULL;
 		rt->spheres[i]->vector_map = NULL;

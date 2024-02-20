@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/20 09:35:30 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:51:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ typedef struct s_sphere
 	double	diameter;
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
+	double	glossiness;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -209,6 +210,7 @@ typedef struct s_plane
 	double		*coords; // x,y,z coordinates of point
 	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int			*rgb;
+	double	glossiness;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -225,6 +227,7 @@ typedef	struct s_disc
 	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	double		radius;
 	int			*rgb;
+	double	glossiness;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -244,6 +247,7 @@ typedef struct s_cylinder
 	double		diameter;
 	double		height;
 	int			*rgb;
+	double	glossiness;
 	t_disc		*botcap;
 	t_disc		*topcap;
 	t_vect3f	*normal;
@@ -263,6 +267,7 @@ typedef struct s_cone
 	double		diameter;
 	double		height;
 	int			*rgb;
+	double	glossiness;
 	t_disc		*base;
 	t_disc		*pinnacle;
 	t_vect3f	*normal;
@@ -308,7 +313,7 @@ typedef struct s_options
 	t_mode		mode;
 	int			light_intensity;
 	int			spec_highlight_size;
-	double		glossiness;
+	//double		glossiness;
 }				t_options;
 
 
@@ -368,6 +373,7 @@ typedef	struct s_shader
 	int			pix_color[3];
 	double		id;
 	double		is;
+	double		obj_glossiness;
 }				t_shader;
 
 

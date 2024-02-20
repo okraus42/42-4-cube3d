@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:59:24 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:32:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_cones(t_rt *rt, int *ids)
         rt->cones[i]->pinnacle = ft_calloc(1, sizeof(t_disc));
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->cones[i]->glossiness = 0.5;
 		rt->cones[i]->checkerboard = NULL;
 		rt->cones[i]->texture = NULL;
 		rt->cones[i]->vector_map = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   phong_illumination.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:37:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/15 15:31:30 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:38:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ void	diff_and_spec_ratios(t_shader *shader, t_options options)
 	else
 	{
 		get_reflection_vector(shader);
-		shader->specular_ratio = options.glossiness * pow(MAX(dot_product(shader->view_dir, shader->reflect_vect), 0), options.spec_highlight_size);
+		shader->specular_ratio = shader->obj_glossiness * pow(MAX(dot_product(shader->view_dir, shader->reflect_vect), 0), options.spec_highlight_size);
 	}
 }

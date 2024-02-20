@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:59:49 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/20 10:33:39 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_cylinders(t_rt *rt, int *ids)
 		rt->cylinders[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->cylinders[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cylinders[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->cylinders[i]->glossiness = 0.5;
 		rt->cylinders[i]->checkerboard = NULL;
 		rt->cylinders[i]->texture = NULL;
 		rt->cylinders[i]->vector_map = NULL;
