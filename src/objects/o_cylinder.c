@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 11:01:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:39:32 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,13 @@ void	init_cylinders(t_rt *rt, int *ids)
 
 int	check_format_cylinder(char **split)
 {
-	if (!has_spec_count(split, 6))
+	int	spec_count_flag;
+
+	spec_count_flag = has_spec_count(split, 6);
+	if (!spec_count_flag)
 		return (id_err("cy", E_SPEC, "5"));
+	else if (spec_count_flag < 0)
+		return (id_err("cy", "Invalid specifier format", "unique texture identifiers after the 5th specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("cy", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -88,9 +93,9 @@ int	fill_cylinder(t_rt *rt, char **split)
 	if (!get_rgb(rt->cylinders[i]->rgb, split[5]))
 		return (id_err("cy", E_RGB_RANGE, E_RANGE_INT));
 	set_cylinder_vects(rt->cylinders[i]);
-	set_checkerboard_pointer(rt, split, &rt->cylinders[i]->checkerboard);
-	set_texture_pointer(rt, split, &rt->cylinders[i]->texture);
-	set_vector_map_pointer(rt, split, &rt->cylinders[i]->vector_map);
+	set_checkerboard_pointer("cy", rt, split, &rt->cylinders[i]->checkerboard);
+	set_texture_pointer("cy", rt, split, &rt->cylinders[i]->texture);
+	set_vector_map_pointer("cy", rt, split, &rt->cylinders[i]->vector_map);
 	get_discs(rt->cylinders[i]);
 	rt->n_cylinders++;
 	return (0);

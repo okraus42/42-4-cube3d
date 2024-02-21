@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:30:20 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 11:25:01 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:42:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ static int	find_checkerboard_id(char **split)
 		specifier = ft_split(split[i-1], '/');
 		while (specifier[1][len])
 		{
-			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			if (len > 3 || !ft_isdigit(specifier[1][len]))
 			{
 				ft_free_split(&specifier);
-				return (id);
+				return (-2);
 			}
 			len++;
 		}
@@ -42,24 +42,27 @@ static int	find_checkerboard_id(char **split)
 	return (id);
 }
 
-void	set_checkerboard_pointer(t_rt *rt, char **split, t_checkerboard **ptr)
+int	set_checkerboard_pointer(char *obj, t_rt *rt, char **split, t_checkerboard **ptr)
 {
 	int	id;
 	int	i;
 
 	i = 0;
 	id = find_checkerboard_id(split);
-	if (id < 0) // can this even happen?
-		return ;
+	if (id == -2)
+		return (id_warn(obj, W_CHECKER_ID, W_CHECKER_CONT));
+	if (id == -1)
+		return (0);
 	while (i < rt->n_checkerboards)
 	{
 		if (rt->checkerboards[i]->id == id)
 		{
 			*ptr = rt->checkerboards[i];
-			return ;
+			return (1);
 		}
 		i++;
 	}
+	return (id_warn(obj, W_CHECKER_ID, W_CHECKER_CONT));
 }
 
 static int	find_texture_id(char **split)
@@ -79,10 +82,10 @@ static int	find_texture_id(char **split)
 		specifier = ft_split(split[i-1], '/');
 		while (specifier[1][len])
 		{
-			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			if (len > 3 || !ft_isdigit(specifier[1][len]))
 			{
 				ft_free_split(&specifier);
-				return (id);
+				return (-2);
 			}
 			len++;
 		}
@@ -92,24 +95,27 @@ static int	find_texture_id(char **split)
 	return (id);
 }
 
-void	set_texture_pointer(t_rt *rt, char **split, t_texture **ptr)
+int	set_texture_pointer(char *obj, t_rt *rt, char **split, t_texture **ptr)
 {
 	int	id;
 	int	i;
 
 	i = 0;
 	id = find_texture_id(split);
-	if (id < 0) // can this even happen?
-		return ;
+	if (id == -2)
+		return (id_warn(obj, W_TEXT_ID, W_TEXT_CONT));
+	if (id == -1)
+		return (0);
 	while (i < rt->n_textures)
 	{
 		if (rt->textures[i]->id == id)
 		{
 			*ptr = rt->textures[i];
-			return ;
+			return (1);
 		}
 		i++;
 	}
+	return (id_warn(obj, W_TEXT_ID, W_TEXT_CONT));
 }
 
 static int	find_vector_map_id(char **split)
@@ -129,10 +135,10 @@ static int	find_vector_map_id(char **split)
 		specifier = ft_split(split[i-1], '/');
 		while (specifier[1][len])
 		{
-			if (len > 9 || !ft_isdigit(specifier[1][len]))
+			if (len > 3 || !ft_isdigit(specifier[1][len]))
 			{
 				ft_free_split(&specifier);
-				return (id);
+				return (-2);
 			}
 			len++;
 		}
@@ -142,22 +148,25 @@ static int	find_vector_map_id(char **split)
 	return (id);
 }
 
-void	set_vector_map_pointer(t_rt *rt, char **split, t_vector_map **ptr)
+int	set_vector_map_pointer(char *obj, t_rt *rt, char **split, t_vector_map **ptr)
 {
 	int	id;
 	int	i;
 
 	i = 0;
 	id = find_vector_map_id(split);
-	if (id < 0) // can this even happen?
-		return ;
+	if (id == -2)
+		return (id_warn(obj, W_VMAP_ID, W_VMAP_CONT));
+	if (id == -1)
+		return (0);
 	while (i < rt->n_vector_maps)
 	{
 		if (rt->vector_maps[i]->id == id)
 		{
 			*ptr = rt->vector_maps[i];
-			return ;
+			return (1);
 		}
 		i++;
 	}
+	return (id_warn(obj, W_VMAP_ID, W_VMAP_CONT));
 }

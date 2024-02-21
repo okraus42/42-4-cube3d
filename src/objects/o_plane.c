@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 11:02:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:40:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,13 @@ void	init_planes(t_rt *rt, int *ids)
 
 int	check_format_plane(char **split)
 {
-	if (!has_spec_count(split, 4))
+	int	spec_count_flag;
+
+	spec_count_flag = has_spec_count(split, 4);
+	if (!spec_count_flag)
 		return (id_err("pl", E_SPEC, "3"));
+	else if (spec_count_flag < 0)
+		return (id_err("pl", "Invalid specifier format", "unique texture identifiers after the 3rd specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("pl", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -72,9 +77,9 @@ int	fill_plane(t_rt *rt, char **split)
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));
 	set_plane_vects(rt->planes[i]);
-	set_checkerboard_pointer(rt, split, &rt->planes[i]->checkerboard);
-	set_texture_pointer(rt, split, &rt->planes[i]->texture);
-	set_vector_map_pointer(rt, split, &rt->planes[i]->vector_map);
+	set_checkerboard_pointer("pl", rt, split, &rt->planes[i]->checkerboard);
+	set_texture_pointer("pl", rt, split, &rt->planes[i]->texture);
+	set_vector_map_pointer("pl", rt, split, &rt->planes[i]->vector_map);
 	rt->n_planes++;
 	return (0);
 }

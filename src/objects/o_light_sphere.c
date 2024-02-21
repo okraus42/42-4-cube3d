@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_light_sphere.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/09 16:12:17 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:50:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	init_light_sphere(t_rt *rt, int *ids)
 
 int	check_format_light(char **split)
 {
-	if (!has_spec_count(split, 4))
+	if (!has_spec_count_strict(split, 4))
 		return (id_err("L", E_SPEC, "3"));
 	if (!is_float_triad(split[1]))
 		return (id_err("L", E_COORD, E_TRIAD_INTFLOAT));

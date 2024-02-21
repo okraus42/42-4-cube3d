@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 11:02:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:41:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,13 @@ void	init_spheres(t_rt *rt, int *ids)
 
 int	check_format_sphere(char **split)
 {
-	if (!has_spec_count(split, 4))
+	int	spec_count_flag;
+
+	spec_count_flag = has_spec_count(split, 4);
+	if (!spec_count_flag)
 		return (id_err("sp", E_SPEC, "3"));
+	else if (spec_count_flag < 0)
+		return (id_err("sp", "Invalid specifier format", "unique texture identifiers after the 3rd specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("sp", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -68,9 +73,9 @@ int	fill_sphere(t_rt *rt, char **split)
 		return (id_err("sp", E_RGB_RANGE, E_RANGE_INT));
 	*rt->spheres[i]->normal = (t_vect3f){0, 0, 1};
 	set_sphere_vects(rt->spheres[i]);
-	set_checkerboard_pointer(rt, split, &rt->spheres[i]->checkerboard);
-	set_texture_pointer(rt, split, &rt->spheres[i]->texture);
-	set_vector_map_pointer(rt, split, &rt->spheres[i]->vector_map);
+	set_checkerboard_pointer("sp", rt, split, &rt->spheres[i]->checkerboard);
+	set_texture_pointer("sp", rt, split, &rt->spheres[i]->texture);
+	set_vector_map_pointer("sp", rt, split, &rt->spheres[i]->vector_map);
 	rt->n_spheres++;
 	return (0);
 }

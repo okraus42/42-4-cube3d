@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:31:01 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:12:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,16 +101,37 @@ int	is_rgb_format(char *str)
 int	has_spec_count(char **split, int target)
 {
 	int	num;
+	int	i;
+	int	ch_flag;
+	int	tx_flag;
+	int	vm_flag;
 
 	num = 0;
+	i = 0;
+	ch_flag = 0;
+	tx_flag = 0;
+	vm_flag = 0;
 	while (split[num])
 		num++;
-	if (num == target + 1)
+	if (num > target + 3)
+		return (0);
+	else if (num > target && num <= target + 3)
 	{
-		if (!ft_strncmp(split[num-1], ".ch/", 4) || !ft_strncmp(split[num-1], ".tx/", 4) || !ft_strncmp(split[num-1], ".vm/", 4) )
-			return (1);
+		i = target;
+		while (i < num && split[i])
+		{
+			if (!ft_strncmp(split[i], ".ch/", 4) && !ch_flag)
+				ch_flag++;
+			else if (!ft_strncmp(split[i], ".tx/", 4) && !tx_flag)
+				tx_flag++;
+			else if (!ft_strncmp(split[i], ".vm/", 4) && !vm_flag)
+				vm_flag++;
+			else
+				return (-1);
+			i++;
+		}
 	}
-	if (num != target)
+	else if (num < target)
 		return (0);
 	return (1);
 }

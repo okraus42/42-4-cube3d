@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_camera.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/19 10:14:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:49:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_camera(t_rt *rt)
 
 int	check_format_camera(char **split)
 {
-	if (!has_spec_count(split, 4))
+	if (!has_spec_count_strict(split, 4))
 		return (id_err("C", E_SPEC, "3"));
 	if (!is_float_triad(split[1]))
 		return (id_err("C", E_COORD, E_TRIAD_INTFLOAT));

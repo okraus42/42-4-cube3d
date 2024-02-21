@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 17:50:55 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/21 10:48:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -814,7 +814,7 @@ void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 			fictnormal.y = 0;
 			fictnormal.z = 1;
 			rot = get_rotvect_quat(fictnormal, newnormal);
-			printf("%f %f %f %f\n", rot.q0, rot.q1, rot.q2, rot.q3);
+			//printf("%f %f %f %f\n", rot.q0, rot.q1, rot.q2, rot.q3);
 			rotate_vect(&(shader->hit_normal), rot);
 		}
 	}

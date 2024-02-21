@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/20 17:29:52 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:21:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@
 # define E_RANGE_POS "a value in range (0.0;1.0)"
 # define E_RANGE_NORM "values in range (-1.0;1.0)"
 # define E_RANGE_STRICT "a strictly positive value"
+# define W_CHECKER_ID "Checkerboard ID not matched to existing IDs"
+# define W_TEXT_ID "Texture ID not matched to existing IDs"
+# define W_VMAP_ID "Vector map ID not matched to existing IDs"
+# define W_CHECKER_CONT "checkerboard will not display"
+# define W_TEXT_CONT "texture will not display"
+# define W_VMAP_CONT "vector map will not display"
+
 # define STRINGS 16
 #define BLK "\e[0;30m"
 #define RED "\e[0;31m"
@@ -434,6 +441,7 @@ int		fill_vector_map(t_rt *rt, char **split);
 
 double	ft_atof(char *str);
 int		id_err(char *id, char *err_str, char *details);
+int		id_warn(char *id, char *err_str, char *details);
 void	free_objects(t_rt *rt);
 
 int	get_rgb(int *rgb, char *triad);
@@ -592,9 +600,9 @@ void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
 t_rayfinder	init_rayfinder(t_master	*master);
 void	set_highlight_from_reference(t_master *master, t_rayfinder rf);
 void	ft_draw_string(t_master *master);
-void	set_checkerboard_pointer(t_rt *rt, char **split, t_checkerboard **ptr);
-void	set_texture_pointer(t_rt *rt, char **split, t_texture **ptr);
-void	set_vector_map_pointer(t_rt *rt, char **split, t_vector_map **ptr);
+int	set_checkerboard_pointer(char *obj, t_rt *rt, char **split, t_checkerboard **ptr);
+int	set_texture_pointer(char *obj, t_rt *rt, char **split, t_texture **ptr);
+int	set_vector_map_pointer(char *obj, t_rt *rt, char **split, t_vector_map **ptr);
 
 // Phong model
 void	phong_illumination(t_shader *shader, t_sphere *light);

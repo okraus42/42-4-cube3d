@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 11:01:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:39:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,13 @@ void	init_cones(t_rt *rt, int *ids)
 
 int	check_format_cone(char **split)
 {
-	if (!has_spec_count(split, 6))
+	int	spec_count_flag;
+
+	spec_count_flag = has_spec_count(split, 6);
+	if (!spec_count_flag)
 		return (id_err("co", E_SPEC, "5"));
+	else if (spec_count_flag < 0)
+		return (id_err("co", "Invalid specifier format", "unique texture identifiers after the 5th specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("co", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -89,9 +94,9 @@ int	fill_cone(t_rt *rt, char **split)
 	if (!get_rgb(rt->cones[i]->rgb, split[5]))
 		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
 	set_cone_vects(rt->cones[i]);
-	set_checkerboard_pointer(rt, split, &rt->cones[i]->checkerboard);
-	set_texture_pointer(rt, split, &rt->cones[i]->texture);
-	set_vector_map_pointer(rt, split, &rt->cones[i]->vector_map);
+	set_checkerboard_pointer("co", rt, split, &rt->cones[i]->checkerboard);
+	set_texture_pointer("co", rt, split, &rt->cones[i]->texture);
+	set_vector_map_pointer("co", rt, split, &rt->cones[i]->vector_map);
 	get_cone_discs(rt->cones[i]);
 	rt->n_cones++;
 	return (0);
