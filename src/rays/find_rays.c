@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 14:42:09 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 16:30:10 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,59 +21,6 @@ int	update_object_ref(t_rayfinder *rf, void *object, t_object flag)
 		rf->object_ptr = object;
 	}
 	return (1);
-}
-
-int	find_intersections_t(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type)
-{
-	int	i;
-	int	flag;
-
-	i = 0;
-	flag = 0;
-	while (i < master->rt->n_spheres)
-	{
-		//if (object != master->rt->spheres[i] && intersect_sphere(ray, master->rt->spheres[i], &rf->t))
-		if (intersect_sphere(ray, master->rt->spheres[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->spheres[i], SPHERE);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_planes)
-	{
-		if (intersect_plane(ray, master->rt->planes[i], &rf->t, PLANE))
-			flag = update_object_ref(rf, master->rt->planes[i], PLANE);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cylinders)
-	{
-		if (intersect_cylinder(ray, master->rt->cylinders[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
-		if (intersect_disc(ray, master->rt->cylinders[i]->topcap, &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i]->topcap, DISC);
-		if (intersect_disc(ray, master->rt->cylinders[i]->botcap, &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cones)
-	{
-		if (intersect_cone(ray, master->rt->cones[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i], CONE);
-		/* if (intersect_disc(ray, master->rt->cones[i]->pinnacle, &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i]->pinnacle, DISC); */
-		if (intersect_disc(ray, master->rt->cones[i]->base, &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_lights)
-	{
-		if (type != SHADOW && intersect_sphere(ray, master->rt->light_spheres[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->light_spheres[i], LIGHT);
-		i++;
-	}
-	return (flag);
 }
 
 int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type)
@@ -217,6 +164,7 @@ void	find_rays(t_master *master)
 	rf = init_rayfinder(master);
 	x = 0;
 	y = 0;
+	detect_camera_inside_objects(master->rt);
 	while (x < WIDTH)
 	{
 		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));

@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/22 11:29:14 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/22 16:27:34 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,8 @@ SRC_O		=	fill_object_getters.c \
 				choose_object.c \
 				set_texture_data_pointers.c \
 				o_texture.c \
-				o_vector_map.c
+				o_vector_map.c \
+				camera_in_objects.c
 				
 SRC_R		=	find_rays.c \
 				intersections.c

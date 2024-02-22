@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/22 15:10:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 16:23:50 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ typedef struct s_sphere
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
 	double	glossiness;
+	int		camera_inside; // 1 = inside of the object, 0 = outside
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -219,6 +220,7 @@ typedef struct s_plane
 	double		*nvect; // 3d normalized vector; [-1;1],[-1;1],[-1;1]
 	int			*rgb;
 	double	glossiness;
+	int		camera_inside;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -236,6 +238,7 @@ typedef	struct s_disc
 	double		radius;
 	int			*rgb;
 	double	glossiness;
+	int		camera_inside;
 	t_vect3f	*normal;
 	t_vect3f	*right;
 	t_vect3f	*up;
@@ -256,6 +259,7 @@ typedef struct s_cylinder
 	double		height;
 	int			*rgb;
 	double	glossiness;
+	int		camera_inside;
 	t_disc		*botcap;
 	t_disc		*topcap;
 	t_vect3f	*normal;
@@ -276,6 +280,7 @@ typedef struct s_cone
 	double		height;
 	int			*rgb;
 	double	glossiness;
+	int		camera_inside;
 	t_disc		*base;
 	t_disc		*pinnacle;
 	t_vect3f	*normal;
@@ -618,5 +623,6 @@ int	find_intersections_t(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype
 void	diff_and_spec_ratios_t(t_shader *shader, t_options options); */
 int	point_lies_in_cylinder(t_vect3f point, t_vect3f bot_point, t_vect3f top_point, double radius);
 int	point_lies_in_cone(t_vect3f point, t_cone cone, double radius, double height);
+void	detect_camera_inside_objects(t_rt *rt);
 
 #endif
