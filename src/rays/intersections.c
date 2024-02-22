@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/24 11:36:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/21 15:59:07 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
 }
 
 /*
-https://stackoverflow.com/questions/73866852/ray-cylinder-intersection-formula
+https://stackoverflow.com/questions/73866852/ray-cylinder-intersection-formula - wrong!!
 D - ray direction
 V - axis (normalized)
 X - ray.origin - cylinder.center

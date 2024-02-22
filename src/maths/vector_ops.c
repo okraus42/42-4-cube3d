@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:04:07 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/09 11:05:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 13:06:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,12 @@ t_vect3f	invert_vect3f(t_vect3f vect)
 	inv.y = vect.y * -1;
 	inv.z = vect.z * -1;
 	return (inv);
+}
+
+double	get_vector_length(t_vect3f vector)
+{
+	double	l;
+	
+ 	l = sqrt(pow(vector.x, 2) + pow(vector.y, 2) + pow(vector.z, 2));
+	return (l);
 }

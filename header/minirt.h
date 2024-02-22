@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/21 11:21:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:10:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # define R 0
 # define G 1
 # define B 2
+# define PRECISION 0.000001
 # define E_FILE "Invalid file"
 # define E_FILE_EXT "Invalid file extension"
 # define E_SPEC "Invalid number of specifiers"
@@ -479,6 +480,7 @@ t_vect3f	scale_vect3f(double scale, t_vect3f vect);
 t_vect3f	invert_vect3f(t_vect3f vect);
 double		dot_product(t_vect3f vect1, t_vect3f vect2);
 t_vect3f	cross_product(t_vect3f vect1, t_vect3f vect2);
+double	get_vector_length(t_vect3f vector);
 
 // Cylinder caps functions
 int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);
@@ -609,5 +611,12 @@ void	phong_illumination(t_shader *shader, t_sphere *light);
 void	get_reflection_vector(t_shader *shader);
 void	diff_and_spec_ratios(t_shader *shader, t_options options);
 void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_shader *shader, double *light_pos);
+
+// Testing functions
+/* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_shader *shader, double *light_pos);
+int	find_intersections_t(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type);
+void	diff_and_spec_ratios_t(t_shader *shader, t_options options); */
+int	point_lies_in_cylinder(t_vect3f point, t_vect3f bot_point, t_vect3f top_point, double radius);
+int	point_lies_in_cone(t_vect3f point, t_cone cone, double radius, double height);
 
 #endif

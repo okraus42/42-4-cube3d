@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 17:25:46 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:08:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	t_sphere	*sphere;
 	t_shader	shader;
 	int			i;
+	double		cam_dist;
 
 	sphere = (t_sphere *)object_ptr;
 	shader.obj_glossiness = sphere->glossiness;
@@ -29,6 +30,9 @@ void	sphere_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_m
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
+	cam_dist = point_distance(array_to_vect(sphere->coords), array_to_vect(master->rt->camera->coords)); //testing
+	if (cam_dist < sphere->diameter / 2. && absf(cam_dist - sphere->diameter / 2) > PRECISION)
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
 	while (i < master->rt->n_lights)
 	{
 		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
@@ -49,6 +53,8 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	t_plane		*plane;
 	t_shader	shader;
 	int			i;
+	double		dist;
+	double		subspace;
 	
 	plane = (t_plane *)object_ptr;
 	shader.obj_glossiness = plane->glossiness;
@@ -61,6 +67,13 @@ void	plane_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_ma
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
+	dist = (-1 * plane->normal->x * plane->coords[X]) \
+			- (plane->normal->y * plane->coords[Y]) \
+			- (plane->normal->z * plane->coords[Z]);
+	subspace = (plane->normal->x * master->rt->camera->coords[X]) + (plane->normal->y * master->rt->camera->coords[Y]) \
+			+ (plane->normal->z * master->rt->camera->coords[Z]) + dist;
+	if (subspace < -PRECISION)
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
 	while (i < master->rt->n_lights)
 	{
 		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
@@ -93,6 +106,8 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
+	if (point_lies_in_cylinder(array_to_vect(master->rt->camera->coords), array_to_vect(cylinder->botcap->coords), array_to_vect(cylinder->topcap->coords), cylinder->diameter / 2))
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
 	while (i < master->rt->n_lights)
 	{
 		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
@@ -113,6 +128,8 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	t_disc		*disc;
 	t_shader	shader;
 	int			i;
+	double		dist;
+	double		subspace;
 	
 	disc = (t_disc *)object_ptr;
 	shader.obj_glossiness = disc->glossiness;
@@ -125,6 +142,13 @@ void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
+	dist = (-1 * disc->normal->x * disc->coords[X]) \
+			- (disc->normal->y * disc->coords[Y]) \
+			- (disc->normal->z * disc->coords[Z]);
+	subspace = (disc->normal->x * master->rt->camera->coords[X]) + (disc->normal->y * master->rt->camera->coords[Y]) \
+			+ (disc->normal->z * master->rt->camera->coords[Z]) + dist;
+	if (subspace < -PRECISION)
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
 	while (i < master->rt->n_lights)
 	{
 		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
@@ -157,6 +181,8 @@ void	cone_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_mas
 	shader.view_dir = subtract_vect3f(array_to_vect(master->rt->camera->coords), intersection);
 	normalize(&shader.view_dir);
 	normalize(&shader.hit_normal);
+	if (point_lies_in_cone(array_to_vect(master->rt->camera->coords), *cone, cone->diameter / 2, cone->height))
+		shader.hit_normal = invert_vect3f(shader.hit_normal);
 	while (i < master->rt->n_lights)
 	{
 		shader.light_dir = subtract_vect3f(array_to_vect(master->rt->light_spheres[i]->coords), intersection);
