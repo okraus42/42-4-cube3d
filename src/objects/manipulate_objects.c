@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:52:49 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 18:24:17 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ void	set_cylinder_vects(t_cylinder *cylinder)
 		normalize(up);
 	}
 	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	cylinder->topcap->is_inversed = NORMALDISC;
+	cylinder->botcap->is_inversed = INVERSEDISC;
 	cylinder->topcap->q = cylinder->q;
 	cylinder->botcap->q = cylinder->q;
 }
@@ -165,9 +167,142 @@ void	set_cone_vects(t_cone *cone)
 		*up = cross_product(*forward, *right);
 		normalize(up);
 	}
+	// cylinder->pinn->type = NORMALDISC;
+	// cylinder->botcap->type = INVERSEDISC;
+	
 	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
 	cone->base->q = cone->q;
 	cone->pinnacle->q = cone->q;
+}
+
+
+//quaternion 
+void	qtilt(t_quat *q, double angle)
+{
+t_quat	rot;
+	t_quat	inv;
+	t_quat	res1;
+	t_quat	res2;
+
+	if (q->q0 > 0.9999 || q->q0 < -0.9999)
+	{
+		q->q0 = 0.9999;
+		q->q1 = 0.01;
+		q->q2 = 0;
+		q->q3 = 0;
+	}
+	normalize_quat(q);
+	rot.q0 = cos(rad(angle) / 2);
+	rot.q1 = 1 * sin(rad(angle) / 2);
+	rot.q2 = 0;
+	rot.q3 = 0;
+	normalize_quat(&rot);
+	inv = get_inverse_quat(rot);
+	res1 = mult_quat(rot, *q);
+	res2 = mult_quat(*q, inv);
+	q->q0 = res2.q0;
+	q->q1 = res2.q1;
+	q->q2 = res2.q2;
+	q->q3 = res2.q3;
+	if (q->q0 < 0.001 && q->q0 > 0.001)
+	{
+		q->q0 = 0;
+		q->q1 = 1;
+		q->q2 = 0;
+		q->q3 = 0;
+	}
+}
+
+// rotation along up/y-axis
+void	qpan(t_quat *q, double angle)
+{	
+	t_quat	rot;
+	t_quat	inv;
+	t_quat	res1;
+	t_quat	res2;
+
+	if (q->q0 > 0.9999 || q->q0 < -0.9999)
+	{
+		q->q0 = 0.9999;
+		q->q1 = 0;
+		q->q2 = 0.01;
+		q->q3 = 0;
+	}
+	normalize_quat(q);
+	rot.q0 = cos(rad(angle) / 2);
+	rot.q1 = 0;
+	rot.q2 = 1 * sin(rad(angle) / 2);
+	rot.q3 = 0;
+	normalize_quat(&rot);
+	inv = get_inverse_quat(rot);
+	res1 = mult_quat(rot, *q);
+	res2 = mult_quat(*q, inv);
+	q->q0 = res2.q0;
+	q->q1 = res2.q1;
+	q->q2 = res2.q2;
+	q->q3 = res2.q3;
+	if (q->q0 < 0.001 && q->q0 > 0.001)
+	{
+		q->q0 = 0;
+		q->q1 = 0;
+		q->q2 = 1;
+		q->q3 = 0;
+	}
+}
+
+// rotation along forward/z-axis
+void	qcant(t_quat *q, double angle)
+{
+	t_quat	rot;
+	t_quat	inv;
+	t_quat	res1;
+	t_quat	res2;
+
+	if (q->q0 > 0.9999 || q->q0 < -0.9999)
+	{
+		q->q0 = 0.9999;
+		q->q1 = 0;
+		q->q2 = 0;
+		q->q3 = 0.01;
+	}
+	normalize_quat(q);
+	rot.q0 = cos(rad(angle) / 2);
+	rot.q1 = 0;
+	rot.q2 = 0;
+	rot.q3 = 1 * sin(rad(angle) / 2);
+	normalize_quat(&rot);
+	inv = get_inverse_quat(rot);
+	res1 = mult_quat(rot, *q);
+	res2 = mult_quat(*q, inv);
+	q->q0 = res2.q0;
+	q->q1 = res2.q1;
+	q->q2 = res2.q2;
+	q->q3 = res2.q3;
+	if (q->q0 < 0.001 && q->q0 > 0.001)
+	{
+		q->q0 = 0;
+		q->q1 = 0;
+		q->q2 = 0;
+		q->q3 = 1;
+	}
+}
+
+void	qrotate_o(keys_t key, t_quat *q, t_camera *camera)
+{
+	(void)camera->coords;
+	if (key == MLX_KEY_A)
+		qpan(q, 5);
+	else if (key == MLX_KEY_D)
+		qpan(q, -5);
+	else if (key == MLX_KEY_W)
+		qtilt(q, 5);
+	else if (key == MLX_KEY_S)
+		qtilt(q, -5);
+	else if (key == MLX_KEY_Q)
+		qcant(q, 5);
+	else if (key == MLX_KEY_E)
+		qcant(q, -5);
+	normalize_quat(q);
 }
 
 void	rotate_o(keys_t key, t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera)
@@ -220,6 +355,7 @@ void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 	change_glossiness(&sphere->glossiness, keydata.key);
 	move(keydata.key, rt->camera, sphere->coords);
 	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
+	qrotate_o(keydata.key, &(sphere->q), rt->camera);
 	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
 }
 
@@ -228,7 +364,8 @@ void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 	change_glossiness(&plane->glossiness, keydata.key);
 	move(keydata.key, rt->camera, plane->coords);
 	rotate_o(keydata.key, plane->normal, plane->right, plane->up, rt->camera);
-	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
+	qrotate_o(keydata.key, &(plane->q), rt->camera);
+	//plane->q = get_obj_quat(*(plane->normal), *(plane->up));
 }
 
 void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
@@ -236,8 +373,11 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 	change_glossiness(&cylinder->glossiness, keydata.key);
 	move(keydata.key, rt->camera, cylinder->coords);
 	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
+	qrotate_o(keydata.key, &(cylinder->q), rt->camera);
 	get_discs(cylinder);
-	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	printf("texture %p, normal %p\n", cylinder->texture, cylinder->vector_map);
+	//cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	
 	cylinder->topcap->q = cylinder->q;
 	cylinder->botcap->q = cylinder->q;
 }
@@ -247,8 +387,9 @@ void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 	change_glossiness(&cone->glossiness, keydata.key);
 	move(keydata.key, rt->camera, cone->coords);
 	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
+	qrotate_o(keydata.key, &(cone->q), rt->camera);
 	get_cone_discs(cone);
-	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
+	//cone->q = get_obj_quat(*(cone->normal), *(cone->up));
 	cone->base->q = cone->q;
 	cone->pinnacle->q = cone->q;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 10:48:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/22 19:35:43 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,14 @@ void	get_plane_uv(t_vect3f p, long long *u, long long *v, int scale[2])
 	uu = p.x / 16;	//to make bigger checkerboard
 	vv = p.y / 16;
 	// rewrite to get values 0 - (scale[0] - 1)
+	if (uu < 0)
+		uu = 0;
+	if (uu > 0.9999)
+		uu = 0.9999;
+	if (vv < 0)
+		vv = 0;
+	if (vv > 0.9999)
+		vv = 0.9999;
 	*u = ((long long)(uu * scale[0] + 2147483648LL) % scale[0]); //offset to not get weird stuff around 0
 	*v = (scale[0] - 1) - ((long long)(vv * scale[1] + 2147483648LL) % scale[1]);
 	// to work well on negative coordinates
@@ -215,6 +223,14 @@ void	get_sphere_uv(t_vect3f p, int *u, int *v, int scale[2])
 	normalize(&p);
 	uu = 1 - (0.5 + (atan2(p.z, p.x) / (6.28318530718)));	
 	vv = 1 - (0.5 + (asin(p.y) / 3.14159265358979));
+	if (uu < 0)
+		uu = 0;
+	if (uu > 0.9999)
+		uu = 0.9999;
+	if (vv < 0)
+		vv = 0;
+	if (vv > 0.9999)
+		vv = 0.9999;
 	*u = (int)(uu * scale[0]);
 	*v = (int)(vv * scale[1]);
 }
@@ -323,6 +339,14 @@ void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
 	//printf ("%f %f %f\n", p.z, vv, scale[2]);
 	normalize(&p);
 	uu = 0.5 + (atan2(p.y, p.x) / (6.28318530718));	
+	if (uu < 0)
+		uu = 0;
+	if (uu > 0.9999)
+		uu = 0.9999;
+	if (vv < 0)
+		vv = 0;
+	if (vv > 0.9999)
+		vv = 0.9999;
 	*u = (int)(uu * scale[0]);
 	*v = (int)(vv * scale[1]);
 }
@@ -435,6 +459,14 @@ void	get_disc_uv(t_vect3f p, long long *u, long long *v, double scale[3])
 
 	uu = (p.x + scale[2]) / (2 * scale[2]);	//to make bigger checkerboard
 	vv = (p.y + scale[2]) / (2 * scale[2]);
+	if (uu < 0)
+		uu = 0;
+	if (uu > 0.9999)
+		uu = 0.9999;
+	if (vv < 0)
+		vv = 0;
+	if (vv > 0.9999)
+		vv = 0.9999;
 	*u = (long long)(uu * scale[0]); //offset to not get weird stuff around 0
 	*v = scale[1] - (long long)(vv * scale[1]);
 	// to work well on negative coordinates
@@ -447,7 +479,12 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 	int			w;
 	double		s[3];
 	t_vect3f	p;
+	t_quat		inv;
 
+	inv.q0 = 0;
+	inv.q1 = 0;
+	inv.q2 = 1;
+	inv.q3 = 0;
 	if (disc->texture)
 	{
 		//printf("disc has texture\n");
@@ -460,6 +497,8 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 			p.y = intersection.y - disc->coords[Y];
 			p.z = intersection.z - disc->coords[Z];
 			rotate_vect(&p, disc->q);
+			if (disc->is_inversed)
+				rotate_vect(&p, inv);
 			s[0] = disc->tx_disc->width;
 			s[1] = disc->tx_disc->height;
 			s[2] = 1 * disc->radius;
@@ -479,6 +518,8 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 		s[1] = (int)disc->checkerboard->magnitude;
 		s[2] = 1 * disc->radius;
 		rotate_vect(&p, disc->q);
+		if (disc->is_inversed)
+				rotate_vect(&p, inv);		
 		get_disc_uv(p, &u, &v, s);
 		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
 		{
@@ -508,7 +549,15 @@ void	get_cylinder_uv(t_vect3f p, int *u, int *v, double scale[2])
 
 	vv = 1 - ((p.z + scale[2] / 2) / scale[2]);
 	normalize(&p);
-	uu = (0.5 + (atan2(p.y, p.x) / (6.28318530718)));	
+	uu = (0.5 + (atan2(p.y, p.x) / (6.28318530718)));
+	if (uu < 0)
+		uu = 0;
+	if (uu > 0.9999)
+		uu = 0.9999;
+	if (vv < 0)
+		vv = 0;
+	if (vv > 0.9999)
+		vv = 0.9999;
 	*u = (int)(uu * scale[0]);
 	*v = (int)(vv * scale[1]);
 }
@@ -682,6 +731,9 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 	t_vect3f	p;
 	t_vect3f	newnormal;
 	t_vect3f	fictnormal;
+	t_quat		tanq;
+	t_quat		invt;
+	t_quat		invc;
 	t_quat		rot;
 
 	if (cylinder->vector_map)
@@ -692,7 +744,18 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			p.x = intersection.x - cylinder->coords[X];
 			p.y = intersection.y - cylinder->coords[Y];
 			p.z = intersection.z - cylinder->coords[Z];
+			invc = get_inverse_quat(cylinder->q);
 			rotate_vect(&p, cylinder->q);
+			printf("normal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			rotate_vect(&(shader->hit_normal), cylinder->q);
+			printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			tanq = get_tan_quat(shader->hit_normal);
+			fictnormal.x = 0;
+			fictnormal.y = 0;
+			fictnormal.z = -1;
+			rot = get_rotvect_quat(fictnormal, shader->hit_normal);
+			rotate_vect(&(shader->hit_normal), tanq);
+			printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			s[0] = cylinder->vector_map->vm_main->width;
 			s[1] = cylinder->vector_map->vm_main->height;
 			s[2] = cylinder->height;
@@ -701,11 +764,19 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			newnormal = get_new_normal(cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = 1;
-			rot = get_rotvect_quat(fictnormal, newnormal);
-			rotate_vect(&(shader->hit_normal), rot);
+			printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			invt = get_inverse_quat(tanq);
+			rotate_vect(&newnormal, invt);
+
+			printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			rotate_vect(&newnormal, invc);
+			printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			shader->hit_normal.x = newnormal.x;
+			shader->hit_normal.y = newnormal.y;
+			shader->hit_normal.z = newnormal.z;
+			// shader->hit_normal.x = 0.945;
+			// shader->hit_normal.y = 0.312;
+			// shader->hit_normal.z = -0.07;
 		}
 	}
 }
@@ -718,8 +789,8 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 	double		s[3];
 	t_vect3f	p;
 	t_vect3f	newnormal;
-	t_vect3f	fictnormal;
-	t_quat		rot;
+	t_quat		tanq;
+	t_quat		inv;
 
 	if (cone->vector_map)
 	{
@@ -730,6 +801,8 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 			p.y = intersection.y - cone->coords[Y];
 			p.z = intersection.z - cone->coords[Z];
 			rotate_vect(&p, cone->q);
+			rotate_vect(&(shader->hit_normal), cone->q);
+			tanq = get_tan_quat(shader->hit_normal);
 			s[0] = cone->vector_map->vm_main->width;
 			s[1] = cone->vector_map->vm_main->height;
 			s[2] = cone->height;
@@ -738,11 +811,13 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 			newnormal = get_new_normal(cone->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = 1;
-			rot = get_rotvect_quat(fictnormal, newnormal);
-			rotate_vect(&(shader->hit_normal), rot);
+			inv = get_inverse_quat(tanq);
+			rotate_vect(&newnormal, inv);
+			inv = get_inverse_quat(cone->q);
+			rotate_vect(&newnormal, inv);
+			shader->hit_normal.x = newnormal.x;
+			shader->hit_normal.y = newnormal.y;
+			shader->hit_normal.z = newnormal.z;
 		}
 	}
 }
@@ -791,9 +866,15 @@ void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 	double		s[3];
 	t_vect3f	p;
 	t_vect3f	newnormal;
-	t_vect3f	fictnormal;
-	t_quat		rot;
+	//t_vect3f	fictnormal;
+	//t_quat		rot;
+	t_quat		inv;
 
+
+	inv.q0 = 0;
+	inv.q1 = 0;
+	inv.q2 = 1;
+	inv.q3 = 0;
 	if (disc->vector_map)
 	{
 		if (disc->vector_map->vm_main)
@@ -802,6 +883,8 @@ void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 			p.y = intersection.y - disc->coords[Y];
 			p.z = intersection.z - disc->coords[Z];
 			rotate_vect(&p, disc->q);
+			if (disc->is_inversed)
+				rotate_vect(&p, inv);
 			s[0] = disc->vector_map->vm_main->width;
 			s[1] = disc->vector_map->vm_main->height;
 			s[2] = 1 * disc->radius;
@@ -810,12 +893,19 @@ void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 			newnormal = get_new_normal(disc->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				disc->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				disc->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = 1;
-			rot = get_rotvect_quat(fictnormal, newnormal);
+			if (disc->is_inversed)
+				rotate_vect(&newnormal, inv);
+			inv = get_inverse_quat(disc->q);
+			rotate_vect(&newnormal, inv);
+			// fictnormal.x = 0;
+			// fictnormal.y = 0;
+			// fictnormal.z = 1;
+			// rot = get_rotvect_quat(fictnormal, newnormal);
 			//printf("%f %f %f %f\n", rot.q0, rot.q1, rot.q2, rot.q3);
-			rotate_vect(&(shader->hit_normal), rot);
+			//rotate_vect(&(shader->hit_normal), rot);
+			shader->hit_normal.x = newnormal.x;
+			shader->hit_normal.y = newnormal.y;
+			shader->hit_normal.z = newnormal.z;
 		}
 	}
 }
