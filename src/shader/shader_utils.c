@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:04:15 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/23 16:17:50 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -756,6 +756,8 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			//rot = get_rotvect_quat(fictnormal, shader->hit_normal);
 			rotate_vect(&(shader->hit_normal), tanq);
 			//printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			if (shader->hit_normal.z < 0.999)
+				printf("LOOKHERE!!!\n");
 			s[0] = cylinder->vector_map->vm_main->width;
 			s[1] = cylinder->vector_map->vm_main->height;
 			s[2] = cylinder->height;

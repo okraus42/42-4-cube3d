@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:05:22 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/23 16:17:36 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,17 @@ t_quat	get_rotvect_quat(t_vect3f v1, t_vect3f v2)
 	q.q2 = v.y;
 	q.q3 = v.z;
 	q.q0 = 1 + dot;
-	if (q.q0 < 0.00001 && q.q0 > -0.00001)
+	normalize_quat(&q);
+	if (q.q0 < 0.001 && q.q0 > -0.001)
 	{
-		q.q1 +=0.01;
-		q.q2 +=0.01;
-		q.q3 +=0.01;
+		//printf("WOWWOWWOW\n");
+		q.q0 = 0;
+		q.q1 = 0;
+		q.q2 = 0;
+		q.q3 = 1;
 	}
 	normalize_quat(&q);
-	// printf("nq %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
+	//printf("nq %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
 	return (q);
 }
 
@@ -244,6 +247,7 @@ t_quat	get_tan_quat(t_vect3f norm)
 	rotate_vect(&norm, second);
 	//printf("qnorm2 %f %f %f\n", norm.x, norm.y, norm.z);
 	q = mult_quat(first, second);
+	//printf("qq %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
 	normalize_quat(&q);
 	return (q);
 }

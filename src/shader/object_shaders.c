@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_shaders.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:40:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 16:37:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/23 16:18:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ void	cylinder_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t
 	shader.pix_color[G] = 255 * shader.illumination[G];
 	shader.pix_color[B] = 255 * shader.illumination[B];
 	rf->clr = get_clr_int(shader.pix_color);
+	//printf("%x\n\n", rf->clr);
 }
 
 void	disc_shader(t_rayfinder *rf, t_vect3f intersection, void *object_ptr, t_master *master)
