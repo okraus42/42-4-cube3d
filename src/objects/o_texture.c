@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_texture.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 16:09:05 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:11:08 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,12 +162,12 @@ int	fill_texture(t_rt *rt, char **split)
 	}	
 	if (!set_texture_id(rt->textures[i], split[0]))
 		return (id_err(".tx", "Invalid .tx specification", NULL));
-	ft_putstr_fd(rt->textures[i]->tx_path, 1);
-	write(1, "\n", 1);
-	ft_putstr_fd(rt->textures[i]->botcap_tx_path, 1);
-	write(1, "\n", 1);
-	ft_putstr_fd(rt->textures[i]->topcap_tx_path, 1);
-	write(1, "\n", 1);
+	// ft_putstr_fd(rt->textures[i]->tx_path, 1);
+	// write(1, "\n", 1);
+	// ft_putstr_fd(rt->textures[i]->botcap_tx_path, 1);
+	// write(1, "\n", 1);
+	// ft_putstr_fd(rt->textures[i]->topcap_tx_path, 1);
+	// write(1, "\n", 1);
 	ft_load_texture(rt->textures[i]);
 	rt->n_textures++;
 	return (0);

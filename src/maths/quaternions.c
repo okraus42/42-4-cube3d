@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 19:48:40 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:05:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ t_quat	get_tan_quat(t_vect3f norm)
 	z.x = 0.;
 	z.y = 0.;
 	z.z = 1.;
-	printf("qnorm0 %f %f %f\n", norm.x, norm.y, norm.z);
+	//printf("qnorm0 %f %f %f\n", norm.x, norm.y, norm.z);
 	first = get_rotvect_quat(norm, z);
 	// rotate up to y 0,1,0
 	y.x = 0.;
@@ -231,18 +231,18 @@ t_quat	get_tan_quat(t_vect3f norm)
 	// newup.y = up.y;
 	// newup.z = up.z;
 	rotate_vect(&norm, first);
-	printf("qnorm1 %f %f %f\n", norm.x, norm.y, norm.z);
+	//printf("qnorm1 %f %f %f\n", norm.x, norm.y, norm.z);
 	rotate_vect(&up, first);
 	normalize(&up);
-	printf("qup %f %f %f\n", up.x, up.y, up.z);
+	//printf("qup %f %f %f\n", up.x, up.y, up.z);
 	newup.x = up.x;
 	newup.y = up.y;
 	newup.z = up.z;
 	second = get_rotvect_quat(newup, y);
 	rotate_vect(&newup, second);
-	printf("qnewup %f %f %f\n", newup.x, newup.y, newup.z);
+	//printf("qnewup %f %f %f\n", newup.x, newup.y, newup.z);
 	rotate_vect(&norm, second);
-	printf("qnorm2 %f %f %f\n", norm.x, norm.y, norm.z);
+	//printf("qnorm2 %f %f %f\n", norm.x, norm.y, norm.z);
 	q = mult_quat(first, second);
 	normalize_quat(&q);
 	return (q);

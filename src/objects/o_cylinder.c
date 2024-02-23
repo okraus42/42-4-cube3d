@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:39:32 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:13:45 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 	set_checkerboard_pointer("cy", rt, split, &rt->cylinders[i]->checkerboard);
 	set_texture_pointer("cy", rt, split, &rt->cylinders[i]->texture);
 	set_vector_map_pointer("cy", rt, split, &rt->cylinders[i]->vector_map);
+	printf("Checkerboard: %p\nTexture: %p\nVector map: %p\n", rt->cylinders[i]->checkerboard, rt->cylinders[i]->texture, rt->cylinders[i]->vector_map);
 	get_discs(rt->cylinders[i]);
 	rt->n_cylinders++;
 	return (0);

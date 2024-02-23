@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 19:35:43 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:04:15 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -734,7 +734,7 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 	t_quat		tanq;
 	t_quat		invt;
 	t_quat		invc;
-	t_quat		rot;
+//	t_quat		rot;
 
 	if (cylinder->vector_map)
 	{
@@ -746,16 +746,16 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			p.z = intersection.z - cylinder->coords[Z];
 			invc = get_inverse_quat(cylinder->q);
 			rotate_vect(&p, cylinder->q);
-			printf("normal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			//printf("normal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			rotate_vect(&(shader->hit_normal), cylinder->q);
-			printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			//printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			tanq = get_tan_quat(shader->hit_normal);
 			fictnormal.x = 0;
 			fictnormal.y = 0;
 			fictnormal.z = -1;
-			rot = get_rotvect_quat(fictnormal, shader->hit_normal);
+			//rot = get_rotvect_quat(fictnormal, shader->hit_normal);
 			rotate_vect(&(shader->hit_normal), tanq);
-			printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			//printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			s[0] = cylinder->vector_map->vm_main->width;
 			s[1] = cylinder->vector_map->vm_main->height;
 			s[2] = cylinder->height;
@@ -764,13 +764,13 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			newnormal = get_new_normal(cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				cylinder->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			//printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			invt = get_inverse_quat(tanq);
 			rotate_vect(&newnormal, invt);
 
-			printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			//printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			rotate_vect(&newnormal, invc);
-			printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			//printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			shader->hit_normal.x = newnormal.x;
 			shader->hit_normal.y = newnormal.y;
 			shader->hit_normal.z = newnormal.z;

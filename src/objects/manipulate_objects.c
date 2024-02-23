@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 18:24:17 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:04:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void	qtilt(t_quat *q, double angle)
 {
 t_quat	rot;
 	t_quat	inv;
-	t_quat	res1;
+	//t_quat	res1;
 	t_quat	res2;
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
@@ -198,7 +198,7 @@ t_quat	rot;
 	rot.q3 = 0;
 	normalize_quat(&rot);
 	inv = get_inverse_quat(rot);
-	res1 = mult_quat(rot, *q);
+	//res1 = mult_quat(rot, *q);
 	res2 = mult_quat(*q, inv);
 	q->q0 = res2.q0;
 	q->q1 = res2.q1;
@@ -218,7 +218,7 @@ void	qpan(t_quat *q, double angle)
 {	
 	t_quat	rot;
 	t_quat	inv;
-	t_quat	res1;
+	//t_quat	res1;
 	t_quat	res2;
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
@@ -235,7 +235,7 @@ void	qpan(t_quat *q, double angle)
 	rot.q3 = 0;
 	normalize_quat(&rot);
 	inv = get_inverse_quat(rot);
-	res1 = mult_quat(rot, *q);
+	//res1 = mult_quat(rot, *q);
 	res2 = mult_quat(*q, inv);
 	q->q0 = res2.q0;
 	q->q1 = res2.q1;
@@ -255,7 +255,7 @@ void	qcant(t_quat *q, double angle)
 {
 	t_quat	rot;
 	t_quat	inv;
-	t_quat	res1;
+	//t_quat	res1;
 	t_quat	res2;
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
@@ -272,7 +272,7 @@ void	qcant(t_quat *q, double angle)
 	rot.q3 = 1 * sin(rad(angle) / 2);
 	normalize_quat(&rot);
 	inv = get_inverse_quat(rot);
-	res1 = mult_quat(rot, *q);
+	//res1 = mult_quat(rot, *q);
 	res2 = mult_quat(*q, inv);
 	q->q0 = res2.q0;
 	q->q1 = res2.q1;
@@ -375,7 +375,7 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
 	qrotate_o(keydata.key, &(cylinder->q), rt->camera);
 	get_discs(cylinder);
-	printf("texture %p, normal %p\n", cylinder->texture, cylinder->vector_map);
+	//("texture %p, normal %p\n", cylinder->texture, cylinder->vector_map);
 	//cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
 	
 	cylinder->topcap->q = cylinder->q;

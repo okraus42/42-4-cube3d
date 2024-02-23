@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:30:20 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:42:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/23 10:35:43 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,23 @@ static int	find_checkerboard_id(char **split)
 	id = -1;
 	len = 0;
 	while (split[i])
-		i++;
-	if (!ft_strncmp(split[i-1], ".ch/", 4))
 	{
-		specifier = ft_split(split[i-1], '/');
-		while (specifier[1][len])
+		if (!ft_strncmp(split[i], ".ch/", 4))
 		{
-			if (len > 3 || !ft_isdigit(specifier[1][len]))
+			specifier = ft_split(split[i], '/');
+			while (specifier[1][len])
 			{
-				ft_free_split(&specifier);
-				return (-2);
+				if (len > 3 || !ft_isdigit(specifier[1][len]))
+				{
+					ft_free_split(&specifier);
+					return (-2);
+				}
+				len++;
 			}
-			len++;
+			id = ft_atoi(specifier[1]);
+			ft_free_split(&specifier);
 		}
-		id = ft_atoi(specifier[1]);
-		ft_free_split(&specifier);
+		i++;
 	}
 	return (id);
 }
@@ -76,21 +78,23 @@ static int	find_texture_id(char **split)
 	id = -1;
 	len = 0;
 	while (split[i])
-		i++;
-	if (!ft_strncmp(split[i-1], ".tx/", 4))
 	{
-		specifier = ft_split(split[i-1], '/');
-		while (specifier[1][len])
+		if (!ft_strncmp(split[i], ".tx/", 4))
 		{
-			if (len > 3 || !ft_isdigit(specifier[1][len]))
+			specifier = ft_split(split[i], '/');
+			while (specifier[1][len])
 			{
-				ft_free_split(&specifier);
-				return (-2);
+				if (len > 3 || !ft_isdigit(specifier[1][len]))
+				{
+					ft_free_split(&specifier);
+					return (-2);
+				}
+				len++;
 			}
-			len++;
+			id = ft_atoi(specifier[1]);
+			ft_free_split(&specifier);
 		}
-		id = ft_atoi(specifier[1]);
-		ft_free_split(&specifier);
+		i++;
 	}
 	return (id);
 }
@@ -129,21 +133,23 @@ static int	find_vector_map_id(char **split)
 	id = -1;
 	len = 0;
 	while (split[i])
-		i++;
-	if (!ft_strncmp(split[i-1], ".vm/", 4))
 	{
-		specifier = ft_split(split[i-1], '/');
-		while (specifier[1][len])
+		if (!ft_strncmp(split[i], ".vm/", 4))
 		{
-			if (len > 3 || !ft_isdigit(specifier[1][len]))
+			specifier = ft_split(split[i], '/');
+			while (specifier[1][len])
 			{
-				ft_free_split(&specifier);
-				return (-2);
+				if (len > 3 || !ft_isdigit(specifier[1][len]))
+				{
+					ft_free_split(&specifier);
+					return (-2);
+				}
+				len++;
 			}
-			len++;
+			id = ft_atoi(specifier[1]);
+			ft_free_split(&specifier);
 		}
-		id = ft_atoi(specifier[1]);
-		ft_free_split(&specifier);
+		i++;
 	}
 	return (id);
 }
