@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:04:56 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/24 16:13:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,9 @@ void	set_cone_vects(t_cone *cone)
 	// cylinder->botcap->type = INVERSEDISC;
 	
 	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
+	printf("%f\n", cone->q.q2);
+	cone->pinnacle->is_inversed = NORMALDISC;
+	cone->base->is_inversed = INVERSEDISC;
 	cone->base->q = cone->q;
 	cone->pinnacle->q = cone->q;
 }
@@ -356,7 +359,8 @@ void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 	move(keydata.key, rt->camera, sphere->coords);
 	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
 	qrotate_o(keydata.key, &(sphere->q), rt->camera);
-	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
+	//sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
+	
 }
 
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)

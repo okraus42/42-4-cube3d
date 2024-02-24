@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   phong_illumination.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:37:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 15:08:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/24 14:31:57 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	trace_shadow(t_master *master, t_rayfinder *rf, t_vect3f intersection, t_sh
 void	diff_and_spec_ratios(t_shader *shader, t_options options)
 {
 	shader->diffuse_ratio = dot_product(shader->hit_normal, shader->light_dir);
-	if (!shader->diffuse_ratio)
+	// if (shader->diffuse_ratio < 0)
+	// 	printf("diffuse %f\n", shader->diffuse_ratio);
+	if (!shader->diffuse_ratio || shader->diffuse_ratio < 0)
 		shader->specular_ratio = 0;
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 16:17:50 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/24 18:14:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,16 +111,16 @@ void	get_plane_uv(t_vect3f p, long long *u, long long *v, int scale[2])
 	uu = p.x / 16;	//to make bigger checkerboard
 	vv = p.y / 16;
 	// rewrite to get values 0 - (scale[0] - 1)
-	if (uu < 0)
-		uu = 0;
-	if (uu > 0.9999)
-		uu = 0.9999;
-	if (vv < 0)
-		vv = 0;
-	if (vv > 0.9999)
-		vv = 0.9999;
+	// if (uu < 0)
+	// 	uu = 0;
+	// if (uu > 0.9999)
+	// 	uu = 0.9999;
+	// if (vv < 0)
+	// 	vv = 0;
+	// if (vv > 0.9999)
+	// 	vv = 0.9999;
 	*u = ((long long)(uu * scale[0] + 2147483648LL) % scale[0]); //offset to not get weird stuff around 0
-	*v = (scale[0] - 1) - ((long long)(vv * scale[1] + 2147483648LL) % scale[1]);
+	*v = (scale[1] - 1) - ((long long)(vv * scale[1] + 2147483648LL) % scale[1]);
 	// to work well on negative coordinates
 }
 
@@ -202,8 +202,8 @@ void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 		}
 		if (u == 2 && !v)
 		{
-			shader->rgb_object[R] = 0;
-			shader->rgb_object[G] = 0;
+			shader->rgb_object[R] = 255;
+			shader->rgb_object[G] = 255;
 			shader->rgb_object[B] = 0;
 		}
 	}
@@ -339,6 +339,7 @@ void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
 	//printf ("%f %f %f\n", p.z, vv, scale[2]);
 	normalize(&p);
 	uu = 0.5 + (atan2(p.y, p.x) / (6.28318530718));	
+	//printf ("%f %f\n", uu, vv);
 	if (uu < 0)
 		uu = 0;
 	if (uu > 0.9999)
@@ -390,6 +391,8 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		s[2] = cone->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cone->coords[Z]);
 		rotate_vect(&p, cone->q);
+		//printf("q0 %f q1 %f q2 %f q3 %f\n", cone->q.q0, cone->q.q1, cone->q.q2, cone->q.q3);
+		//printf("px %f py %f pz %f\n", p.x, p.y, p.z);
 		get_cone_uv(p, &u, &v, s);
 		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
 		{
@@ -676,8 +679,8 @@ t_vect3f	get_new_normal(int x, int y, int z)
 	x -= 128;
 	y -= 128;
 	z -= 128;
-	if (z < 0)
-		z = 0;
+	if (z < 1)
+		z = 1;
 	newnorm.x = x;
 	newnorm.y = y;
 	newnorm.z = z; //shou be from 0 to -1, but I think it can work if we assume normal nomal to go to 1 and not -1
@@ -694,8 +697,11 @@ void	set_sphere_normal(t_shader *shader, t_sphere *sphere, t_vect3f intersection
 	int			s[2];
 	t_vect3f	p;
 	t_vect3f	newnormal;
-	t_vect3f	fictnormal;
-	t_quat		rot;
+//	t_vect3f	fictnormal;
+//	t_quat		rot;
+	t_quat		tanq;
+	t_quat		invt;
+	t_quat		invq;
 
 	if (sphere->vector_map)
 	{
@@ -705,7 +711,14 @@ void	set_sphere_normal(t_shader *shader, t_sphere *sphere, t_vect3f intersection
 			p.x = intersection.x - sphere->coords[X];
 			p.y = intersection.y - sphere->coords[Y];
 			p.z = intersection.z - sphere->coords[Z];
+			invq = get_inverse_quat(sphere->q);
 			rotate_vect(&p, sphere->q);
+			//printf("\nnormal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			rotate_vect(&(shader->hit_normal), sphere->q);
+			//printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			tanq = get_sphere_tan_quat(shader->hit_normal);
+			rotate_vect(&(shader->hit_normal), tanq);
+			//printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			s[0] = sphere->vector_map->vm_main->width;
 			s[1] = sphere->vector_map->vm_main->height;
 			get_sphere_uv(p, &u, &v, s);
@@ -713,13 +726,40 @@ void	set_sphere_normal(t_shader *shader, t_sphere *sphere, t_vect3f intersection
 			newnormal = get_new_normal(sphere->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = 1;
-			rot = get_rotvect_quat(fictnormal, newnormal);
-			rotate_vect(&(shader->hit_normal), rot);
+			invt = get_inverse_quat(tanq);
+			//printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			rotate_vect(&newnormal, invt);
+			//printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			rotate_vect(&newnormal, invq);
+			//printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			shader->hit_normal.x = newnormal.x;
+			shader->hit_normal.y = newnormal.y;
+			shader->hit_normal.z = newnormal.z;
 		}
 	}
+	// if (sphere->vector_map)
+	// {
+
+	// 	if (sphere->vector_map->vm_main)
+	// 	{
+	// 		p.x = intersection.x - sphere->coords[X];
+	// 		p.y = intersection.y - sphere->coords[Y];
+	// 		p.z = intersection.z - sphere->coords[Z];
+	// 		rotate_vect(&p, sphere->q);
+	// 		s[0] = sphere->vector_map->vm_main->width;
+	// 		s[1] = sphere->vector_map->vm_main->height;
+	// 		get_sphere_uv(p, &u, &v, s);
+	// 		w = s[0] * 4;
+	// 		newnormal = get_new_normal(sphere->vector_map->vm_main->pixels[(v * w) + (u * 4)],
+	// 			sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
+	// 			sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
+	// 		fictnormal.x = 0;
+	// 		fictnormal.y = 0;
+	// 		fictnormal.z = 1;
+	// 		rot = get_rotvect_quat(fictnormal, newnormal);
+	// 		rotate_vect(&(shader->hit_normal), rot);
+	// 	}
+	// }
 }
 
 void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f intersection)
@@ -730,10 +770,10 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 	double		s[3];
 	t_vect3f	p;
 	t_vect3f	newnormal;
-	t_vect3f	fictnormal;
+//	t_vect3f	fictnormal;
 	t_quat		tanq;
 	t_quat		invt;
-	t_quat		invc;
+	t_quat		invq;
 //	t_quat		rot;
 
 	if (cylinder->vector_map)
@@ -744,15 +784,15 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			p.x = intersection.x - cylinder->coords[X];
 			p.y = intersection.y - cylinder->coords[Y];
 			p.z = intersection.z - cylinder->coords[Z];
-			invc = get_inverse_quat(cylinder->q);
+			invq = get_inverse_quat(cylinder->q);
 			rotate_vect(&p, cylinder->q);
 			//printf("normal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			rotate_vect(&(shader->hit_normal), cylinder->q);
 			//printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
-			tanq = get_tan_quat(shader->hit_normal);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = -1;
+			tanq = get_cylinder_tan_quat(shader->hit_normal);
+			// fictnormal.x = 0;
+			// fictnormal.y = 0;
+			// fictnormal.z = -1;
 			//rot = get_rotvect_quat(fictnormal, shader->hit_normal);
 			rotate_vect(&(shader->hit_normal), tanq);
 			//printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
@@ -769,9 +809,8 @@ void	set_cylinder_normal(t_shader *shader, t_cylinder *cylinder, t_vect3f inters
 			//printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			invt = get_inverse_quat(tanq);
 			rotate_vect(&newnormal, invt);
-
 			//printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
-			rotate_vect(&newnormal, invc);
+			rotate_vect(&newnormal, invq);
 			//printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			shader->hit_normal.x = newnormal.x;
 			shader->hit_normal.y = newnormal.y;
@@ -791,8 +830,11 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 	double		s[3];
 	t_vect3f	p;
 	t_vect3f	newnormal;
+//	t_vect3f	fictnormal;
 	t_quat		tanq;
-	t_quat		inv;
+	t_quat		invt;
+	t_quat		invq;
+//	t_quat		rot;
 
 	if (cone->vector_map)
 	{
@@ -802,9 +844,20 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 			p.x = intersection.x - cone->coords[X];
 			p.y = intersection.y - cone->coords[Y];
 			p.z = intersection.z - cone->coords[Z];
+			invq = get_inverse_quat(cone->q);
 			rotate_vect(&p, cone->q);
+			//printf("normal0 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			rotate_vect(&(shader->hit_normal), cone->q);
-			tanq = get_tan_quat(shader->hit_normal);
+			//printf("normal1 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			tanq = get_cone_tan_quat(shader->hit_normal, cone, intersection);
+			// fictnormal.x = 0;
+			// fictnormal.y = 0;
+			// fictnormal.z = -1;
+			//rot = get_rotvect_quat(fictnormal, shader->hit_normal);
+			rotate_vect(&(shader->hit_normal), tanq);
+			//printf("normal2 %f %f %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
+			// if (shader->hit_normal.z < 0.999)
+			// 	printf("LOOKHERE!!!\n");
 			s[0] = cone->vector_map->vm_main->width;
 			s[1] = cone->vector_map->vm_main->height;
 			s[2] = cone->height;
@@ -813,16 +866,62 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 			newnormal = get_new_normal(cone->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			inv = get_inverse_quat(tanq);
-			rotate_vect(&newnormal, inv);
-			inv = get_inverse_quat(cone->q);
-			rotate_vect(&newnormal, inv);
+			//printf("newnormal0 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			invt = get_inverse_quat(tanq);
+			rotate_vect(&newnormal, invt);
+			//printf("newnormal1 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
+			rotate_vect(&newnormal, invq);
+			//printf("newnormal2 %f %f %f\n", newnormal.x, newnormal.y, newnormal.z);
 			shader->hit_normal.x = newnormal.x;
 			shader->hit_normal.y = newnormal.y;
 			shader->hit_normal.z = newnormal.z;
+			// shader->hit_normal.x = 0.945;
+			// shader->hit_normal.y = 0.312;
+			// shader->hit_normal.z = -0.07;
 		}
 	}
 }
+
+// void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
+// {
+// 	int			u;
+// 	int			v;
+// 	int			w;
+// 	double		s[3];
+// 	t_vect3f	p;
+// 	t_vect3f	newnormal;
+// 	t_quat		tanq;
+// 	t_quat		inv;
+
+// 	if (cone->vector_map)
+// 	{
+
+// 		if (cone->vector_map->vm_main)
+// 		{
+// 			p.x = intersection.x - cone->coords[X];
+// 			p.y = intersection.y - cone->coords[Y];
+// 			p.z = intersection.z - cone->coords[Z];
+// 			rotate_vect(&p, cone->q);
+// 			rotate_vect(&(shader->hit_normal), cone->q);
+// 			tanq = get_cone_tan_quat(shader->hit_normal);
+// 			s[0] = cone->vector_map->vm_main->width;
+// 			s[1] = cone->vector_map->vm_main->height;
+// 			s[2] = cone->height;
+// 			get_cone_uv(p, &u, &v, s);
+// 			w = s[0] * 4;
+// 			newnormal = get_new_normal(cone->vector_map->vm_main->pixels[(v * w) + (u * 4)],
+// 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
+// 				cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
+// 			inv = get_inverse_quat(tanq);
+// 			rotate_vect(&newnormal, inv);
+// 			inv = get_inverse_quat(cone->q);
+// 			rotate_vect(&newnormal, inv);
+// 			shader->hit_normal.x = newnormal.x;
+// 			shader->hit_normal.y = newnormal.y;
+// 			shader->hit_normal.z = newnormal.z;
+// 		}
+// 	}
+// }
 
 void	set_plane_normal(t_shader *shader, t_plane *plane, t_vect3f intersection)
 {
@@ -832,8 +931,7 @@ void	set_plane_normal(t_shader *shader, t_plane *plane, t_vect3f intersection)
 	int			s[2];
 	t_vect3f	p;
 	t_vect3f	newnormal;
-	t_vect3f	fictnormal;
-	t_quat		rot;
+	t_quat		inv;
 
 	if (plane->vector_map)
 	{
@@ -851,11 +949,11 @@ void	set_plane_normal(t_shader *shader, t_plane *plane, t_vect3f intersection)
 			newnormal = get_new_normal(plane->vector_map->vm_main->pixels[(v * w) + (u * 4)],
 				plane->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
 				plane->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			fictnormal.x = 0;
-			fictnormal.y = 0;
-			fictnormal.z = 1;
-			rot = get_rotvect_quat(fictnormal, newnormal);
-			rotate_vect(&(shader->hit_normal), rot);
+			inv = get_inverse_quat(plane->q);
+			rotate_vect(&newnormal, inv);
+			shader->hit_normal.x = newnormal.x;
+			shader->hit_normal.y = newnormal.y;
+			shader->hit_normal.z = newnormal.z;
 		}
 	}
 }

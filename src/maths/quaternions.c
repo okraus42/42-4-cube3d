@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 16:17:36 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/24 17:22:58 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,15 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 	z.x = 0.;
 	z.y = 0.;
 	z.z = 1.;
+	//printf("%f %f %f\n", norm.x, norm.y, norm.z);
+	if (norm.z < -0.999)
+	{
+		q.q0 = 0;
+		q.q1 = 0;
+		q.q2 = 1;
+		q.q3 = 0;
+		return (q);
+	}
 	first = get_rotvect_quat(norm, z);
 	// rotate up to y 0,1,0
 	y.x = 0.;
@@ -208,7 +217,73 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 	return (q);
 }
 
-t_quat	get_tan_quat(t_vect3f norm)
+//sphere
+t_quat	get_sphere_tan_quat(t_vect3f norm)
+{
+	t_quat		q;
+	t_quat		first;
+	t_quat		second;
+	t_vect3f	z;
+	t_vect3f	y;
+	t_vect3f	up;
+	t_vect3f	newup;
+	t_vect3f	tmp;
+	t_vect3f	right;
+
+	tmp = (t_vect3f){0, 1, 0};
+	if (norm.x == 0. && norm.y == 1. && norm.z == 0.)
+	{
+		right = (t_vect3f){1, 0, 0};
+		up = (t_vect3f){0, 0, -1};
+	}
+	else if (norm.x == 0. && norm.y == -1 && norm.z == 0.)
+	{
+		right = (t_vect3f){1, 0, 0};
+		up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		right = cross_product(tmp, norm);
+		normalize(&right);
+		up = cross_product(norm, right);
+		normalize(&up);
+	}
+	
+	// rotate norm to z 0,0,1
+	z.x = 0.;
+	z.y = 0.;
+	z.z = 1.;
+	//printf("qnorm0 %f %f %f\n", norm.x, norm.y, norm.z);
+	first = get_rotvect_quat(norm, z);
+	// rotate up to y 0,1,0
+	y.x = 0.;
+	y.y = 1.;
+	y.z = 0.;
+	// newup.x = up.x;
+	// newup.y = up.y;
+	// newup.z = up.z;
+	rotate_vect(&norm, first);
+	//printf("qnorm1 %f %f %f\n", norm.x, norm.y, norm.z);
+	rotate_vect(&up, first);
+	normalize(&up);
+	//printf("qup %f %f %f\n", up.x, up.y, up.z);
+	newup.x = up.x;
+	newup.y = up.y;
+	newup.z = up.z;
+	second = get_rotvect_quat(newup, y);
+	rotate_vect(&newup, second);
+	//printf("qnewup %f %f %f\n", newup.x, newup.y, newup.z);
+	rotate_vect(&norm, second);
+	//printf("qnorm2 %f %f %f\n", norm.x, norm.y, norm.z);
+	q = mult_quat(first, second);
+	//printf("qq %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
+	normalize_quat(&q);
+	return (q);
+}
+
+
+//cylinder
+t_quat	get_cylinder_tan_quat(t_vect3f norm)
 {
 	t_quat		q;
 	t_quat		first;
@@ -236,6 +311,59 @@ t_quat	get_tan_quat(t_vect3f norm)
 	rotate_vect(&norm, first);
 	//printf("qnorm1 %f %f %f\n", norm.x, norm.y, norm.z);
 	rotate_vect(&up, first);
+	normalize(&up);
+	//printf("qup %f %f %f\n", up.x, up.y, up.z);
+	newup.x = up.x;
+	newup.y = up.y;
+	newup.z = up.z;
+	second = get_rotvect_quat(newup, y);
+	rotate_vect(&newup, second);
+	//printf("qnewup %f %f %f\n", newup.x, newup.y, newup.z);
+	rotate_vect(&norm, second);
+	//printf("qnorm2 %f %f %f\n", norm.x, norm.y, norm.z);
+	q = mult_quat(first, second);
+	//printf("qq %f %f %f %f\n", q.q0, q.q1, q.q2, q.q3);
+	normalize_quat(&q);
+	return (q);
+}
+
+//cone to be done
+
+t_quat	get_cone_tan_quat(t_vect3f norm, t_cone *cone, t_vect3f	i)
+{
+	t_quat		q;
+	t_quat		first;
+	t_quat		second;
+	t_vect3f	z;
+	t_vect3f	y;
+	t_vect3f	up;
+	t_vect3f	newup;
+
+	up.x = cone->pinnacle->coords[X] - i.x;
+	up.y = cone->pinnacle->coords[Y] - i.y;
+	up.z = cone->pinnacle->coords[Z] - i.z;
+	normalize(&up);
+	rotate_vect(&up, cone->q);
+	normalize(&up);
+	//printf("qoldup %f %f %f\n", up.x, up.y, up.z);
+	//printf("dot: %f\n", dot_product(up, norm));
+	// rotate norm to z 0,0,1
+	z.x = 0.;
+	z.y = 0.;
+	z.z = 1.;
+	//printf("qnorm0 %f %f %f\n", norm.x, norm.y, norm.z);
+	first = get_rotvect_quat(norm, z);
+	// rotate up to y 0,1,0
+	y.x = 0.;
+	y.y = 1.;
+	y.z = 0.;
+	// newup.x = up.x;
+	// newup.y = up.y;
+	// newup.z = up.z;
+	rotate_vect(&norm, first);
+	//printf("qnorm1 %f %f %f\n", norm.x, norm.y, norm.z);
+	rotate_vect(&up, first);
+	up.z = 0;
 	normalize(&up);
 	//printf("qup %f %f %f\n", up.x, up.y, up.z);
 	newup.x = up.x;

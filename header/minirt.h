@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/22 18:23:53 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/24 17:07:34 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -525,7 +525,9 @@ t_quat	mult_quat(t_quat i, t_quat j);
 void	rotate_vect(t_vect3f *vect, t_quat q);
 t_quat	get_rotvect_quat(t_vect3f v1, t_vect3f v2);
 t_quat	get_obj_quat(t_vect3f norm, t_vect3f up);
-t_quat	get_tan_quat(t_vect3f norm);
+t_quat	get_cylinder_tan_quat(t_vect3f norm);
+t_quat	get_cone_tan_quat(t_vect3f norm, t_cone *cone, t_vect3f	i);
+t_quat	get_sphere_tan_quat(t_vect3f norm);
 void	normalize_quat(t_quat *q);
 
 
