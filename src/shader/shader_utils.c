@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/24 18:14:23 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/25 14:44:34 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,7 +387,7 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		p.y = intersection.y - cone->coords[Y];
 		p.z = intersection.z - cone->coords[Z];
 		s[0] = (int)cone->checkerboard->magnitude;
-		s[1] = (int)cone->checkerboard->magnitude;
+		s[1] = (int)(0.5 + cone->checkerboard->magnitude * sqrt(cone->height * cone->height + cone->diameter * cone->diameter / 4) / (M_PI * cone->diameter));
 		s[2] = cone->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cone->coords[Z]);
 		rotate_vect(&p, cone->q);
@@ -435,8 +435,8 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		}
 		if (u == 2 && !v)
 		{
-			shader->rgb_object[R] = 0;
-			shader->rgb_object[G] = 0;
+			shader->rgb_object[R] = 255;
+			shader->rgb_object[G] = 255;
 			shader->rgb_object[B] = 0;
 		}
 		// if (intersection.z < 0)
@@ -600,7 +600,7 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 		p.y = intersection.y - cylinder->coords[Y];
 		p.z = intersection.z - cylinder->coords[Z];
 		s[0] = (int)cylinder->checkerboard->magnitude;
-		s[1] = (int)cylinder->checkerboard->magnitude;
+		s[1] = (int)(0.5 + cylinder->checkerboard->magnitude * cylinder->height / (M_PI * cylinder->diameter));
 		s[2] = cylinder->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cylinder->coords[Z]);
 		rotate_vect(&p, cylinder->q);
@@ -646,8 +646,8 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 		}
 		if (u == 2 && !v)
 		{
-			shader->rgb_object[R] = 0;
-			shader->rgb_object[G] = 0;
+			shader->rgb_object[R] = 255;
+			shader->rgb_object[G] = 255;
 			shader->rgb_object[B] = 0;
 		}
 		// if (intersection.z < 0)
