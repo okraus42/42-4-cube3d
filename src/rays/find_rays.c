@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 16:30:10 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/26 15:44:16 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_rayfinder	init_rayfinder(t_master	*master)
 
 	rf.ratio = (double)WIDTH / (double)HEIGHT; // assuming WIDTH > HEIGHT
 	rf.fov = master->rt->camera->fov;
-	rf.scale = tan(cos(rad(rf.fov * 0.5))); // why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
+	rf.scale = tan(rad(rf.fov * 0.5)); // why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
 	rf.t_near = (double)INT_MAX;
 	rf.t = (double)INT_MAX;
 	rf.object_flag = EMPTY;

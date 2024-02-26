@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/26 10:59:25 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/26 15:57:13 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,10 +164,12 @@ int	iterate_highlighted_object(t_rt *rt)
 		}
 		i++;
 	}
+	i = 0;
 	while (i < rt->n_lights)
 	{
 		if (rt->light_spheres[i]->mode == HIGHLIGHT)
 		{
+			//printf("light\n");
 			return (LIGHT | (i << 8));
 		}
 		i++;
@@ -308,7 +310,10 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			{
 				master->options->mode = LIGHTING;
 				if (master->rt->n_lights > 0)
+				{
+					//printf("highlighted light\n");
 					master->rt->light_spheres[0]->mode = HIGHLIGHT;
+				}
 			}
 	else if ((master->options->mode == LIGHTING)
 			&& keydata.modifier == MLX_SHIFT
