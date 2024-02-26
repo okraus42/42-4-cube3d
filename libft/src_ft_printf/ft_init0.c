@@ -6,20 +6,20 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 11:34:38 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/15 11:35:49 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/26 17:26:10 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/libft.h"
 
-char	*ft_get_print_string(va_list arg, const char *s, int *len)
+char	*ft_get_print_string(t_pf_vargs *varg, const char *s, int *len)
 {
 	char	*str;
 	t_list	*lst;
 
 	lst = ft_process_input_string(s);
 	str = NULL;
-	if (ft_init_list(arg, lst))
+	if (ft_init_list(varg, lst))
 	{
 		ft_lstclear(&lst, ft_clear_pf_data);
 		lst = NULL;

@@ -6,20 +6,20 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:39 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/15 17:45:35 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/26 17:27:34 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/libft.h"
 
-void	ft_init_precision(int *i, int *err, t_pf_info *data, va_list arg)
+void	ft_init_precision(int *i, int *err, t_pf_info *data, t_pf_vargs *varg)
 {
 	int			n;
 	long long	num;
 
 	if (data->orig[*i] == '*')
 	{
-		data->precision = va_arg(arg, unsigned int);
+		data->precision = va_arg(varg->arg, unsigned int);
 		++(*i);
 	}
 	else
@@ -67,42 +67,42 @@ void	ft_init_modifiers(int *i, t_pf_info *data)
 	++(*i);
 }
 
-static void	ft_get_int_value_helper(t_pf_info *data, va_list arg, int flag)
+static void	ft_get_int_value_helper(t_pf_info *data, t_pf_vargs *varg, int flag)
 {
 	data->value_flag = flag;
 	if (flag & SIGNED_CHAR)
-		data->value.ll = (long long)va_arg(arg, int);
+		data->value.ll = (long long)va_arg(varg->arg, int);
 	else if (flag & SIGNED_SHORT)
-		data->value.ll = (long long)va_arg(arg, int);
+		data->value.ll = (long long)va_arg(varg->arg, int);
 	else if (flag & LONG)
-		data->value.ll = (long long)va_arg(arg, long);
+		data->value.ll = (long long)va_arg(varg->arg, long);
 	else if (flag & LONG_LONG)
-		data->value.ll = (long long)va_arg(arg, long long);
+		data->value.ll = (long long)va_arg(varg->arg, long long);
 	else if (flag & INT)
-		data->value.ll = (long long)va_arg(arg, int);
+		data->value.ll = (long long)va_arg(varg->arg, int);
 }
 
-int	ft_get_int_value(t_pf_info *data, va_list arg)
+int	ft_get_int_value(t_pf_info *data, t_pf_vargs *varg)
 {
 	if (data->type_flag & LENGTH_MODIFIER)
 	{
 		if (data->type_flag & LOWERCASE_HH)
-			ft_get_int_value_helper(data, arg, SIGNED_CHAR);
+			ft_get_int_value_helper(data, varg, SIGNED_CHAR);
 		else if (data->type_flag & LOWERCASE_H)
-			ft_get_int_value_helper(data, arg, SIGNED_SHORT);
+			ft_get_int_value_helper(data, varg, SIGNED_SHORT);
 		else if (data->type_flag & LOWERCASE_L)
-			ft_get_int_value_helper(data, arg, LONG);
+			ft_get_int_value_helper(data, varg, LONG);
 		else if (data->type_flag & LLL)
-			ft_get_int_value_helper(data, arg, LONG_LONG);
+			ft_get_int_value_helper(data, varg, LONG_LONG);
 		else
 			return (1);
 	}
 	else
-		ft_get_int_value_helper(data, arg, INT);
+		ft_get_int_value_helper(data, varg, INT);
 	return (0);
 }
 
-int	ft_init_int(char c, t_pf_info *data, va_list arg)
+int	ft_init_int(char c, t_pf_info *data, t_pf_vargs *varg)
 {
 	if (c == 'c')
 		data->type_flag |= LOWERCASE_C;
@@ -110,5 +110,5 @@ int	ft_init_int(char c, t_pf_info *data, va_list arg)
 		data->type_flag |= LOWERCASE_D;
 	else if (c == 'i')
 		data->type_flag |= LOWERCASE_I;
-	return (ft_get_int_value(data, arg));
+	return (ft_get_int_value(data, varg));
 }

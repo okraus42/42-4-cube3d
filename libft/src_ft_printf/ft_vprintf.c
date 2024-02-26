@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 11:34:36 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/15 13:37:31 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/26 17:14:53 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 int	ft_vprintf(const char *s, va_list arg)
 {
-	int		value;
-	char	*str;
-	int		len;
+	int			value;
+	char		*str;
+	int			len;
+	t_pf_vargs	vargs;
 
 	len = 0;
-	str = ft_get_print_string(arg, s, &len);
+	va_copy(vargs.arg, arg);
+	str = ft_get_print_string(&vargs, s, &len);
 	if (str)
 	{
 		value = write(1, str, len);
@@ -34,12 +36,14 @@ int	ft_vprintf(const char *s, va_list arg)
 
 int	ft_vdprintf(int fd, const char *s, va_list arg)
 {
-	int		value;
-	char	*str;
-	int		len;
+	int			value;
+	char		*str;
+	int			len;
+	t_pf_vargs	vargs;
 
 	len = 0;
-	str = ft_get_print_string(arg, s, &len);
+	va_copy(vargs.arg, arg);
+	str = ft_get_print_string(&vargs, s, &len);
 	if (str)
 	{
 		value = write(fd, str, len);
@@ -52,12 +56,14 @@ int	ft_vdprintf(int fd, const char *s, va_list arg)
 
 int	ft_vsprintf(char *str, const char *s, va_list arg)
 {
-	int		value;
-	char	*temp;
-	int		len;
+	int			value;
+	char		*temp;
+	int			len;
+	t_pf_vargs	vargs;
 
 	len = 0;
-	temp = ft_get_print_string(arg, s, &len);
+	va_copy(vargs.arg, arg);
+	temp = ft_get_print_string(&vargs, s, &len);
 	if (temp)
 	{
 		value = ft_snpf_strncpy(str, temp, len, len);
@@ -70,12 +76,14 @@ int	ft_vsprintf(char *str, const char *s, va_list arg)
 
 int	ft_vsnprintf(char *str, size_t size, const char *s, va_list arg)
 {
-	int		value;
-	char	*temp;
-	int		len;
+	int			value;
+	char		*temp;
+	int			len;
+	t_pf_vargs	vargs;
 
 	len = 0;
-	temp = ft_get_print_string(arg, s, &len);
+	va_copy(vargs.arg, arg);
+	temp = ft_get_print_string(&vargs, s, &len);
 	if (temp)
 	{
 		value = ft_snpf_strncpy(str, temp, size, len);
