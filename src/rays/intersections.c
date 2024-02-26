@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 15:59:07 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/26 09:14:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
 			+ (cap1->normal->z * inter.z) + dist1;
 	plane2 = (cap2->normal->x * inter.x) + (cap2->normal->y * inter.y) \
 			+ (cap2->normal->z * inter.z) + dist2;
-	if (plane1 > 0 || plane2 > 0)
+	if (plane1 > PRECISION || plane2 > PRECISION)
 		return (0);
-	else if (plane1 < 0 && plane2 < 0)
+	else if (plane1 < -PRECISION && plane2 < -PRECISION)
 		return (1);
 	else
 		return (0);
