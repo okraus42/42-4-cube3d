@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_vector_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:41 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:11:25 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 16:13:27 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,12 @@ void	free_vector_maps(t_rt *rt)
 	i = 0;
 	while (rt->vector_maps[i] != NULL)
 	{
+		if (rt->vector_maps[i]->vm_main)
+			mlx_delete_texture(rt->vector_maps[i]->vm_main);
+		if (rt->vector_maps[i]->vm_top)
+			mlx_delete_texture(rt->vector_maps[i]->vm_top);
+		if (rt->vector_maps[i]->vm_bot)
+			mlx_delete_texture(rt->vector_maps[i]->vm_bot);
 		free(rt->vector_maps[i++]);
 	}
 	free(rt->vector_maps);

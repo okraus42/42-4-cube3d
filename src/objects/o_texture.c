@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_texture.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:11:08 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 16:13:04 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,12 @@ void	free_textures(t_rt *rt)
 	i = 0;
 	while (rt->textures[i] != NULL)
 	{
+		if (rt->textures[i]->tx_main)
+			mlx_delete_texture(rt->textures[i]->tx_main);
+		if (rt->textures[i]->tx_top)
+			mlx_delete_texture(rt->textures[i]->tx_top);
+		if (rt->textures[i]->tx_bot)
+			mlx_delete_texture(rt->textures[i]->tx_bot);
 		free(rt->textures[i++]);
 	}
 	free(rt->textures);
