@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 09:26:55 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 11:33:55 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,6 @@ void	free_objects(t_rt *rt)
 	free_cones(rt);
 	free_light_sphere(rt);
 	free_checkerboards(rt);
+	free_textures(rt);
+	free_vector_maps(rt);
 }

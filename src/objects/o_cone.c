@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:50:05 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 11:50:56 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	init_cones(t_rt *rt, int *ids)
 		rt->cones[i]->nvect = ft_calloc(3, sizeof(double));
 		rt->cones[i]->rgb = ft_calloc(3, sizeof(double));
 		rt->cones[i]->normal = ft_calloc(1, sizeof(t_vect3f));
-        rt->cones[i]->pinnacle = ft_calloc(1, sizeof(t_disc));
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->up = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->glossiness = 0.5;

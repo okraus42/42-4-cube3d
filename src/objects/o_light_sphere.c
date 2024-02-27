@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:39:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 12:06:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	free_light_sphere(t_rt *rt)
 	int	i;
 
 	i = 0;
-	while (i < rt->n_lights)
+	while (rt->light_spheres[i] != NULL)
 	{
 		free(rt->light_spheres[i]->coords);
 		free(rt->light_spheres[i]->rgb);

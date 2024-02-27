@@ -6,15 +6,15 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/27 10:49:03 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 11:38:24 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
-# define HEIGHT 720
-# define WIDTH 1080
+# define HEIGHT 10
+# define WIDTH 10
 # define X 0
 # define Y 1
 # define Z 2
@@ -199,7 +199,6 @@ typedef struct s_camera
 typedef struct s_sphere
 {
 	double	*coords; // x,y,z coordinates of center
-	//double	diameter;
 	double	radius;
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
@@ -260,7 +259,6 @@ typedef struct s_cylinder
 {
 	double		*coords; // x,y,z coordinates of center
 	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	//double		diameter;
 	double		radius;
 	double		height;
 	int			*rgb;
@@ -282,7 +280,6 @@ typedef struct s_cone
 {
 	double		*coords; // x,y,z coordinates of center
 	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	//double		diameter;
 	double		radius;
 	double		height;
 	int			*rgb;
@@ -361,34 +358,22 @@ typedef	struct s_rayfinder
 	t_vect3f	origin;
 	double		**cam_mat;
 	t_ray		shadowray;
-	t_vect3f	hit_normal; // shader
-	t_vect3f	light_dir; // shader
-	double		light_ratio; // shader
-	double		light_dist; // shader
 	t_vect3f	shadow_inter;
 	double		inter_dist;
-	int			light_intensity; // shader
 }				t_rayfinder;
 
 typedef	struct s_shader
 {
 	int			rgb_object[3];
-	int			rgb_diffuse_arr[3];
-	int			rgb_specular_arr[3];
-	uint32_t	rgb_diffuse;
-	uint32_t	rgb_specular;
-	uint32_t	rgb_ambient;
 	t_vect3f	hit_normal;
 	t_vect3f	light_dir;
 	t_vect3f	incident_light;
 	t_vect3f	reflect_vect;
 	t_vect3f	view_dir;
 	double		dot_reflect;
-	double		falloff;
 	double		light_dist;
 	double		diffuse_ratio;
 	double		specular_ratio;
-	int			light_intensity;
 	double		illumination[3];
 	int			pix_color[3];
 	double		id;
@@ -473,6 +458,8 @@ void	free_planes(t_rt *rt);
 void	free_cylinders(t_rt *rt);
 void	free_light_sphere(t_rt *rt);
 void	free_checkerboards(t_rt *rt);
+void	free_textures(t_rt *rt);
+void	free_vector_maps(t_rt *rt);
 
 // Ray casting
 void	find_rays(t_master *master);

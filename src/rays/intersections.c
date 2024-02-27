@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:50:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 11:23:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	intersect_plane(t_ray ray, void *object, double *t, t_object flag)
 	diff = (t_vect3f){};
 	define_shape(object, &point, &normal, flag);
 	denom = dot_product(normal, ray.direction);
-	if (denom < 1e-6 && denom > -1e-6) // nearly or completely parallel
+	if (denom < PRECISION && denom > -PRECISION) // nearly or completely parallel
 		return (0);
 	else
 	{
@@ -120,21 +120,6 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
 		return (0);
 }
 
-/*
-https://stackoverflow.com/questions/73866852/ray-cylinder-intersection-formula - wrong!!
-D - ray direction
-V - axis (normalized)
-X - ray.origin - cylinder.center
-r - radius
-
-a = D|D - (D|V)^2
-
-c = X|X - (X|V)^2 - r^2
-
-b = 2 * (D-V*(D|V))|(X-V*(X|V)) =
- = 2 * (D|X - D|V*(X|V) - X|V*(D|V) + (D|V)*(X|V)) =
- = 2 * (D|X - (D|V)*(X|V))
-*/
 int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 {
 	t_quadterms	quad;
@@ -153,25 +138,6 @@ int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 			- pow(cylinder->radius, 2);
 	return (solve_quad_cyl(t, quad, ray, cylinder));
 }
-
-/* int	intersect_cone(t_ray ray, t_cone *cone, double *t)
-{
-	t_quadterms	quad;
-	double		half_angle;
-	t_vect3f	centered;
-	t_vect3f	axis;
-	t_vect3f	dir;
-
-	dir = ray.direction;
-	axis = invert_vect3f(*cone->normal);
-	centered = subtract_center(ray.origin, cone->coords);
-	half_angle = atan2(cone->diameter / 2, cone->height);
-
-	quad.a = dot_product(dir, dir) - (1 + half_angle * half_angle) * pow(dot_product(dir, axis), 2);
-	quad.b = 2 * ((dot_product(dir, centered)) - (1 + half_angle * half_angle) * (dot_product(dir, axis) * dot_product(centered, axis)));
-	quad.c = dot_product(centered, centered) - (1 + half_angle * half_angle) * pow(dot_product(centered, axis), 2);
-	return (solve_quad_cone(t, quad, ray, cone));
-} */
 
 int	intersect_cone(t_ray ray, t_cone *cone, double *t)
 {

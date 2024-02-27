@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/26 15:44:16 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/27 11:12:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,8 @@ t_rayfinder	init_rayfinder(t_master	*master)
 	rf.cam_mat = master->rt->camera->matrix;
 	rf.shadowray.direction = (t_vect3f){};
 	rf.shadowray.origin = (t_vect3f){};
-	rf.hit_normal = (t_vect3f){};
-	rf.light_dir = (t_vect3f){};
-	rf.light_ratio = 0;
-	rf.light_dist = 0;
 	rf.shadow_inter = (t_vect3f){};
 	rf.inter_dist = 0;
-	rf.light_intensity = master->options->light_intensity;
 	return (rf);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/26 15:57:13 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/27 12:01:53 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,7 +391,6 @@ void	init_options(t_master *master)
 	options->mode = DEFAULT;
 	options->light_intensity = 100;
 	options->spec_highlight_size = 512;
-	//options->glossiness = 0.5;
 	master->options = options;
 }
 
@@ -499,6 +498,7 @@ int	main(int ac, char *av[])
 		if (fd < 0)
 		{
 			free(rt);
+			free(master->options);
 			free(master);
 			return (EXIT_FAILURE);
 		}
@@ -519,7 +519,7 @@ int	main(int ac, char *av[])
 				master->string[i] = mlx_put_string(master->mlx, master->str[i], 10, 5 + 20 * i);
 				++i;
 			}
-			create_object_list(master);
+			//create_object_list(master);
 			find_rays(master);
 			ft_draw_string(master); // maybe here?
 			//mlx_get_window_pos(master->mlx, &xpos, &ypos);
