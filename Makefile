@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/27 10:27:57 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/27 16:22:57 by okraus           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ LIBS		=	$(LIBMLX)/build/libmlx42.a -ldl -lglfw -pthread -lm
 #LIBS		=	$(LIBMLX)/build/libmlx42.a -Iinclude -lglfw
 LHEADERS	=	-I ./include -I $(LIBMLX)/include
 CC 			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror -g -O2
 CMFLAGS		=	-DCMAKE_C_COMPILER=/usr/bin/gcc -DCMAKE_CXX_COMPILER=/usr/bin/g++ -B build
 OBJ_DIR		=	objs/
 SLEEP		=	#sleep 0.5
