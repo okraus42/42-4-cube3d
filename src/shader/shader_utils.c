@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 15:10:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 18:47:49 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,7 +383,7 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		p.y = intersection.y - cone->coords[Y];
 		p.z = intersection.z - cone->coords[Z];
 		s[0] = (int)cone->checkerboard->magnitude;
-		s[1] = (int)(0.5 + cone->checkerboard->magnitude * sqrt(cone->height * cone->height + cone->radius * 2 * cone->radius * 2 / 4) / (M_PI * cone->radius * 2));
+		s[1] = (int)(0.5 + cone->checkerboard->magnitude * sqrt(cone->height * cone->height + cone->radius * cone->radius) / (M_PI * cone->radius * 2));
 		s[2] = cone->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cone->coords[Z]);
 		rotate_vect(&p, cone->q);
