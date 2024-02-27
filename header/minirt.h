@@ -6,15 +6,15 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/27 11:38:24 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 15:04:16 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 
 # define MINIRT_H
-# define HEIGHT 10
-# define WIDTH 10
+# define HEIGHT 720
+# define WIDTH 1080
 # define X 0
 # define Y 1
 # define Z 2
@@ -285,6 +285,9 @@ typedef struct s_cone
 	int			*rgb;
 	double	glossiness;
 	int		camera_inside;
+	double	half_angle;
+	float	dist_term; // only used for surface normal math, DO NOT USE ELSEWHERE
+	t_vect3f	*axis; // only used for intersection test and surface normal, DO NOT USE ANYWHERE ELSE
 	t_disc		*base;
 	t_disc		*pinnacle;
 	t_vect3f	*normal;
@@ -538,7 +541,6 @@ void	cant(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle);
 
 // Intersections
 int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t);
-void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f);
 int	intersect_plane(t_ray ray, void *object, double *t, t_object flag);
 int	intersect_disc(t_ray ray, t_disc *disc, double *t);
 int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t);

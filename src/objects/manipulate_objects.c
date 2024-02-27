@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:49:16 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 15:17:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -414,9 +414,12 @@ void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 	change_glossiness(&cone->glossiness, keydata.key);
 	change_radius(&cone->radius, keydata.key);
 	change_height(&cone->height, keydata.key);
+	cone->half_angle = atan2(cone->radius, cone->height);
+	cone->dist_term = sqrt(1 + pow(cone->half_angle, 2));
 	move(keydata.key, rt->camera, cone->coords);
 	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
 	qrotate_o(keydata.key, &(cone->q), rt->camera);
+	*cone->axis = invert_vect3f(*cone->normal);
 	get_cone_discs(cone);
 	//cone->q = get_obj_quat(*(cone->normal), *(cone->up));
 	cone->base->q = cone->q;

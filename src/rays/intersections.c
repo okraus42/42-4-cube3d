@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 11:23:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 15:17:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t)
 	return (solve_quad(t, quad));
 }
 
-void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f)
+static void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f)
 {
 	t_disc		*disc;
 	t_plane		*plane;
@@ -142,23 +142,20 @@ int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 int	intersect_cone(t_ray ray, t_cone *cone, double *t)
 {
 	t_quadterms	quad;
-	double		half_angle;
 	t_vect3f	centered;
-	t_vect3f	axis;
 	t_vect3f	dir;
 	t_vect3f	centered_cos;
 
 	dir = ray.direction;
-	axis = invert_vect3f(*cone->normal);
 	centered = subtract_center(ray.origin, cone->pinnacle->coords);
-	half_angle = atan2(cone->radius, cone->height);
-	centered_cos.x = centered.x * pow(cos(half_angle), 2);
-	centered_cos.y = centered.y * pow(cos(half_angle), 2);
-	centered_cos.z = centered.z * pow(cos(half_angle), 2);
+	cone->half_angle = atan2(cone->radius, cone->height);
+	centered_cos.x = centered.x * pow(cos(cone->half_angle), 2);
+	centered_cos.y = centered.y * pow(cos(cone->half_angle), 2);
+	centered_cos.z = centered.z * pow(cos(cone->half_angle), 2);
 
-	quad.a = pow(dot_product(dir, axis), 2) - pow(cos(half_angle), 2);
-	quad.b = 2 * (dot_product(dir, axis) * dot_product(centered, axis) - dot_product(dir, centered_cos));
-	quad.c = pow(dot_product(centered, axis), 2) - dot_product(centered, centered_cos);
+	quad.a = pow(dot_product(dir, *cone->axis), 2) - pow(cos(cone->half_angle), 2);
+	quad.b = 2 * (dot_product(dir, *cone->axis) * dot_product(centered, *cone->axis) - dot_product(dir, centered_cos));
+	quad.c = pow(dot_product(centered, *cone->axis), 2) - dot_product(centered, centered_cos);
 	return (solve_quad_cone(t, quad, ray, cone));
 }
 

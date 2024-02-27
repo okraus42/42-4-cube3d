@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:51:24 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 15:10:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,15 @@ t_vect3f	get_cylinder_hit_normal(t_rayfinder *rf, t_ray ray, t_vect3f intersecti
 t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 {
 	double	dist;
-	double	half_angle;
-	t_vect3f	axis;
 	t_vect3f	a;
 	double		d;
 	t_vect3f	normal;
 
-	axis = invert_vect3f(*cone.normal);
-	half_angle = atan2(cone.radius, cone.height);
 	dist = point_distance(intersection, array_to_vect(cone.pinnacle->coords));
-	d = dist * sqrt(1 + pow(half_angle, 2));
-	a.x = cone.pinnacle->coords[X] + axis.x * d;
-	a.y = cone.pinnacle->coords[Y] + axis.y * d;
-	a.z = cone.pinnacle->coords[Z] + axis.z * d;
+	d = dist * cone.dist_term;
+	a.x = cone.pinnacle->coords[X] + cone.axis->x * d;
+	a.y = cone.pinnacle->coords[Y] + cone.axis->y * d;
+	a.z = cone.pinnacle->coords[Z] + cone.axis->z * d;
 	normal = subtract_vect3f(intersection, a);
 	normalize(&normal);
 	return (normal);

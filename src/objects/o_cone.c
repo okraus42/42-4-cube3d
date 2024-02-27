@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 11:50:56 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 15:04:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,14 @@ void	init_cones(t_rt *rt, int *ids)
 	rt->n_cones = 0;
 	while (i < (ids[6]))
 	{
-		rt->cones[i] = ft_calloc(1, sizeof(t_cylinder));
+		rt->cones[i] = ft_calloc(1, sizeof(t_cone));
 		rt->cones[i]->coords = ft_calloc(3, sizeof(double));
 		rt->cones[i]->nvect = ft_calloc(3, sizeof(double));
 		rt->cones[i]->rgb = ft_calloc(3, sizeof(double));
 		rt->cones[i]->normal = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->right = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->up = ft_calloc(1, sizeof(t_vect3f));
+		rt->cones[i]->axis = ft_calloc(1, sizeof(t_vect3f));
 		rt->cones[i]->glossiness = 0.5;
 		rt->cones[i]->checkerboard = NULL;
 		rt->cones[i]->texture = NULL;
@@ -85,6 +86,7 @@ int	fill_cone(t_rt *rt, char **split)
 		return (id_err("co", E_NORM_ZERO, NULL));
 	*rt->cones[i]->normal = get_normal(rt->cones[i]->nvect[X], \
 			rt->cones[i]->nvect[Y], rt->cones[i]->nvect[Z]);
+	*rt->cones[i]->axis = invert_vect3f(*rt->cones[i]->normal);
 	diameter = ft_atof(split[3]);
 	if (diameter <= 0)
 		return (id_err("co", E_DIA_RANGE, E_RANGE_STRICT));
@@ -92,6 +94,8 @@ int	fill_cone(t_rt *rt, char **split)
 	rt->cones[i]->height = ft_atof(split[4]);
 	if (rt->cones[i]->height <= 0)
 		return (id_err("co", E_HEIGHT_RANGE, E_RANGE_STRICT));
+	rt->cones[i]->half_angle = atan2(rt->cones[i]->radius, rt->cones[i]->height);
+	rt->cones[i]->dist_term = sqrt(1 + pow(rt->cones[i]->half_angle, 2));
 	if (!get_rgb(rt->cones[i]->rgb, split[5]))
 		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
 	set_cone_vects(rt->cones[i]);
@@ -117,6 +121,7 @@ void	free_cones(t_rt *rt)
 		free(rt->cones[i]->normal);
 		free(rt->cones[i]->right);
 		free(rt->cones[i]->up);
+		free(rt->cones[i]->axis);
 		free(rt->cones[i++]);
 	}
 	free(rt->cones);
