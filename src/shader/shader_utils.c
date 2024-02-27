@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/25 14:44:34 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:51:24 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 	t_vect3f	normal;
 
 	axis = invert_vect3f(*cone.normal);
-	half_angle = atan2(cone.diameter / 2, cone.height);
+	half_angle = atan2(cone.radius, cone.height);
 	dist = point_distance(intersection, array_to_vect(cone.pinnacle->coords));
 	d = dist * sqrt(1 + pow(half_angle, 2));
 	a.x = cone.pinnacle->coords[X] + axis.x * d;
@@ -387,7 +387,7 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		p.y = intersection.y - cone->coords[Y];
 		p.z = intersection.z - cone->coords[Z];
 		s[0] = (int)cone->checkerboard->magnitude;
-		s[1] = (int)(0.5 + cone->checkerboard->magnitude * sqrt(cone->height * cone->height + cone->diameter * cone->diameter / 4) / (M_PI * cone->diameter));
+		s[1] = (int)(0.5 + cone->checkerboard->magnitude * sqrt(cone->height * cone->height + cone->radius * 2 * cone->radius * 2 / 4) / (M_PI * cone->radius * 2));
 		s[2] = cone->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cone->coords[Z]);
 		rotate_vect(&p, cone->q);
@@ -600,7 +600,7 @@ void	set_cylinder_rgb(t_shader *shader, t_cylinder *cylinder, t_vect3f intersect
 		p.y = intersection.y - cylinder->coords[Y];
 		p.z = intersection.z - cylinder->coords[Z];
 		s[0] = (int)cylinder->checkerboard->magnitude;
-		s[1] = (int)(0.5 + cylinder->checkerboard->magnitude * cylinder->height / (M_PI * cylinder->diameter));
+		s[1] = (int)(0.5 + cylinder->checkerboard->magnitude * cylinder->height / (M_PI * cylinder->radius * 2));
 		s[2] = cylinder->height;
 		//printf("%f %f %f\n",intersection.z, p.z, cylinder->coords[Z]);
 		rotate_vect(&p, cylinder->q);

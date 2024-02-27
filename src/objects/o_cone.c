@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:39:15 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:50:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	check_format_cone(char **split)
 int	fill_cone(t_rt *rt, char **split)
 {
 	int			i;
+	double		diameter;
 
 	i = rt->n_cones;
 	if (check_format_cone(split))
@@ -85,9 +86,10 @@ int	fill_cone(t_rt *rt, char **split)
 		return (id_err("co", E_NORM_ZERO, NULL));
 	*rt->cones[i]->normal = get_normal(rt->cones[i]->nvect[X], \
 			rt->cones[i]->nvect[Y], rt->cones[i]->nvect[Z]);
-	rt->cones[i]->diameter = ft_atof(split[3]);
-	if (rt->cones[i]->diameter <= 0)
+	diameter = ft_atof(split[3]);
+	if (diameter <= 0)
 		return (id_err("co", E_DIA_RANGE, E_RANGE_STRICT));
+	rt->cones[i]->radius = diameter / 2.;
 	rt->cones[i]->height = ft_atof(split[4]);
 	if (rt->cones[i]->height <= 0)
 		return (id_err("co", E_HEIGHT_RANGE, E_RANGE_STRICT));

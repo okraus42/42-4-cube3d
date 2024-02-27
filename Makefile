@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/22 16:27:34 by plouda           ###   ########.fr        #
+#    Updated: 2024/02/27 10:27:57 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,8 +71,7 @@ SRC_SHDIR	=	src/shader/
 SRC_S		=	minirt.c \
 				objlist.c
 
-SRC_M		=	ft_atof.c \
-				quaternions.c \
+SRC_M		=	quaternions.c \
 				vector_ops.c
 
 SRC_O		=	fill_object_getters.c \
@@ -103,7 +102,8 @@ SRC_U		=	check_identifiers_helpers.c \
 				format_check_utils2.c \
 				math_utils.c \
 				print_contents.c \
-				utils1.c
+				utils1.c \
+				ft_atof.c
 
 SRC_C		= 	camera.c \
 				movements.c \

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:35:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:46:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->rgb[R] = cylinder->rgb[R];
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
-	botcap->radius = cylinder->diameter / 2;
+	botcap->radius = cylinder->radius;
 	*botcap->normal = get_normal(botcap->nvect[X], \
 		botcap->nvect[Y], botcap->nvect[Z]);
 	set_disc_vects(botcap);
@@ -90,7 +90,7 @@ void	define_topcap(t_cylinder *cylinder)
 	topcap->rgb[R] = cylinder->rgb[R];
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
-	cylinder->topcap->radius = cylinder->diameter / 2;
+	cylinder->topcap->radius = cylinder->radius;
 	*topcap->normal = get_normal(topcap->nvect[X], \
 		topcap->nvect[Y], topcap->nvect[Z]);
 	set_disc_vects(topcap);

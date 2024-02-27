@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 15:40:33 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/22 16:41:57 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:49:10 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	detect_camera_inside_sphere(t_sphere *sphere, t_camera *camera)
 	double	cam_dist;
 
 	cam_dist = point_distance(array_to_vect(sphere->coords), array_to_vect(camera->coords)); //testing
-	if (cam_dist < sphere->diameter / 2. && absf(cam_dist - sphere->diameter / 2) > PRECISION)
+	if (cam_dist < sphere->radius && absf(cam_dist - sphere->radius) > PRECISION)
 		sphere->camera_inside = 1;
 	else
 		sphere->camera_inside = 0;
@@ -42,7 +42,7 @@ void	detect_camera_inside_plane(t_plane *plane, t_camera *camera)
 
 void	detect_camera_inside_cylinder(t_cylinder *cylinder, t_camera *camera)
 {
-	if (point_lies_in_cylinder(array_to_vect(camera->coords), array_to_vect(cylinder->botcap->coords), array_to_vect(cylinder->topcap->coords), cylinder->diameter / 2))
+	if (point_lies_in_cylinder(array_to_vect(camera->coords), array_to_vect(cylinder->botcap->coords), array_to_vect(cylinder->topcap->coords), cylinder->radius))
 		cylinder->camera_inside = 1;
 	else
 		cylinder->camera_inside = 0;
@@ -67,7 +67,7 @@ void	detect_camera_inside_disc(t_disc *disc, t_camera *camera) // is this needed
 
 void	detect_camera_inside_cone(t_cone *cone, t_camera *camera)
 {
-	if (point_lies_in_cone(array_to_vect(camera->coords), *cone, cone->diameter / 2, cone->height))
+	if (point_lies_in_cone(array_to_vect(camera->coords), *cone, cone->radius, cone->height))
 		cone->camera_inside = 1;
 	else
 		cone->camera_inside = 0;

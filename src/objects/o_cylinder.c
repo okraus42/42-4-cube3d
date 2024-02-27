@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:13:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:45:59 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	check_format_cylinder(char **split)
 int	fill_cylinder(t_rt *rt, char **split)
 {
 	int			i;
+	double		diameter;
 
 	i = rt->n_cylinders;
 	if (check_format_cylinder(split))
@@ -84,9 +85,10 @@ int	fill_cylinder(t_rt *rt, char **split)
 		return (id_err("cy", E_NORM_ZERO, NULL));
 	*rt->cylinders[i]->normal = get_normal(rt->cylinders[i]->nvect[X], \
 			rt->cylinders[i]->nvect[Y], rt->cylinders[i]->nvect[Z]);
-	rt->cylinders[i]->diameter = ft_atof(split[3]);
-	if (rt->cylinders[i]->diameter <= 0)
+	diameter = ft_atof(split[3]);
+	if (diameter <= 0)
 		return (id_err("cy", E_DIA_RANGE, E_RANGE_STRICT));
+	rt->cylinders[i]->radius = diameter / 2.;
 	rt->cylinders[i]->height = ft_atof(split[4]);
 	if (rt->cylinders[i]->height <= 0)
 		return (id_err("cy", E_HEIGHT_RANGE, E_RANGE_STRICT));

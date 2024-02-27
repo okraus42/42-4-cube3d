@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:41:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:37:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,17 @@ int	check_format_sphere(char **split)
 int	fill_sphere(t_rt *rt, char **split)
 {
 	int			i;
+	double		diameter;
 
 	i = rt->n_spheres;
 	if (check_format_sphere(split))
 		return (1);
 	get_coords(rt->spheres[i]->coords, split[1]);
-	rt->spheres[i]->diameter = ft_atof(split[2]);
-	if (rt->spheres[i]->diameter <= 0)
+	diameter = ft_atof(split[2]);
+	//rt->spheres[i]->diameter = ft_atof(split[2]);
+	if (diameter <= 0)
 		return (id_err("sp", E_DIA_RANGE, E_RANGE_STRICT));
+	rt->spheres[i]->radius = diameter / 2.;
 	if (!get_rgb(rt->spheres[i]->rgb, split[3]))
 		return (id_err("sp", E_RGB_RANGE, E_RANGE_INT));
 	*rt->spheres[i]->normal = (t_vect3f){0, 0, 1};

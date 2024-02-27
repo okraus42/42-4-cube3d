@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/20 10:47:58 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:50:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	define_cone_base(t_cone *cone)
 	base->rgb[R] = cone->rgb[R];
 	base->rgb[G] = cone->rgb[G];
 	base->rgb[B] = cone->rgb[B];
-	base->radius = cone->diameter / 2;
+	base->radius = cone->radius;
 	*base->normal = get_normal(base->nvect[X], \
 		base->nvect[Y], base->nvect[Z]);
 	set_disc_vects(base);
@@ -85,7 +85,7 @@ void	define_cone_pinnacle(t_cone *cone)
 	pinnacle->rgb[R] = cone->rgb[R];
 	pinnacle->rgb[G] = cone->rgb[G];
 	pinnacle->rgb[B] = cone->rgb[B];
-	cone->pinnacle->radius = cone->diameter / 2;
+	cone->pinnacle->radius = cone->radius;
 	*pinnacle->normal = get_normal(pinnacle->nvect[X], \
 		pinnacle->nvect[Y], pinnacle->nvect[Z]);
 	set_disc_vects(pinnacle);

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/26 09:14:02 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:50:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t)
 	centered = subtract_center(ray.origin, sphere->coords);
 	quad.a = dot_product(ray.direction, ray.direction);
 	quad.b = 2 * dot_product(ray.direction, centered);
-	quad.c = dot_product(centered, centered) - pow(sphere->diameter / 2, 2);
+	quad.c = dot_product(centered, centered) - pow(sphere->radius, 2);
 	return (solve_quad(t, quad));
 }
 
@@ -150,7 +150,7 @@ int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 			- (dot_product(dir, axis) * dot_product(centered, axis)));
 	quad.c = dot_product(centered, centered) \
 			- pow(dot_product(centered, axis), 2) \
-			- pow(cylinder->diameter / 2, 2);
+			- pow(cylinder->radius, 2);
 	return (solve_quad_cyl(t, quad, ray, cylinder));
 }
 
@@ -185,7 +185,7 @@ int	intersect_cone(t_ray ray, t_cone *cone, double *t)
 	dir = ray.direction;
 	axis = invert_vect3f(*cone->normal);
 	centered = subtract_center(ray.origin, cone->pinnacle->coords);
-	half_angle = atan2(cone->diameter / 2, cone->height);
+	half_angle = atan2(cone->radius, cone->height);
 	centered_cos.x = centered.x * pow(cos(half_angle), 2);
 	centered_cos.y = centered.y * pow(cos(half_angle), 2);
 	centered_cos.z = centered.z * pow(cos(half_angle), 2);

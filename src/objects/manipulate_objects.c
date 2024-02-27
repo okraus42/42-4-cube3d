@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/26 11:04:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:49:16 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,14 +353,14 @@ static void	change_glossiness(double *glossiness, keys_t key)
 	}
 }
 
-static void	change_diameter(double *diameter, keys_t key)
+static void	change_radius(double *radius, keys_t key)
 {
 	if (key == MLX_KEY_1)
-		*diameter += 1;
+		*radius += 0.5;
 	else if (key == MLX_KEY_2)
-		*diameter -= 1;
-	if (*diameter < PRECISION)
-		*diameter = 0.1;
+		*radius -= 0.5;
+	if (*radius < PRECISION)
+		*radius = 0.1;
 }
 
 static void	change_height(double *height, keys_t key)
@@ -376,7 +376,7 @@ static void	change_height(double *height, keys_t key)
 void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
 	change_glossiness(&sphere->glossiness, keydata.key);
-	change_diameter(&sphere->diameter, keydata.key);
+	change_radius(&sphere->radius, keydata.key);
 	move(keydata.key, rt->camera, sphere->coords);
 	rotate_o(keydata.key, sphere->normal, sphere->right, sphere->up, rt->camera);
 	qrotate_o(keydata.key, &(sphere->q), rt->camera);
@@ -396,7 +396,7 @@ void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 {
 	change_glossiness(&cylinder->glossiness, keydata.key);
-	change_diameter(&cylinder->diameter, keydata.key);
+	change_radius(&cylinder->radius, keydata.key);
 	change_height(&cylinder->height, keydata.key);
 	move(keydata.key, rt->camera, cylinder->coords);
 	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up, rt->camera);
@@ -412,7 +412,7 @@ void	manipulate_cylinder(t_rt *rt, t_cylinder *cylinder, mlx_key_data_t keydata)
 void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 {
 	change_glossiness(&cone->glossiness, keydata.key);
-	change_diameter(&cone->diameter, keydata.key);
+	change_radius(&cone->radius, keydata.key);
 	change_height(&cone->height, keydata.key);
 	move(keydata.key, rt->camera, cone->coords);
 	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);

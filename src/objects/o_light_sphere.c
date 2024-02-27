@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 09:50:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:39:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	fill_light_sphere(t_rt *rt, char **split)
 		return (id_err("L", E_BRIGHT_RANGE, E_RANGE_POS));
 	if (!get_rgb(rt->light_spheres[i]->rgb, split[3]))
 		return (id_err("L", E_RGB_RANGE, E_RANGE_INT));
-	rt->light_spheres[i]->diameter = 0.1;
+	//rt->light_spheres[i]->diameter = 0.1;
+	rt->light_spheres[i]->radius = 0.05;
 	rt->n_lights++;
 	return (0);
 }

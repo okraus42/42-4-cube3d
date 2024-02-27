@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/24 17:07:34 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:49:03 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,8 @@ typedef struct s_camera
 typedef struct s_sphere
 {
 	double	*coords; // x,y,z coordinates of center
-	double	diameter;
+	//double	diameter;
+	double	radius;
 	int		*rgb;
 	double	brightness; // only relevant for light-emitting spheres
 	double	glossiness;
@@ -259,7 +260,8 @@ typedef struct s_cylinder
 {
 	double		*coords; // x,y,z coordinates of center
 	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	double		diameter;
+	//double		diameter;
+	double		radius;
 	double		height;
 	int			*rgb;
 	double	glossiness;
@@ -280,7 +282,8 @@ typedef struct s_cone
 {
 	double		*coords; // x,y,z coordinates of center
 	double		*nvect; // 3d normalized vector of an axis; [-1;1],[-1;1],[-1;1]
-	double		diameter;
+	//double		diameter;
+	double		radius;
 	double		height;
 	int			*rgb;
 	double	glossiness;

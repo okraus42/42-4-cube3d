@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:02:07 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/14 13:38:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/27 10:52:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	print_contents(t_rt *rt)
 		printf("SPHERE %i\n", i + 1);
 		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %i,%i,%i\n%-11s %p\n", \
 				"Coords:", rt->spheres[i]->coords[0], rt->spheres[i]->coords[1], rt->spheres[i]->coords[2], \
-				"Diameter:", rt->spheres[i]->diameter, \
+				"Diameter:", rt->spheres[i]->radius * 2, \
 				"RGB:", rt->spheres[i]->rgb[0], rt->spheres[i]->rgb[1], rt->spheres[i]->rgb[2], \
 				"CHECKERBOARD:", rt->spheres[i]->checkerboard);
 		printf("=================================================\n");
@@ -64,7 +64,7 @@ int	print_contents(t_rt *rt)
 		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %.2f\n%-11s %i,%i,%i\n%-11s %p\n", \
 				"Coords:", rt->cylinders[i]->coords[0], rt->cylinders[i]->coords[1], rt->cylinders[i]->coords[2], \
 				"Vector:", rt->cylinders[i]->nvect[0], rt->cylinders[i]->nvect[1], rt->cylinders[i]->nvect[2], \
-				"Diameter:", rt->cylinders[i]->diameter, \
+				"Diameter:", rt->cylinders[i]->radius * 2, \
 				"Height:", rt->cylinders[i]->height, \
 				"RGB:", rt->cylinders[i]->rgb[0], rt->cylinders[i]->rgb[1], rt->cylinders[i]->rgb[2], \
 				"CHECKERBOARD:", rt->cylinders[i]->checkerboard);
@@ -99,7 +99,7 @@ int	print_contents(t_rt *rt)
 		printf("%-11s %.2f,%.2f,%.2f\n%-11s %.2f,%.2f,%.2f\n%-11s %.2f\n%-11s %.2f\n%-11s %i,%i,%i\n%-11s %p\n", \
 				"Coords:", rt->cones[i]->coords[0], rt->cones[i]->coords[1], rt->cones[i]->coords[2], \
 				"Vector:", rt->cones[i]->nvect[0], rt->cones[i]->nvect[1], rt->cones[i]->nvect[2], \
-				"Diameter:", rt->cones[i]->diameter, \
+				"Diameter:", rt->cones[i]->radius * 2, \
 				"Height:", rt->cones[i]->height, \
 				"RGB:", rt->cones[i]->rgb[0], rt->cones[i]->rgb[1], rt->cones[i]->rgb[2], \
 				"CHECKERBOARD:", rt->cones[i]->checkerboard);
