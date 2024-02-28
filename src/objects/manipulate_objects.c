@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 15:17:00 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/28 15:59:50 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,13 +513,13 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 		i++;
 	}
 	move(keydata.key, master->rt->camera, master->rt->light_spheres[i]->coords);
-	if (keydata.key == MLX_KEY_COMMA)
-		master->options->light_intensity -= 15;
-	else if (keydata.key == MLX_KEY_PERIOD)
-		master->options->light_intensity += 15;
-	clamp(0, INT_MAX - 100, &master->options->light_intensity);
+	// if (keydata.key == MLX_KEY_COMMA)
+	// 	master->options->light_intensity -= 15;
+	// else if (keydata.key == MLX_KEY_PERIOD)
+	// 	master->options->light_intensity += 15;
+	//clamp(0, INT_MAX - 100, &master->options->light_intensity);
 	specular_options(master, keydata.key);
-	printf("Light intensity: %d\n", master->options->light_intensity);
+	//printf("Light intensity: %d\n", master->options->light_intensity);
 	//printf("Glossiness: %.2f\n", master->options->glossiness);
 	find_rays(master);
 }

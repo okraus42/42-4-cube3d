@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 11:12:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/28 17:17:35 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray
 	else if (flag == PLANE)
 		plane_shader(rf, intersection, object_ptr, master);
 	else if (flag == CYLINDER)
-		cylinder_shader(rf, intersection, object_ptr, master, ray);
+		cylinder_shader(rf, intersection, object_ptr, master);
 	else if (flag == DISC)
 		disc_shader(rf, intersection, object_ptr, master);
 	else if (flag == CONE)

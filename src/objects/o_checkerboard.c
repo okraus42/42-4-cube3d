@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_checkerboard.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/11 18:21:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 10:22:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/28 17:32:11 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	fill_checkerboard(t_rt *rt, char **split)
 	if (!get_rgb(rt->checkerboards[i]->rgb2, split[2]))
 		return (id_err(".ch", E_RGB_RANGE, E_RANGE_INT));
 	rt->checkerboards[i]->magnitude = ft_atof(split[3]);
-	if (rt->checkerboards[i]->magnitude <= 0)
+	if (rt->checkerboards[i]->magnitude <= 1)
 		return (id_err(".ch", "Magnitude value too low", E_RANGE_STRICT));
 	if (!get_checkerboard_id(rt->checkerboards[i], split[0]))
 		return (id_err(".ch", "Invalid .ch specification", NULL));

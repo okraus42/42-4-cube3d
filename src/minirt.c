@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/27 12:01:53 by plouda           ###   ########.fr       */
+/*   Updated: 2024/02/28 15:59:01 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,7 +389,7 @@ void	init_options(t_master *master)
 
 	options = ft_calloc(1, sizeof(t_options));
 	options->mode = DEFAULT;
-	options->light_intensity = 100;
+	//options->light_intensity = 100;
 	options->spec_highlight_size = 512;
 	master->options = options;
 }

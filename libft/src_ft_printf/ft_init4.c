@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:46 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/26 17:28:54 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/28 16:46:13 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ static void	ft_init_baselen(int *i, int *err, t_pf_info *data, t_pf_vargs *varg)
 	}
 }
 
-static int	ft_init_list_helper(t_pf_vargs *varg, t_pf_info *data, int *i, int *err)
+static int	ft_init_list_helper(t_pf_vargs *varg,
+	t_pf_info *data, int *i, int *err)
 {
 	if (data->type)
 	{

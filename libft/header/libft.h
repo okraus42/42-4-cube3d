@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 13:43:29 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/26 17:23:31 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/28 16:44:47 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define PN(a) (((a) > 0) - ((a) < 0))
 # define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
 # define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
-//# define PERCENTIL(a, b, c, d) (MIN(a, b) + (MAX(a, b) - MIN(a, b)) * (c) / (d))
 # define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
 
 // GET_NEXT_LINE definitions
@@ -49,7 +48,8 @@
 # define F_MODIFIER	"hlLz"
 # define BASE_CAP	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # define BASE_SML	"0123456789abcdefghijklmnopqrstuvwxyz"
-typedef	long long t_fix64;
+
+typedef long long	t_fix64;
 
 typedef enum e_print_flag
 {
