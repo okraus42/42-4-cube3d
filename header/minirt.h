@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/28 17:16:43 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/01 15:12:10 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,6 +367,7 @@ typedef struct s_shader
 	t_vect3f	incident_light;
 	t_vect3f	reflect_vect;
 	t_vect3f	view_dir;
+	t_vect3f	intersection;
 	double		dot_reflect;
 	double		light_dist;
 	double		diffuse_ratio;
@@ -628,7 +629,7 @@ void		phong_illumination(t_shader *shader, t_sphere *light);
 void		get_reflection_vector(t_shader *shader);
 void		diff_and_spec_ratios(t_shader *shader, t_options options);
 void		trace_shadow(t_master *master, t_rayfinder *rf,
-				t_vect3f intersection, t_shader *shader, double *light_pos);
+				t_shader *shader, double *light_pos);
 
 // Testing functions
 /* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection,

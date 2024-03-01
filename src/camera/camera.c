@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/19 16:49:23 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/01 15:17:19 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,6 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 
 	camera = master->rt->camera;
 	rotate(keydata.key, camera->normal, camera->right, camera->up);
-	/* normalize(camera->normal);
-	normalize(camera->right);
-	normalize(camera->up); */
 	master->rt->camera = camera;
 	find_rays(master);
 }
