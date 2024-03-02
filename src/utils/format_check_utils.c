@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:12:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 16:15:07 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	has_spec_count_strict(char **split, int target)
 	return (1);
 }
 
-int	has_valid_id_attribute(char *str) //ex. .ch/03
+int	has_valid_id_attribute(char *str)
 {
 	int	i;
 
@@ -164,11 +164,11 @@ int	has_valid_id_attribute(char *str) //ex. .ch/03
 
 int	contains_valid_key_value_pair(char *str)
 {
-	int	i;
+	int		i;
 	char	**key_value_pair;
 
 	i = 0;
-	key_value_pair = ft_split(str, '='); // needs changing for = in path (rewrite split or forbid = in path)
+	key_value_pair = ft_split(str, '=');
 	while (key_value_pair[i])
 		i++;
 	if (i != 2)
@@ -177,14 +177,12 @@ int	contains_valid_key_value_pair(char *str)
 		return (0);
 	}
 	i = 0;
-	// if (key_value_pair[0] && (key_value_pair[0][0] != '0' && key_value_pair[0][0] != '1' && key_value_pair[0][0] != '2'))
-	// {
-	// 	ft_free_split(&key_value_pair);
-	// 	return (0);
-	// }
-	if (key_value_pair[0] && (ft_strncmp("0", key_value_pair[0], ft_strlen(key_value_pair[0]))
-							&& ft_strncmp("1", key_value_pair[0], ft_strlen(key_value_pair[0]))
-							&& ft_strncmp("2", key_value_pair[0], ft_strlen(key_value_pair[0]))))
+	if (key_value_pair[0] && (ft_strncmp("0", key_value_pair[0],
+				ft_strlen(key_value_pair[0]))
+			&& ft_strncmp("1", key_value_pair[0],
+				ft_strlen(key_value_pair[0]))
+			&& ft_strncmp("2", key_value_pair[0],
+				ft_strlen(key_value_pair[0]))))
 	{
 		ft_free_split(&key_value_pair);
 		return (0);
@@ -198,7 +196,7 @@ int	contains_valid_key_value_pair(char *str)
 	{
 		ft_free_split(&key_value_pair);
 		return (0);
-	}	
+	}
 }
 
 int	is_valid_texture_file(char *str)
@@ -210,7 +208,7 @@ int	is_valid_texture_file(char *str)
 	int		fd;
 
 	i = 0;
-	key_value_pair = ft_split(str, '='); // needs changing for = in path (rewrite split or forbid = in path)
+	key_value_pair = ft_split(str, '=');
 	value = key_value_pair[1];
 	while (key_value_pair[i])
 		i++;
@@ -220,7 +218,7 @@ int	is_valid_texture_file(char *str)
 		return (0);
 	}
 	path = ft_strtrim(value, "\"");
-	if (ft_strlen(path) > 1024) // check for length
+	if (ft_strlen(path) > 1024)
 		return (0);
 	fd = open(path, O_RDONLY);
 	if (fd < 0)

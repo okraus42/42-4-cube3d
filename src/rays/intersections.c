@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersections.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 15:17:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 16:03:02 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t)
 	return (solve_quad(t, quad));
 }
 
-static void	define_shape(void *object, t_vect3f *pt, t_vect3f *normal, t_object f)
+static void	define_shape(void *object,
+	t_vect3f *pt, t_vect3f *normal, t_object f)
 {
 	t_disc		*disc;
 	t_plane		*plane;
@@ -57,7 +58,7 @@ int	intersect_plane(t_ray ray, void *object, double *t, t_object flag)
 	diff = (t_vect3f){};
 	define_shape(object, &point, &normal, flag);
 	denom = dot_product(normal, ray.direction);
-	if (denom < PRECISION && denom > -PRECISION) // nearly or completely parallel
+	if (denom < PRECISION && denom > -PRECISION)
 		return (0);
 	else
 	{
@@ -102,16 +103,16 @@ int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
 	inter.x = ray.origin.x + ray.direction.x * t;
 	inter.y = ray.origin.y + ray.direction.y * t;
 	inter.z = ray.origin.z + ray.direction.z * t;
-	dist1 = (-1 * cap1->normal->x * cap1->coords[X]) \
-			- (cap1->normal->y * cap1->coords[Y]) \
-			- (cap1->normal->z * cap1->coords[Z]);
-	dist2 = (-1 * cap2->normal->x * cap2->coords[X]) \
-			- (cap2->normal->y * cap2->coords[Y]) \
-			- (cap2->normal->z * cap2->coords[Z]);
-	plane1 = (cap1->normal->x * inter.x) + (cap1->normal->y * inter.y) \
-			+ (cap1->normal->z * inter.z) + dist1;
-	plane2 = (cap2->normal->x * inter.x) + (cap2->normal->y * inter.y) \
-			+ (cap2->normal->z * inter.z) + dist2;
+	dist1 = (-1 * cap1->normal->x * cap1->coords[X])
+		- (cap1->normal->y * cap1->coords[Y])
+		- (cap1->normal->z * cap1->coords[Z]);
+	dist2 = (-1 * cap2->normal->x * cap2->coords[X])
+		- (cap2->normal->y * cap2->coords[Y])
+		- (cap2->normal->z * cap2->coords[Z]);
+	plane1 = (cap1->normal->x * inter.x) + (cap1->normal->y * inter.y)
+		+ (cap1->normal->z * inter.z) + dist1;
+	plane2 = (cap2->normal->x * inter.x) + (cap2->normal->y * inter.y)
+		+ (cap2->normal->z * inter.z) + dist2;
 	if (plane1 > PRECISION || plane2 > PRECISION)
 		return (0);
 	else if (plane1 < -PRECISION && plane2 < -PRECISION)
@@ -131,11 +132,11 @@ int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)
 	axis = *cylinder->normal;
 	centered = subtract_center(ray.origin, cylinder->coords);
 	quad.a = dot_product(dir, dir) - pow(dot_product(dir, axis), 2);
-	quad.b = 2 * (dot_product(dir, centered) \
+	quad.b = 2 * (dot_product(dir, centered)
 			- (dot_product(dir, axis) * dot_product(centered, axis)));
-	quad.c = dot_product(centered, centered) \
-			- pow(dot_product(centered, axis), 2) \
-			- pow(cylinder->radius, 2);
+	quad.c = dot_product(centered, centered)
+		- pow(dot_product(centered, axis), 2)
+		- pow(cylinder->radius, 2);
 	return (solve_quad_cyl(t, quad, ray, cylinder));
 }
 
@@ -152,10 +153,12 @@ int	intersect_cone(t_ray ray, t_cone *cone, double *t)
 	centered_cos.x = centered.x * pow(cos(cone->half_angle), 2);
 	centered_cos.y = centered.y * pow(cos(cone->half_angle), 2);
 	centered_cos.z = centered.z * pow(cos(cone->half_angle), 2);
-
-	quad.a = pow(dot_product(dir, *cone->axis), 2) - pow(cos(cone->half_angle), 2);
-	quad.b = 2 * (dot_product(dir, *cone->axis) * dot_product(centered, *cone->axis) - dot_product(dir, centered_cos));
-	quad.c = pow(dot_product(centered, *cone->axis), 2) - dot_product(centered, centered_cos);
+	quad.a = pow(dot_product(dir, *cone->axis), 2)
+		- pow(cos(cone->half_angle), 2);
+	quad.b = 2 * (dot_product(dir, *cone->axis)
+			* dot_product(centered, *cone->axis)
+			- dot_product(dir, centered_cos));
+	quad.c = pow(dot_product(centered, *cone->axis), 2)
+		- dot_product(centered, centered_cos);
 	return (solve_quad_cone(t, quad, ray, cone));
 }
-

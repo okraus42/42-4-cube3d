@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:51:04 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/02 16:02:45 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ int	find_intersections(t_master *master,
 			flag = update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
 		if (intersect_disc(ray, master->rt->cylinders[i]->topcap, &rf->t))
 			flag = update_object_ref(rf,
-				master->rt->cylinders[i]->topcap, DISC);
+					master->rt->cylinders[i]->topcap, DISC);
 		if (intersect_disc(ray, master->rt->cylinders[i]->botcap, &rf->t))
 			flag = update_object_ref(rf,
-				master->rt->cylinders[i]->botcap, DISC);
+					master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
 	i = 0;
@@ -142,19 +142,19 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 	ray->origin.x = rf->origin.x;
 	ray->origin.y = rf->origin.y;
 	ray->origin.z = rf->origin.z;
-	ray->direction.x = (2. * ((x + 0.5) / (double)WIDTH) - 1.) \
-				* rf->ratio * rf->scale;
-	ray->direction.y = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) \
-				* rf->scale;
+	ray->direction.x = (2. * ((x + 0.5) / (double)WIDTH) - 1.)
+		* rf->ratio * rf->scale;
+	ray->direction.y = (1. - 2. * ((y + 0.5) / (double)HEIGHT))
+		* rf->scale;
 	ray->direction.z = -1;
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
 }
 
 void	find_rays(t_master *master)
 {
-	int		x;
-	int		y;
-	t_ray	**rays;
+	int			x;
+	int			y;
+	t_ray		**rays;
 	t_rayfinder	rf;
 
 	update_camera_matrix(master->rt->camera);

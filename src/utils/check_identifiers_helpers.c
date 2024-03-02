@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/19 11:29:17 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 16:04:28 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ void	check_duplicates(int *ids, int *flag)
 		id_err(NULL, "Duplicate identifier: A", NULL);
 	else if (ids[1] > 1)
 		id_err(NULL, "Duplicate identifier: C", NULL);
-	/* else if (ids[2] > 1)
-		id_err(NULL, "Duplicate identifier: L", NULL); */
 	if (ids[0] > 1 || ids[1] > 1)
 		*flag = 1;
 }
@@ -64,7 +62,7 @@ void	get_identifiers(char **split, int *ids, int *flag)
 		else
 			*flag = 1;
 	}
-	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5) // allows storing up to 99 checkerboards/textures, but will only report Unknown identifier if too long
+	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5)
 	{
 		if (!ft_strncmp(split[0], ".ch/", 4))
 			ids[7]++;
