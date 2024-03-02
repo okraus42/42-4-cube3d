@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_light_sphere.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 18:27:13 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 12:06:41 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:35:04 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	init_light_sphere(t_rt *rt, int *ids)
 		rt->light_spheres[i] = ft_calloc(1, sizeof(t_sphere));
 		rt->light_spheres[i]->coords = ft_calloc(3, sizeof(double));
 		rt->light_spheres[i]->rgb = ft_calloc(3, sizeof(int));
-		//rt->light_spheres[i]->brightness = 1;
 		rt->light_spheres[i++]->mode = DEFAULT;
 	}
 	rt->light_spheres[i] = NULL;
@@ -56,7 +55,8 @@ int	fill_light(t_rt *rt, char **split)
 		return (1);
 	get_coords(rt->light_spheres[i]->coords, split[1]);
 	rt->light_spheres[i]->brightness = ft_atof(split[2]);
-	if (rt->light_spheres[i]->brightness < 0.0 || rt->light_spheres[i]->brightness > 1.0)
+	if (rt->light_spheres[i]->brightness < 0.0
+		|| rt->light_spheres[i]->brightness > 1.0)
 		return (id_err("L", E_BRIGHT_RANGE, E_RANGE_POS));
 	if (!get_rgb(rt->light_spheres[i]->rgb, split[3]))
 		return (id_err("L", E_RGB_RANGE, E_RANGE_INT));
@@ -73,11 +73,11 @@ int	fill_light_sphere(t_rt *rt, char **split)
 		return (1);
 	get_coords(rt->light_spheres[i]->coords, split[1]);
 	rt->light_spheres[i]->brightness = ft_atof(split[2]);
-	if (rt->light_spheres[i]->brightness < 0.0 || rt->light_spheres[i]->brightness > 1.0)
+	if (rt->light_spheres[i]->brightness < 0.0
+		|| rt->light_spheres[i]->brightness > 1.0)
 		return (id_err("L", E_BRIGHT_RANGE, E_RANGE_POS));
 	if (!get_rgb(rt->light_spheres[i]->rgb, split[3]))
 		return (id_err("L", E_RGB_RANGE, E_RANGE_INT));
-	//rt->light_spheres[i]->diameter = 0.1;
 	rt->light_spheres[i]->radius = 0.05;
 	rt->n_lights++;
 	return (0);

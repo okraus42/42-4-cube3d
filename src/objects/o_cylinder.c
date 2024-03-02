@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:45:59 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:41:28 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ int	check_format_cylinder(char **split)
 	if (!spec_count_flag)
 		return (id_err("cy", E_SPEC, "5"));
 	else if (spec_count_flag < 0)
-		return (id_err("cy", "Invalid specifier format", "unique texture identifiers after the 5th specifier"));
+		return (id_err("cy", "Invalid specifier format",
+				"unique texture identifiers after the 5th specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("cy", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -83,7 +84,7 @@ int	fill_cylinder(t_rt *rt, char **split)
 	if (rt->cylinders[i]->nvect[X] == 0 && rt->cylinders[i]->nvect[Y] == 0
 		&& rt->cylinders[i]->nvect[Z] == 0)
 		return (id_err("cy", E_NORM_ZERO, NULL));
-	*rt->cylinders[i]->normal = get_normal(rt->cylinders[i]->nvect[X], \
+	*rt->cylinders[i]->normal = get_normal(rt->cylinders[i]->nvect[X],
 			rt->cylinders[i]->nvect[Y], rt->cylinders[i]->nvect[Z]);
 	diameter = ft_atof(split[3]);
 	if (diameter <= 0)
@@ -98,7 +99,9 @@ int	fill_cylinder(t_rt *rt, char **split)
 	set_checkerboard_pointer("cy", rt, split, &rt->cylinders[i]->checkerboard);
 	set_texture_pointer("cy", rt, split, &rt->cylinders[i]->texture);
 	set_vector_map_pointer("cy", rt, split, &rt->cylinders[i]->vector_map);
-	printf("Checkerboard: %p\nTexture: %p\nVector map: %p\n", rt->cylinders[i]->checkerboard, rt->cylinders[i]->texture, rt->cylinders[i]->vector_map);
+	printf("Checkerboard: %p\nTexture: %p\nVector map: %p\n",
+		rt->cylinders[i]->checkerboard, rt->cylinders[i]->texture,
+		rt->cylinders[i]->vector_map);
 	get_discs(rt->cylinders[i]);
 	rt->n_cylinders++;
 	return (0);

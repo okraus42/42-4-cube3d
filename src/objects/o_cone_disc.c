@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone_disc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:50:27 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:55:08 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ void	define_cone_base(t_cone *cone)
 
 	base = cone->base;
 	base->glossiness = cone->glossiness;
-	base->coords[X] = cone->coords[X] + (-1 * cone->normal->x * cone->height / 2);
-	base->coords[Y] = cone->coords[Y] + (-1 * cone->normal->y * cone->height / 2);
-	base->coords[Z] = cone->coords[Z] + (-1 * cone->normal->z * cone->height / 2);
+	base->coords[X] = cone->coords[X]
+		+ (-1 * cone->normal->x * cone->height / 2);
+	base->coords[Y] = cone->coords[Y]
+		+ (-1 * cone->normal->y * cone->height / 2);
+	base->coords[Z] = cone->coords[Z]
+		+ (-1 * cone->normal->z * cone->height / 2);
 	base->nvect[X] = cone->normal->x * -1;
 	base->nvect[Y] = cone->normal->y * -1;
 	base->nvect[Z] = cone->normal->z * -1;
@@ -54,8 +57,8 @@ void	define_cone_base(t_cone *cone)
 	base->rgb[G] = cone->rgb[G];
 	base->rgb[B] = cone->rgb[B];
 	base->radius = cone->radius;
-	*base->normal = get_normal(base->nvect[X], \
-		base->nvect[Y], base->nvect[Z]);
+	*base->normal = get_normal(base->nvect[X],
+			base->nvect[Y], base->nvect[Z]);
 	set_disc_vects(base);
 	base->checkerboard = cone->checkerboard;
 	base->texture = cone->texture;
@@ -76,9 +79,12 @@ void	define_cone_pinnacle(t_cone *cone)
 
 	pinnacle = cone->pinnacle;
 	pinnacle->glossiness = cone->glossiness;
-	pinnacle->coords[X] = cone->coords[X] + (cone->normal->x * cone->height / 2);
-	pinnacle->coords[Y] = cone->coords[Y] + (cone->normal->y * cone->height / 2);
-	pinnacle->coords[Z] = cone->coords[Z] + (cone->normal->z * cone->height / 2);
+	pinnacle->coords[X] = cone->coords[X]
+		+ (cone->normal->x * cone->height / 2);
+	pinnacle->coords[Y] = cone->coords[Y]
+		+ (cone->normal->y * cone->height / 2);
+	pinnacle->coords[Z] = cone->coords[Z]
+		+ (cone->normal->z * cone->height / 2);
 	pinnacle->nvect[X] = cone->normal->x;
 	pinnacle->nvect[Y] = cone->normal->y;
 	pinnacle->nvect[Z] = cone->normal->z;
@@ -86,8 +92,8 @@ void	define_cone_pinnacle(t_cone *cone)
 	pinnacle->rgb[G] = cone->rgb[G];
 	pinnacle->rgb[B] = cone->rgb[B];
 	cone->pinnacle->radius = cone->radius;
-	*pinnacle->normal = get_normal(pinnacle->nvect[X], \
-		pinnacle->nvect[Y], pinnacle->nvect[Z]);
+	*pinnacle->normal = get_normal(pinnacle->nvect[X],
+			pinnacle->nvect[Y], pinnacle->nvect[Z]);
 	set_disc_vects(pinnacle);
 	pinnacle->checkerboard = NULL;
 	pinnacle->texture = cone->texture;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera_in_objects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 15:40:33 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:49:10 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:54:45 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	detect_camera_inside_sphere(t_sphere *sphere, t_camera *camera)
 {
 	double	cam_dist;
 
-	cam_dist = point_distance(array_to_vect(sphere->coords), array_to_vect(camera->coords)); //testing
-	if (cam_dist < sphere->radius && absf(cam_dist - sphere->radius) > PRECISION)
+	cam_dist = point_distance(array_to_vect(sphere->coords),
+			array_to_vect(camera->coords));
+	if (cam_dist < sphere->radius
+		&& absf(cam_dist - sphere->radius) > PRECISION)
 		sphere->camera_inside = 1;
 	else
 		sphere->camera_inside = 0;
@@ -27,13 +29,13 @@ void	detect_camera_inside_plane(t_plane *plane, t_camera *camera)
 {
 	double	dist;
 	double	subspace;
-	
-	dist = (-1 * plane->normal->x * plane->coords[X]) \
-			- (plane->normal->y * plane->coords[Y]) \
-			- (plane->normal->z * plane->coords[Z]);
-	subspace = (plane->normal->x * camera->coords[X]) \
-			+ (plane->normal->y * camera->coords[Y]) \
-			+ (plane->normal->z * camera->coords[Z]) + dist;
+
+	dist = (-1 * plane->normal->x * plane->coords[X])
+		- (plane->normal->y * plane->coords[Y])
+		- (plane->normal->z * plane->coords[Z]);
+	subspace = (plane->normal->x * camera->coords[X])
+		+ (plane->normal->y * camera->coords[Y])
+		+ (plane->normal->z * camera->coords[Z]) + dist;
 	if (subspace < -PRECISION)
 		plane->camera_inside = 1;
 	else
@@ -42,23 +44,25 @@ void	detect_camera_inside_plane(t_plane *plane, t_camera *camera)
 
 void	detect_camera_inside_cylinder(t_cylinder *cylinder, t_camera *camera)
 {
-	if (point_lies_in_cylinder(array_to_vect(camera->coords), array_to_vect(cylinder->botcap->coords), array_to_vect(cylinder->topcap->coords), cylinder->radius))
+	if (point_lies_in_cylinder(array_to_vect(camera->coords),
+			array_to_vect(cylinder->botcap->coords),
+			array_to_vect(cylinder->topcap->coords), cylinder->radius))
 		cylinder->camera_inside = 1;
 	else
 		cylinder->camera_inside = 0;
 }
 
-void	detect_camera_inside_disc(t_disc *disc, t_camera *camera) // is this needed?
+void	detect_camera_inside_disc(t_disc *disc, t_camera *camera)
 {
 	double	dist;
 	double	subspace;
 
-	dist = (-1 * disc->normal->x * disc->coords[X]) \
-			- (disc->normal->y * disc->coords[Y]) \
-			- (disc->normal->z * disc->coords[Z]);
-	subspace = (disc->normal->x * camera->coords[X]) \
-			+ (disc->normal->y * camera->coords[Y]) \
-			+ (disc->normal->z * camera->coords[Z]) + dist;
+	dist = (-1 * disc->normal->x * disc->coords[X])
+		- (disc->normal->y * disc->coords[Y])
+		- (disc->normal->z * disc->coords[Z]);
+	subspace = (disc->normal->x * camera->coords[X])
+		+ (disc->normal->y * camera->coords[Y])
+		+ (disc->normal->z * camera->coords[Z]) + dist;
 	if (subspace < -PRECISION)
 		disc->camera_inside = 1;
 	else
@@ -67,7 +71,8 @@ void	detect_camera_inside_disc(t_disc *disc, t_camera *camera) // is this needed
 
 void	detect_camera_inside_cone(t_cone *cone, t_camera *camera)
 {
-	if (point_lies_in_cone(array_to_vect(camera->coords), *cone, cone->radius, cone->height))
+	if (point_lies_in_cone(array_to_vect(camera->coords),
+			*cone, cone->radius, cone->height))
 		cone->camera_inside = 1;
 	else
 		cone->camera_inside = 0;

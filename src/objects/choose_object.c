@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   choose_object.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/08 16:58:10 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:39:14 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			{
 				master->rt->light_spheres[i]->mode = DEFAULT;
 				if (i + 1 < master->rt->n_lights)
-					master->rt->light_spheres[i+1]->mode = HIGHLIGHT;
+					master->rt->light_spheres[i + 1]->mode = HIGHLIGHT;
 				else
 					master->rt->light_spheres[0]->mode = HIGHLIGHT;
 				return ;
@@ -96,7 +96,6 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			master->rt->cones[i]->pinnacle->mode = HIGHLIGHT;
 		}
 		master->options->mode = HIGHLIGHT;
-		//find_rays(master);
 		return ;
 	}
 	else
@@ -108,8 +107,7 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->spheres[i]->mode = DEFAULT;
 				if (i + 1 < master->rt->n_spheres)
 				{
-					master->rt->spheres[i+1]->mode = HIGHLIGHT;
-					//find_rays(master);
+					master->rt->spheres[i + 1]->mode = HIGHLIGHT;
 					return ;
 				}
 				else
@@ -126,7 +124,6 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 			if (flag)
 			{
 				master->rt->planes[i]->mode = HIGHLIGHT;
-				//find_rays(master);
 				return ;
 			}
 			if (master->rt->planes[i]->mode == HIGHLIGHT)
@@ -134,8 +131,7 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->planes[i]->mode = DEFAULT;
 				if (i + 1 < master->rt->n_planes)
 				{
-					master->rt->planes[i+1]->mode = HIGHLIGHT;
-					//find_rays(master);
+					master->rt->planes[i + 1]->mode = HIGHLIGHT;
 					return ;
 				}
 				else
@@ -154,7 +150,6 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->cylinders[i]->mode = HIGHLIGHT;
 				master->rt->cylinders[i]->botcap->mode = HIGHLIGHT;
 				master->rt->cylinders[i]->topcap->mode = HIGHLIGHT;
-				//find_rays(master);
 				return ;
 			}
 			if (master->rt->cylinders[i]->mode == HIGHLIGHT)
@@ -164,10 +159,9 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->cylinders[i]->topcap->mode = DEFAULT;
 				if (i + 1 < master->rt->n_cylinders)
 				{
-					master->rt->cylinders[i+1]->mode = HIGHLIGHT;
-					master->rt->cylinders[i+1]->botcap->mode = HIGHLIGHT;
-					master->rt->cylinders[i+1]->topcap->mode = HIGHLIGHT;
-					//find_rays(master);
+					master->rt->cylinders[i + 1]->mode = HIGHLIGHT;
+					master->rt->cylinders[i + 1]->botcap->mode = HIGHLIGHT;
+					master->rt->cylinders[i + 1]->topcap->mode = HIGHLIGHT;
 					return ;
 				}
 				else
@@ -186,7 +180,6 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->cones[i]->mode = HIGHLIGHT;
 				master->rt->cones[i]->base->mode = HIGHLIGHT;
 				master->rt->cones[i]->pinnacle->mode = HIGHLIGHT;
-				//find_rays(master);
 				return ;
 			}
 			if (master->rt->cones[i]->mode == HIGHLIGHT)
@@ -196,10 +189,9 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 				master->rt->cones[i]->pinnacle->mode = DEFAULT;
 				if (i + 1 < master->rt->n_cones)
 				{
-					master->rt->cones[i+1]->mode = HIGHLIGHT;
-					master->rt->cones[i+1]->base->mode = HIGHLIGHT;
-					master->rt->cones[i+1]->pinnacle->mode = HIGHLIGHT;
-					//find_rays(master);
+					master->rt->cones[i + 1]->mode = HIGHLIGHT;
+					master->rt->cones[i + 1]->base->mode = HIGHLIGHT;
+					master->rt->cones[i + 1]->pinnacle->mode = HIGHLIGHT;
 					return ;
 				}
 				else
@@ -210,7 +202,6 @@ void	choose_object(t_master *master, mlx_key_data_t keydata)
 	}
 	master->options->mode = OBJECT_CHOICE;
 	choose_object(master, keydata);
-	//find_rays(master);
 }
 
 void	connect_disc_to_object(t_rt *rt, void *object_ptr)
@@ -220,8 +211,8 @@ void	connect_disc_to_object(t_rt *rt, void *object_ptr)
 	i = 0;
 	while (i < rt->n_cylinders)
 	{
-		if (rt->cylinders[i]->botcap == object_ptr ||
-			rt->cylinders[i]->topcap == object_ptr)
+		if (rt->cylinders[i]->botcap == object_ptr
+			|| rt->cylinders[i]->topcap == object_ptr)
 		{
 			rt->cylinders[i]->mode = HIGHLIGHT;
 			rt->cylinders[i]->botcap->mode = HIGHLIGHT;
@@ -232,8 +223,8 @@ void	connect_disc_to_object(t_rt *rt, void *object_ptr)
 	i = 0;
 	while (i < rt->n_cones)
 	{
-		if (rt->cones[i]->base == object_ptr ||
-			rt->cones[i]->pinnacle == object_ptr)
+		if (rt->cones[i]->base == object_ptr
+			|| rt->cones[i]->pinnacle == object_ptr)
 		{
 			rt->cones[i]->mode = HIGHLIGHT;
 			rt->cones[i]->base->mode = HIGHLIGHT;
@@ -241,7 +232,6 @@ void	connect_disc_to_object(t_rt *rt, void *object_ptr)
 		}
 		i++;
 	}
-	
 }
 
 void	set_highlight_from_reference(t_master *master, t_rayfinder rf)
@@ -268,7 +258,6 @@ void	set_highlight_from_reference(t_master *master, t_rayfinder rf)
 				master->rt->planes[i]->mode = HIGHLIGHT;
 			i++;
 		}
-		
 	}
 	else if (rf.object_flag == CYLINDER)
 	{

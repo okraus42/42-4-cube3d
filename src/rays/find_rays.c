@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/28 17:17:35 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:51:04 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	update_object_ref(t_rayfinder *rf, void *object, t_object flag)
 	return (1);
 }
 
-int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype type)
+int	find_intersections(t_master *master,
+	t_ray ray, t_rayfinder *rf, t_raytype type)
 {
 	int	i;
 	int	flag;
@@ -49,9 +50,11 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 		if (intersect_cylinder(ray, master->rt->cylinders[i], &rf->t))
 			flag = update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
 		if (intersect_disc(ray, master->rt->cylinders[i]->topcap, &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i]->topcap, DISC);
+			flag = update_object_ref(rf,
+				master->rt->cylinders[i]->topcap, DISC);
 		if (intersect_disc(ray, master->rt->cylinders[i]->botcap, &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i]->botcap, DISC);
+			flag = update_object_ref(rf,
+				master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
 	i = 0;
@@ -59,8 +62,6 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 	{
 		if (intersect_cone(ray, master->rt->cones[i], &rf->t))
 			flag = update_object_ref(rf, master->rt->cones[i], CONE);
-		/* if (intersect_disc(ray, master->rt->cones[i]->pinnacle, &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i]->pinnacle, DISC); */
 		if (intersect_disc(ray, master->rt->cones[i]->base, &rf->t))
 			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
 		i++;
@@ -68,7 +69,8 @@ int	find_intersections(t_master *master, t_ray ray, t_rayfinder *rf, t_raytype t
 	i = 0;
 	while (i < master->rt->n_lights)
 	{
-		if (type != SHADOW && intersect_sphere(ray, master->rt->light_spheres[i], &rf->t))
+		if (type != SHADOW && intersect_sphere(ray,
+				master->rt->light_spheres[i], &rf->t))
 			flag = update_object_ref(rf, master->rt->light_spheres[i], LIGHT);
 		i++;
 	}
@@ -85,7 +87,8 @@ t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t)
 	return (intersection);
 }
 
-void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_ray ray, t_master *master)
+void	shade_nearest_object(int flag,
+	void *object_ptr, t_rayfinder *rf, t_ray ray, t_master *master)
 {
 	t_vect3f	intersection;
 
@@ -117,9 +120,9 @@ t_rayfinder	init_rayfinder(t_master	*master)
 {
 	t_rayfinder	rf;
 
-	rf.ratio = (double)WIDTH / (double)HEIGHT; // assuming WIDTH > HEIGHT
+	rf.ratio = (double)WIDTH / (double)HEIGHT;
 	rf.fov = master->rt->camera->fov;
-	rf.scale = tan(rad(rf.fov * 0.5)); // why cos(rad)? see https://www.permadi.com/tutorial/raycast/rayc8.html, alternatively change z to a lower value (e.g. -10)
+	rf.scale = tan(rad(rf.fov * 0.5));
 	rf.t_near = (double)INT_MAX;
 	rf.t = (double)INT_MAX;
 	rf.object_flag = EMPTY;
@@ -143,7 +146,7 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 				* rf->ratio * rf->scale;
 	ray->direction.y = (1. - 2. * ((y + 0.5) / (double)HEIGHT)) \
 				* rf->scale;
-	ray->direction.z = -1; // change to calibrate focal length, should be -1
+	ray->direction.z = -1;
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
 }
 
@@ -169,7 +172,8 @@ void	find_rays(t_master *master)
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
 			find_intersections(master, rays[x][y], &rf, PRIMARY);
-			shade_nearest_object(rf.object_flag, rf.object_ptr, &rf, rays[x][y], master);
+			shade_nearest_object(rf.object_flag,
+				rf.object_ptr, &rf, rays[x][y], master);
 			mlx_put_pixel(master->img, x, y, rf.clr);
 			y++;
 		}

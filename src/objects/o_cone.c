@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 15:04:34 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:33:43 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ int	check_format_cone(char **split)
 	if (!spec_count_flag)
 		return (id_err("co", E_SPEC, "5"));
 	else if (spec_count_flag < 0)
-		return (id_err("co", "Invalid specifier format", "unique texture identifiers after the 5th specifier"));
+		return (id_err("co", "Invalid specifier format",
+				"unique texture identifiers after the 5th specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("co", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -84,7 +85,7 @@ int	fill_cone(t_rt *rt, char **split)
 	if (rt->cones[i]->nvect[X] == 0 && rt->cones[i]->nvect[Y] == 0
 		&& rt->cones[i]->nvect[Z] == 0)
 		return (id_err("co", E_NORM_ZERO, NULL));
-	*rt->cones[i]->normal = get_normal(rt->cones[i]->nvect[X], \
+	*rt->cones[i]->normal = get_normal(rt->cones[i]->nvect[X],
 			rt->cones[i]->nvect[Y], rt->cones[i]->nvect[Z]);
 	*rt->cones[i]->axis = invert_vect3f(*rt->cones[i]->normal);
 	diameter = ft_atof(split[3]);
@@ -94,7 +95,8 @@ int	fill_cone(t_rt *rt, char **split)
 	rt->cones[i]->height = ft_atof(split[4]);
 	if (rt->cones[i]->height <= 0)
 		return (id_err("co", E_HEIGHT_RANGE, E_RANGE_STRICT));
-	rt->cones[i]->half_angle = atan2(rt->cones[i]->radius, rt->cones[i]->height);
+	rt->cones[i]->half_angle = atan2(rt->cones[i]->radius,
+			rt->cones[i]->height);
 	rt->cones[i]->dist_term = sqrt(1 + pow(rt->cones[i]->half_angle, 2));
 	if (!get_rgb(rt->cones[i]->rgb, split[5]))
 		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));

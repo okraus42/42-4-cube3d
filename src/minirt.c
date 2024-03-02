@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/28 15:59:01 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:31:24 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ int	open_file(char *path)
 		id_err("File", E_FILE_EXT, ".rt");
 		return (fd);
 	}
-
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		id_err("File", "Invalid file", NULL);
@@ -169,7 +168,6 @@ int	iterate_highlighted_object(t_rt *rt)
 	{
 		if (rt->light_spheres[i]->mode == HIGHLIGHT)
 		{
-			//printf("light\n");
 			return (LIGHT | (i << 8));
 		}
 		i++;
@@ -179,8 +177,7 @@ int	iterate_highlighted_object(t_rt *rt)
 
 void	ft_draw_string(t_master *master)
 {
-	int	i;
-
+	int		i;
 	char	*s[STRINGS];
 
 	if (master->options->mode == DEFAULT)
@@ -208,38 +205,10 @@ void	ft_draw_string(t_master *master)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT: %i", i >> 8);
 	else
 		ft_sprintf(master->str[1], " ");
-	//ft_sprintf(master->str[2], "");
-	/* if (master->rt->cones[0])
-		sprintf(master->str[2], "Cone normal   x %8f y %8f z %8f", master->rt->cones[0]->normal->x, master->rt->cones[0]->normal->y, master->rt->cones[0]->normal->z);
-	if (master->rt->cones[0])
-		sprintf(master->str[3], "Cone right    x %8f y %8f z %8f", master->rt->cones[0]->right->x, master->rt->cones[0]->right->y, master->rt->cones[0]->right->z);
-	if (master->rt->cones[0])
-		sprintf(master->str[4], "Cone up       x %8f y %8f z %8f", master->rt->cones[0]->up->x, master->rt->cones[0]->up->y, master->rt->cones[0]->up->z);
-	if (master->rt->cones[0])
-		sprintf(master->str[5], "Camera normal x %8f y %8f z %8f", master->rt->camera->normal->x, master->rt->camera->normal->y, master->rt->camera->normal->z);
-	if (master->rt->cones[0])
-		sprintf(master->str[6], "Camera right  x %8f y %8f z %8f", master->rt->camera->right->x, master->rt->camera->right->y, master->rt->camera->right->z);
-	if (master->rt->cones[0])
-		sprintf(master->str[7], "Camera up     x %8f y %8f z %8f", master->rt->camera->up->x, master->rt->camera->up->y, master->rt->camera->up->z);
-	//ft_sprintf(master->str[8], "WHAT IS GOING ON???"); */
 	mlx_delete_image(master->mlx, master->string[0]);
 	mlx_delete_image(master->mlx, master->string[1]);
-	/* mlx_delete_image(master->mlx, master->string[2]);
-	mlx_delete_image(master->mlx, master->string[3]);
-	mlx_delete_image(master->mlx, master->string[4]);
-	mlx_delete_image(master->mlx, master->string[5]);
-	mlx_delete_image(master->mlx, master->string[6]);
-	mlx_delete_image(master->mlx, master->string[7]); */
-	//mlx_delete_image(master->mlx, master->string[8]);
 	master->string[0] = mlx_put_string(master->mlx, s[0], 10, 5);
 	master->string[1] = mlx_put_string(master->mlx, master->str[1], 10, 25);
-	/* master->string[2] = mlx_put_string(master->mlx, master->str[2], 10, 45);
-	master->string[3] = mlx_put_string(master->mlx, master->str[3], 10, 65);
-	master->string[4] = mlx_put_string(master->mlx, master->str[4], 10, 85);
-	master->string[5] = mlx_put_string(master->mlx, master->str[5], 10, 105);
-	master->string[6] = mlx_put_string(master->mlx, master->str[6], 10, 125);
-	master->string[7] = mlx_put_string(master->mlx, master->str[7], 10, 145); */
-	//master->string[8] = mlx_put_string(master->mlx, master->str[8], 10, 165);
 	free (s[0]);
 }
 
@@ -249,8 +218,8 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 
 	master = param;
 	if (master->options->mode == DEFAULT
-			&& !keydata.modifier && keydata.action != MLX_RELEASE
-			&& (keydata.key == MLX_KEY_RIGHT
+		&& !keydata.modifier && keydata.action != MLX_RELEASE
+		&& (keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
@@ -260,32 +229,32 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_PAGE_DOWN))
 		shift_camera(master, keydata);
 	else if (master->options->mode == DEFAULT
-			&& !keydata.modifier && keydata.action != MLX_RELEASE
-			&& (keydata.key == MLX_KEY_A
+		&& !keydata.modifier && keydata.action != MLX_RELEASE
+		&& (keydata.key == MLX_KEY_A
 			|| keydata.key == MLX_KEY_D
 			|| keydata.key == MLX_KEY_W
 			|| keydata.key == MLX_KEY_S
 			|| keydata.key == MLX_KEY_Q
 			|| keydata.key == MLX_KEY_E))
 		rotate_camera(master, keydata);
-	else if (keydata.modifier == MLX_CONTROL 
-			&& keydata.key == MLX_KEY_O
-			&& keydata.action != MLX_RELEASE
-			&& master->options->mode == DEFAULT)
-		{
-			master->options->mode = OBJECT_CHOICE;
-			choose_object(master, keydata);
-		}
-	else if ((master->options->mode == OBJECT_CHOICE 
+	else if (keydata.modifier == MLX_CONTROL
+		&& keydata.key == MLX_KEY_O
+		&& keydata.action != MLX_RELEASE
+		&& master->options->mode == DEFAULT)
+	{
+		master->options->mode = OBJECT_CHOICE;
+		choose_object(master, keydata);
+	}
+	else if ((master->options->mode == OBJECT_CHOICE
 			|| master->options->mode == HIGHLIGHT)
-			&& keydata.modifier == MLX_SHIFT
-			&& keydata.key == MLX_KEY_UP
-			&& keydata.action != MLX_RELEASE)
+		&& keydata.modifier == MLX_SHIFT
+		&& keydata.key == MLX_KEY_UP
+		&& keydata.action != MLX_RELEASE)
 		choose_object(master, keydata);
 	else if (master->options->mode == HIGHLIGHT
-			&& keydata.action != MLX_RELEASE
-			&& !keydata.modifier
-			&& (keydata.key == MLX_KEY_RIGHT
+		&& keydata.action != MLX_RELEASE
+		&& !keydata.modifier
+		&& (keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
@@ -303,27 +272,26 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_3
 			|| keydata.key == MLX_KEY_4))
 		manipulate_objects(master, keydata);
-	else if (keydata.modifier == MLX_CONTROL 
-			&& keydata.key == MLX_KEY_L
-			&& keydata.action != MLX_RELEASE
-			&& master->options->mode == DEFAULT)
-			{
-				master->options->mode = LIGHTING;
-				if (master->rt->n_lights > 0)
-				{
-					//printf("highlighted light\n");
-					master->rt->light_spheres[0]->mode = HIGHLIGHT;
-				}
-			}
+	else if (keydata.modifier == MLX_CONTROL
+		&& keydata.key == MLX_KEY_L
+		&& keydata.action != MLX_RELEASE
+		&& master->options->mode == DEFAULT)
+	{
+		master->options->mode = LIGHTING;
+		if (master->rt->n_lights > 0)
+		{
+			master->rt->light_spheres[0]->mode = HIGHLIGHT;
+		}
+	}
 	else if ((master->options->mode == LIGHTING)
-			&& keydata.modifier == MLX_SHIFT
-			&& keydata.key == MLX_KEY_UP
-			&& keydata.action != MLX_RELEASE)
+		&& keydata.modifier == MLX_SHIFT
+		&& keydata.key == MLX_KEY_UP
+		&& keydata.action != MLX_RELEASE)
 		choose_object(master, keydata);
 	else if (master->options->mode == LIGHTING
-			&& keydata.action != MLX_RELEASE
-			&& !keydata.modifier
-			&& (keydata.key == MLX_KEY_RIGHT
+		&& keydata.action != MLX_RELEASE
+		&& !keydata.modifier
+		&& (keydata.key == MLX_KEY_RIGHT
 			|| keydata.key == MLX_KEY_LEFT
 			|| keydata.key == MLX_KEY_UP
 			|| keydata.key == MLX_KEY_DOWN
@@ -341,10 +309,11 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 	ft_draw_string(master);
 }
 
-t_rayfinder	trace_singular_object_ray(t_master *master, int32_t xpos, int32_t ypos)
+t_rayfinder	trace_singular_object_ray(t_master *master,
+	int32_t xpos, int32_t ypos)
 {
 	t_rayfinder	rf;
-	t_ray	*ray;
+	t_ray		*ray;
 
 	ray = malloc(sizeof(t_ray));
 	update_camera_matrix(master->rt->camera);
@@ -356,7 +325,8 @@ t_rayfinder	trace_singular_object_ray(t_master *master, int32_t xpos, int32_t yp
 	return (rf);
 }
 
-void	mousehook(mouse_key_t button, action_t action, modifier_key_t mods, void *param)
+void	mousehook(mouse_key_t button,
+	action_t action, modifier_key_t mods, void *param)
 {
 	t_master	*master;
 	int32_t		xpos;
@@ -389,7 +359,6 @@ void	init_options(t_master *master)
 
 	options = ft_calloc(1, sizeof(t_options));
 	options->mode = DEFAULT;
-	//options->light_intensity = 100;
 	options->spec_highlight_size = 512;
 	master->options = options;
 }
@@ -403,9 +372,7 @@ void	create_object_list(t_master *master)
 {
 	int			i;
 	t_objlist	*object;
-	//t_objlist	*tmp;
 
-	//master->obj_list = ft_calloc(1, sizeof(t_objlist));
 	master->obj_list = NULL;
 	i = 0;
 	while (i < master->rt->n_spheres)
@@ -450,20 +417,6 @@ void	create_object_list(t_master *master)
 		ft_objlst_add_back(&master->obj_list, object);
 		i++;
 	}
-
-	//tmp = master->obj_list;
-	//ft_objlst_iter(tmp, &print_list);
-
-	/* i = 0;
-	if (tmp)
-	{
-		while (tmp)
-		{
-			printf("Flag no. %i of object: %i\n", i++, tmp->object);
-			tmp = tmp->next;
-		}
-	} */
-	//printf("Flag no. %i of object: %i\n", i++, master->obj_list->next->object);
 }
 
 int	main(int ac, char *av[])
@@ -474,8 +427,6 @@ int	main(int ac, char *av[])
 	mlx_image_t	*img;
 	int			fd;
 	int			i;
-	//int32_t	xpos;
-	//int32_t	ypos;
 
 	fd = 0;
 	master = ft_calloc(1, sizeof(t_master));
@@ -504,7 +455,6 @@ int	main(int ac, char *av[])
 		}
 		if (!load_file(av[1], rt, fd))
 		{
-			//print_contents(rt);
 			mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 			mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
 			img = mlx_new_image(mlx, mlx->width, mlx->height);
@@ -516,14 +466,12 @@ int	main(int ac, char *av[])
 			while (i < STRINGS)
 			{
 				ft_sprintf(master->str[i], "");
-				master->string[i] = mlx_put_string(master->mlx, master->str[i], 10, 5 + 20 * i);
+				master->string[i] = mlx_put_string(master->mlx,
+						master->str[i], 10, 5 + 20 * i);
 				++i;
 			}
-			//create_object_list(master);
 			find_rays(master);
-			ft_draw_string(master); // maybe here?
-			//mlx_get_window_pos(master->mlx, &xpos, &ypos);
-			//printf("xpos: %i\nypos: %i\n", xpos, ypos);
+			ft_draw_string(master);
 			loop(mlx, master);
 			mlx_delete_image(mlx, img);
 			mlx_terminate(mlx);

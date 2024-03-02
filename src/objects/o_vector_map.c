@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:41 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 16:13:27 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:56:07 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@ void	init_vector_maps(t_rt *rt, int *ids)
 	while (i < (ids[9]))
 	{
 		rt->vector_maps[i] = ft_calloc(1, sizeof(t_vector_map));
-		//rt->vector_maps[i]->tx_path = NULL;
-		// ft_bzero(rt->vector_maps[i]->tx_path, 1024);
-		// ft_bzero(rt->vector_maps[i]->botcap_tx_path, 1024);
-		// ft_bzero(rt->vector_maps[i]->topcap_tx_path, 1024);
 		i++;
 	}
 	rt->vector_maps[i] = NULL;
@@ -38,7 +34,8 @@ int	check_format_vector_map(char **split)
 
 	i = 1;
 	spec_count = 0;
-	if (!has_spec_count_strict(split, 4) && !has_spec_count_strict(split, 3) && !has_spec_count_strict(split, 2))
+	if (!has_spec_count_strict(split, 4)
+		&& !has_spec_count_strict(split, 3) && !has_spec_count_strict(split, 2))
 		return (id_err(".vm", E_SPEC, "up to 3"));
 	if (!has_valid_id_attribute(split[0]))
 		return (id_err(".vm", "Invalid vector_map ID", NULL));
@@ -47,7 +44,8 @@ int	check_format_vector_map(char **split)
 	while (i < spec_count)
 	{
 		if (!contains_valid_key_value_pair(split[i]))
-			return (id_err(".vm", "invalid key-value pair", "key{0,1,2}=\"value\""));
+			return (id_err(".vm", "invalid key-value pair",
+					"key{0,1,2}=\"value\""));
 		if (!is_valid_texture_file(split[i]))
 			return (id_err(".vm", "Invalid vector_map file", NULL));
 		i++;
@@ -163,14 +161,7 @@ int	fill_vector_map(t_rt *rt, char **split)
 	}
 	if (!set_vector_map_id(rt->vector_maps[i], split[0]))
 		return (id_err(".vm", "Invalid .vm specification", NULL));
-	// ft_putstr_fd(rt->vector_maps[i]->vm_path, 1);
-	// write(1, "\n", 1);
-	// ft_putstr_fd(rt->vector_maps[i]->botcap_vm_path, 1);
-	// write(1, "\n", 1);
-	// ft_putstr_fd(rt->vector_maps[i]->topcap_vm_path, 1);
-	// write(1, "\n", 1);
 	ft_load_vector_map(rt->vector_maps[i]);
-	//printf("vm->botcap_vm_path %s\n", rt->vector_maps[i]->topcap_vm_path);
 	rt->n_vector_maps++;
 	return (0);
 }
@@ -192,4 +183,3 @@ void	free_vector_maps(t_rt *rt)
 	}
 	free(rt->vector_maps);
 }
-

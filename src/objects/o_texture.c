@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 16:13:04 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:42:52 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@ void	init_textures(t_rt *rt, int *ids)
 	while (i < (ids[8]))
 	{
 		rt->textures[i] = ft_calloc(1, sizeof(t_texture));
-		//rt->textures[i]->tx_path = NULL;
-		// ft_bzero(rt->textures[i]->tx_path, 1024);
-		// ft_bzero(rt->textures[i]->botcap_tx_path, 1024);
-		// ft_bzero(rt->textures[i]->topcap_tx_path, 1024);
 		i++;
 	}
 	rt->textures[i] = NULL;
@@ -38,7 +34,8 @@ int	check_format_texture(char **split)
 
 	i = 1;
 	spec_count = 0;
-	if (!has_spec_count_strict(split, 4) && !has_spec_count_strict(split, 3) && !has_spec_count_strict(split, 2))
+	if (!has_spec_count_strict(split, 4)
+		&& !has_spec_count_strict(split, 3) && !has_spec_count_strict(split, 2))
 		return (id_err(".tx", E_SPEC, "up to 3"));
 	if (!has_valid_id_attribute(split[0]))
 		return (id_err(".tx", "Invalid texture ID", NULL));
@@ -47,7 +44,8 @@ int	check_format_texture(char **split)
 	while (i < spec_count)
 	{
 		if (!contains_valid_key_value_pair(split[i]))
-			return (id_err(".tx", "invalid key-value pair", "key{0,1,2}=\"value\""));
+			return (id_err(".tx",
+					"invalid key-value pair", "key{0,1,2}=\"value\""));
 		if (!is_valid_texture_file(split[i]))
 			return (id_err(".tx", "Invalid texture file", NULL));
 		i++;
@@ -145,7 +143,6 @@ void	ft_load_texture(t_texture *tx)
 	}
 }
 
-
 int	fill_texture(t_rt *rt, char **split)
 {
 	int			i;
@@ -159,15 +156,9 @@ int	fill_texture(t_rt *rt, char **split)
 	{
 		set_texture_paths(rt->textures[i], split[j]);
 		j++;
-	}	
+	}
 	if (!set_texture_id(rt->textures[i], split[0]))
 		return (id_err(".tx", "Invalid .tx specification", NULL));
-	// ft_putstr_fd(rt->textures[i]->tx_path, 1);
-	// write(1, "\n", 1);
-	// ft_putstr_fd(rt->textures[i]->botcap_tx_path, 1);
-	// write(1, "\n", 1);
-	// ft_putstr_fd(rt->textures[i]->topcap_tx_path, 1);
-	// write(1, "\n", 1);
 	ft_load_texture(rt->textures[i]);
 	rt->n_textures++;
 	return (0);

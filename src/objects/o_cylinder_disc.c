@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:46:22 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:44:54 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->texture = NULL;
 	cylinder->botcap->vector_map = NULL;
 	cylinder->topcap->vector_map = NULL;
-
 }
 
 void	define_botcap(t_cylinder *cylinder)
@@ -45,9 +44,12 @@ void	define_botcap(t_cylinder *cylinder)
 
 	botcap = cylinder->botcap;
 	botcap->glossiness = cylinder->glossiness;
-	botcap->coords[X] = cylinder->coords[X] + (-1 * cylinder->normal->x * cylinder->height / 2);
-	botcap->coords[Y] = cylinder->coords[Y] + (-1 * cylinder->normal->y * cylinder->height / 2);
-	botcap->coords[Z] = cylinder->coords[Z] + (-1 * cylinder->normal->z * cylinder->height / 2);
+	botcap->coords[X] = cylinder->coords[X]
+		+ (-1 * cylinder->normal->x * cylinder->height / 2);
+	botcap->coords[Y] = cylinder->coords[Y]
+		+ (-1 * cylinder->normal->y * cylinder->height / 2);
+	botcap->coords[Z] = cylinder->coords[Z]
+		+ (-1 * cylinder->normal->z * cylinder->height / 2);
 	botcap->nvect[X] = cylinder->normal->x * -1;
 	botcap->nvect[Y] = cylinder->normal->y * -1;
 	botcap->nvect[Z] = cylinder->normal->z * -1;
@@ -55,8 +57,8 @@ void	define_botcap(t_cylinder *cylinder)
 	botcap->rgb[G] = cylinder->rgb[G];
 	botcap->rgb[B] = cylinder->rgb[B];
 	botcap->radius = cylinder->radius;
-	*botcap->normal = get_normal(botcap->nvect[X], \
-		botcap->nvect[Y], botcap->nvect[Z]);
+	*botcap->normal = get_normal(botcap->nvect[X],
+			botcap->nvect[Y], botcap->nvect[Z]);
 	set_disc_vects(botcap);
 	botcap->checkerboard = cylinder->checkerboard;
 	botcap->texture = cylinder->texture;
@@ -69,7 +71,6 @@ void	define_botcap(t_cylinder *cylinder)
 		botcap->vm_disc = cylinder->vector_map->vm_bot;
 	else
 		botcap->vm_disc = NULL;
-	//botcap->texture->tx_main = cylinder->texture->tx_bot;
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -78,12 +79,12 @@ void	define_topcap(t_cylinder *cylinder)
 
 	topcap = cylinder->topcap;
 	topcap->glossiness = cylinder->glossiness;
-	topcap->coords[X] = cylinder->coords[X] \
-			+ cylinder->height / 2 * cylinder->normal->x;
-	topcap->coords[Y] = cylinder->coords[Y] \
-			+ cylinder->height / 2 * cylinder->normal->y;
-	topcap->coords[Z] = cylinder->coords[Z] \
-			+ cylinder->height / 2 * cylinder->normal->z;
+	topcap->coords[X] = cylinder->coords[X]
+		+ cylinder->height / 2 * cylinder->normal->x;
+	topcap->coords[Y] = cylinder->coords[Y]
+		+ cylinder->height / 2 * cylinder->normal->y;
+	topcap->coords[Z] = cylinder->coords[Z]
+		+ cylinder->height / 2 * cylinder->normal->z;
 	topcap->nvect[X] = cylinder->normal->x;
 	topcap->nvect[Y] = cylinder->normal->y;
 	topcap->nvect[Z] = cylinder->normal->z;
@@ -91,8 +92,8 @@ void	define_topcap(t_cylinder *cylinder)
 	topcap->rgb[G] = cylinder->rgb[G];
 	topcap->rgb[B] = cylinder->rgb[B];
 	cylinder->topcap->radius = cylinder->radius;
-	*topcap->normal = get_normal(topcap->nvect[X], \
-		topcap->nvect[Y], topcap->nvect[Z]);
+	*topcap->normal = get_normal(topcap->nvect[X],
+			topcap->nvect[Y], topcap->nvect[Z]);
 	set_disc_vects(topcap);
 	topcap->checkerboard = cylinder->checkerboard;
 	topcap->texture = cylinder->texture;
@@ -105,7 +106,6 @@ void	define_topcap(t_cylinder *cylinder)
 		topcap->vm_disc = cylinder->vector_map->vm_top;
 	else
 		topcap->vm_disc = NULL;
-	//topcap->texture->tx_main = cylinder->texture->tx_top;
 }
 
 void	get_discs(t_cylinder *cylinder)

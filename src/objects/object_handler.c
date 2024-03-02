@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 11:33:55 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:43:10 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ void	fill_objects(t_rt *rt, char **split, int *flag)
 		else
 			*flag = 1;
 	}
- 	else if (!ft_strncmp(split[0], ".ch/", 4)) // ignoring checkerboard call during object parsing
+	else if (!ft_strncmp(split[0], ".ch/", 4))
 		return ;
-	else if (!ft_strncmp(split[0], ".tx/", 4)) // ignoring texture call during object parsing
+	else if (!ft_strncmp(split[0], ".tx/", 4))
 		return ;
-	else if (!ft_strncmp(split[0], ".vm/", 4)) // ignoring vector map call during object parsing
+	else if (!ft_strncmp(split[0], ".vm/", 4))
 		return ;
 	else
 		*flag = 1;

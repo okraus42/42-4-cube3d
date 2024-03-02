@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_texture_data_pointers.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 13:30:20 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/23 10:35:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:43:33 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	find_checkerboard_id(char **split)
 {
-	int	i;
-	int	id;
-	int	len;
+	int		i;
+	int		id;
+	int		len;
 	char	**specifier;
 
 	i = 0;
@@ -44,7 +44,8 @@ static int	find_checkerboard_id(char **split)
 	return (id);
 }
 
-int	set_checkerboard_pointer(char *obj, t_rt *rt, char **split, t_checkerboard **ptr)
+int	set_checkerboard_pointer(char *obj,
+	t_rt *rt, char **split, t_checkerboard **ptr)
 {
 	int	id;
 	int	i;
@@ -69,9 +70,9 @@ int	set_checkerboard_pointer(char *obj, t_rt *rt, char **split, t_checkerboard *
 
 static int	find_texture_id(char **split)
 {
-	int	i;
-	int	id;
-	int	len;
+	int		i;
+	int		id;
+	int		len;
 	char	**specifier;
 
 	i = 0;
@@ -124,9 +125,9 @@ int	set_texture_pointer(char *obj, t_rt *rt, char **split, t_texture **ptr)
 
 static int	find_vector_map_id(char **split)
 {
-	int	i;
-	int	id;
-	int	len;
+	int		i;
+	int		id;
+	int		len;
 	char	**specifier;
 
 	i = 0;
@@ -154,7 +155,8 @@ static int	find_vector_map_id(char **split)
 	return (id);
 }
 
-int	set_vector_map_pointer(char *obj, t_rt *rt, char **split, t_vector_map **ptr)
+int	set_vector_map_pointer(char *obj,
+	t_rt *rt, char **split, t_vector_map **ptr)
 {
 	int	id;
 	int	i;

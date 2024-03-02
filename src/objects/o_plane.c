@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_plane.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:42:08 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/21 11:40:45 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:56:24 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	check_format_plane(char **split)
 	if (!spec_count_flag)
 		return (id_err("pl", E_SPEC, "3"));
 	else if (spec_count_flag < 0)
-		return (id_err("pl", "Invalid specifier format", "unique texture identifiers after the 3rd specifier"));
+		return (id_err("pl", "Invalid specifier format",
+				"unique texture identifiers after the 3rd specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("pl", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -72,7 +73,7 @@ int	fill_plane(t_rt *rt, char **split)
 	if (rt->planes[i]->nvect[X] == 0 && rt->planes[i]->nvect[Y] == 0
 		&& rt->planes[i]->nvect[Z] == 0)
 		return (id_err("pl", E_NORM_ZERO, NULL));
-	*rt->planes[i]->normal = get_normal(rt->planes[i]->nvect[X], \
+	*rt->planes[i]->normal = get_normal(rt->planes[i]->nvect[X],
 			rt->planes[i]->nvect[Y], rt->planes[i]->nvect[Z]);
 	if (!get_rgb(rt->planes[i]->rgb, split[3]))
 		return (id_err("pl", E_RGB_RANGE, E_RANGE_INT));

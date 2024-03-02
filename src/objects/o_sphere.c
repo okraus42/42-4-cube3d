@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_sphere.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:40:34 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/27 10:37:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/02 15:56:35 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	check_format_sphere(char **split)
 	if (!spec_count_flag)
 		return (id_err("sp", E_SPEC, "3"));
 	else if (spec_count_flag < 0)
-		return (id_err("sp", "Invalid specifier format", "unique texture identifiers after the 3rd specifier"));
+		return (id_err("sp", "Invalid specifier format",
+				"unique texture identifiers after the 3rd specifier"));
 	if (!is_float_triad(split[1]))
 		return (id_err("sp", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -68,7 +69,6 @@ int	fill_sphere(t_rt *rt, char **split)
 		return (1);
 	get_coords(rt->spheres[i]->coords, split[1]);
 	diameter = ft_atof(split[2]);
-	//rt->spheres[i]->diameter = ft_atof(split[2]);
 	if (diameter <= 0)
 		return (id_err("sp", E_DIA_RANGE, E_RANGE_STRICT));
 	rt->spheres[i]->radius = diameter / 2.;
