@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 15:15:46 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 16:33:53 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t)
 	return (intersection);
 }
 
-void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_master *master)
+void	shade_nearest_object(int flag,
+	void *object_ptr, t_rayfinder *rf, t_master *master)
 {
 	t_vect3f	intersection;
 

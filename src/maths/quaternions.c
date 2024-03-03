@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:21:33 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 16:02:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,163 +145,138 @@ void	rotate_vect(t_vect3f *vect, t_quat q)
 
 t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 {
-	t_quat		q;
-	t_quat		first;
-	t_quat		second;
-	t_vect3f	z;
-	t_vect3f	y;
-	t_vect3f	newup;
+	t_qmath	qm;
 
-	z.x = 0.;
-	z.y = 0.;
-	z.z = 1.;
+	qm.z.x = 0.;
+	qm.z.y = 0.;
+	qm.z.z = 1.;
 	if (norm.z < -0.999)
 	{
-		q.q0 = 0;
-		q.q1 = 0;
-		q.q2 = 1;
-		q.q3 = 0;
-		return (q);
+		qm.q.q0 = 0;
+		qm.q.q1 = 0;
+		qm.q.q2 = 1;
+		qm.q.q3 = 0;
+		return (qm.q);
 	}
-	first = get_rotvect_quat(norm, z);
-	y.x = 0.;
-	y.y = 1.;
-	y.z = 0.;
-	newup.x = up.x;
-	newup.y = up.y;
-	newup.z = up.z;
-	normalize(&newup);
-	rotate_vect(&newup, first);
-	normalize(&newup);
-	second = get_rotvect_quat(newup, y);
-	q = mult_quat(first, second);
-	normalize_quat(&q);
-	return (q);
+	qm.first = get_rotvect_quat(norm, qm.z);
+	qm.y.x = 0.;
+	qm.y.y = 1.;
+	qm.y.z = 0.;
+	qm.newup.x = up.x;
+	qm.newup.y = up.y;
+	qm.newup.z = up.z;
+	normalize(&qm.newup);
+	rotate_vect(&qm.newup, qm.first);
+	normalize(&qm.newup);
+	qm.second = get_rotvect_quat(qm.newup, qm.y);
+	qm.q = mult_quat(qm.first, qm.second);
+	normalize_quat(&qm.q);
+	return (qm.q);
 }
 
 //sphere
 t_quat	get_sphere_tan_quat(t_vect3f norm)
 {
-	t_quat		q;
-	t_quat		first;
-	t_quat		second;
-	t_vect3f	z;
-	t_vect3f	y;
-	t_vect3f	up;
-	t_vect3f	newup;
-	t_vect3f	tmp;
-	t_vect3f	right;
+	t_qmath	qm;
 
-	tmp = (t_vect3f){0, 1, 0};
+	qm.tmp = (t_vect3f){0, 1, 0};
 	if (norm.x == 0. && norm.y == 1. && norm.z == 0.)
 	{
-		right = (t_vect3f){1, 0, 0};
-		up = (t_vect3f){0, 0, -1};
+		qm.right = (t_vect3f){1, 0, 0};
+		qm.up = (t_vect3f){0, 0, -1};
 	}
 	else if (norm.x == 0. && norm.y == -1 && norm.z == 0.)
 	{
-		right = (t_vect3f){1, 0, 0};
-		up = (t_vect3f){0, 0, 1};
+		qm.right = (t_vect3f){1, 0, 0};
+		qm.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		right = cross_product(tmp, norm);
-		normalize(&right);
-		up = cross_product(norm, right);
-		normalize(&up);
+		qm.right = cross_product(qm.tmp, norm);
+		normalize(&(qm.right));
+		qm.up = cross_product(norm, qm.right);
+		normalize(&(qm.up));
 	}
-	z.x = 0.;
-	z.y = 0.;
-	z.z = 1.;
-	first = get_rotvect_quat(norm, z);
-	y.x = 0.;
-	y.y = 1.;
-	y.z = 0.;
-	rotate_vect(&norm, first);
-	rotate_vect(&up, first);
-	normalize(&up);
-	newup.x = up.x;
-	newup.y = up.y;
-	newup.z = up.z;
-	second = get_rotvect_quat(newup, y);
-	rotate_vect(&newup, second);
-	rotate_vect(&norm, second);
-	q = mult_quat(first, second);
-	normalize_quat(&q);
-	return (q);
+	qm.z.x = 0.;
+	qm.z.y = 0.;
+	qm.z.z = 1.;
+	qm.first = get_rotvect_quat(norm, qm.z);
+	qm.y.x = 0.;
+	qm.y.y = 1.;
+	qm.y.z = 0.;
+	rotate_vect(&norm, qm.first);
+	rotate_vect(&qm.up, qm.first);
+	normalize(&qm.up);
+	qm.newup.x = qm.up.x;
+	qm.newup.y = qm.up.y;
+	qm.newup.z = qm.up.z;
+	qm.second = get_rotvect_quat(qm.newup, qm.y);
+	rotate_vect(&qm.newup, qm.second);
+	rotate_vect(&norm, qm.second);
+	qm.q = mult_quat(qm.first, qm.second);
+	normalize_quat(&qm.q);
+	return (qm.q);
 }
 
 //cylinder
 t_quat	get_cylinder_tan_quat(t_vect3f norm)
 {
-	t_quat		q;
-	t_quat		first;
-	t_quat		second;
-	t_vect3f	z;
-	t_vect3f	y;
-	t_vect3f	up;
-	t_vect3f	newup;
+	t_qmath	qm;
 
-	up.x = 0.;
-	up.y = 0.;
-	up.z = 1.;
-	z.x = 0.;
-	z.y = 0.;
-	z.z = 1.;
-	first = get_rotvect_quat(norm, z);
-	y.x = 0.;
-	y.y = 1.;
-	y.z = 0.;
-	rotate_vect(&norm, first);
-	rotate_vect(&up, first);
-	normalize(&up);
-	newup.x = up.x;
-	newup.y = up.y;
-	newup.z = up.z;
-	second = get_rotvect_quat(newup, y);
-	rotate_vect(&newup, second);
-	rotate_vect(&norm, second);
-	q = mult_quat(first, second);
-	normalize_quat(&q);
-	return (q);
+	qm.up.x = 0.;
+	qm.up.y = 0.;
+	qm.up.z = 1.;
+	qm.z.x = 0.;
+	qm.z.y = 0.;
+	qm.z.z = 1.;
+	qm.first = get_rotvect_quat(norm, qm.z);
+	qm.y.x = 0.;
+	qm.y.y = 1.;
+	qm.y.z = 0.;
+	rotate_vect(&norm, qm.first);
+	rotate_vect(&qm.up, qm.first);
+	normalize(&qm.up);
+	qm.newup.x = qm.up.x;
+	qm.newup.y = qm.up.y;
+	qm.newup.z = qm.up.z;
+	qm.second = get_rotvect_quat(qm.newup, qm.y);
+	rotate_vect(&qm.newup, qm.second);
+	rotate_vect(&norm, qm.second);
+	qm.q = mult_quat(qm.first, qm.second);
+	normalize_quat(&qm.q);
+	return (qm.q);
 }
 
 //cone to be done
 
 t_quat	get_cone_tan_quat(t_vect3f norm, t_cone *cone, t_vect3f	i)
 {
-	t_quat		q;
-	t_quat		first;
-	t_quat		second;
-	t_vect3f	z;
-	t_vect3f	y;
-	t_vect3f	up;
-	t_vect3f	newup;
+	t_qmath	qm;
 
-	up.x = cone->pinnacle->coords[X] - i.x;
-	up.y = cone->pinnacle->coords[Y] - i.y;
-	up.z = cone->pinnacle->coords[Z] - i.z;
-	normalize(&up);
-	rotate_vect(&up, cone->q);
-	normalize(&up);
-	z.x = 0.;
-	z.y = 0.;
-	z.z = 1.;
-	first = get_rotvect_quat(norm, z);
-	y.x = 0.;
-	y.y = 1.;
-	y.z = 0.;
-	rotate_vect(&norm, first);
-	rotate_vect(&up, first);
-	up.z = 0;
-	normalize(&up);
-	newup.x = up.x;
-	newup.y = up.y;
-	newup.z = up.z;
-	second = get_rotvect_quat(newup, y);
-	rotate_vect(&newup, second);
-	rotate_vect(&norm, second);
-	q = mult_quat(first, second);
-	normalize_quat(&q);
-	return (q);
+	qm.up.x = cone->pinnacle->coords[X] - i.x;
+	qm.up.y = cone->pinnacle->coords[Y] - i.y;
+	qm.up.z = cone->pinnacle->coords[Z] - i.z;
+	normalize(&qm.up);
+	rotate_vect(&qm.up, cone->q);
+	normalize(&qm.up);
+	qm.z.x = 0.;
+	qm.z.y = 0.;
+	qm.z.z = 1.;
+	qm.first = get_rotvect_quat(norm, qm.z);
+	qm.y.x = 0.;
+	qm.y.y = 1.;
+	qm.y.z = 0.;
+	rotate_vect(&norm, qm.first);
+	rotate_vect(&qm.up, qm.first);
+	qm.up.z = 0;
+	normalize(&qm.up);
+	qm.newup.x = qm.up.x;
+	qm.newup.y = qm.up.y;
+	qm.newup.z = qm.up.z;
+	qm.second = get_rotvect_quat(qm.newup, qm.y);
+	rotate_vect(&qm.newup, qm.second);
+	rotate_vect(&norm, qm.second);
+	qm.q = mult_quat(qm.first, qm.second);
+	normalize_quat(&qm.q);
+	return (qm.q);
 }

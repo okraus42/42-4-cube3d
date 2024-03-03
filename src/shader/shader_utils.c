@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 14:40:53 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 16:33:21 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,24 +91,21 @@ t_vect3f	get_cone_hit_normal(t_vect3f intersection, t_cone cone)
 	return (normal);
 }
 
-void	get_plane_uv(t_vect3f p, long long *u, long long *v, int scale[2])
+void	get_plane_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 {
 	double		uu;
 	double		vv;
 
 	uu = p.x / 16;
 	vv = p.y / 16;
-	*u = ((long long)(uu * scale[0] + 2147483648LL) % scale[0]);
-	*v = scale[1] - 1 - ((long long)(vv * scale[1] + 2147483648LL) % scale[1]);
+	*u = ((long long)(uu * scale[0] + 2147483648LL) % (int)scale[0]);
+	*v = scale[1] - 1
+		- ((long long)(vv * scale[1] + 2147483648LL) % (int)scale[1]);
 }
 
 void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 {
-	long long	u;
-	long long	v;
-	int			s[2];
-	int			w;
-	t_vect3f	p;
+	t_map	m;
 
 	if (plane->texture)
 	{
@@ -117,32 +114,32 @@ void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 		shader->rgb_object[B] = 255;
 		if (plane->texture->tx_main)
 		{
-			p.x = intersection.x - plane->coords[X];
-			p.y = intersection.y - plane->coords[Y];
-			p.z = intersection.z - plane->coords[Z];
-			rotate_vect(&p, plane->q);
-			s[0] = plane->texture->tx_main->width;
-			s[1] = plane->texture->tx_main->height;
-			get_plane_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			shader->rgb_object[R] = plane->texture->tx_main->pixels[(v
-					* w) + (u * 4)];
-			shader->rgb_object[G] = plane->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 1];
-			shader->rgb_object[B] = plane->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 2];
+			m.p.x = intersection.x - plane->coords[X];
+			m.p.y = intersection.y - plane->coords[Y];
+			m.p.z = intersection.z - plane->coords[Z];
+			rotate_vect(&m.p, plane->q);
+			m.s[0] = plane->texture->tx_main->width;
+			m.s[1] = plane->texture->tx_main->height;
+			get_plane_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			shader->rgb_object[R] = plane->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4)];
+			shader->rgb_object[G] = plane->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 1];
+			shader->rgb_object[B] = plane->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 2];
 		}
 	}
 	else if (plane->checkerboard)
 	{
-		p.x = intersection.x - plane->coords[X];
-		p.y = intersection.y - plane->coords[Y];
-		p.z = intersection.z - plane->coords[Z];
-		s[0] = (int)plane->checkerboard->magnitude;
-		s[1] = (int)plane->checkerboard->magnitude;
-		rotate_vect(&p, plane->q);
-		get_plane_uv(p, &u, &v, s);
-		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		m.p.x = intersection.x - plane->coords[X];
+		m.p.y = intersection.y - plane->coords[Y];
+		m.p.z = intersection.z - plane->coords[Z];
+		m.s[0] = (int)plane->checkerboard->magnitude;
+		m.s[1] = (int)plane->checkerboard->magnitude;
+		rotate_vect(&m.p, plane->q);
+		get_plane_uv(m.p, &m.u, &m.v, m.s);
+		if (((m.u & 1) && (m.v & 1)) || (!(m.u & 1) && !(m.v & 1)))
 		{
 			shader->rgb_object[R] = plane->checkerboard->rgb1[R];
 			shader->rgb_object[G] = plane->checkerboard->rgb1[G];
@@ -163,7 +160,7 @@ void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 	}
 }
 
-void	get_sphere_uv(t_vect3f p, int *u, int *v, int scale[2])
+void	get_sphere_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 {
 	double		uu;
 	double		vv;
@@ -186,11 +183,7 @@ void	get_sphere_uv(t_vect3f p, int *u, int *v, int scale[2])
 void	set_sphere_rgb(t_shader *shader,
 	t_sphere *sphere, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	int			s[2];
-	t_vect3f	p;
+	t_map	m;
 
 	if (sphere->texture)
 	{
@@ -199,32 +192,32 @@ void	set_sphere_rgb(t_shader *shader,
 		shader->rgb_object[B] = 255;
 		if (sphere->texture->tx_main)
 		{
-			p.x = intersection.x - sphere->coords[X];
-			p.y = intersection.y - sphere->coords[Y];
-			p.z = intersection.z - sphere->coords[Z];
-			rotate_vect(&p, sphere->q);
-			s[0] = sphere->texture->tx_main->width;
-			s[1] = sphere->texture->tx_main->height;
-			get_sphere_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			shader->rgb_object[R] = sphere->texture->tx_main->pixels[(v
-					* w) + (u * 4)];
-			shader->rgb_object[G] = sphere->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 1];
-			shader->rgb_object[B] = sphere->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 2];
+			m.p.x = intersection.x - sphere->coords[X];
+			m.p.y = intersection.y - sphere->coords[Y];
+			m.p.z = intersection.z - sphere->coords[Z];
+			rotate_vect(&m.p, sphere->q);
+			m.s[0] = sphere->texture->tx_main->width;
+			m.s[1] = sphere->texture->tx_main->height;
+			get_sphere_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			shader->rgb_object[R] = sphere->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4)];
+			shader->rgb_object[G] = sphere->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 1];
+			shader->rgb_object[B] = sphere->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 2];
 		}
 	}
 	else if (sphere->checkerboard)
 	{
-		p.x = intersection.x - sphere->coords[X];
-		p.y = intersection.y - sphere->coords[Y];
-		p.z = intersection.z - sphere->coords[Z];
-		rotate_vect(&p, sphere->q);
-		s[0] = (int)sphere->checkerboard->magnitude;
-		s[1] = (int)sphere->checkerboard->magnitude;
-		get_sphere_uv(p, &u, &v, s);
-		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		m.p.x = intersection.x - sphere->coords[X];
+		m.p.y = intersection.y - sphere->coords[Y];
+		m.p.z = intersection.z - sphere->coords[Z];
+		rotate_vect(&m.p, sphere->q);
+		m.s[0] = (int)sphere->checkerboard->magnitude;
+		m.s[1] = (int)sphere->checkerboard->magnitude;
+		get_sphere_uv(m.p, &m.u, &m.v, m.s);
+		if (((m.u & 1) && (m.v & 1)) || (!(m.u & 1) && !(m.v & 1)))
 		{
 			shader->rgb_object[R] = sphere->checkerboard->rgb1[R];
 			shader->rgb_object[G] = sphere->checkerboard->rgb1[G];
@@ -245,7 +238,7 @@ void	set_sphere_rgb(t_shader *shader,
 	}
 }
 
-void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
+void	get_cone_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 {
 	double		uu;
 	double		vv;
@@ -267,11 +260,7 @@ void	get_cone_uv(t_vect3f p, int *u, int *v, double scale[2])
 
 void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
+	t_map	m;
 
 	if (cone->texture)
 	{
@@ -280,36 +269,36 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 		shader->rgb_object[B] = 255;
 		if (cone->texture->tx_main)
 		{
-			p.x = intersection.x - cone->coords[X];
-			p.y = intersection.y - cone->coords[Y];
-			p.z = intersection.z - cone->coords[Z];
-			rotate_vect(&p, cone->q);
-			s[0] = cone->texture->tx_main->width;
-			s[1] = cone->texture->tx_main->height;
-			s[2] = cone->height;
-			get_cone_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			shader->rgb_object[R] = cone->texture->tx_main->pixels[(v
-					* w) + (u * 4)];
-			shader->rgb_object[G] = cone->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 1];
-			shader->rgb_object[B] = cone->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 2];
+			m.p.x = intersection.x - cone->coords[X];
+			m.p.y = intersection.y - cone->coords[Y];
+			m.p.z = intersection.z - cone->coords[Z];
+			rotate_vect(&m.p, cone->q);
+			m.s[0] = cone->texture->tx_main->width;
+			m.s[1] = cone->texture->tx_main->height;
+			m.s[2] = cone->height;
+			get_cone_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			shader->rgb_object[R] = cone->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4)];
+			shader->rgb_object[G] = cone->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 1];
+			shader->rgb_object[B] = cone->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 2];
 		}
 	}
 	else if (cone->checkerboard)
 	{
-		p.x = intersection.x - cone->coords[X];
-		p.y = intersection.y - cone->coords[Y];
-		p.z = intersection.z - cone->coords[Z];
-		s[0] = (int)cone->checkerboard->magnitude;
-		s[1] = (int)(0.5 + cone->checkerboard->magnitude
+		m.p.x = intersection.x - cone->coords[X];
+		m.p.y = intersection.y - cone->coords[Y];
+		m.p.z = intersection.z - cone->coords[Z];
+		m.s[0] = (int)cone->checkerboard->magnitude;
+		m.s[1] = (int)(0.5 + cone->checkerboard->magnitude
 				* sqrt(cone->height * cone->height + cone->radius
 					* cone->radius) / (M_PI * cone->radius * 2));
-		s[2] = cone->height;
-		rotate_vect(&p, cone->q);
-		get_cone_uv(p, &u, &v, s);
-		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		m.s[2] = cone->height;
+		rotate_vect(&m.p, cone->q);
+		get_cone_uv(m.p, &m.u, &m.v, m.s);
+		if (((m.u & 1) && (m.v & 1)) || (!(m.u & 1) && !(m.v & 1)))
 		{
 			shader->rgb_object[R] = cone->checkerboard->rgb1[R];
 			shader->rgb_object[G] = cone->checkerboard->rgb1[G];
@@ -351,17 +340,12 @@ void	get_disc_uv(t_vect3f p, long long *u, long long *v, double scale[3])
 
 void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 {
-	long long	u;
-	long long	v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
-	t_quat		inv;
+	t_map	m;
 
-	inv.q0 = 0;
-	inv.q1 = 0;
-	inv.q2 = 1;
-	inv.q3 = 0;
+	m.invq.q0 = 0;
+	m.invq.q1 = 0;
+	m.invq.q2 = 1;
+	m.invq.q3 = 0;
 	if (disc->texture)
 	{
 		shader->rgb_object[R] = 255;
@@ -369,37 +353,38 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 		shader->rgb_object[B] = 255;
 		if (disc->tx_disc)
 		{
-			p.x = intersection.x - disc->coords[X];
-			p.y = intersection.y - disc->coords[Y];
-			p.z = intersection.z - disc->coords[Z];
-			rotate_vect(&p, disc->q);
+			m.p.x = intersection.x - disc->coords[X];
+			m.p.y = intersection.y - disc->coords[Y];
+			m.p.z = intersection.z - disc->coords[Z];
+			rotate_vect(&m.p, disc->q);
 			if (disc->is_inversed)
-				rotate_vect(&p, inv);
-			s[0] = disc->tx_disc->width;
-			s[1] = disc->tx_disc->height;
-			s[2] = 1 * disc->radius;
-			get_disc_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			shader->rgb_object[R] = disc->tx_disc->pixels[(v * w) + (u * 4)];
-			shader->rgb_object[G] = disc->tx_disc->pixels[(v
-					* w) + (u * 4) + 1];
-			shader->rgb_object[B] = disc->tx_disc->pixels[(v
-					* w) + (u * 4) + 2];
+				rotate_vect(&m.p, m.invq);
+			m.s[0] = disc->tx_disc->width;
+			m.s[1] = disc->tx_disc->height;
+			m.s[2] = 1 * disc->radius;
+			get_disc_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			shader->rgb_object[R] = disc->tx_disc->pixels[(m.v
+					* m.w) + (m.u * 4)];
+			shader->rgb_object[G] = disc->tx_disc->pixels[(m.v
+					* m.w) + (m.u * 4) + 1];
+			shader->rgb_object[B] = disc->tx_disc->pixels[(m.v
+					* m.w) + (m.u * 4) + 2];
 		}
 	}
 	else if (disc->checkerboard)
 	{
-		p.x = intersection.x - disc->coords[X];
-		p.y = intersection.y - disc->coords[Y];
-		p.z = intersection.z - disc->coords[Z];
-		s[0] = (int)disc->checkerboard->magnitude / 2;
-		s[1] = (int)disc->checkerboard->magnitude / 2;
-		s[2] = 1 * disc->radius;
-		rotate_vect(&p, disc->q);
+		m.p.x = intersection.x - disc->coords[X];
+		m.p.y = intersection.y - disc->coords[Y];
+		m.p.z = intersection.z - disc->coords[Z];
+		m.s[0] = (int)disc->checkerboard->magnitude / 2;
+		m.s[1] = (int)disc->checkerboard->magnitude / 2;
+		m.s[2] = 1 * disc->radius;
+		rotate_vect(&m.p, disc->q);
 		if (disc->is_inversed)
-			rotate_vect(&p, inv);
-		get_disc_uv(p, &u, &v, s);
-		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+			rotate_vect(&m.p, m.invq);
+		get_disc_uv(m.p, &m.u, &m.v, m.s);
+		if (((m.u & 1) && (m.v & 1)) || (!(m.u & 1) && !(m.v & 1)))
 		{
 			shader->rgb_object[R] = disc->checkerboard->rgb1[R];
 			shader->rgb_object[G] = disc->checkerboard->rgb1[G];
@@ -420,7 +405,7 @@ void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 	}
 }
 
-void	get_cylinder_uv(t_vect3f p, int *u, int *v, double scale[2])
+void	get_cylinder_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 {
 	double		uu;
 	double		vv;
@@ -443,11 +428,7 @@ void	get_cylinder_uv(t_vect3f p, int *u, int *v, double scale[2])
 void	set_cylinder_rgb(t_shader *shader,
 	t_cylinder *cylinder, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
+	t_map	m;
 
 	if (cylinder->texture)
 	{
@@ -456,35 +437,35 @@ void	set_cylinder_rgb(t_shader *shader,
 		shader->rgb_object[B] = 255;
 		if (cylinder->texture->tx_main)
 		{
-			p.x = intersection.x - cylinder->coords[X];
-			p.y = intersection.y - cylinder->coords[Y];
-			p.z = intersection.z - cylinder->coords[Z];
-			rotate_vect(&p, cylinder->q);
-			s[0] = cylinder->texture->tx_main->width;
-			s[1] = cylinder->texture->tx_main->height;
-			s[2] = cylinder->height;
-			get_cylinder_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			shader->rgb_object[R] = cylinder->texture->tx_main->pixels[(v
-					* w) + (u * 4)];
-			shader->rgb_object[G] = cylinder->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 1];
-			shader->rgb_object[B] = cylinder->texture->tx_main->pixels[(v
-					* w) + (u * 4) + 2];
+			m.p.x = intersection.x - cylinder->coords[X];
+			m.p.y = intersection.y - cylinder->coords[Y];
+			m.p.z = intersection.z - cylinder->coords[Z];
+			rotate_vect(&m.p, cylinder->q);
+			m.s[0] = cylinder->texture->tx_main->width;
+			m.s[1] = cylinder->texture->tx_main->height;
+			m.s[2] = cylinder->height;
+			get_cylinder_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			shader->rgb_object[R] = cylinder->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4)];
+			shader->rgb_object[G] = cylinder->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 1];
+			shader->rgb_object[B] = cylinder->texture->tx_main->pixels[(m.v
+					* m.w) + (m.u * 4) + 2];
 		}
 	}
 	else if (cylinder->checkerboard)
 	{
-		p.x = intersection.x - cylinder->coords[X];
-		p.y = intersection.y - cylinder->coords[Y];
-		p.z = intersection.z - cylinder->coords[Z];
-		s[0] = (int)cylinder->checkerboard->magnitude;
-		s[1] = (int)(0.5 + cylinder->checkerboard->magnitude
+		m.p.x = intersection.x - cylinder->coords[X];
+		m.p.y = intersection.y - cylinder->coords[Y];
+		m.p.z = intersection.z - cylinder->coords[Z];
+		m.s[0] = (int)cylinder->checkerboard->magnitude;
+		m.s[1] = (int)(0.5 + cylinder->checkerboard->magnitude
 				* cylinder->height / (M_PI * cylinder->radius * 2));
-		s[2] = cylinder->height;
-		rotate_vect(&p, cylinder->q);
-		get_cylinder_uv(p, &u, &v, s);
-		if (((u & 1) && (v & 1)) || (!(u & 1) && !(v & 1)))
+		m.s[2] = cylinder->height;
+		rotate_vect(&m.p, cylinder->q);
+		get_cylinder_uv(m.p, &m.u, &m.v, m.s);
+		if (((m.u & 1) && (m.v & 1)) || (!(m.u & 1) && !(m.v & 1)))
 		{
 			shader->rgb_object[R] = cylinder->checkerboard->rgb1[R];
 			shader->rgb_object[G] = cylinder->checkerboard->rgb1[G];
@@ -535,42 +516,37 @@ t_vect3f	get_new_normal(int x, int y, int z)
 void	set_sphere_normal(t_shader *shader,
 	t_sphere *sphere, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	int			s[2];
-	t_vect3f	p;
-	t_vect3f	newnormal;
-	t_quat		tanq;
-	t_quat		invt;
-	t_quat		invq;
+	t_map	m;
 
 	if (sphere->vector_map)
 	{
 		if (sphere->vector_map->vm_main)
 		{
-			p.x = intersection.x - sphere->coords[X];
-			p.y = intersection.y - sphere->coords[Y];
-			p.z = intersection.z - sphere->coords[Z];
-			invq = get_inverse_quat(sphere->q);
-			rotate_vect(&p, sphere->q);
+			m.p.x = intersection.x - sphere->coords[X];
+			m.p.y = intersection.y - sphere->coords[Y];
+			m.p.z = intersection.z - sphere->coords[Z];
+			m.invq = get_inverse_quat(sphere->q);
+			rotate_vect(&m.p, sphere->q);
 			rotate_vect(&(shader->hit_normal), sphere->q);
-			tanq = get_sphere_tan_quat(shader->hit_normal);
-			rotate_vect(&(shader->hit_normal), tanq);
-			s[0] = sphere->vector_map->vm_main->width;
-			s[1] = sphere->vector_map->vm_main->height;
-			get_sphere_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			newnormal = get_new_normal(sphere->vector_map->vm_main->pixels[(v
-						* w) + (u * 4)],
-					sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
-					sphere->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			invt = get_inverse_quat(tanq);
-			rotate_vect(&newnormal, invt);
-			rotate_vect(&newnormal, invq);
-			shader->hit_normal.x = newnormal.x;
-			shader->hit_normal.y = newnormal.y;
-			shader->hit_normal.z = newnormal.z;
+			m.tanq = get_sphere_tan_quat(shader->hit_normal);
+			rotate_vect(&(shader->hit_normal), m.tanq);
+			m.s[0] = sphere->vector_map->vm_main->width;
+			m.s[1] = sphere->vector_map->vm_main->height;
+			get_sphere_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			m.newnormal
+				= get_new_normal(sphere->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4)],
+					sphere->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4) + 1],
+					sphere->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4) + 2]);
+			m.invt = get_inverse_quat(m.tanq);
+			rotate_vect(&m.newnormal, m.invt);
+			rotate_vect(&m.newnormal, m.invq);
+			shader->hit_normal.x = m.newnormal.x;
+			shader->hit_normal.y = m.newnormal.y;
+			shader->hit_normal.z = m.newnormal.z;
 		}
 	}
 }
@@ -578,88 +554,75 @@ void	set_sphere_normal(t_shader *shader,
 void	set_cylinder_normal(t_shader *shader,
 	t_cylinder *cylinder, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
-	t_vect3f	newnormal;
-	t_quat		tanq;
-	t_quat		invt;
-	t_quat		invq;
+	t_map	m;
 
 	if (cylinder->vector_map)
 	{
 		if (cylinder->vector_map->vm_main)
 		{
-			p.x = intersection.x - cylinder->coords[X];
-			p.y = intersection.y - cylinder->coords[Y];
-			p.z = intersection.z - cylinder->coords[Z];
-			invq = get_inverse_quat(cylinder->q);
-			rotate_vect(&p, cylinder->q);
+			m.p.x = intersection.x - cylinder->coords[X];
+			m.p.y = intersection.y - cylinder->coords[Y];
+			m.p.z = intersection.z - cylinder->coords[Z];
+			m.invq = get_inverse_quat(cylinder->q);
+			rotate_vect(&m.p, cylinder->q);
 			rotate_vect(&(shader->hit_normal), cylinder->q);
-			tanq = get_cylinder_tan_quat(shader->hit_normal);
-			rotate_vect(&(shader->hit_normal), tanq);
-			s[0] = cylinder->vector_map->vm_main->width;
-			s[1] = cylinder->vector_map->vm_main->height;
-			s[2] = cylinder->height;
-			get_cylinder_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			newnormal = get_new_normal(cylinder->vector_map->vm_main->pixels[(v
-						* w) + (u * 4)],
-					cylinder->vector_map->vm_main->pixels[(v * w)
-					+ (u * 4) + 1],
-					cylinder->vector_map->vm_main->pixels[(v * w)
-					+ (u * 4) + 2]);
-			invt = get_inverse_quat(tanq);
-			rotate_vect(&newnormal, invt);
-			rotate_vect(&newnormal, invq);
-			shader->hit_normal.x = newnormal.x;
-			shader->hit_normal.y = newnormal.y;
-			shader->hit_normal.z = newnormal.z;
+			m.tanq = get_cylinder_tan_quat(shader->hit_normal);
+			rotate_vect(&(shader->hit_normal), m.tanq);
+			m.s[0] = cylinder->vector_map->vm_main->width;
+			m.s[1] = cylinder->vector_map->vm_main->height;
+			m.s[2] = cylinder->height;
+			get_cylinder_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			m.newnormal
+				= get_new_normal(cylinder->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4)],
+					cylinder->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 1],
+					cylinder->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 2]);
+			m.invt = get_inverse_quat(m.tanq);
+			rotate_vect(&m.newnormal, m.invt);
+			rotate_vect(&m.newnormal, m.invq);
+			shader->hit_normal.x = m.newnormal.x;
+			shader->hit_normal.y = m.newnormal.y;
+			shader->hit_normal.z = m.newnormal.z;
 		}
 	}
 }
 
 void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 {
-	int			u;
-	int			v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
-	t_vect3f	newnormal;
-	t_quat		tanq;
-	t_quat		invt;
-	t_quat		invq;
+	t_map	m;
 
 	if (cone->vector_map)
 	{
 		if (cone->vector_map->vm_main)
 		{
-			p.x = intersection.x - cone->coords[X];
-			p.y = intersection.y - cone->coords[Y];
-			p.z = intersection.z - cone->coords[Z];
-			invq = get_inverse_quat(cone->q);
-			rotate_vect(&p, cone->q);
+			m.p.x = intersection.x - cone->coords[X];
+			m.p.y = intersection.y - cone->coords[Y];
+			m.p.z = intersection.z - cone->coords[Z];
+			m.invq = get_inverse_quat(cone->q);
+			rotate_vect(&m.p, cone->q);
 			rotate_vect(&(shader->hit_normal), cone->q);
-			tanq = get_cone_tan_quat(shader->hit_normal, cone, intersection);
-			rotate_vect(&(shader->hit_normal), tanq);
-			s[0] = cone->vector_map->vm_main->width;
-			s[1] = cone->vector_map->vm_main->height;
-			s[2] = cone->height;
-			get_cone_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			newnormal = get_new_normal(cone->vector_map->vm_main->pixels[(v
-						* w) + (u * 4)],
-					cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
-					cone->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			invt = get_inverse_quat(tanq);
-			rotate_vect(&newnormal, invt);
-			rotate_vect(&newnormal, invq);
-			shader->hit_normal.x = newnormal.x;
-			shader->hit_normal.y = newnormal.y;
-			shader->hit_normal.z = newnormal.z;
+			m.tanq = get_cone_tan_quat(shader->hit_normal, cone, intersection);
+			rotate_vect(&(shader->hit_normal), m.tanq);
+			m.s[0] = cone->vector_map->vm_main->width;
+			m.s[1] = cone->vector_map->vm_main->height;
+			m.s[2] = cone->height;
+			get_cone_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			m.newnormal = get_new_normal(cone->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4)],
+					cone->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 1],
+					cone->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 2]);
+			m.invt = get_inverse_quat(m.tanq);
+			rotate_vect(&m.newnormal, m.invt);
+			rotate_vect(&m.newnormal, m.invq);
+			shader->hit_normal.x = m.newnormal.x;
+			shader->hit_normal.y = m.newnormal.y;
+			shader->hit_normal.z = m.newnormal.z;
 		}
 	}
 }
@@ -667,78 +630,70 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 void	set_plane_normal(t_shader *shader,
 	t_plane *plane, t_vect3f intersection)
 {
-	long long	u;
-	long long	v;
-	int			w;
-	int			s[2];
-	t_vect3f	p;
-	t_vect3f	newnormal;
-	t_quat		inv;
+	t_map	m;
 
 	if (plane->vector_map)
 	{
 		if (plane->vector_map->vm_main)
 		{
-			p.x = intersection.x - plane->coords[X];
-			p.y = intersection.y - plane->coords[Y];
-			p.z = intersection.z - plane->coords[Z];
-			rotate_vect(&p, plane->q);
-			s[0] = plane->vector_map->vm_main->width;
-			s[1] = plane->vector_map->vm_main->height;
-			get_plane_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			newnormal = get_new_normal(plane->vector_map->vm_main->pixels[(v
-						* w) + (u * 4)],
-					plane->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
-					plane->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
-			inv = get_inverse_quat(plane->q);
-			rotate_vect(&newnormal, inv);
-			shader->hit_normal = (t_vect3f){newnormal.x,
-				newnormal.y, newnormal.z};
+			m.p.x = intersection.x - plane->coords[X];
+			m.p.y = intersection.y - plane->coords[Y];
+			m.p.z = intersection.z - plane->coords[Z];
+			rotate_vect(&m.p, plane->q);
+			m.s[0] = plane->vector_map->vm_main->width;
+			m.s[1] = plane->vector_map->vm_main->height;
+			get_plane_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			m.newnormal = get_new_normal(plane->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4)],
+					plane->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 1],
+					plane->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 2]);
+			m.invq = get_inverse_quat(plane->q);
+			rotate_vect(&m.newnormal, m.invq);
+			shader->hit_normal = (t_vect3f){m.newnormal.x,
+				m.newnormal.y, m.newnormal.z};
 		}
 	}
 }
 
 void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 {
-	long long	u;
-	long long	v;
-	int			w;
-	double		s[3];
-	t_vect3f	p;
-	t_vect3f	newnormal;
-	t_quat		inv;
+	t_map	m;
 
-	inv.q0 = 0;
-	inv.q1 = 0;
-	inv.q2 = 1;
-	inv.q3 = 0;
+	m.invq.q0 = 0;
+	m.invq.q1 = 0;
+	m.invq.q2 = 1;
+	m.invq.q3 = 0;
 	if (disc->vector_map)
 	{
 		if (disc->vector_map->vm_main)
 		{
-			p.x = intersection.x - disc->coords[X];
-			p.y = intersection.y - disc->coords[Y];
-			p.z = intersection.z - disc->coords[Z];
-			rotate_vect(&p, disc->q);
+			m.p.x = intersection.x - disc->coords[X];
+			m.p.y = intersection.y - disc->coords[Y];
+			m.p.z = intersection.z - disc->coords[Z];
+			rotate_vect(&m.p, disc->q);
 			if (disc->is_inversed)
-				rotate_vect(&p, inv);
-			s[0] = disc->vector_map->vm_main->width;
-			s[1] = disc->vector_map->vm_main->height;
-			s[2] = 1 * disc->radius;
-			get_disc_uv(p, &u, &v, s);
-			w = s[0] * 4;
-			newnormal = get_new_normal(disc->vector_map->vm_main->pixels[(v
-						* w) + (u * 4)],
-					disc->vector_map->vm_main->pixels[(v * w) + (u * 4) + 1],
-					disc->vector_map->vm_main->pixels[(v * w) + (u * 4) + 2]);
+				rotate_vect(&m.p, m.invq);
+			m.s[0] = disc->vector_map->vm_main->width;
+			m.s[1] = disc->vector_map->vm_main->height;
+			m.s[2] = 1 * disc->radius;
+			get_disc_uv(m.p, &m.u, &m.v, m.s);
+			m.w = m.s[0] * 4;
+			m.newnormal = get_new_normal(disc->vector_map->vm_main->pixels[(m.v
+						* m.w) + (m.u * 4)],
+					disc->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 1],
+					disc->vector_map->vm_main->pixels[(m.v * m.w)
+					+ (m.u * 4) + 2]);
 			if (disc->is_inversed)
-				rotate_vect(&newnormal, inv);
-			inv = get_inverse_quat(disc->q);
-			rotate_vect(&newnormal, inv);
-			shader->hit_normal.x = newnormal.x;
-			shader->hit_normal.y = newnormal.y;
-			shader->hit_normal.z = newnormal.z;
+				rotate_vect(&m.newnormal, m.invq);
+			m.invq = get_inverse_quat(disc->q);
+			rotate_vect(&m.newnormal, m.invq);
+			shader->hit_normal.x = m.newnormal.x;
+			shader->hit_normal.y = m.newnormal.y;
+			shader->hit_normal.z = m.newnormal.z;
 		}
 	}
 }

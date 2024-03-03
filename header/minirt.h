@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/03 15:14:41 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 16:14:19 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,32 @@ typedef struct s_quat
 	double	q2;
 	double	q3;
 }				t_quat;
+
+typedef struct s_qmath
+{
+	t_quat		q;
+	t_quat		first;
+	t_quat		second;
+	t_vect3f	z;
+	t_vect3f	y;
+	t_vect3f	up;
+	t_vect3f	newup;
+	t_vect3f	tmp;
+	t_vect3f	right;
+}				t_qmath;
+
+typedef struct s_map
+{
+	long long	u;
+	long long	v;
+	int			w;
+	double		s[3];
+	t_vect3f	p;
+	t_vect3f	newnormal;
+	t_quat		tanq;
+	t_quat		invt;
+	t_quat		invq;
+}				t_map;
 
 typedef struct s_ray
 {
