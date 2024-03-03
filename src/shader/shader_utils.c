@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/29 18:20:18 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 14:40:53 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ uint32_t	get_clr_int(int *rgb)
 	return (clr);
 }
 
-uint32_t	ft_max_clr(uint32_t a, uint32_t b)
-{
-	uint32_t	c;
+// uint32_t	ft_max_clr(uint32_t a, uint32_t b)
+// {
+// 	uint32_t	c;
 
-	c = MAX(a & 0xFF000000, b & 0xFF000000) | MAX(a & 0xFF0000, b & 0xFF0000)
-		| MAX(a & 0xFF00, b & 0xFF00) | 0xFF;
-	return (c);
-}
+// 	c = MAX(a & 0xFF000000, b & 0xFF000000) | MAX(a & 0xFF0000, b & 0xFF0000)
+// 		| MAX(a & 0xFF00, b & 0xFF00) | 0xFF;
+// 	return (c);
+// }
 
 void	clamp(int min, int max, int *value)
 {

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 16:02:45 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 15:15:46 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ t_vect3f	get_intersection(t_vect3f origin, t_vect3f direction, double t)
 	return (intersection);
 }
 
-void	shade_nearest_object(int flag,
-	void *object_ptr, t_rayfinder *rf, t_ray ray, t_master *master)
+void	shade_nearest_object(int flag, void *object_ptr, t_rayfinder *rf, t_master *master)
 {
 	t_vect3f	intersection;
 
-	intersection = get_intersection(ray.origin, ray.direction, rf->t_near);
+	intersection = get_intersection(rf->ray.origin, rf->ray.direction,
+			rf->t_near);
 	if (flag == SPHERE)
 		sphere_shader(rf, intersection, object_ptr, master);
 	else if (flag == PLANE)
@@ -172,8 +172,9 @@ void	find_rays(t_master *master)
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
 			find_intersections(master, rays[x][y], &rf, PRIMARY);
+			rf.ray = rays[x][y];
 			shade_nearest_object(rf.object_flag,
-				rf.object_ptr, &rf, rays[x][y], master);
+				rf.object_ptr, &rf, master);
 			mlx_put_pixel(master->img, x, y, rf.clr);
 			y++;
 		}

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:48:18 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 15:10:24 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,25 +298,24 @@ void	qrotate_o(keys_t key, t_quat *q, t_camera *camera)
 	normalize_quat(q);
 }
 
-void	rotate_o(keys_t key,
-	t_vect3f *forward, t_vect3f *right, t_vect3f *up, t_camera *camera)
+void	rotate_o(keys_t key, t_vect33f *axes, t_camera *camera)
 {
 	(void)camera->coords;
 	if (key == MLX_KEY_A)
-		pan(forward, right, up, 5);
+		pan(axes->normal, axes->right, axes->up, 5);
 	else if (key == MLX_KEY_D)
-		pan(forward, right, up, -5);
+		pan(axes->normal, axes->right, axes->up, -5);
 	else if (key == MLX_KEY_W)
-		tilt(forward, right, up, 5);
+		tilt(axes->normal, axes->right, axes->up, 5);
 	else if (key == MLX_KEY_S)
-		tilt(forward, right, up, -5);
+		tilt(axes->normal, axes->right, axes->up, -5);
 	else if (key == MLX_KEY_Q)
-		cant(forward, right, up, 5);
+		cant(axes->normal, axes->right, axes->up, 5);
 	else if (key == MLX_KEY_E)
-		cant(forward, right, up, -5);
-	normalize(forward);
-	normalize(right);
-	normalize(up);
+		cant(axes->normal, axes->right, axes->up, -5);
+	normalize(axes->normal);
+	normalize(axes->right);
+	normalize(axes->up);
 }
 
 static void	change_glossiness(double *glossiness, keys_t key)
@@ -351,31 +350,44 @@ static void	change_height(double *height, keys_t key)
 
 void	manipulate_sphere(t_rt *rt, t_sphere *sphere, mlx_key_data_t keydata)
 {
+	t_vect33f	axes;
+
+	axes.normal = sphere->normal;
+	axes.right = sphere->right;
+	axes.up = sphere->up;
 	change_glossiness(&sphere->glossiness, keydata.key);
 	change_radius(&sphere->radius, keydata.key);
 	move(keydata.key, rt->camera, sphere->coords);
-	rotate_o(keydata.key,
-		sphere->normal, sphere->right, sphere->up, rt->camera);
+	rotate_o(keydata.key, &axes, rt->camera);
 	qrotate_o(keydata.key, &(sphere->q), rt->camera);
 }
 
 void	manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata)
 {
+	t_vect33f	axes;
+
+	axes.normal = plane->normal;
+	axes.right = plane->right;
+	axes.up = plane->up;
 	change_glossiness(&plane->glossiness, keydata.key);
 	move(keydata.key, rt->camera, plane->coords);
-	rotate_o(keydata.key, plane->normal, plane->right, plane->up, rt->camera);
+	rotate_o(keydata.key, &axes, rt->camera);
 	qrotate_o(keydata.key, &(plane->q), rt->camera);
 }
 
 void	manipulate_cylinder(t_rt *rt,
 	t_cylinder *cylinder, mlx_key_data_t keydata)
 {
+	t_vect33f	axes;
+
+	axes.normal = cylinder->normal;
+	axes.right = cylinder->right;
+	axes.up = cylinder->up;
 	change_glossiness(&cylinder->glossiness, keydata.key);
 	change_radius(&cylinder->radius, keydata.key);
 	change_height(&cylinder->height, keydata.key);
 	move(keydata.key, rt->camera, cylinder->coords);
-	rotate_o(keydata.key, cylinder->normal, cylinder->right, cylinder->up,
-		rt->camera);
+	rotate_o(keydata.key, &axes, rt->camera);
 	qrotate_o(keydata.key, &(cylinder->q), rt->camera);
 	get_discs(cylinder);
 	cylinder->topcap->q = cylinder->q;
@@ -384,13 +396,18 @@ void	manipulate_cylinder(t_rt *rt,
 
 void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 {
+	t_vect33f	axes;
+
+	axes.normal = cone->normal;
+	axes.right = cone->right;
+	axes.up = cone->up;
 	change_glossiness(&cone->glossiness, keydata.key);
 	change_radius(&cone->radius, keydata.key);
 	change_height(&cone->height, keydata.key);
 	cone->half_angle = atan2(cone->radius, cone->height);
 	cone->dist_term = sqrt(1 + pow(cone->half_angle, 2));
 	move(keydata.key, rt->camera, cone->coords);
-	rotate_o(keydata.key, cone->normal, cone->right, cone->up, rt->camera);
+	rotate_o(keydata.key, &axes, rt->camera);
 	qrotate_o(keydata.key, &(cone->q), rt->camera);
 	*cone->axis = invert_vect3f(*cone->normal);
 	get_cone_discs(cone);

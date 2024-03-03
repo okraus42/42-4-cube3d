@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 13:43:29 by okraus            #+#    #+#             */
-/*   Updated: 2024/02/28 16:44:47 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 14:39:30 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@
 // DEFINITIONS
 
 //	Useful Macros
-# define ABS(a) (((a) > 0) * (a) - ((a) < 0) * (a))
-# define PN(a) (((a) > 0) - ((a) < 0))
-# define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
-# define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
-# define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
+// # define ABS(a) (((a) > 0) * (a) - ((a) < 0) * (a))
+// # define PN(a) (((a) > 0) - ((a) < 0))
+// # define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
+// # define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
+// # define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
 
 // GET_NEXT_LINE definitions
 

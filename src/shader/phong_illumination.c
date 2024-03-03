@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 11:37:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/01 15:15:53 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 14:57:26 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,18 @@ void	trace_shadow(t_master *master, t_rayfinder *rf,
 
 void	diff_and_spec_ratios(t_shader *shader, t_options options)
 {
+	double	dot;
+
 	shader->diffuse_ratio = dot_product(shader->hit_normal, shader->light_dir);
 	if (!shader->diffuse_ratio || shader->diffuse_ratio < 0)
 		shader->specular_ratio = 0;
 	else
 	{
 		get_reflection_vector(shader);
+		dot = dot_product(shader->view_dir, shader->reflect_vect);
+		clampf(0, 1024, &dot);
 		shader->specular_ratio = shader->obj_glossiness
-			* pow(MAX(dot_product(shader->view_dir, shader->reflect_vect), 0),
-				options.spec_highlight_size);
+			* pow(dot, options.spec_highlight_size);
 	}
 }
 
@@ -75,8 +78,9 @@ void	phong_illumination(t_shader *shader, t_sphere *light)
 void	get_reflection_vector(t_shader *shader)
 {
 	shader->incident_light = shader->light_dir;
-	shader->dot_reflect = MAX(dot_product(shader->hit_normal,
-				shader->incident_light), 0);
+	shader->dot_reflect = dot_product(shader->hit_normal,
+			shader->incident_light);
+	clampf(0, 1024, &(shader->dot_reflect));
 	shader->reflect_vect.x = 2 * shader->dot_reflect
 		* shader->hit_normal.x - shader->incident_light.x;
 	shader->reflect_vect.y = 2 * shader->dot_reflect
