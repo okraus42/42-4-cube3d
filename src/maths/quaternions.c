@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 16:02:23 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 17:28:27 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,24 +147,15 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 {
 	t_qmath	qm;
 
-	qm.z.x = 0.;
-	qm.z.y = 0.;
-	qm.z.z = 1.;
+	qm.z = (t_vect3f){0., 0., 1.};
 	if (norm.z < -0.999)
 	{
-		qm.q.q0 = 0;
-		qm.q.q1 = 0;
-		qm.q.q2 = 1;
-		qm.q.q3 = 0;
+		qm.q = (t_quat){0., 0., 1., 0.};
 		return (qm.q);
 	}
 	qm.first = get_rotvect_quat(norm, qm.z);
-	qm.y.x = 0.;
-	qm.y.y = 1.;
-	qm.y.z = 0.;
-	qm.newup.x = up.x;
-	qm.newup.y = up.y;
-	qm.newup.z = up.z;
+	qm.y = (t_vect3f){0., 1., 0.};
+	qm.newup = (t_vect3f){up.x, up.y, up.z};
 	normalize(&qm.newup);
 	rotate_vect(&qm.newup, qm.first);
 	normalize(&qm.newup);
@@ -175,44 +166,41 @@ t_quat	get_obj_quat(t_vect3f norm, t_vect3f up)
 }
 
 //sphere
+
+void	get_sphere_tan_quat2(t_vect3f norm, t_qmath *qm)
+{
+	qm->tmp = (t_vect3f){0, 1, 0};
+	if (norm.x == 0. && norm.y == 1. && norm.z == 0.)
+	{
+		qm->right = (t_vect3f){1, 0, 0};
+		qm->up = (t_vect3f){0, 0, -1};
+	}
+	else if (norm.x == 0. && norm.y == -1 && norm.z == 0.)
+	{
+		qm->right = (t_vect3f){1, 0, 0};
+		qm->up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		qm->right = cross_product(qm->tmp, norm);
+		normalize(&(qm->right));
+		qm->up = cross_product(norm, qm->right);
+		normalize(&(qm->up));
+	}
+}
+
 t_quat	get_sphere_tan_quat(t_vect3f norm)
 {
 	t_qmath	qm;
 
-	qm.tmp = (t_vect3f){0, 1, 0};
-	if (norm.x == 0. && norm.y == 1. && norm.z == 0.)
-	{
-		qm.right = (t_vect3f){1, 0, 0};
-		qm.up = (t_vect3f){0, 0, -1};
-	}
-	else if (norm.x == 0. && norm.y == -1 && norm.z == 0.)
-	{
-		qm.right = (t_vect3f){1, 0, 0};
-		qm.up = (t_vect3f){0, 0, 1};
-	}
-	else
-	{
-		qm.right = cross_product(qm.tmp, norm);
-		normalize(&(qm.right));
-		qm.up = cross_product(norm, qm.right);
-		normalize(&(qm.up));
-	}
-	qm.z.x = 0.;
-	qm.z.y = 0.;
-	qm.z.z = 1.;
+	get_sphere_tan_quat2(norm, &qm);
+	qm.z = (t_vect3f){0., 0., 1.};
 	qm.first = get_rotvect_quat(norm, qm.z);
-	qm.y.x = 0.;
-	qm.y.y = 1.;
-	qm.y.z = 0.;
-	rotate_vect(&norm, qm.first);
+	qm.y = (t_vect3f){0., 1., 0.};
 	rotate_vect(&qm.up, qm.first);
 	normalize(&qm.up);
-	qm.newup.x = qm.up.x;
-	qm.newup.y = qm.up.y;
-	qm.newup.z = qm.up.z;
+	qm.newup = (t_vect3f){qm.up.x, qm.up.y, qm.up.z};
 	qm.second = get_rotvect_quat(qm.newup, qm.y);
-	rotate_vect(&qm.newup, qm.second);
-	rotate_vect(&norm, qm.second);
 	qm.q = mult_quat(qm.first, qm.second);
 	normalize_quat(&qm.q);
 	return (qm.q);
@@ -223,32 +211,20 @@ t_quat	get_cylinder_tan_quat(t_vect3f norm)
 {
 	t_qmath	qm;
 
-	qm.up.x = 0.;
-	qm.up.y = 0.;
-	qm.up.z = 1.;
-	qm.z.x = 0.;
-	qm.z.y = 0.;
-	qm.z.z = 1.;
+	qm.up = (t_vect3f){0., 0., 1.};
+	qm.z = (t_vect3f){0., 0., 1.};
 	qm.first = get_rotvect_quat(norm, qm.z);
-	qm.y.x = 0.;
-	qm.y.y = 1.;
-	qm.y.z = 0.;
-	rotate_vect(&norm, qm.first);
+	qm.y = (t_vect3f){0., 1., 0.};
 	rotate_vect(&qm.up, qm.first);
 	normalize(&qm.up);
-	qm.newup.x = qm.up.x;
-	qm.newup.y = qm.up.y;
-	qm.newup.z = qm.up.z;
+	qm.newup = (t_vect3f){qm.up.x, qm.up.y, qm.up.z};
 	qm.second = get_rotvect_quat(qm.newup, qm.y);
-	rotate_vect(&qm.newup, qm.second);
-	rotate_vect(&norm, qm.second);
 	qm.q = mult_quat(qm.first, qm.second);
 	normalize_quat(&qm.q);
 	return (qm.q);
 }
 
-//cone to be done
-
+//cone
 t_quat	get_cone_tan_quat(t_vect3f norm, t_cone *cone, t_vect3f	i)
 {
 	t_qmath	qm;
@@ -259,23 +235,14 @@ t_quat	get_cone_tan_quat(t_vect3f norm, t_cone *cone, t_vect3f	i)
 	normalize(&qm.up);
 	rotate_vect(&qm.up, cone->q);
 	normalize(&qm.up);
-	qm.z.x = 0.;
-	qm.z.y = 0.;
-	qm.z.z = 1.;
+	qm.z = (t_vect3f){0., 0., 1.};
 	qm.first = get_rotvect_quat(norm, qm.z);
-	qm.y.x = 0.;
-	qm.y.y = 1.;
-	qm.y.z = 0.;
-	rotate_vect(&norm, qm.first);
+	qm.y = (t_vect3f){0., 1., 0.};
 	rotate_vect(&qm.up, qm.first);
 	qm.up.z = 0;
 	normalize(&qm.up);
-	qm.newup.x = qm.up.x;
-	qm.newup.y = qm.up.y;
-	qm.newup.z = qm.up.z;
+	qm.newup = (t_vect3f){qm.up.x, qm.up.y, qm.up.z};
 	qm.second = get_rotvect_quat(qm.newup, qm.y);
-	rotate_vect(&qm.newup, qm.second);
-	rotate_vect(&norm, qm.second);
 	qm.q = mult_quat(qm.first, qm.second);
 	normalize_quat(&qm.q);
 	return (qm.q);

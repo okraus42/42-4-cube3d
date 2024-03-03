@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/03 16:01:14 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 17:14:27 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	open_file(char *path)
 	return (fd);
 }
 
-int	iterate_highlighted_object(t_rt *rt)
+int	iterate_highlighted_object2(t_rt *rt)
 {
 	int	i;
 
@@ -131,48 +131,63 @@ int	iterate_highlighted_object(t_rt *rt)
 	while (i < rt->n_spheres)
 	{
 		if (rt->spheres[i]->mode == HIGHLIGHT)
-		{
 			return (SPHERE | (i << 8));
-		}
 		i++;
 	}
 	i = 0;
 	while (i < rt->n_planes)
 	{
 		if (rt->planes[i]->mode == HIGHLIGHT)
-		{
 			return (PLANE | (i << 8));
-		}
 		i++;
 	}
 	i = 0;
 	while (i < rt->n_cylinders)
 	{
 		if (rt->cylinders[i]->mode == HIGHLIGHT)
-		{
 			return (CYLINDER | (i << 8));
-		}
 		i++;
 	}
-	i = 0;
+	return (0);
+}
+
+int	iterate_highlighted_object(t_rt *rt)
+{
+	int	i;
+
+	i = iterate_highlighted_object2(rt);
+	if (i)
+		return (i);
 	while (i < rt->n_cones)
 	{
 		if (rt->cones[i]->mode == HIGHLIGHT)
-		{
 			return (CONE | (i << 8));
-		}
 		i++;
 	}
 	i = 0;
 	while (i < rt->n_lights)
 	{
 		if (rt->light_spheres[i]->mode == HIGHLIGHT)
-		{
 			return (LIGHT | (i << 8));
-		}
 		i++;
 	}
 	return (0);
+}
+
+void	ft_draw_string2(t_master *master, char **s)
+{
+	if (master->options->mode == DEFAULT)
+		*s = ft_strdup("MODE: DEFAULT");
+	else if (master->options->mode == OBJECT_CHOICE)
+		*s = ft_strdup("MODE: OBJECT_CHOICE");
+	else if (master->options->mode == HIGHLIGHT)
+		*s = ft_strdup("MODE: HIGHLIGHT");
+	else if (master->options->mode == LIGHTING)
+		*s = ft_strdup("MODE: LIGHTING");
+	else if (master->options->mode == CAMERA)
+		*s = ft_strdup("MODE: CAMERA");
+	else
+		*s = ft_strdup("UNKNOWN MODE");
 }
 
 void	ft_draw_string(t_master *master)
@@ -180,18 +195,7 @@ void	ft_draw_string(t_master *master)
 	int		i;
 	char	*s[STRINGS];
 
-	if (master->options->mode == DEFAULT)
-		s[0] = ft_strdup("MODE: DEFAULT");
-	else if (master->options->mode == OBJECT_CHOICE)
-		s[0] = ft_strdup("MODE: OBJECT_CHOICE");
-	else if (master->options->mode == HIGHLIGHT)
-		s[0] = ft_strdup("MODE: HIGHLIGHT");
-	else if (master->options->mode == LIGHTING)
-		s[0] = ft_strdup("MODE: LIGHTING");
-	else if (master->options->mode == CAMERA)
-		s[0] = ft_strdup("MODE: CAMERA");
-	else
-		s[0] = ft_strdup("UNKNOWN MODE");
+	ft_draw_string2(master, &s[0]);
 	i = iterate_highlighted_object(master->rt);
 	if ((i & 0xFF) == SPHERE)
 		ft_sprintf(master->str[1], "HIGHLIGHTED: SPHERE: %i", i >> 8);
@@ -419,12 +423,37 @@ void	create_object_list(t_master *master)
 	}
 }
 
-void	minirt(t_master *master, t_rt *rt, char *s)
+void	minirt2(t_master *master, t_rt *rt)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
-	int			fd;
 	int			i;
+
+	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
+	img = mlx_new_image(mlx, mlx->width, mlx->height);
+	mlx_image_to_window(mlx, img, 0, 0);
+	master->mlx = mlx;
+	master->img = img;
+	master->rt = rt;
+	i = 0;
+	while (i < STRINGS)
+	{
+		ft_sprintf(master->str[i], "");
+		master->string[i] = mlx_put_string(master->mlx,
+				master->str[i], 10, 5 + 20 * i);
+		++i;
+	}
+	find_rays(master);
+	ft_draw_string(master);
+	loop(mlx, master);
+	mlx_delete_image(mlx, img);
+	mlx_terminate(mlx);
+}
+
+void	minirt(t_master *master, t_rt *rt, char *s)
+{
+	int	fd;
 
 	ft_printf("Should open map: %s\n", s);
 	fd = open_file(s);
@@ -437,26 +466,7 @@ void	minirt(t_master *master, t_rt *rt, char *s)
 	}
 	if (!load_file(s, rt, fd))
 	{
-		mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-		mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
-		img = mlx_new_image(mlx, mlx->width, mlx->height);
-		mlx_image_to_window(mlx, img, 0, 0);
-		master->mlx = mlx;
-		master->img = img;
-		master->rt = rt;
-		i = 0;
-		while (i < STRINGS)
-		{
-			ft_sprintf(master->str[i], "");
-			master->string[i] = mlx_put_string(master->mlx,
-					master->str[i], 10, 5 + 20 * i);
-			++i;
-		}
-		find_rays(master);
-		ft_draw_string(master);
-		loop(mlx, master);
-		mlx_delete_image(mlx, img);
-		mlx_terminate(mlx);
+		minirt2(master, rt);
 	}
 }
 
