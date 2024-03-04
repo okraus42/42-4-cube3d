@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 17:08:54 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:22:33 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,10 +193,7 @@ void	qtilt(t_quat *q, double angle)
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
 	{
-		q->q0 = 0.9999;
-		q->q1 = 0.01;
-		q->q2 = 0;
-		q->q3 = 0;
+		*q = (t_quat){0.9999, 0.01, 0., 0.};
 	}
 	normalize_quat(q);
 	rot.q0 = cos(rad(angle) / 2);
@@ -212,10 +209,7 @@ void	qtilt(t_quat *q, double angle)
 	q->q3 = res2.q3;
 	if (q->q0 < 0.001 && q->q0 > 0.001)
 	{
-		q->q0 = 0;
-		q->q1 = 1;
-		q->q2 = 0;
-		q->q3 = 0;
+		*q = (t_quat){0., 1., 0., 0.};
 	}
 }
 
@@ -228,10 +222,7 @@ void	qpan(t_quat *q, double angle)
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
 	{
-		q->q0 = 0.9999;
-		q->q1 = 0;
-		q->q2 = 0.01;
-		q->q3 = 0;
+		*q = (t_quat){0.9999, 0., 0.01, 0.};
 	}
 	normalize_quat(q);
 	rot.q0 = cos(rad(angle) / 2);
@@ -247,10 +238,7 @@ void	qpan(t_quat *q, double angle)
 	q->q3 = res2.q3;
 	if (q->q0 < 0.001 && q->q0 > 0.001)
 	{
-		q->q0 = 0;
-		q->q1 = 0;
-		q->q2 = 1;
-		q->q3 = 0;
+		*q = (t_quat){0., 0., 1., 0.};
 	}
 }
 
@@ -263,10 +251,7 @@ void	qcant(t_quat *q, double angle)
 
 	if (q->q0 > 0.9999 || q->q0 < -0.9999)
 	{
-		q->q0 = 0.9999;
-		q->q1 = 0;
-		q->q2 = 0;
-		q->q3 = 0.01;
+		*q = (t_quat){0.9999, 0., 0., 0.01};
 	}
 	normalize_quat(q);
 	rot.q0 = cos(rad(angle) / 2);
@@ -282,10 +267,7 @@ void	qcant(t_quat *q, double angle)
 	q->q3 = res2.q3;
 	if (q->q0 < 0.001 && q->q0 > 0.001)
 	{
-		q->q0 = 0;
-		q->q1 = 0;
-		q->q2 = 0;
-		q->q3 = 1;
+		*q = (t_quat){0., 0., 0., 1.};
 	}
 }
 

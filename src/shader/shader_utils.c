@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:46:40 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 18:06:31 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:34:20 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,15 +152,9 @@ void	set_plane_checkerboard(t_shader *shader,
 
 void	set_plane_rgb(t_shader *shader, t_plane *plane, t_vect3f intersection)
 {
-	if (plane->texture)
+	if (plane->texture && plane->texture->tx_main)
 	{
-		shader->rgb_object[R] = 255;
-		shader->rgb_object[G] = 0;
-		shader->rgb_object[B] = 255;
-		if (plane->texture->tx_main)
-		{
-			set_plane_texture(shader, plane, intersection);
-		}
+		set_plane_texture(shader, plane, intersection);
 	}
 	else if (plane->checkerboard)
 	{
@@ -244,15 +238,9 @@ void	set_sphere_checkerboard(t_shader *shader,
 void	set_sphere_rgb(t_shader *shader,
 	t_sphere *sphere, t_vect3f intersection)
 {
-	if (sphere->texture)
+	if (sphere->texture && sphere->texture->tx_main)
 	{
-		shader->rgb_object[R] = 255;
-		shader->rgb_object[G] = 0;
-		shader->rgb_object[B] = 255;
-		if (sphere->texture->tx_main)
-		{
-			set_sphere_texture(shader, sphere, intersection);
-		}
+		set_sphere_texture(shader, sphere, intersection);
 	}
 	else if (sphere->checkerboard)
 	{
@@ -339,15 +327,9 @@ void	set_cone_checkerboard(t_shader *shader,
 
 void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 {
-	if (cone->texture)
+	if (cone->texture && cone->texture->tx_main)
 	{
-		shader->rgb_object[R] = 255;
-		shader->rgb_object[G] = 0;
-		shader->rgb_object[B] = 255;
-		if (cone->texture->tx_main)
-		{
-			set_cone_texture(shader, cone, intersection);
-		}
+		set_cone_texture(shader, cone, intersection);
 	}
 	else if (cone->checkerboard)
 	{
@@ -437,15 +419,9 @@ void	set_disc_checkerboard(t_shader *shader,
 
 void	set_disc_rgb(t_shader *shader, t_disc *disc, t_vect3f intersection)
 {
-	if (disc->texture)
+	if (disc->texture && disc->tx_disc)
 	{
-		shader->rgb_object[R] = 255;
-		shader->rgb_object[G] = 0;
-		shader->rgb_object[B] = 255;
-		if (disc->tx_disc)
-		{
-			set_disc_texture(shader, disc, intersection);
-		}
+		set_disc_texture(shader, disc, intersection);
 	}
 	else if (disc->checkerboard)
 	{
@@ -532,15 +508,9 @@ void	set_cylinder_checkerboard(t_shader *shader,
 void	set_cylinder_rgb(t_shader *shader,
 	t_cylinder *cylinder, t_vect3f intersection)
 {
-	if (cylinder->texture)
+	if (cylinder->texture && cylinder->texture->tx_main)
 	{
-		shader->rgb_object[R] = 255;
-		shader->rgb_object[G] = 0;
-		shader->rgb_object[B] = 255;
-		if (cylinder->texture->tx_main)
-		{
-			set_cylinder_texture(shader, cylinder, intersection);
-		}
+		set_cylinder_texture(shader, cylinder, intersection);
 	}
 	else if (cylinder->checkerboard)
 	{

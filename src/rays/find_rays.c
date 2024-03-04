@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 16:33:53 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:34:25 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,42 @@ int	update_object_ref(t_rayfinder *rf, void *object, t_object flag)
 	return (1);
 }
 
-int	find_intersections(t_master *master,
-	t_ray ray, t_rayfinder *rf, t_raytype type)
+static void	find_intersections_1(t_master *master,
+	t_ray ray, t_rayfinder *rf, int *flag)
 {
 	int	i;
-	int	flag;
 
 	i = 0;
-	flag = 0;
 	while (i < master->rt->n_spheres)
 	{
 		if (intersect_sphere(ray, master->rt->spheres[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->spheres[i], SPHERE);
+			*flag = update_object_ref(rf, master->rt->spheres[i], SPHERE);
 		i++;
 	}
 	i = 0;
 	while (i < master->rt->n_planes)
 	{
 		if (intersect_plane(ray, master->rt->planes[i], &rf->t, PLANE))
-			flag = update_object_ref(rf, master->rt->planes[i], PLANE);
+			*flag = update_object_ref(rf, master->rt->planes[i], PLANE);
 		i++;
 	}
+}
+
+static void	find_intersections_2(t_master *master,
+	t_ray ray, t_rayfinder *rf, int *flag)
+{
+	int	i;
+
 	i = 0;
 	while (i < master->rt->n_cylinders)
 	{
 		if (intersect_cylinder(ray, master->rt->cylinders[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
+			*flag = update_object_ref(rf, master->rt->cylinders[i], CYLINDER);
 		if (intersect_disc(ray, master->rt->cylinders[i]->topcap, &rf->t))
-			flag = update_object_ref(rf,
+			*flag = update_object_ref(rf,
 					master->rt->cylinders[i]->topcap, DISC);
 		if (intersect_disc(ray, master->rt->cylinders[i]->botcap, &rf->t))
-			flag = update_object_ref(rf,
+			*flag = update_object_ref(rf,
 					master->rt->cylinders[i]->botcap, DISC);
 		i++;
 	}
@@ -61,11 +66,22 @@ int	find_intersections(t_master *master,
 	while (i < master->rt->n_cones)
 	{
 		if (intersect_cone(ray, master->rt->cones[i], &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i], CONE);
+			*flag = update_object_ref(rf, master->rt->cones[i], CONE);
 		if (intersect_disc(ray, master->rt->cones[i]->base, &rf->t))
-			flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
+			*flag = update_object_ref(rf, master->rt->cones[i]->base, DISC);
 		i++;
 	}
+}
+
+int	find_intersections(t_master *master,
+	t_ray ray, t_rayfinder *rf, t_raytype type)
+{
+	int	i;
+	int	flag;
+
+	flag = 0;
+	find_intersections_1(master, ray, rf, &flag);
+	find_intersections_2(master, ray, rf, &flag);
 	i = 0;
 	while (i < master->rt->n_lights)
 	{
@@ -151,6 +167,12 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
 }
 
+void	camera_things(t_master *master)
+{
+	update_camera_matrix(master->rt->camera);
+	detect_camera_inside_objects(master->rt);
+}
+
 void	find_rays(t_master *master)
 {
 	int			x;
@@ -158,29 +180,24 @@ void	find_rays(t_master *master)
 	t_ray		**rays;
 	t_rayfinder	rf;
 
-	update_camera_matrix(master->rt->camera);
+	camera_things(master);
 	rays = malloc(sizeof(t_ray *) * (WIDTH));
 	rf = init_rayfinder(master);
-	x = 0;
-	y = 0;
-	detect_camera_inside_objects(master->rt);
-	while (x < WIDTH)
+	x = -1;
+	while (++x < WIDTH)
 	{
 		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));
-		y = 0;
-		while (y < HEIGHT)
+		y = -1;
+		while (++y < HEIGHT)
 		{
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);
 			find_intersections(master, rays[x][y], &rf, PRIMARY);
 			rf.ray = rays[x][y];
-			shade_nearest_object(rf.object_flag,
-				rf.object_ptr, &rf, master);
+			shade_nearest_object(rf.object_flag, rf.object_ptr, &rf, master);
 			mlx_put_pixel(master->img, x, y, rf.clr);
-			y++;
 		}
 		free(rays[x]);
-		x++;
 	}
 	free(rays);
 }

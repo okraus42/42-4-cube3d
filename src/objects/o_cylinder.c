@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:43:36 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 14:54:46 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:34:27 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	check_format_cylinder(char **split)
 int	precompute_cylinder_elements(t_cylinder *cylinder, char **split)
 {
 	double	diameter;
-	
+
 	diameter = ft_atof(split[3]);
 	if (diameter <= 0)
 		return (id_err("cy", E_DIA_RANGE, E_RANGE_STRICT));

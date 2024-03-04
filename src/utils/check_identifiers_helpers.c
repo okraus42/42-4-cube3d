@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 16:04:28 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:33:59 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,33 +34,43 @@ void	check_duplicates(int *ids, int *flag)
 		*flag = 1;
 }
 
+static void	get_identifiers_1(char **split, int *ids, int *flag)
+{
+	if (!ft_strncmp(split[0], "A", 1))
+		ids[0]++;
+	else if (!ft_strncmp(split[0], "C", 1))
+		ids[1]++;
+	else if (!ft_strncmp(split[0], "L", 1))
+		ids[2]++;
+	else if (!ft_strncmp(split[0], "#", 1))
+		return ;
+	else
+		*flag = 1;
+}
+
+static void	get_identifiers_2(char **split, int *ids, int *flag)
+{
+	if (!ft_strncmp(split[0], "sp", 2))
+		ids[3]++;
+	else if (!ft_strncmp(split[0], "pl", 2))
+		ids[4]++;
+	else if (!ft_strncmp(split[0], "cy", 2))
+		ids[5]++;
+	else if (!ft_strncmp(split[0], "co", 2))
+		ids[6]++;
+	else
+		*flag = 1;
+}
+
 void	get_identifiers(char **split, int *ids, int *flag)
 {
 	if (ft_strlen(split[0]) == 1)
 	{
-		if (!ft_strncmp(split[0], "A", 1))
-			ids[0]++;
-		else if (!ft_strncmp(split[0], "C", 1))
-			ids[1]++;
-		else if (!ft_strncmp(split[0], "L", 1))
-			ids[2]++;
-		else if (!ft_strncmp(split[0], "#", 1))
-			return ;
-		else
-			*flag = 1;
+		get_identifiers_1(split, ids, flag);
 	}
 	else if (ft_strlen(split[0]) == 2)
 	{
-		if (!ft_strncmp(split[0], "sp", 2))
-			ids[3]++;
-		else if (!ft_strncmp(split[0], "pl", 2))
-			ids[4]++;
-		else if (!ft_strncmp(split[0], "cy", 2))
-			ids[5]++;
-		else if (!ft_strncmp(split[0], "co", 2))
-			ids[6]++;
-		else
-			*flag = 1;
+		get_identifiers_2(split, ids, flag);
 	}
 	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5)
 	{

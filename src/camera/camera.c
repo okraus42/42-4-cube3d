@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/01 15:17:19 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:44:36 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,28 @@
 void	set_camera(t_camera *camera)
 {
 	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	t_vect33f	c;
 
-	forward = camera->normal;
-	right = camera->right;
-	up = camera->up;
+	c.normal = camera->normal;
+	c.right = camera->right;
+	c.up = camera->up;
 	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	if (c.normal->x == 0. && c.normal->y == 1. && c.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
+		*c.right = (t_vect3f){1, 0, 0};
+		*c.up = (t_vect3f){0, 0, -1};
 	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	else if (c.normal->x == 0. && c.normal->y == -1 && c.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
+		*c.right = (t_vect3f){1, 0, 0};
+		*c.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
+		*c.right = cross_product(tmp, *c.normal);
+		normalize(c.right);
+		*c.up = cross_product(*c.normal, *c.right);
+		normalize(c.up);
 	}
 }
 

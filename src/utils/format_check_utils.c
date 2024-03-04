@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 16:15:07 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 19:11:53 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,38 +98,44 @@ int	is_rgb_format(char *str)
 	return (1);
 }
 
-int	has_spec_count(char **split, int target)
+int	has_spec_count_helper(char **split, int target, int num)
 {
-	int	num;
-	int	i;
 	int	ch_flag;
 	int	tx_flag;
 	int	vm_flag;
+	int	i;
 
-	num = 0;
-	i = 0;
 	ch_flag = 0;
 	tx_flag = 0;
 	vm_flag = 0;
+	i = target - 1;
+	while (++i < num && split[i])
+	{
+		if (!ft_strncmp(split[i], ".ch/", 4) && !ch_flag)
+			ch_flag++;
+		else if (!ft_strncmp(split[i], ".tx/", 4) && !tx_flag)
+			tx_flag++;
+		else if (!ft_strncmp(split[i], ".vm/", 4) && !vm_flag)
+			vm_flag++;
+		else
+			return (1);
+	}
+	return (0);
+}
+
+int	has_spec_count(char **split, int target)
+{
+	int	num;
+
+	num = 0;
 	while (split[num])
 		num++;
 	if (num > target + 3)
 		return (0);
 	else if (num > target && num <= target + 3)
 	{
-		i = target;
-		while (i < num && split[i])
-		{
-			if (!ft_strncmp(split[i], ".ch/", 4) && !ch_flag)
-				ch_flag++;
-			else if (!ft_strncmp(split[i], ".tx/", 4) && !tx_flag)
-				tx_flag++;
-			else if (!ft_strncmp(split[i], ".vm/", 4) && !vm_flag)
-				vm_flag++;
-			else
-				return (-1);
-			i++;
-		}
+		if (has_spec_count_helper(split, target, num))
+			return (-1);
 	}
 	else if (num < target)
 		return (0);
@@ -162,20 +168,10 @@ int	has_valid_id_attribute(char *str)
 	return (1);
 }
 
-int	contains_valid_key_value_pair(char *str)
+static int	contains_valid_key_value_pair_helper(char **key_value_pair)
 {
-	int		i;
-	char	**key_value_pair;
+	int	i;
 
-	i = 0;
-	key_value_pair = ft_split(str, '=');
-	while (key_value_pair[i])
-		i++;
-	if (i != 2)
-	{
-		ft_free_split(&key_value_pair);
-		return (0);
-	}
 	i = 0;
 	if (key_value_pair[0] && (ft_strncmp("0", key_value_pair[0],
 				ft_strlen(key_value_pair[0]))
@@ -199,13 +195,48 @@ int	contains_valid_key_value_pair(char *str)
 	}
 }
 
+int	contains_valid_key_value_pair(char *str)
+{
+	int		i;
+	char	**key_value_pair;
+
+	i = 0;
+	key_value_pair = ft_split(str, '=');
+	while (key_value_pair[i])
+		i++;
+	if (i != 2)
+	{
+		ft_free_split(&key_value_pair);
+		return (0);
+	}
+	return (contains_valid_key_value_pair_helper(key_value_pair));
+}
+
+static int	is_valid_texture_file_helper(char *value, char ***key_value_pair)
+{
+	char	*path;
+	int		fd;
+
+	path = ft_strtrim(value, "\"");
+	if (ft_strlen(path) > 1024)
+		return (0);
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+	{
+		free(path);
+		ft_free_split(key_value_pair);
+		return (0);
+	}
+	free(path);
+	close (fd);
+	return (1);
+}
+
 int	is_valid_texture_file(char *str)
 {
 	int		i;
 	char	**key_value_pair;
 	char	*value;
-	char	*path;
-	int		fd;
 
 	i = 0;
 	key_value_pair = ft_split(str, '=');
@@ -217,18 +248,8 @@ int	is_valid_texture_file(char *str)
 		ft_free_split(&key_value_pair);
 		return (0);
 	}
-	path = ft_strtrim(value, "\"");
-	if (ft_strlen(path) > 1024)
+	if (!is_valid_texture_file_helper(value, &key_value_pair))
 		return (0);
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-	{
-		free(path);
-		ft_free_split(&key_value_pair);
-		return (0);
-	}
-	free(path);
 	ft_free_split(&key_value_pair);
-	close (fd);
 	return (1);
 }

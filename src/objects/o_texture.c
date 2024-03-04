@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_texture.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 15:35:50 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 18:34:05 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,14 @@ void	ft_load_texture(t_texture *tx)
 		tx->tx_top = mlx_load_png(tx->topcap_tx_path);
 		if (!tx->tx_top)
 			id_warn(".tx", "Cannot read texture file under",
-			tx->topcap_tx_path, 0);
+				tx->topcap_tx_path, 0);
 	}
 	if (tx->botcap_tx_path[0])
 	{
 		tx->tx_bot = mlx_load_png(tx->botcap_tx_path);
 		if (!tx->tx_bot)
 			id_warn(".tx", "Cannot read texture file under",
-			tx->botcap_tx_path, 0);
+				tx->botcap_tx_path, 0);
 	}
 }
 
