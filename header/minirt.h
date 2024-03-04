@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/04 15:33:22 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 19:57:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -682,6 +682,8 @@ int			point_lies_in_cylinder(t_vect3f point,
 				t_vect3f bot_point, t_vect3f top_point, double radius);
 int			point_lies_in_cone(t_vect3f point,
 				t_cone cone, double radius, double height);
+void		shader_loop(t_shader *sh, t_master *m,
+				t_vect3f inter, t_rayfinder *rf);
 void		detect_camera_inside_objects(t_rt *rt);
 
 #endif

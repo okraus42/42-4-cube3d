@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shader_utils2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 10:55:46 by plouda            #+#    #+#             */
-/*   Updated: 2024/02/29 18:02:49 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 20:06:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,22 @@ int	point_lies_in_cone(t_vect3f point, t_cone cone,
 				scale_vect3f(cone_dist, axis)));
 	return (orth_distance < cone_radius
 		&& absf(orth_distance - cone_radius) > PRECISION);
+}
+
+void	shader_loop(t_shader *shader, t_master *master,
+		t_vect3f intersection, t_rayfinder *rf)
+{
+	int	i;
+
+	i = 0;
+	while (i < master->rt->n_lights)
+	{
+		shader->light_dir = subtract_vect3f(array_to_vect(
+					master->rt->light_spheres[i]->coords), intersection);
+		normalize(&shader->light_dir);
+		diff_and_spec_ratios(shader, *master->options);
+		trace_shadow(master, rf, shader, master->rt->light_spheres[i]->coords);
+		phong_illumination(shader, master->rt->light_spheres[i]);
+		i++;
+	}
 }
