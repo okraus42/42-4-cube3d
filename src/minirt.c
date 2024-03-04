@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/03 17:14:27 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 09:53:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,11 +216,8 @@ void	ft_draw_string(t_master *master)
 	free (s[0]);
 }
 
-void	keyhook(mlx_key_data_t keydata, void *param)
+void	camera_movements(t_master *master, mlx_key_data_t keydata)
 {
-	t_master	*master;
-
-	master = param;
 	if (master->options->mode == DEFAULT
 		&& !keydata.modifier && keydata.action != MLX_RELEASE
 		&& (keydata.key == MLX_KEY_RIGHT
@@ -241,74 +238,76 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			|| keydata.key == MLX_KEY_Q
 			|| keydata.key == MLX_KEY_E))
 		rotate_camera(master, keydata);
-	else if (keydata.modifier == MLX_CONTROL
-		&& keydata.key == MLX_KEY_O
-		&& keydata.action != MLX_RELEASE
-		&& master->options->mode == DEFAULT)
-	{
-		master->options->mode = OBJECT_CHOICE;
-		choose_object(master, keydata);
-	}
-	else if ((master->options->mode == OBJECT_CHOICE
-			|| master->options->mode == HIGHLIGHT)
+}
+
+void	light_movements(t_master *master, mlx_key_data_t keydata)
+{
+	if ((master->options->mode == LIGHTING)
 		&& keydata.modifier == MLX_SHIFT
 		&& keydata.key == MLX_KEY_UP
 		&& keydata.action != MLX_RELEASE)
-		choose_object(master, keydata);
-	else if (master->options->mode == HIGHLIGHT
-		&& keydata.action != MLX_RELEASE
-		&& !keydata.modifier
-		&& (keydata.key == MLX_KEY_RIGHT
-			|| keydata.key == MLX_KEY_LEFT
-			|| keydata.key == MLX_KEY_UP
-			|| keydata.key == MLX_KEY_DOWN
-			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN
-			|| keydata.key == MLX_KEY_A
-			|| keydata.key == MLX_KEY_D
-			|| keydata.key == MLX_KEY_W
-			|| keydata.key == MLX_KEY_S
-			|| keydata.key == MLX_KEY_Q
-			|| keydata.key == MLX_KEY_E
-			|| keydata.key == MLX_KEY_G
-			|| keydata.key == MLX_KEY_1
-			|| keydata.key == MLX_KEY_2
-			|| keydata.key == MLX_KEY_3
-			|| keydata.key == MLX_KEY_4))
-		manipulate_objects(master, keydata);
-	else if (keydata.modifier == MLX_CONTROL
-		&& keydata.key == MLX_KEY_L
-		&& keydata.action != MLX_RELEASE
-		&& master->options->mode == DEFAULT)
-	{
-		master->options->mode = LIGHTING;
-		if (master->rt->n_lights > 0)
-		{
-			master->rt->light_spheres[0]->mode = HIGHLIGHT;
-		}
-	}
-	else if ((master->options->mode == LIGHTING)
-		&& keydata.modifier == MLX_SHIFT
-		&& keydata.key == MLX_KEY_UP
-		&& keydata.action != MLX_RELEASE)
-		choose_object(master, keydata);
+		choose_object(master);
 	else if (master->options->mode == LIGHTING
 		&& keydata.action != MLX_RELEASE
 		&& !keydata.modifier
-		&& (keydata.key == MLX_KEY_RIGHT
-			|| keydata.key == MLX_KEY_LEFT
-			|| keydata.key == MLX_KEY_UP
-			|| keydata.key == MLX_KEY_DOWN
+		&& (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT
+			|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
 			|| keydata.key == MLX_KEY_PAGE_UP
 			|| keydata.key == MLX_KEY_PAGE_DOWN
-			|| keydata.key == MLX_KEY_COMMA
-			|| keydata.key == MLX_KEY_PERIOD
-			|| keydata.key == MLX_KEY_G
-			|| keydata.key == MLX_KEY_H))
+			|| keydata.key == MLX_KEY_COMMA || keydata.key == MLX_KEY_PERIOD
+			|| keydata.key == MLX_KEY_G || keydata.key == MLX_KEY_H))
 		manipulate_light(master, keydata);
-	else if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
+	else if (master->options->mode == DEFAULT
+		&& keydata.modifier == MLX_CONTROL
+		&& keydata.key == MLX_KEY_L
+		&& keydata.action != MLX_RELEASE)
+	{
+		master->options->mode = LIGHTING;
+		if (master->rt->n_lights > 0)
+			master->rt->light_spheres[0]->mode = HIGHLIGHT;
+	}
+}
+
+void	object_movements(t_master *master, mlx_key_data_t keydata)
+{
+	if (keydata.modifier == MLX_CONTROL
+		&& keydata.key == MLX_KEY_O && keydata.action != MLX_RELEASE
+		&& master->options->mode == DEFAULT)
+	{
+		master->options->mode = OBJECT_CHOICE;
+		choose_object(master);
+	}
+	else if ((master->options->mode == OBJECT_CHOICE
+			|| master->options->mode == HIGHLIGHT)
+		&& keydata.modifier == MLX_SHIFT && keydata.key == MLX_KEY_UP
+		&& keydata.action != MLX_RELEASE)
+		choose_object(master);
+	else if (master->options->mode == HIGHLIGHT
+		&& keydata.action != MLX_RELEASE && !keydata.modifier
+		&& (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT
+			|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
+			|| keydata.key == MLX_KEY_PAGE_UP
+			|| keydata.key == MLX_KEY_PAGE_DOWN
+			|| keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D
+			|| keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S
+			|| keydata.key == MLX_KEY_Q || keydata.key == MLX_KEY_E
+			|| keydata.key == MLX_KEY_G
+			|| keydata.key == MLX_KEY_1 || keydata.key == MLX_KEY_2
+			|| keydata.key == MLX_KEY_3 || keydata.key == MLX_KEY_4))
+		manipulate_objects(master, keydata);
+}
+
+void	keyhook(mlx_key_data_t keydata, void *param)
+{
+	t_master	*master;
+
+	master = param;
+	camera_movements(master, keydata);
+	object_movements(master, keydata);
+	light_movements(master, keydata);
+	if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
 		reset_to_default(master);
-	else if ((keydata.key == MLX_KEY_ESCAPE) && keydata.action != MLX_RELEASE)
+	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action != MLX_RELEASE)
 		mlx_close_window(master->mlx);
 	ft_draw_string(master);
 }

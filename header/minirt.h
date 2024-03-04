@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/03 16:14:19 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 11:55:09 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,13 @@ typedef enum e_mode
 	LIGHTING,
 	CAMERA
 }			t_mode;
+
+typedef enum e_iterator
+{
+	BREAK,
+	CONTINUE,
+	NEXT_OBJECT
+}			t_iterator;
 
 typedef struct s_quadterms
 {
@@ -632,7 +639,7 @@ void		set_sphere_vects(t_sphere *sphere);
 void		set_plane_vects(t_plane *plane);
 void		set_cylinder_vects(t_cylinder *cylinder);
 void		set_disc_vects(t_disc *disc);
-void		choose_object(t_master *master, mlx_key_data_t keydata);
+void		choose_object(t_master *master);
 void		reset_to_default(t_master *master);
 void		clamp(int min, int max, int *value);
 
