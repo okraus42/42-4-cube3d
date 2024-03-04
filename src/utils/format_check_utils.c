@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format_check_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 09:13:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 19:11:53 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 19:34:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,9 +170,6 @@ int	has_valid_id_attribute(char *str)
 
 static int	contains_valid_key_value_pair_helper(char **key_value_pair)
 {
-	int	i;
-
-	i = 0;
 	if (key_value_pair[0] && (ft_strncmp("0", key_value_pair[0],
 				ft_strlen(key_value_pair[0]))
 			&& ft_strncmp("1", key_value_pair[0],

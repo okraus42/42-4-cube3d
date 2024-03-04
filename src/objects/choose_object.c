@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   choose_object.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 11:52:19 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 12:16:55 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 19:33:35 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,10 +228,8 @@ static int	iterate_and_pick_objects(t_master *master, int *flag)
 
 void	choose_object(t_master *master)
 {
-	int	i;
 	int	flag;
 
-	i = 0;
 	flag = 0;
 	if (master->options->mode == LIGHTING)
 	{

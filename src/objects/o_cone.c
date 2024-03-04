@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 14:19:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 19:31:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int	fill_cone(t_rt *rt, char **split)
 	*rt->cones[i]->axis = invert_vect3f(*rt->cones[i]->normal);
 	if (precompute_cone_elements(rt->cones[i], split))
 		return (1);
+	if (!get_rgb(rt->cones[i]->rgb, split[5]))
+		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
 	set_cone_vects(rt->cones[i]);
 	set_checkerboard_pointer("co", rt, split, &rt->cones[i]->checkerboard);
 	set_texture_pointer("co", rt, split, &rt->cones[i]->texture);
