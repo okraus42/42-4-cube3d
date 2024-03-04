@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:09:54 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:33:43 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 14:19:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	init_cones(t_rt *rt, int *ids)
 	rt->cones[i] = NULL;
 }
 
-int	check_format_cone(char **split)
+int	check_cone_spec_count(char **split)
 {
 	int	spec_count_flag;
 
@@ -50,6 +50,13 @@ int	check_format_cone(char **split)
 	else if (spec_count_flag < 0)
 		return (id_err("co", "Invalid specifier format",
 				"unique texture identifiers after the 5th specifier"));
+	return (0);
+}
+
+int	check_format_cone(char **split)
+{
+	if (check_cone_spec_count(split))
+		return (1);
 	if (!is_float_triad(split[1]))
 		return (id_err("co", E_COORD, E_TRIAD_INTFLOAT));
 	if (!triad_in_range(split[1]))
@@ -71,10 +78,25 @@ int	check_format_cone(char **split)
 	return (0);
 }
 
+int	precompute_cone_elements(t_cone *cone, char **split)
+{
+	double	diameter;
+
+	diameter = ft_atof(split[3]);
+	if (diameter <= 0)
+		return (id_err("co", E_DIA_RANGE, E_RANGE_STRICT));
+	cone->radius = diameter / 2.;
+	cone->height = ft_atof(split[4]);
+	if (cone->height <= 0)
+		return (id_err("co", E_HEIGHT_RANGE, E_RANGE_STRICT));
+	cone->half_angle = atan2(cone->radius, cone->height);
+	cone->dist_term = sqrt(1 + pow(cone->half_angle, 2));
+	return (0);
+}
+
 int	fill_cone(t_rt *rt, char **split)
 {
 	int			i;
-	double		diameter;
 
 	i = rt->n_cones;
 	if (check_format_cone(split))
@@ -88,18 +110,8 @@ int	fill_cone(t_rt *rt, char **split)
 	*rt->cones[i]->normal = get_normal(rt->cones[i]->nvect[X],
 			rt->cones[i]->nvect[Y], rt->cones[i]->nvect[Z]);
 	*rt->cones[i]->axis = invert_vect3f(*rt->cones[i]->normal);
-	diameter = ft_atof(split[3]);
-	if (diameter <= 0)
-		return (id_err("co", E_DIA_RANGE, E_RANGE_STRICT));
-	rt->cones[i]->radius = diameter / 2.;
-	rt->cones[i]->height = ft_atof(split[4]);
-	if (rt->cones[i]->height <= 0)
-		return (id_err("co", E_HEIGHT_RANGE, E_RANGE_STRICT));
-	rt->cones[i]->half_angle = atan2(rt->cones[i]->radius,
-			rt->cones[i]->height);
-	rt->cones[i]->dist_term = sqrt(1 + pow(rt->cones[i]->half_angle, 2));
-	if (!get_rgb(rt->cones[i]->rgb, split[5]))
-		return (id_err("co", E_RGB_RANGE, E_RANGE_INT));
+	if (precompute_cone_elements(rt->cones[i], split))
+		return (1);
 	set_cone_vects(rt->cones[i]);
 	set_checkerboard_pointer("co", rt, split, &rt->cones[i]->checkerboard);
 	set_texture_pointer("co", rt, split, &rt->cones[i]->texture);

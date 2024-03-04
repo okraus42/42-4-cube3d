@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cone_disc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 10:16:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:55:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 17:20:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,22 @@ void	init_cone_discs(t_cone *cone)
 	cone->base->vector_map = NULL;
 }
 
+// only considers botcap, so base in this case (we don't care about pinnacle)
+static void	attribute_texture_data_cone(t_disc *disc, t_cone *cone)
+{
+	disc->checkerboard = cone->checkerboard;
+	disc->texture = cone->texture;
+	if (disc->texture)
+		disc->tx_disc = cone->texture->tx_bot;
+	else
+		disc->tx_disc = NULL;
+	disc->vector_map = cone->vector_map;
+	if (disc->vector_map)
+		disc->vm_disc = cone->vector_map->vm_bot;
+	else
+		disc->vm_disc = NULL;
+}
+
 void	define_cone_base(t_cone *cone)
 {
 	t_disc	*base;
@@ -60,17 +76,7 @@ void	define_cone_base(t_cone *cone)
 	*base->normal = get_normal(base->nvect[X],
 			base->nvect[Y], base->nvect[Z]);
 	set_disc_vects(base);
-	base->checkerboard = cone->checkerboard;
-	base->texture = cone->texture;
-	if (base->texture)
-		base->tx_disc = cone->texture->tx_bot;
-	else
-		base->tx_disc = NULL;
-	base->vector_map = cone->vector_map;
-	if (base->vector_map)
-		base->vm_disc = cone->vector_map->vm_bot;
-	else
-		base->vm_disc = NULL;
+	attribute_texture_data_cone(base, cone);
 }
 
 void	define_cone_pinnacle(t_cone *cone)
@@ -95,17 +101,7 @@ void	define_cone_pinnacle(t_cone *cone)
 	*pinnacle->normal = get_normal(pinnacle->nvect[X],
 			pinnacle->nvect[Y], pinnacle->nvect[Z]);
 	set_disc_vects(pinnacle);
-	pinnacle->checkerboard = NULL;
-	pinnacle->texture = cone->texture;
-	if (pinnacle->texture)
-		pinnacle->tx_disc = cone->texture->tx_top;
-	else
-		pinnacle->tx_disc = NULL;
-	pinnacle->vector_map = cone->vector_map;
-	if (pinnacle->vector_map)
-		pinnacle->vm_disc = cone->vector_map->vm_top;
-	else
-		pinnacle->vm_disc = NULL;
+	attribute_texture_data_cone(pinnacle, cone);
 }
 
 void	get_cone_discs(t_cone *cone)

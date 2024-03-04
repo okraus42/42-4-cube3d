@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/04 11:55:09 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 15:33:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -476,7 +476,7 @@ int			fill_vector_map(t_rt *rt, char **split);
 
 double		ft_atof(char *str);
 int			id_err(char *id, char *err_str, char *details);
-int			id_warn(char *id, char *err_str, char *details);
+int			id_warn(char *id, char *err_str, char *details, int comma);
 void		free_objects(t_rt *rt);
 
 int			get_rgb(int *rgb, char *triad);

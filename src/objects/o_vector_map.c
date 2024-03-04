@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_vector_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:47:41 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:56:07 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 15:53:47 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,44 +103,26 @@ void	ft_load_vector_map(t_vector_map *vm)
 {
 	if (vm->vm_path[0])
 	{
-		if (access(vm->vm_path, R_OK) < 0)
-		{
-			dprintf(2, "Cannot open texture %s\n", vm->vm_path);
-			exit(-3);
-		}
 		vm->vm_main = mlx_load_png(vm->vm_path);
 		if (!vm->vm_main)
-		{
-			dprintf(2, "Error loading texture %s\n", vm->vm_path);
-			exit(-4);
-		}
+			id_warn(".vm", "Cannot read vector map file under", vm->vm_path, 0);
 	}
 	if (vm->topcap_vm_path[0])
 	{
-		if (access(vm->topcap_vm_path, R_OK) < 0)
-		{
-			dprintf(2, "Cannot open texture %s\n", vm->topcap_vm_path);
-			exit(-3);
-		}
 		vm->vm_top = mlx_load_png(vm->topcap_vm_path);
 		if (!vm->vm_top)
 		{
-			dprintf(2, "Error loading texture %s\n", vm->topcap_vm_path);
-			exit(-4);
+			id_warn(".vm", "Cannot read vector map file under",
+				vm->topcap_vm_path, 0);
 		}
 	}
 	if (vm->botcap_vm_path[0])
 	{
-		if (access(vm->botcap_vm_path, R_OK) < 0)
-		{
-			dprintf(2, "Cannot open texture %s\n", vm->botcap_vm_path);
-			exit(-3);
-		}
 		vm->vm_bot = mlx_load_png(vm->botcap_vm_path);
 		if (!vm->vm_bot)
 		{
-			dprintf(2, "Error loading texture %s\n", vm->botcap_vm_path);
-			exit(-4);
+			id_warn(".vm", "Cannot read vector map file under",
+				vm->botcap_vm_path, 0);
 		}
 	}
 }

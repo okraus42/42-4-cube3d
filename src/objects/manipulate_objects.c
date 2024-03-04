@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/03 15:10:24 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 17:08:54 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,28 @@
 void	set_sphere_vects(t_sphere *sphere)
 {
 	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	t_vect33f	o;
 
-	forward = sphere->normal;
-	right = sphere->right;
-	up = sphere->up;
+	o.normal = sphere->normal;
+	o.right = sphere->right;
+	o.up = sphere->up;
 	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
 	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
 	}
 	sphere->q = get_obj_quat(*(sphere->normal), *(sphere->up));
 }
@@ -46,133 +44,144 @@ void	set_sphere_vects(t_sphere *sphere)
 void	set_plane_vects(t_plane *plane)
 {
 	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	t_vect33f	o;
 
-	forward = plane->normal;
-	right = plane->right;
-	up = plane->up;
+	o.normal = plane->normal;
+	o.right = plane->right;
+	o.up = plane->up;
 	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
 	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
 	}
 	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
 }
 
-void	set_cylinder_vects(t_cylinder *cylinder)
+static void	set_cylinder_vects_ptrs(t_cylinder *cylinder, t_vect33f *o)
 {
-	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	o->normal = cylinder->normal;
+	o->right = cylinder->right;
+	o->up = cylinder->up;
+}
 
-	forward = cylinder->normal;
-	right = cylinder->right;
-	up = cylinder->up;
-	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
-	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
-	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
-	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
-	}
-	else
-	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
-	}
-	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+static void	set_cylinder_cap_inversion(t_cylinder *cylinder)
+{
 	cylinder->topcap->is_inversed = NORMALDISC;
 	cylinder->botcap->is_inversed = INVERSEDISC;
 	cylinder->topcap->q = cylinder->q;
 	cylinder->botcap->q = cylinder->q;
 }
 
-void	set_disc_vects(t_disc *disc)
+void	set_cylinder_vects(t_cylinder *cylinder)
 {
 	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	t_vect33f	o;
 
-	forward = disc->normal;
-	right = disc->right;
-	up = disc->up;
+	set_cylinder_vects_ptrs(cylinder, &o);
 	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
 	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
 	}
+	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	set_cylinder_cap_inversion(cylinder);
+}
+
+void	set_disc_vects(t_disc *disc)
+{
+	t_vect3f	tmp;
+	t_vect33f	o;
+
+	o.normal = disc->normal;
+	o.right = disc->right;
+	o.up = disc->up;
+	tmp = (t_vect3f){0, 1, 0};
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
+	{
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
+	}
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
+	{
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
+	}
+}
+
+static void	set_cone_vects_ptrs(t_cone *cone, t_vect33f *o)
+{
+	o->normal = cone->normal;
+	o->right = cone->right;
+	o->up = cone->up;
+}
+
+static void	set_cone_cap_inversion(t_cone *cone)
+{
+	cone->pinnacle->is_inversed = NORMALDISC;
+	cone->base->is_inversed = INVERSEDISC;
+	cone->base->q = cone->q;
+	cone->pinnacle->q = cone->q;
 }
 
 void	set_cone_vects(t_cone *cone)
 {
 	t_vect3f	tmp;
-	t_vect3f	*forward;
-	t_vect3f	*right;
-	t_vect3f	*up;
+	t_vect33f	o;
 
-	forward = cone->normal;
-	right = cone->right;
-	up = cone->up;
+	set_cone_vects_ptrs(cone, &o);
 	tmp = (t_vect3f){0, 1, 0};
-	if (forward->x == 0. && forward->y == 1. && forward->z == 0.)
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, -1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
 	}
-	else if (forward->x == 0. && forward->y == -1 && forward->z == 0.)
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
 	{
-		*right = (t_vect3f){1, 0, 0};
-		*up = (t_vect3f){0, 0, 1};
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
 	}
 	else
 	{
-		*right = cross_product(tmp, *forward);
-		normalize(right);
-		*up = cross_product(*forward, *right);
-		normalize(up);
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
 	}
 	cone->q = get_obj_quat(*(cone->normal), *(cone->up));
-	printf("%f\n", cone->q.q2);
-	cone->pinnacle->is_inversed = NORMALDISC;
-	cone->base->is_inversed = INVERSEDISC;
-	cone->base->q = cone->q;
-	cone->pinnacle->q = cone->q;
+	set_cone_cap_inversion(cone);
 }
 
 //quaternion 
@@ -415,7 +424,7 @@ void	manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata)
 	cone->pinnacle->q = cone->q;
 }
 
-void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
+void	manipulate_highlighted_sphere_plane(t_rt *rt, mlx_key_data_t keydata)
 {
 	int	i;
 
@@ -423,40 +432,35 @@ void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
 	while (i < rt->n_spheres)
 	{
 		if (rt->spheres[i]->mode == HIGHLIGHT)
-		{
 			manipulate_sphere(rt, rt->spheres[i], keydata);
-			return ;
-		}
 		i++;
 	}
 	i = 0;
 	while (i < rt->n_planes)
 	{
 		if (rt->planes[i]->mode == HIGHLIGHT)
-		{
 			manipulate_plane(rt, rt->planes[i], keydata);
-			return ;
-		}
 		i++;
 	}
+}
+
+void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
+{
+	int	i;
+
+	manipulate_highlighted_sphere_plane(rt, keydata);
 	i = 0;
 	while (i < rt->n_cylinders)
 	{
 		if (rt->cylinders[i]->mode == HIGHLIGHT)
-		{
 			manipulate_cylinder(rt, rt->cylinders[i], keydata);
-			return ;
-		}
 		i++;
 	}
 	i = 0;
 	while (i < rt->n_cones)
 	{
 		if (rt->cones[i]->mode == HIGHLIGHT)
-		{
 			manipulate_cone(rt, rt->cones[i], keydata);
-			return ;
-		}
 		i++;
 	}
 }

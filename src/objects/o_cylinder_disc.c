@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:44:54 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 17:19:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,21 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->vector_map = NULL;
 }
 
+void	attribute_texture_data_cylinder_bot(t_disc *disc, t_cylinder *cylinder)
+{
+	disc->checkerboard = cylinder->checkerboard;
+	disc->texture = cylinder->texture;
+	if (disc->texture)
+		disc->tx_disc = cylinder->texture->tx_bot;
+	else
+		disc->tx_disc = NULL;
+	disc->vector_map = cylinder->vector_map;
+	if (disc->vector_map)
+		disc->vm_disc = cylinder->vector_map->vm_bot;
+	else
+		disc->vm_disc = NULL;
+}
+
 void	define_botcap(t_cylinder *cylinder)
 {
 	t_disc	*botcap;
@@ -60,17 +75,22 @@ void	define_botcap(t_cylinder *cylinder)
 	*botcap->normal = get_normal(botcap->nvect[X],
 			botcap->nvect[Y], botcap->nvect[Z]);
 	set_disc_vects(botcap);
-	botcap->checkerboard = cylinder->checkerboard;
-	botcap->texture = cylinder->texture;
-	if (botcap->texture)
-		botcap->tx_disc = cylinder->texture->tx_bot;
+	attribute_texture_data_cylinder_bot(botcap, cylinder);
+}
+
+void	attribute_texture_data_cylinder_top(t_disc *disc, t_cylinder *cylinder)
+{
+	disc->checkerboard = cylinder->checkerboard;
+	disc->texture = cylinder->texture;
+	if (disc->texture)
+		disc->tx_disc = cylinder->texture->tx_top;
 	else
-		botcap->tx_disc = NULL;
-	botcap->vector_map = cylinder->vector_map;
-	if (botcap->vector_map)
-		botcap->vm_disc = cylinder->vector_map->vm_bot;
+		disc->tx_disc = NULL;
+	disc->vector_map = cylinder->vector_map;
+	if (disc->vector_map)
+		disc->vm_disc = cylinder->vector_map->vm_top;
 	else
-		botcap->vm_disc = NULL;
+		disc->vm_disc = NULL;
 }
 
 void	define_topcap(t_cylinder *cylinder)
@@ -95,17 +115,7 @@ void	define_topcap(t_cylinder *cylinder)
 	*topcap->normal = get_normal(topcap->nvect[X],
 			topcap->nvect[Y], topcap->nvect[Z]);
 	set_disc_vects(topcap);
-	topcap->checkerboard = cylinder->checkerboard;
-	topcap->texture = cylinder->texture;
-	if (topcap->texture)
-		topcap->tx_disc = cylinder->texture->tx_top;
-	else
-		topcap->tx_disc = NULL;
-	topcap->vector_map = cylinder->vector_map;
-	if (topcap->vector_map)
-		topcap->vm_disc = cylinder->vector_map->vm_top;
-	else
-		topcap->vm_disc = NULL;
+	attribute_texture_data_cylinder_top(topcap, cylinder);
 }
 
 void	get_discs(t_cylinder *cylinder)

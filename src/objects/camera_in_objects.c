@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera_in_objects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/22 15:40:33 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 15:54:45 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/04 14:18:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,16 +84,10 @@ void	detect_camera_inside_objects(t_rt *rt)
 
 	i = 0;
 	while (i < rt->n_spheres)
-	{
-		detect_camera_inside_sphere(rt->spheres[i], rt->camera);
-		i++;
-	}
+		detect_camera_inside_sphere(rt->spheres[i++], rt->camera);
 	i = 0;
 	while (i < rt->n_planes)
-	{
-		detect_camera_inside_plane(rt->planes[i], rt->camera);
-		i++;
-	}
+		detect_camera_inside_plane(rt->planes[i++], rt->camera);
 	i = 0;
 	while (i < rt->n_cylinders)
 	{

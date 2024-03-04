@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/04 09:53:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/04 14:22:48 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,7 +371,7 @@ void	print_list(void *content, t_object flag)
 	printf("Address of obj %i: %p\n", flag, content);
 }
 
-void	create_object_list(t_master *master)
+/* void	create_object_list(t_master *master)
 {
 	int			i;
 	t_objlist	*object;
@@ -420,7 +420,7 @@ void	create_object_list(t_master *master)
 		ft_objlst_add_back(&master->obj_list, object);
 		i++;
 	}
-}
+} */
 
 void	minirt2(t_master *master, t_rt *rt)
 {
