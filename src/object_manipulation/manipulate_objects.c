@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_objects.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 13:21:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:43:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:19:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ static void	manipulate_highlighted_object(t_rt *rt, mlx_key_data_t keydata)
 void	manipulate_objects(t_master *master, mlx_key_data_t keydata)
 {
 	manipulate_highlighted_object(master->rt, keydata);
-	find_rays(master);
+	cast_rays(master);
 }

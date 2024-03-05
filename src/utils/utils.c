@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:20:14 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 15:10:18 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:12:05 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_vect3f	array_to_vect(double *array)
 	vect.z = array[Z];
 	return (vect);
 }
-
 
 static int	space_sign(char *str, int *neg)
 {

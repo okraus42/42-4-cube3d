@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 11:12:30 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:19:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	rotate_camera(t_master *master, mlx_key_data_t keydata)
 	camera = master->rt->camera;
 	rotate(keydata.key, camera->normal, camera->right, camera->up);
 	master->rt->camera = camera;
-	find_rays(master);
+	cast_rays(master);
 }
 
 void	shift_camera(t_master *master, mlx_key_data_t keydata)
@@ -103,5 +103,5 @@ void	shift_camera(t_master *master, mlx_key_data_t keydata)
 	if (keydata.key == MLX_KEY_EQUAL)
 		master->rt->camera->fov += 5;
 	clamp(1, 179, &master->rt->camera->fov);
-	find_rays(master);
+	cast_rays(master);
 }

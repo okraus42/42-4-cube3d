@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   intersections.c                                    :+:      :+:    :+:   */
+/*   object_intersections.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 14:28:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:32:22 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,6 @@ int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t)
 	return (solve_quad_sphere(t, quad));
 }
 
-static void	define_shape(void *object,
-	t_vect3f *pt, t_vect3f *normal, t_object f)
-{
-	t_disc		*disc;
-	t_plane		*plane;
-
-	disc = NULL;
-	plane = NULL;
-	if (f == DISC)
-	{
-		disc = (t_disc *)object;
-		*pt = array_to_vect(disc->coords);
-		*normal = *disc->normal;
-	}
-	else
-	{
-		plane = (t_plane *)object;
-		*pt = array_to_vect(plane->coords);
-		*normal = *plane->normal;
-	}
-}
-
 int	intersect_plane(t_ray ray, void *object, double *t, t_object flag)
 {
 	double		denom;
@@ -56,7 +34,7 @@ int	intersect_plane(t_ray ray, void *object, double *t, t_object flag)
 	point = (t_vect3f){};
 	normal = (t_vect3f){};
 	diff = (t_vect3f){};
-	define_shape(object, &point, &normal, flag);
+	disc_or_plane(object, &point, &normal, flag);
 	denom = dot_product(normal, ray.direction);
 	if (denom < PRECISION && denom > -PRECISION)
 		return (0);
@@ -89,36 +67,6 @@ int	intersect_disc(t_ray ray, t_disc *disc, double *t)
 		return (distance2 <= pow(disc->radius, 2));
 	}
 	return (0);
-}
-
-// d=-ax_0-by_0-cz_0. 
-int	is_between_caps(t_disc	*cap1, t_disc *cap2, t_ray ray, double t)
-{
-	double		dist1;
-	double		dist2;
-	double		plane1;
-	double		plane2;
-	t_vect3f	inter;
-
-	inter.x = ray.origin.x + ray.direction.x * t;
-	inter.y = ray.origin.y + ray.direction.y * t;
-	inter.z = ray.origin.z + ray.direction.z * t;
-	dist1 = (-1 * cap1->normal->x * cap1->coords[X])
-		- (cap1->normal->y * cap1->coords[Y])
-		- (cap1->normal->z * cap1->coords[Z]);
-	dist2 = (-1 * cap2->normal->x * cap2->coords[X])
-		- (cap2->normal->y * cap2->coords[Y])
-		- (cap2->normal->z * cap2->coords[Z]);
-	plane1 = (cap1->normal->x * inter.x) + (cap1->normal->y * inter.y)
-		+ (cap1->normal->z * inter.z) + dist1;
-	plane2 = (cap2->normal->x * inter.x) + (cap2->normal->y * inter.y)
-		+ (cap2->normal->z * inter.z) + dist2;
-	if (plane1 > PRECISION || plane2 > PRECISION)
-		return (0);
-	else if (plane1 < -PRECISION && plane2 < -PRECISION)
-		return (1);
-	else
-		return (0);
 }
 
 int	intersect_cylinder(t_ray ray, t_cylinder *cylinder, double *t)

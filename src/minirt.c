@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 11:10:06 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:19:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	minirt2(t_master *master, t_rt *rt)
 				master->str[i], 10, 5 + 20 * i);
 		++i;
 	}
-	find_rays(master);
+	cast_rays(master);
 	ft_draw_string(master);
 	loop(mlx, master);
 	mlx_delete_image(mlx, img);

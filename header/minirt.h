@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 14:28:33 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:39:16 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -503,7 +503,7 @@ void		free_textures(t_rt *rt);
 void		free_vector_maps(t_rt *rt);
 
 // Ray casting
-void		find_rays(t_master *master);
+void		cast_rays(t_master *master);
 
 int			solve_quad_sphere(double *t, t_quadterms quad);
 int			solve_quad_cyl(double *t, t_quadterms quad,
@@ -616,7 +616,7 @@ void		disc_shader(t_rayfinder *rf,
 				t_vect3f intersection, void *object_ptr, t_master *master);
 void		cone_shader(t_rayfinder *rf,
 				t_vect3f intersection, void *object_ptr, t_master *master);
-void		light_shader(t_rayfinder *rf, void *object_ptr, t_master *master);
+void		light_sphere_shader(t_rayfinder *rf, void *object_ptr);
 
 // Shader utils
 void		set_ambient_intensity(t_shader *shader,
@@ -725,6 +725,13 @@ void		set_cone_vects_ptrs(t_cone *cone, t_vect33f *o);
 void		set_cone_cap_inversion(t_cone *cone);
 void		set_cylinder_vects_ptrs(t_cylinder *cylinder, t_vect33f *o);
 void		set_cylinder_cap_inversion(t_cylinder *cylinder);
+
+// Rayfinder
+t_rayfinder	init_rayfinder(t_master	*master);
+void		reset_rayfinder(t_rayfinder *rf);
+
+void		disc_or_plane(void *object,
+				t_vect3f *pt, t_vect3f *normal, t_object f);
 
 // Testing functions
 /* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection,

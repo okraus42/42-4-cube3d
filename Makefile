@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 15:10:25 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 15:39:08 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,7 +89,8 @@ SRC_M		=	quaternions.c \
 				math_utils.c \
 				solve_quadratic_eq_cone.c \
 				solve_quadratic_eq_cylinder.c \
-				solve_quadratic_eq_sphere.c
+				solve_quadratic_eq_sphere.c \
+				point_lies_between_caps.c
 
 SRC_O		=	fill_object_getters.c \
 				o_ambient.c \
@@ -118,8 +119,12 @@ SRC_O		=	fill_object_getters.c \
 				set_texture_pointer.c \
 				set_vector_map_pointer.c
 				
-SRC_R		=	find_rays.c \
-				intersections.c
+SRC_R		=	cast_rays.c \
+				find_intersections.c \
+				object_intersections.c \
+				define_ray.c \
+				rayfinder.c \
+				disc_or_plane.c
 
 SRC_U		=	error.c \
 				print_contents.c \
@@ -134,6 +139,7 @@ SRC_C		= 	camera.c \
 				camera_in_objects_functions.c
 
 SRC_SH		=	object_shaders.c \
+				light_sphere_shader.c \
 				shader_utils.c \
 				shader_utils2.c \
 				phong_illumination.c

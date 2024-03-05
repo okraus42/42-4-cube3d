@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 15:02:42 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 15:05:20 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:12:20 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,3 @@ int	is_valid_texture_file(char *str)
 	ft_free_split(&key_value_pair);
 	return (1);
 }
-

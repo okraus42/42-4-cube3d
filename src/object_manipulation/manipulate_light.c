@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manipulate_light.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 12:15:05 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:27:19 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:19:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ void	manipulate_light(t_master *master, mlx_key_data_t keydata)
 	}
 	move(keydata.key, master->rt->camera, master->rt->light_spheres[i]->coords);
 	specular_options(master, keydata.key);
-	find_rays(master);
+	cast_rays(master);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reset_to_default.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:53:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 11:54:26 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 15:19:34 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,5 @@ void	reset_to_default(t_master *master)
 	reset_spheres_planes_lights(master->rt);
 	reset_cylinders_cones(master->rt);
 	master->options->mode = DEFAULT;
-	find_rays(master);
+	cast_rays(master);
 }
