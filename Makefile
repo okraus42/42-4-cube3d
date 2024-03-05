@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 12:12:10 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 12:40:58 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,21 +57,23 @@ SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
 				$(addprefix $(SRC_SHDIR), $(SRC_SH)) \
 				$(addprefix $(SRC_HOOKDIR), $(SRC_HOOKS)) \
 				$(addprefix $(SRC_FILEDIR), $(SRC_FILE)) \
-				$(addprefix $(SRC_OBJCHDIR), $(SRC_OBJCH))
+				$(addprefix $(SRC_OBJCHDIR), $(SRC_OBJCH)) \
+				$(addprefix $(SRC_OBJMANDIR), $(SRC_OBJMAN))
 
 
 # Source directories
 
-SRC_DIR		=	src/
-SRC_MDIR	=	src/maths/
-SRC_ODIR	=	src/objects/
-SRC_RDIR	=	src/rays/
-SRC_UDIR	=	src/utils/
-SRC_CDIR	=	src/camera/
-SRC_SHDIR	=	src/shader/
-SRC_HOOKDIR	=	src/hooks/
-SRC_FILEDIR	=	src/file/
+SRC_DIR			=	src/
+SRC_MDIR		=	src/maths/
+SRC_ODIR		=	src/objects/
+SRC_RDIR		=	src/rays/
+SRC_UDIR		=	src/utils/
+SRC_CDIR		=	src/camera/
+SRC_SHDIR		=	src/shader/
+SRC_HOOKDIR		=	src/hooks/
+SRC_FILEDIR		=	src/file/
 SRC_OBJCHDIR	=	src/object_choice/
+SRC_OBJMANDIR	=	src/object_manipulation/
 
 # miniRT functions
 
@@ -96,11 +98,10 @@ SRC_O		=	fill_object_getters.c \
 				o_light_sphere.c \
 				o_checkerboard.c \
 				object_handler.c \
-				manipulate_objects.c \
 				set_texture_data_pointers.c \
 				o_texture.c \
 				o_vector_map.c \
-				camera_in_objects.c
+				set_object_vectors.c
 				
 SRC_R		=	find_rays.c \
 				intersections.c
@@ -117,7 +118,10 @@ SRC_U		=	check_identifiers_helpers.c \
 SRC_C		= 	camera.c \
 				movements.c \
 				movements2.c \
-				rotations.c
+				rotations.c \
+				quaternion_rotations.c \
+				camera_in_objects.c \
+				camera_in_objects_functions.c
 
 SRC_SH		=	object_shaders.c \
 				shader_utils.c \
@@ -137,6 +141,11 @@ SRC_OBJCH	=	change_modes_cylinder_cone.c \
 				choose_object_by_mouse_reference.c \
 				object_iterators.c \
 				reset_to_default.c
+
+SRC_OBJMAN	=	change_properties.c \
+				manipulate_light.c \
+				manipulate_objects.c \
+				manipulated_objects.c
 
 
 # Formating
@@ -172,7 +181,8 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_SH:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_HOOKS:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o)) \
-				$(addprefix $(OBJ_DIR), $(SRC_OBJCH:.c=.o))
+				$(addprefix $(OBJ_DIR), $(SRC_OBJCH:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_OBJMAN:.c=.o))
 
 # RULES
 
@@ -284,6 +294,15 @@ $(OBJ_DIR)%.o:	$(SRC_FILEDIR)%.c $(HEADER)
 				@$(ECHO)
 
 $(OBJ_DIR)%.o:	$(SRC_OBJCHDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_OBJMANDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"

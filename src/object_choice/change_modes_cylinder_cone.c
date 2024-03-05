@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 12:02:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:02:42 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:43:00 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,3 @@ int	change_modes_cylinder(t_cylinder *cylinder, t_mode mode)
 	cylinder->topcap->mode = mode;
 	return (0);
 }
-

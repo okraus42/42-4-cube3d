@@ -6,12 +6,11 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:55:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:01:19 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:42:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
-
 
 static int	iterate_and_pick_cones(t_master *master, int *flag)
 {

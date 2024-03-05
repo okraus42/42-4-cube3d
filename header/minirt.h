@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 12:07:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:40:41 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -548,6 +548,12 @@ void		change_ray_direction(double **cam,
 void		shift_camera(t_master *master, mlx_key_data_t keydata);
 void		rotate_camera(t_master *master, mlx_key_data_t keydata);
 void		update_camera_matrix(t_camera *camera);
+void		detect_camera_inside_cone(t_cone *cone, t_camera *camera);
+void		detect_camera_inside_disc(t_disc *disc, t_camera *camera);
+void		detect_camera_inside_cylinder(t_cylinder *cylinder,
+				 t_camera *camera);
+void		detect_camera_inside_plane(t_plane *plane, t_camera *camera);
+void		detect_camera_inside_sphere(t_sphere *sphere, t_camera *camera);
 
 // Quaternions
 t_quat		get_rot_quat(t_vect3f axis, double angle);
@@ -638,7 +644,6 @@ void		set_plane_normal(t_shader *shader,
 				t_plane *plane, t_vect3f intersection);
 t_vect3f	array_to_vect(double *array);
 
-void		manipulate_objects(t_master *master, mlx_key_data_t keydata);
 void		set_sphere_vects(t_sphere *sphere);
 void		set_plane_vects(t_plane *plane);
 void		set_cylinder_vects(t_cylinder *cylinder);
@@ -646,8 +651,6 @@ void		set_disc_vects(t_disc *disc);
 void		clamp(int min, int max, int *value);
 
 void		rotate_o(keys_t key, t_vect33f *axes, t_camera *camera);
-
-void		manipulate_light(t_master *master, mlx_key_data_t keydata);
 
 // List functions
 t_objlist	*ft_objlst_new(void *content, t_object flag);
@@ -696,6 +699,22 @@ void		set_highlight_from_reference(t_master *master, t_rayfinder rf);
 int			iterate_and_pick(t_master *master, int *flag);
 void		reset_to_default(t_master *master);
 void		choose_object(t_master *master);
+
+// Object manipulation
+void		change_glossiness(double *glossiness, keys_t key);
+void		change_radius(double *radius, keys_t key);
+void		change_height(double *height, keys_t key);
+void		rotate_o(keys_t key, t_vect33f *axes, t_camera *camera);
+void		manipulate_light(t_master *master, mlx_key_data_t keydata);
+void		manipulate_objects(t_master *master, mlx_key_data_t keydata);
+void		manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata);
+void		manipulate_cylinder(t_rt *rt,
+				t_cylinder *cylinder, mlx_key_data_t keydata);
+void		manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata);
+void		manipulate_sphere(t_rt *rt, 
+				t_sphere *sphere, mlx_key_data_t keydata);
+void		qrotate_o(keys_t key, t_quat *q, t_camera *camera);
+
 
 // Testing functions
 /* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection,
