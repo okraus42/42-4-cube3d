@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movements.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:20:05 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/10 12:43:35 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 11:23:44 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,4 @@ void	move_left(t_camera *camera, double *coords)
 	coords[X] -= (camera->right->x * 1);
 	coords[Y] -= (camera->right->y * 1);
 	coords[Z] -= (camera->right->z * 1);
-}
-
-void	move_forward(t_camera *camera, double *coords)
-{
-	coords[X] -= (camera->normal->x * 1);
-	coords[Y] -= (camera->normal->y * 1);
-	coords[Z] -= (camera->normal->z * 1);
-}
-
-void	move_backward(t_camera *camera, double *coords)
-{
-	coords[X] += (camera->normal->x * 1);
-	coords[Y] += (camera->normal->y * 1);
-	coords[Z] += (camera->normal->z * 1);
-}
-
-void	move_up(t_camera *camera, double *coords)
-{
-	coords[X] += (camera->up->x * 1);
-	coords[Y] += (camera->up->y * 1);
-	coords[Z] += (camera->up->z * 1);
-}
-
-void	move_down(t_camera *camera, double *coords)
-{
-	coords[X] -= (camera->up->x * 1);
-	coords[Y] -= (camera->up->y * 1);
-	coords[Z] -= (camera->up->z * 1);
 }

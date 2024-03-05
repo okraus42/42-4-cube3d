@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/04 19:57:51 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 12:07:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,6 +380,8 @@ typedef struct s_master
 	char		str[STRINGS][1024];
 	mlx_image_t	*string[STRINGS];
 	t_objlist	*obj_list;
+	int			w_height;
+	int			w_width;
 }				t_master;
 
 typedef struct s_rayfinder
@@ -398,6 +400,8 @@ typedef struct s_rayfinder
 	t_ray		ray;
 	t_vect3f	shadow_inter;
 	double		inter_dist;
+	int			w_height;
+	int			w_width;
 }				t_rayfinder;
 
 typedef struct s_shader
@@ -639,8 +643,6 @@ void		set_sphere_vects(t_sphere *sphere);
 void		set_plane_vects(t_plane *plane);
 void		set_cylinder_vects(t_cylinder *cylinder);
 void		set_disc_vects(t_disc *disc);
-void		choose_object(t_master *master);
-void		reset_to_default(t_master *master);
 void		clamp(int min, int max, int *value);
 
 void		rotate_o(keys_t key, t_vect33f *axes, t_camera *camera);
@@ -656,8 +658,6 @@ void		ft_objlst_iter(t_objlist *lst, void (*f)(void *, t_object));
 
 void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
 t_rayfinder	init_rayfinder(t_master	*master);
-void		set_highlight_from_reference(t_master *master, t_rayfinder rf);
-void		ft_draw_string(t_master *master);
 int			set_checkerboard_pointer(char *obj,
 				t_rt *rt, char **split, t_checkerboard **ptr);
 int			set_texture_pointer(char *obj,
@@ -671,6 +671,31 @@ void		get_reflection_vector(t_shader *shader);
 void		diff_and_spec_ratios(t_shader *shader, t_options options);
 void		trace_shadow(t_master *master, t_rayfinder *rf,
 				t_shader *shader, double *light_pos);
+
+// Hooks and window drawing
+void		mousehook(mouse_key_t button,
+				action_t action, modifier_key_t mods, void *param);
+void		keyhook(mlx_key_data_t keydata, void *param);
+t_rayfinder	trace_singular_object_ray(t_master *master,
+				int32_t xpos, int32_t ypos);
+void		object_movements(t_master *master, mlx_key_data_t keydata);
+void		light_movements(t_master *master, mlx_key_data_t keydata);
+void		camera_movements(t_master *master, mlx_key_data_t keydata);
+void		ft_draw_string(t_master *master);
+
+// File functions
+int			open_file(char *path);
+int			load_file(char *file, t_rt *rt, int fd);
+void		get_texture_data(t_rt *rt, char *file, int *flag);
+void		get_object_data(t_rt *rt, char *file, int *flag);
+
+// Object choice
+int			change_modes_cone(t_cone *cone, t_mode mode);
+int			change_modes_cylinder(t_cylinder *cylinder, t_mode mode);
+void		set_highlight_from_reference(t_master *master, t_rayfinder rf);
+int			iterate_and_pick(t_master *master, int *flag);
+void		reset_to_default(t_master *master);
+void		choose_object(t_master *master);
 
 // Testing functions
 /* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection,

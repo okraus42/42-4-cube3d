@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   find_rays.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 18:34:25 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/05 11:12:40 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ t_rayfinder	init_rayfinder(t_master	*master)
 {
 	t_rayfinder	rf;
 
-	rf.ratio = (double)WIDTH / (double)HEIGHT;
+	rf.ratio = (double)master->w_width / (double)master->w_height;
 	rf.fov = master->rt->camera->fov;
 	rf.scale = tan(rad(rf.fov * 0.5));
 	rf.t_near = (double)INT_MAX;
@@ -151,7 +151,33 @@ t_rayfinder	init_rayfinder(t_master	*master)
 	rf.shadowray.origin = (t_vect3f){};
 	rf.shadow_inter = (t_vect3f){};
 	rf.inter_dist = 0;
+	rf.w_height = master->w_height;
+	rf.w_width = master->w_width;
 	return (rf);
+}
+
+/* since origin is 0,0,0, it's just shifting it to "from" point from origin.
+Proper matrix multiplication becomes relevant when:
+1/ origin is not 0,0,0
+2/ homogenous coordinate is not 1 (e.g. after projection matrix)
+This could also be encoded in the matrix itself instead of 0,0,0,1
+*/
+t_vect3f	shift_origin(double **cam)
+{
+	t_vect3f	origin;
+
+	origin.x = cam[3][0];
+	origin.y = cam[3][1];
+	origin.z = cam[3][2];
+	return (origin);
+}
+
+void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
+{
+	direction->x = temp.x * cam[0][0] + temp.y * cam[1][0] + temp.z * cam[2][0];
+	direction->y = temp.x * cam[0][1] + temp.y * cam[1][1] + temp.z * cam[2][1];
+	direction->z = temp.x * cam[0][2] + temp.y * cam[1][2] + temp.z * cam[2][2];
+	normalize(direction);
 }
 
 void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
@@ -159,9 +185,9 @@ void	update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y)
 	ray->origin.x = rf->origin.x;
 	ray->origin.y = rf->origin.y;
 	ray->origin.z = rf->origin.z;
-	ray->direction.x = (2. * ((x + 0.5) / (double)WIDTH) - 1.)
+	ray->direction.x = (2. * ((x + 0.5) / (double)rf->w_width) - 1.)
 		* rf->ratio * rf->scale;
-	ray->direction.y = (1. - 2. * ((y + 0.5) / (double)HEIGHT))
+	ray->direction.y = (1. - 2. * ((y + 0.5) / (double)rf->w_height))
 		* rf->scale;
 	ray->direction.z = -1;
 	change_ray_direction(rf->cam_mat, &ray->direction, ray->direction);
@@ -181,14 +207,14 @@ void	find_rays(t_master *master)
 	t_rayfinder	rf;
 
 	camera_things(master);
-	rays = malloc(sizeof(t_ray *) * (WIDTH));
+	rays = malloc(sizeof(t_ray *) * (master->w_width));
 	rf = init_rayfinder(master);
 	x = -1;
-	while (++x < WIDTH)
+	while (++x < master->w_width)
 	{
-		rays[x] = malloc(sizeof(t_ray) * (HEIGHT));
+		rays[x] = malloc(sizeof(t_ray) * (master->w_height));
 		y = -1;
-		while (++y < HEIGHT)
+		while (++y < master->w_height)
 		{
 			reset_rayfinder(&rf);
 			update_ray_direction(&rf, &rays[x][y], x, y);

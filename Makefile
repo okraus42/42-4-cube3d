@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/02/27 16:22:57 by okraus           ###   ########.fr        #
+#    Updated: 2024/03/05 12:12:10 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,11 @@ SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
 				$(addprefix $(SRC_RDIR), $(SRC_R)) \
 				$(addprefix $(SRC_UDIR), $(SRC_U)) \
 				$(addprefix $(SRC_CDIR), $(SRC_C)) \
-				$(addprefix $(SRC_SHDIR), $(SRC_SH))
+				$(addprefix $(SRC_SHDIR), $(SRC_SH)) \
+				$(addprefix $(SRC_HOOKDIR), $(SRC_HOOKS)) \
+				$(addprefix $(SRC_FILEDIR), $(SRC_FILE)) \
+				$(addprefix $(SRC_OBJCHDIR), $(SRC_OBJCH))
+
 
 # Source directories
 
@@ -65,6 +69,9 @@ SRC_RDIR	=	src/rays/
 SRC_UDIR	=	src/utils/
 SRC_CDIR	=	src/camera/
 SRC_SHDIR	=	src/shader/
+SRC_HOOKDIR	=	src/hooks/
+SRC_FILEDIR	=	src/file/
+SRC_OBJCHDIR	=	src/object_choice/
 
 # miniRT functions
 
@@ -72,7 +79,10 @@ SRC_S		=	minirt.c \
 				objlist.c
 
 SRC_M		=	quaternions.c \
-				vector_ops.c
+				quaternions2.c \
+				quaternions3.c \
+				vector_ops.c \
+				vector_ops2.c
 
 SRC_O		=	fill_object_getters.c \
 				o_ambient.c \
@@ -87,7 +97,6 @@ SRC_O		=	fill_object_getters.c \
 				o_checkerboard.c \
 				object_handler.c \
 				manipulate_objects.c \
-				choose_object.c \
 				set_texture_data_pointers.c \
 				o_texture.c \
 				o_vector_map.c \
@@ -107,12 +116,27 @@ SRC_U		=	check_identifiers_helpers.c \
 
 SRC_C		= 	camera.c \
 				movements.c \
+				movements2.c \
 				rotations.c
 
 SRC_SH		=	object_shaders.c \
 				shader_utils.c \
 				shader_utils2.c \
 				phong_illumination.c
+
+SRC_HOOKS	=	draw_string_in_window.c \
+				hooks.c \
+				hooks_helpers.c
+
+SRC_FILE	=	load_file.c \
+				get_texture_data.c \
+				get_object_data.c
+
+SRC_OBJCH	=	change_modes_cylinder_cone.c \
+				choose_object_by_keys.c \
+				choose_object_by_mouse_reference.c \
+				object_iterators.c \
+				reset_to_default.c
 
 
 # Formating
@@ -145,7 +169,10 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_R:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_U:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_C:.c=.o)) \
-				$(addprefix $(OBJ_DIR), $(SRC_SH:.c=.o))
+				$(addprefix $(OBJ_DIR), $(SRC_SH:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_HOOKS:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_OBJCH:.c=.o))
 
 # RULES
 
@@ -230,6 +257,33 @@ $(OBJ_DIR)%.o:	$(SRC_CDIR)%.c $(HEADER)
 				@$(ECHO)
 
 $(OBJ_DIR)%.o:	$(SRC_SHDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_HOOKDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_FILEDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_OBJCHDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"

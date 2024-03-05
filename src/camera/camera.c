@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 12:47:11 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 18:44:36 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/05 11:12:30 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,31 +76,6 @@ void	update_camera_matrix(t_camera *camera)
 	matrix[3][1] = camera->coords[Y];
 	matrix[3][2] = camera->coords[Z];
 	matrix[3][3] = 1;
-	display_camera_matrix(camera);
-}
-
-/* since origin is 0,0,0, it's just shifting it to "from" point from origin.
-Proper matrix multiplication becomes relevant when:
-1/ origin is not 0,0,0
-2/ homogenous coordinate is not 1 (e.g. after projection matrix)
-This could also be encoded in the matrix itself instead of 0,0,0,1
-*/
-t_vect3f	shift_origin(double **cam)
-{
-	t_vect3f	origin;
-
-	origin.x = cam[3][0];
-	origin.y = cam[3][1];
-	origin.z = cam[3][2];
-	return (origin);
-}
-
-void	change_ray_direction(double **cam, t_vect3f *direction, t_vect3f temp)
-{
-	direction->x = temp.x * cam[0][0] + temp.y * cam[1][0] + temp.z * cam[2][0];
-	direction->y = temp.x * cam[0][1] + temp.y * cam[1][1] + temp.z * cam[2][1];
-	direction->z = temp.x * cam[0][2] + temp.y * cam[1][2] + temp.z * cam[2][2];
-	normalize(direction);
 }
 
 /*
@@ -128,6 +103,5 @@ void	shift_camera(t_master *master, mlx_key_data_t keydata)
 	if (keydata.key == MLX_KEY_EQUAL)
 		master->rt->camera->fov += 5;
 	clamp(1, 179, &master->rt->camera->fov);
-	printf("FOV: %d\n", master->rt->camera->fov);
 	find_rays(master);
 }

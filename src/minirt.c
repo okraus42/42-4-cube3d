@@ -6,348 +6,11 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 13:40:49 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/04 14:22:48 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 11:10:06 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minirt.h"
-
-void	get_object_data_from_line(char *line, t_rt *rt, int *flag)
-{
-	char	**split;
-	char	*trimmed;
-
-	trimmed = ft_strtrim(line, " \n");
-	split = ft_split(trimmed, ' ');
-	free(trimmed);
-	if (ft_strlen(split[0]) > 0)
-		fill_objects(rt, split, flag);
-	ft_free_split(&split);
-}
-
-void	get_object_data(t_rt *rt, char *file, int *flag)
-{
-	int		fd;
-	char	*line;
-
-	fd = open(file, O_RDONLY);
-	line = get_next_line(fd);
-	while (line && !(*flag))
-	{
-		get_object_data_from_line(line, rt, flag);
-		free(line);
-		line = get_next_line(fd);
-	}
-	free(line);
-	close(fd);
-}
-
-void	get_texture_data_from_line(char *line, t_rt *rt, int *flag)
-{
-	char	**split;
-	char	*trimmed;
-
-	trimmed = ft_strtrim(line, " \n");
-	split = ft_split(trimmed, ' ');
-	free(trimmed);
-	if (ft_strlen(split[0]) > 0)
-	{
-		if (!ft_strncmp(split[0], ".ch/", 4))
-			*flag = fill_checkerboard(rt, split);
-		if (!ft_strncmp(split[0], ".tx/", 4))
-			*flag = fill_texture(rt, split);
-		if (!ft_strncmp(split[0], ".vm/", 4))
-			*flag = fill_vector_map(rt, split);
-	}
-	ft_free_split(&split);
-}
-
-void	get_texture_data(t_rt *rt, char *file, int *flag)
-{
-	int		fd;
-	char	*line;
-
-	fd = open(file, O_RDONLY);
-	line = get_next_line(fd);
-	while (line && !(*flag))
-	{
-		get_texture_data_from_line(line, rt, flag);
-		free(line);
-		line = get_next_line(fd);
-	}
-	free(line);
-	close(fd);
-}
-
-int	load_file(char *file, t_rt *rt, int fd)
-{
-	int		flag;
-	int		*ids;
-
-	flag = 0;
-	ids = init_ids();
-	check_identifiers(fd, ids, &flag);
-	close(fd);
-	init_objects(rt, ids);
-	free(ids);
-	if (!flag)
-		get_texture_data(rt, file, &flag);
-	if (!flag)
-		get_object_data(rt, file, &flag);
-	return (flag);
-}
-
-int	open_file(char *path)
-{
-	int		fd;
-	char	*extension;
-
-	fd = -1;
-	extension = ft_strrchr(path, '.');
-	if (extension != NULL)
-	{
-		if (ft_strlen(extension) != 3 || ft_strncmp(extension, ".rt", 3))
-		{
-			id_err("File", E_FILE_EXT, ".rt");
-			return (fd);
-		}
-	}
-	else
-	{
-		id_err("File", E_FILE_EXT, ".rt");
-		return (fd);
-	}
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		id_err("File", "Invalid file", NULL);
-	return (fd);
-}
-
-int	iterate_highlighted_object2(t_rt *rt)
-{
-	int	i;
-
-	i = 0;
-	while (i < rt->n_spheres)
-	{
-		if (rt->spheres[i]->mode == HIGHLIGHT)
-			return (SPHERE | (i << 8));
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_planes)
-	{
-		if (rt->planes[i]->mode == HIGHLIGHT)
-			return (PLANE | (i << 8));
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_cylinders)
-	{
-		if (rt->cylinders[i]->mode == HIGHLIGHT)
-			return (CYLINDER | (i << 8));
-		i++;
-	}
-	return (0);
-}
-
-int	iterate_highlighted_object(t_rt *rt)
-{
-	int	i;
-
-	i = iterate_highlighted_object2(rt);
-	if (i)
-		return (i);
-	while (i < rt->n_cones)
-	{
-		if (rt->cones[i]->mode == HIGHLIGHT)
-			return (CONE | (i << 8));
-		i++;
-	}
-	i = 0;
-	while (i < rt->n_lights)
-	{
-		if (rt->light_spheres[i]->mode == HIGHLIGHT)
-			return (LIGHT | (i << 8));
-		i++;
-	}
-	return (0);
-}
-
-void	ft_draw_string2(t_master *master, char **s)
-{
-	if (master->options->mode == DEFAULT)
-		*s = ft_strdup("MODE: DEFAULT");
-	else if (master->options->mode == OBJECT_CHOICE)
-		*s = ft_strdup("MODE: OBJECT_CHOICE");
-	else if (master->options->mode == HIGHLIGHT)
-		*s = ft_strdup("MODE: HIGHLIGHT");
-	else if (master->options->mode == LIGHTING)
-		*s = ft_strdup("MODE: LIGHTING");
-	else if (master->options->mode == CAMERA)
-		*s = ft_strdup("MODE: CAMERA");
-	else
-		*s = ft_strdup("UNKNOWN MODE");
-}
-
-void	ft_draw_string(t_master *master)
-{
-	int		i;
-	char	*s[STRINGS];
-
-	ft_draw_string2(master, &s[0]);
-	i = iterate_highlighted_object(master->rt);
-	if ((i & 0xFF) == SPHERE)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: SPHERE: %i", i >> 8);
-	else if ((i & 0xFF) == PLANE)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: PLANE: %i", i >> 8);
-	else if ((i & 0xFF) == CYLINDER)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: CYLINDER: %i", i >> 8);
-	else if ((i & 0xFF) == CONE)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: CONE: %i", i >> 8);
-	else if ((i & 0xFF) == LIGHT)
-		ft_sprintf(master->str[1], "HIGHLIGHTED: LIGHT: %i", i >> 8);
-	else
-		ft_sprintf(master->str[1], " ");
-	mlx_delete_image(master->mlx, master->string[0]);
-	mlx_delete_image(master->mlx, master->string[1]);
-	master->string[0] = mlx_put_string(master->mlx, s[0], 10, 5);
-	master->string[1] = mlx_put_string(master->mlx, master->str[1], 10, 25);
-	free (s[0]);
-}
-
-void	camera_movements(t_master *master, mlx_key_data_t keydata)
-{
-	if (master->options->mode == DEFAULT
-		&& !keydata.modifier && keydata.action != MLX_RELEASE
-		&& (keydata.key == MLX_KEY_RIGHT
-			|| keydata.key == MLX_KEY_LEFT
-			|| keydata.key == MLX_KEY_UP
-			|| keydata.key == MLX_KEY_DOWN
-			|| keydata.key == MLX_KEY_MINUS
-			|| keydata.key == MLX_KEY_EQUAL
-			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN))
-		shift_camera(master, keydata);
-	else if (master->options->mode == DEFAULT
-		&& !keydata.modifier && keydata.action != MLX_RELEASE
-		&& (keydata.key == MLX_KEY_A
-			|| keydata.key == MLX_KEY_D
-			|| keydata.key == MLX_KEY_W
-			|| keydata.key == MLX_KEY_S
-			|| keydata.key == MLX_KEY_Q
-			|| keydata.key == MLX_KEY_E))
-		rotate_camera(master, keydata);
-}
-
-void	light_movements(t_master *master, mlx_key_data_t keydata)
-{
-	if ((master->options->mode == LIGHTING)
-		&& keydata.modifier == MLX_SHIFT
-		&& keydata.key == MLX_KEY_UP
-		&& keydata.action != MLX_RELEASE)
-		choose_object(master);
-	else if (master->options->mode == LIGHTING
-		&& keydata.action != MLX_RELEASE
-		&& !keydata.modifier
-		&& (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT
-			|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
-			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN
-			|| keydata.key == MLX_KEY_COMMA || keydata.key == MLX_KEY_PERIOD
-			|| keydata.key == MLX_KEY_G || keydata.key == MLX_KEY_H))
-		manipulate_light(master, keydata);
-	else if (master->options->mode == DEFAULT
-		&& keydata.modifier == MLX_CONTROL
-		&& keydata.key == MLX_KEY_L
-		&& keydata.action != MLX_RELEASE)
-	{
-		master->options->mode = LIGHTING;
-		if (master->rt->n_lights > 0)
-			master->rt->light_spheres[0]->mode = HIGHLIGHT;
-	}
-}
-
-void	object_movements(t_master *master, mlx_key_data_t keydata)
-{
-	if (keydata.modifier == MLX_CONTROL
-		&& keydata.key == MLX_KEY_O && keydata.action != MLX_RELEASE
-		&& master->options->mode == DEFAULT)
-	{
-		master->options->mode = OBJECT_CHOICE;
-		choose_object(master);
-	}
-	else if ((master->options->mode == OBJECT_CHOICE
-			|| master->options->mode == HIGHLIGHT)
-		&& keydata.modifier == MLX_SHIFT && keydata.key == MLX_KEY_UP
-		&& keydata.action != MLX_RELEASE)
-		choose_object(master);
-	else if (master->options->mode == HIGHLIGHT
-		&& keydata.action != MLX_RELEASE && !keydata.modifier
-		&& (keydata.key == MLX_KEY_RIGHT || keydata.key == MLX_KEY_LEFT
-			|| keydata.key == MLX_KEY_UP || keydata.key == MLX_KEY_DOWN
-			|| keydata.key == MLX_KEY_PAGE_UP
-			|| keydata.key == MLX_KEY_PAGE_DOWN
-			|| keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D
-			|| keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S
-			|| keydata.key == MLX_KEY_Q || keydata.key == MLX_KEY_E
-			|| keydata.key == MLX_KEY_G
-			|| keydata.key == MLX_KEY_1 || keydata.key == MLX_KEY_2
-			|| keydata.key == MLX_KEY_3 || keydata.key == MLX_KEY_4))
-		manipulate_objects(master, keydata);
-}
-
-void	keyhook(mlx_key_data_t keydata, void *param)
-{
-	t_master	*master;
-
-	master = param;
-	camera_movements(master, keydata);
-	object_movements(master, keydata);
-	light_movements(master, keydata);
-	if (keydata.key == MLX_KEY_BACKSPACE && keydata.action != MLX_RELEASE)
-		reset_to_default(master);
-	else if (keydata.key == MLX_KEY_ESCAPE && keydata.action != MLX_RELEASE)
-		mlx_close_window(master->mlx);
-	ft_draw_string(master);
-}
-
-t_rayfinder	trace_singular_object_ray(t_master *master,
-	int32_t xpos, int32_t ypos)
-{
-	t_rayfinder	rf;
-	t_ray		*ray;
-
-	ray = malloc(sizeof(t_ray));
-	update_camera_matrix(master->rt->camera);
-	rf = init_rayfinder(master);
-	update_ray_direction(&rf, ray, xpos, ypos);
-	find_intersections(master, *ray, &rf, PRIMARY);
-	printf("object ptr: %p\n", rf.object_ptr);
-	free(ray);
-	return (rf);
-}
-
-void	mousehook(mouse_key_t button,
-	action_t action, modifier_key_t mods, void *param)
-{
-	t_master	*master;
-	int32_t		xpos;
-	int32_t		ypos;
-	t_rayfinder	rf;
-
-	master = param;
-	(void)mods;
-	if (button == MLX_MOUSE_BUTTON_LEFT
-		&& (action != MLX_RELEASE && action != MLX_REPEAT))
-	{
-		mlx_get_mouse_pos(master->mlx, &xpos, &ypos);
-		rf = trace_singular_object_ray(master, xpos, ypos);
-		reset_to_default(master);
-		set_highlight_from_reference(master, rf);
-		ft_draw_string(master);
-	}
-}
 
 static void	loop(mlx_t *mlx, t_master *master)
 {
@@ -356,7 +19,7 @@ static void	loop(mlx_t *mlx, t_master *master)
 	mlx_loop(mlx);
 }
 
-void	init_options(t_master *master)
+static void	init_options(t_master *master)
 {
 	t_options	*options;
 
@@ -366,70 +29,14 @@ void	init_options(t_master *master)
 	master->options = options;
 }
 
-void	print_list(void *content, t_object flag)
-{
-	printf("Address of obj %i: %p\n", flag, content);
-}
-
-/* void	create_object_list(t_master *master)
-{
-	int			i;
-	t_objlist	*object;
-
-	master->obj_list = NULL;
-	i = 0;
-	while (i < master->rt->n_spheres)
-	{
-		object = ft_objlst_new(master->rt->spheres[i], SPHERE);
-		ft_objlst_add_back(&master->obj_list, object);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_planes)
-	{
-		object = ft_objlst_new(master->rt->planes[i], PLANE);
-		ft_objlst_add_back(&master->obj_list, object);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cylinders)
-	{
-		object = ft_objlst_new(master->rt->cylinders[i], CYLINDER);
-		ft_objlst_add_back(&master->obj_list, object);
-		object = ft_objlst_new(master->rt->cylinders[i]->botcap, DISC);
-		ft_objlst_add_back(&master->obj_list, object);
-		object = ft_objlst_new(master->rt->cylinders[i]->topcap, DISC);
-		ft_objlst_add_back(&master->obj_list, object);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_cones)
-	{
-		object = ft_objlst_new(master->rt->cones[i], CONE);
-		ft_objlst_add_back(&master->obj_list, object);
-		object = ft_objlst_new(master->rt->cones[i]->base, DISC);
-		ft_objlst_add_back(&master->obj_list, object);
-		object = ft_objlst_new(master->rt->cones[i]->pinnacle, DISC);
-		ft_objlst_add_back(&master->obj_list, object);
-		i++;
-	}
-	i = 0;
-	while (i < master->rt->n_lights)
-	{
-		object = ft_objlst_new(master->rt->light_spheres[i], LIGHT);
-		ft_objlst_add_back(&master->obj_list, object);
-		i++;
-	}
-} */
-
-void	minirt2(t_master *master, t_rt *rt)
+static void	minirt2(t_master *master, t_rt *rt)
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
 	int			i;
 
-	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", false);
-	mlx_set_window_limit(mlx, 250, 250, 10000, 10000);
+	mlx = mlx_init(WIDTH, HEIGHT, "miniRT", true);
+	mlx_set_window_limit(mlx, 100, 100, WIDTH, HEIGHT);
 	img = mlx_new_image(mlx, mlx->width, mlx->height);
 	mlx_image_to_window(mlx, img, 0, 0);
 	master->mlx = mlx;
@@ -450,7 +57,7 @@ void	minirt2(t_master *master, t_rt *rt)
 	mlx_terminate(mlx);
 }
 
-void	minirt(t_master *master, t_rt *rt, char *s)
+static void	minirt(t_master *master, t_rt *rt, char *s)
 {
 	int	fd;
 
@@ -463,10 +70,10 @@ void	minirt(t_master *master, t_rt *rt, char *s)
 		free(master);
 		exit(EXIT_FAILURE);
 	}
+	master->w_height = HEIGHT;
+	master->w_width = WIDTH;
 	if (!load_file(s, rt, fd))
-	{
 		minirt2(master, rt);
-	}
 }
 
 int	main(int ac, char *av[])
@@ -488,9 +95,7 @@ int	main(int ac, char *av[])
 		return (1);
 	}
 	else
-	{
 		minirt(master, rt, av[1]);
-	}
 	free_objects(rt);
 	free(rt);
 	free(master->options);
