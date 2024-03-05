@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 12:40:58 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 13:17:00 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,17 +91,21 @@ SRC_O		=	fill_object_getters.c \
 				o_camera.c \
 				o_cylinder.c \
 				o_cylinder_disc.c \
+				o_cylinder_disc_texture.c \
+				o_cylinder_format_check.c \
 				o_plane.c \
 				o_sphere.c \
 				o_cone.c \
 				o_cone_disc.c \
+				o_cone_disc_texture.c \
+				o_cone_format_check.c \
 				o_light_sphere.c \
 				o_checkerboard.c \
 				object_handler.c \
 				set_texture_data_pointers.c \
 				o_texture.c \
 				o_vector_map.c \
-				set_object_vectors.c
+				set_object_vectors.c \
 				
 SRC_R		=	find_rays.c \
 				intersections.c

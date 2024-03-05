@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 17:19:02 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 13:12:12 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,6 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->vector_map = NULL;
 }
 
-void	attribute_texture_data_cylinder_bot(t_disc *disc, t_cylinder *cylinder)
-{
-	disc->checkerboard = cylinder->checkerboard;
-	disc->texture = cylinder->texture;
-	if (disc->texture)
-		disc->tx_disc = cylinder->texture->tx_bot;
-	else
-		disc->tx_disc = NULL;
-	disc->vector_map = cylinder->vector_map;
-	if (disc->vector_map)
-		disc->vm_disc = cylinder->vector_map->vm_bot;
-	else
-		disc->vm_disc = NULL;
-}
 
 void	define_botcap(t_cylinder *cylinder)
 {
@@ -78,20 +64,6 @@ void	define_botcap(t_cylinder *cylinder)
 	attribute_texture_data_cylinder_bot(botcap, cylinder);
 }
 
-void	attribute_texture_data_cylinder_top(t_disc *disc, t_cylinder *cylinder)
-{
-	disc->checkerboard = cylinder->checkerboard;
-	disc->texture = cylinder->texture;
-	if (disc->texture)
-		disc->tx_disc = cylinder->texture->tx_top;
-	else
-		disc->tx_disc = NULL;
-	disc->vector_map = cylinder->vector_map;
-	if (disc->vector_map)
-		disc->vm_disc = cylinder->vector_map->vm_top;
-	else
-		disc->vm_disc = NULL;
-}
 
 void	define_topcap(t_cylinder *cylinder)
 {

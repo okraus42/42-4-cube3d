@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 12:40:41 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 13:14:30 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,6 +530,10 @@ void		define_botcap(t_cylinder *cylinder);
 void		define_topcap(t_cylinder *cylinder);
 void		get_discs(t_cylinder *cylinder);
 void		free_discs(t_cylinder *cylinder);
+void		attribute_texture_data_cylinder_bot(t_disc *disc,
+				t_cylinder *cylinder);
+void		attribute_texture_data_cylinder_top(t_disc *disc,
+				t_cylinder *cylinder);
 
 // Cone
 void		init_cones(t_rt *rt, int *ids);
@@ -539,6 +543,7 @@ void		free_cones(t_rt *rt);
 void		init_cone_discs(t_cone *cone);
 void		get_cone_discs(t_cone *cone);
 void		free_cone_discs(t_cone *cone);
+void		attribute_texture_data_cone(t_disc *disc, t_cone *cone);
 
 // Camera
 void		set_camera(t_camera *camera);
