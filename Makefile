@@ -6,7 +6,7 @@
 #    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 14:13:01 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 15:10:25 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,8 @@ SRC			=	$(addprefix $(SRC_DIR), $(SRC_S)) \
 				$(addprefix $(SRC_HOOKDIR), $(SRC_HOOKS)) \
 				$(addprefix $(SRC_FILEDIR), $(SRC_FILE)) \
 				$(addprefix $(SRC_OBJCHDIR), $(SRC_OBJCH)) \
-				$(addprefix $(SRC_OBJMANDIR), $(SRC_OBJMAN))
+				$(addprefix $(SRC_OBJMANDIR), $(SRC_OBJMAN)) \
+				$(addprefix $(SRC_FORMDIR), $(SRC_FORM))
 
 
 # Source directories
@@ -74,6 +75,7 @@ SRC_HOOKDIR		=	src/hooks/
 SRC_FILEDIR		=	src/file/
 SRC_OBJCHDIR	=	src/object_choice/
 SRC_OBJMANDIR	=	src/object_manipulation/
+SRC_FORMDIR		=	src/format_check/
 
 # miniRT functions
 
@@ -83,7 +85,11 @@ SRC_M		=	quaternions.c \
 				quaternions2.c \
 				quaternions3.c \
 				vector_ops.c \
-				vector_ops2.c
+				vector_ops2.c \
+				math_utils.c \
+				solve_quadratic_eq_cone.c \
+				solve_quadratic_eq_cylinder.c \
+				solve_quadratic_eq_sphere.c
 
 SRC_O		=	fill_object_getters.c \
 				o_ambient.c \
@@ -115,15 +121,9 @@ SRC_O		=	fill_object_getters.c \
 SRC_R		=	find_rays.c \
 				intersections.c
 
-SRC_U		=	check_identifiers_helpers.c \
-				error.c \
-				format_check_utils.c \
-				format_check_utils2.c \
-				math_utils.c \
+SRC_U		=	error.c \
 				print_contents.c \
-				utils1.c \
-				ft_atof.c \
-				specifier_parsing_check.c
+				utils.c
 
 SRC_C		= 	camera.c \
 				movements.c \
@@ -143,6 +143,7 @@ SRC_HOOKS	=	draw_string_in_window.c \
 				hooks_helpers.c
 
 SRC_FILE	=	load_file.c \
+				load_file_count_identifiers.c \
 				get_texture_data.c \
 				get_object_data.c
 
@@ -156,6 +157,12 @@ SRC_OBJMAN	=	change_properties.c \
 				manipulate_light.c \
 				manipulate_objects.c \
 				manipulated_objects.c
+
+SRC_FORM	=	format_check.c \
+				format_check2.c \
+				texture_format_checks.c \
+				specifier_count_checks.c \
+				specifier_parsing_check.c
 
 
 # Formating
@@ -192,7 +199,8 @@ OBJ			=	$(addprefix $(OBJ_DIR), $(SRC_S:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_HOOKS:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_FILE:.c=.o)) \
 				$(addprefix $(OBJ_DIR), $(SRC_OBJCH:.c=.o)) \
-				$(addprefix $(OBJ_DIR), $(SRC_OBJMAN:.c=.o))
+				$(addprefix $(OBJ_DIR), $(SRC_OBJMAN:.c=.o)) \
+				$(addprefix $(OBJ_DIR), $(SRC_FORM:.c=.o))
 
 # RULES
 
@@ -313,6 +321,15 @@ $(OBJ_DIR)%.o:	$(SRC_OBJCHDIR)%.c $(HEADER)
 				@$(ECHO)
 
 $(OBJ_DIR)%.o:	$(SRC_OBJMANDIR)%.c $(HEADER)
+				@mkdir -p $(OBJ_DIR)
+				@$(SLEEP)
+				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"
+				@$(PRINT2)
+				@$(PRINT1)
+				@$(CC) $(CFLAGS) -c $< -o $@
+				@$(ECHO)
+
+$(OBJ_DIR)%.o:	$(SRC_FORMDIR)%.c $(HEADER)
 				@mkdir -p $(OBJ_DIR)
 				@$(SLEEP)
 				@echo "$(RETURN)$(RETURN)$(YELLOW)Compiling miniRT: $< $(NRM_FORMAT)"

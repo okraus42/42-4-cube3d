@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils1.c                                           :+:      :+:    :+:   */
+/*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/14 12:20:14 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Created: 2023/12/14 12:02:47 by plouda            #+#    #+#             */
+/*   Updated: 2024/03/05 14:29:27 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
 
-void	ft_swapf(double *a, double *b)
+double	deg(double rad)
 {
-	double	temp;
+	double	deg;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
+	deg = rad * 180 / M_PI;
+	return (deg);
 }
 
-t_vect3f	array_to_vect(double *array)
+double	rad(double deg)
 {
-	t_vect3f	vect;
+	double	rad;
 
-	vect.x = array[X];
-	vect.y = array[Y];
-	vect.z = array[Z];
-	return (vect);
+	rad = deg * M_PI / 180;
+	return (rad);
+}
+
+double	absf(double n)
+{
+	if (n < 0)
+		return (-n);
+	else
+		return (n);
 }

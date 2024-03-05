@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 13:54:46 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:18:31 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,6 @@ int	*init_ids(void)
 	while (i < 10)
 		ids[i++] = 0;
 	return (ids);
-}
-
-int	check_identifiers(int fd, int *ids, int *flag)
-{
-	char	*line;
-
-	line = get_next_line(fd);
-	while (line && !(*flag))
-	{
-		count_identifiers(line, ids, flag);
-		check_duplicates(ids, flag);
-		free(line);
-		line = get_next_line(fd);
-	}
-	if (!*flag)
-		check_missing(ids, flag);
-	free(line);
-	return (0);
 }
 
 void	init_objects(t_rt *rt, int *ids)

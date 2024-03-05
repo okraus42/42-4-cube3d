@@ -1,38 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_identifiers_helpers.c                        :+:      :+:    :+:   */
+/*   load_file_count_identifiers.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/04 18:33:59 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:41:14 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
-
-void	check_missing(int *ids, int *flag)
-{
-	if (!ids[0])
-		id_err(NULL, "Missing obligatory identifier: A", NULL);
-	else if (!ids[1])
-		id_err(NULL, "Missing obligatory identifier: C", NULL);
-	else if (!ids[2])
-		id_err(NULL, "Missing obligatory identifier: L", NULL);
-	if (!ids[0] || !ids[1] || !ids[2])
-		*flag = 1;
-}
-
-void	check_duplicates(int *ids, int *flag)
-{
-	if (ids[0] > 1)
-		id_err(NULL, "Duplicate identifier: A", NULL);
-	else if (ids[1] > 1)
-		id_err(NULL, "Duplicate identifier: C", NULL);
-	if (ids[0] > 1 || ids[1] > 1)
-		*flag = 1;
-}
 
 static void	get_identifiers_1(char **split, int *ids, int *flag)
 {
@@ -65,13 +43,9 @@ static void	get_identifiers_2(char **split, int *ids, int *flag)
 void	get_identifiers(char **split, int *ids, int *flag)
 {
 	if (ft_strlen(split[0]) == 1)
-	{
 		get_identifiers_1(split, ids, flag);
-	}
 	else if (ft_strlen(split[0]) == 2)
-	{
 		get_identifiers_2(split, ids, flag);
-	}
 	else if (ft_strlen(split[0]) == 6 || ft_strlen(split[0]) == 5)
 	{
 		if (!ft_strncmp(split[0], ".ch/", 4))

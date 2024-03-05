@@ -3,14 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   load_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 10:48:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 10:51:43 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:21:39 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/minirt.h"
+
+void	check_missing(int *ids, int *flag)
+{
+	if (!ids[0])
+		id_err(NULL, "Missing obligatory identifier: A", NULL);
+	else if (!ids[1])
+		id_err(NULL, "Missing obligatory identifier: C", NULL);
+	else if (!ids[2])
+		id_err(NULL, "Missing obligatory identifier: L", NULL);
+	if (!ids[0] || !ids[1] || !ids[2])
+		*flag = 1;
+}
+
+void	check_duplicates(int *ids, int *flag)
+{
+	if (ids[0] > 1)
+		id_err(NULL, "Duplicate identifier: A", NULL);
+	else if (ids[1] > 1)
+		id_err(NULL, "Duplicate identifier: C", NULL);
+	if (ids[0] > 1 || ids[1] > 1)
+		*flag = 1;
+}
+
+int	check_identifiers(int fd, int *ids, int *flag)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line && !(*flag))
+	{
+		count_identifiers(line, ids, flag);
+		check_duplicates(ids, flag);
+		free(line);
+		line = get_next_line(fd);
+	}
+	if (!*flag)
+		check_missing(ids, flag);
+	free(line);
+	return (0);
+}
 
 int	load_file(char *file, t_rt *rt, int fd)
 {

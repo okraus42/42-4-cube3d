@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 14:10:17 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:28:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,7 +505,7 @@ void		free_vector_maps(t_rt *rt);
 // Ray casting
 void		find_rays(t_master *master);
 
-int			solve_quad(double *t, t_quadterms quad);
+int			solve_quad_sphere(double *t, t_quadterms quad);
 int			solve_quad_cyl(double *t, t_quadterms quad,
 				t_ray ray, t_cylinder *cylinder);
 double		deg(double rad);

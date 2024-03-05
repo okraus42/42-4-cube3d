@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersections.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 18:24:25 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/02 16:03:02 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:28:33 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	intersect_sphere(t_ray ray, t_sphere *sphere, double *t)
 	quad.a = dot_product(ray.direction, ray.direction);
 	quad.b = 2 * dot_product(ray.direction, centered);
 	quad.c = dot_product(centered, centered) - pow(sphere->radius, 2);
-	return (solve_quad(t, quad));
+	return (solve_quad_sphere(t, quad));
 }
 
 static void	define_shape(void *object,
