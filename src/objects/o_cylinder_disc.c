@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_cylinder_disc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/07 16:30:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 13:12:12 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:14:26 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	init_discs(t_cylinder *cylinder)
 	cylinder->topcap->vector_map = NULL;
 }
 
-
 void	define_botcap(t_cylinder *cylinder)
 {
 	t_disc	*botcap;
@@ -63,7 +62,6 @@ void	define_botcap(t_cylinder *cylinder)
 	set_disc_vects(botcap);
 	attribute_texture_data_cylinder_bot(botcap, cylinder);
 }
-
 
 void	define_topcap(t_cylinder *cylinder)
 {

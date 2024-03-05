@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 13:14:30 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:10:17 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -657,12 +657,6 @@ void		clamp(int min, int max, int *value);
 
 void		rotate_o(keys_t key, t_vect33f *axes, t_camera *camera);
 
-// List functions
-t_objlist	*ft_objlst_new(void *content, t_object flag);
-void		ft_objlst_add_back(t_objlist **lst, t_objlist *new);
-void		ft_objlst_clear(t_objlist **lst, void (*del)(void *));
-void		ft_objlst_delone(t_objlist *lst, void (*del)(void *));
-void		ft_objlst_iter(t_objlist *lst, void (*f)(void *, t_object));
 
 void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
 t_rayfinder	init_rayfinder(t_master	*master);
@@ -720,6 +714,17 @@ void		manipulate_sphere(t_rt *rt,
 				t_sphere *sphere, mlx_key_data_t keydata);
 void		qrotate_o(keys_t key, t_quat *q, t_camera *camera);
 
+// Texture and vector map helpers
+int			set_texture_id(t_texture *texture, char *specifier);
+int			set_texture_paths(t_texture *texture, char *str);
+int			set_vector_map_id(t_vector_map *vector_map, char *specifier);
+int			set_vector_map_paths(t_vector_map *vector_map, char *str);
+
+// Vector setter
+void		set_cone_vects_ptrs(t_cone *cone, t_vect33f *o);
+void		set_cone_cap_inversion(t_cone *cone);
+void		set_cylinder_vects_ptrs(t_cylinder *cylinder, t_vect33f *o);
+void		set_cylinder_cap_inversion(t_cylinder *cylinder);
 
 // Testing functions
 /* void	trace_shadow_t(t_master *master, t_rayfinder *rf, t_vect3f intersection,
@@ -734,5 +739,7 @@ int			point_lies_in_cone(t_vect3f point,
 void		shader_loop(t_shader *sh, t_master *m,
 				t_vect3f inter, t_rayfinder *rf);
 void		detect_camera_inside_objects(t_rt *rt);
+
+int			specifier_parsing_check(int i, int len, int *id, char **split);
 
 #endif

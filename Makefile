@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 13:17:00 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 14:13:01 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,8 +77,7 @@ SRC_OBJMANDIR	=	src/object_manipulation/
 
 # miniRT functions
 
-SRC_S		=	minirt.c \
-				objlist.c
+SRC_S		=	minirt.c 
 
 SRC_M		=	quaternions.c \
 				quaternions2.c \
@@ -102,10 +101,16 @@ SRC_O		=	fill_object_getters.c \
 				o_light_sphere.c \
 				o_checkerboard.c \
 				object_handler.c \
-				set_texture_data_pointers.c \
+				object_filler.c \
 				o_texture.c \
+				o_texture_id_path.c \
 				o_vector_map.c \
+				o_vector_map_id_path.c \
 				set_object_vectors.c \
+				set_object_vectors_helpers.c \
+				set_checkerboard_pointer.c \
+				set_texture_pointer.c \
+				set_vector_map_pointer.c
 				
 SRC_R		=	find_rays.c \
 				intersections.c
@@ -117,7 +122,8 @@ SRC_U		=	check_identifiers_helpers.c \
 				math_utils.c \
 				print_contents.c \
 				utils1.c \
-				ft_atof.c
+				ft_atof.c \
+				specifier_parsing_check.c
 
 SRC_C		= 	camera.c \
 				movements.c \

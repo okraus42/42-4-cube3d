@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_object_vectors.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 12:17:42 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:42:06 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 14:00:01 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,49 +70,6 @@ void	set_plane_vects(t_plane *plane)
 	plane->q = get_obj_quat(*(plane->normal), *(plane->up));
 }
 
-static void	set_cylinder_vects_ptrs(t_cylinder *cylinder, t_vect33f *o)
-{
-	o->normal = cylinder->normal;
-	o->right = cylinder->right;
-	o->up = cylinder->up;
-}
-
-static void	set_cylinder_cap_inversion(t_cylinder *cylinder)
-{
-	cylinder->topcap->is_inversed = NORMALDISC;
-	cylinder->botcap->is_inversed = INVERSEDISC;
-	cylinder->topcap->q = cylinder->q;
-	cylinder->botcap->q = cylinder->q;
-}
-
-void	set_cylinder_vects(t_cylinder *cylinder)
-{
-	t_vect3f	tmp;
-	t_vect33f	o;
-
-	set_cylinder_vects_ptrs(cylinder, &o);
-	tmp = (t_vect3f){0, 1, 0};
-	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
-	{
-		*o.right = (t_vect3f){1, 0, 0};
-		*o.up = (t_vect3f){0, 0, -1};
-	}
-	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
-	{
-		*o.right = (t_vect3f){1, 0, 0};
-		*o.up = (t_vect3f){0, 0, 1};
-	}
-	else
-	{
-		*o.right = cross_product(tmp, *o.normal);
-		normalize(o.right);
-		*o.up = cross_product(*o.normal, *o.right);
-		normalize(o.up);
-	}
-	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
-	set_cylinder_cap_inversion(cylinder);
-}
-
 void	set_disc_vects(t_disc *disc)
 {
 	t_vect3f	tmp;
@@ -141,19 +98,32 @@ void	set_disc_vects(t_disc *disc)
 	}
 }
 
-static void	set_cone_vects_ptrs(t_cone *cone, t_vect33f *o)
+void	set_cylinder_vects(t_cylinder *cylinder)
 {
-	o->normal = cone->normal;
-	o->right = cone->right;
-	o->up = cone->up;
-}
+	t_vect3f	tmp;
+	t_vect33f	o;
 
-static void	set_cone_cap_inversion(t_cone *cone)
-{
-	cone->pinnacle->is_inversed = NORMALDISC;
-	cone->base->is_inversed = INVERSEDISC;
-	cone->base->q = cone->q;
-	cone->pinnacle->q = cone->q;
+	set_cylinder_vects_ptrs(cylinder, &o);
+	tmp = (t_vect3f){0, 1, 0};
+	if (o.normal->x == 0. && o.normal->y == 1. && o.normal->z == 0.)
+	{
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, -1};
+	}
+	else if (o.normal->x == 0. && o.normal->y == -1 && o.normal->z == 0.)
+	{
+		*o.right = (t_vect3f){1, 0, 0};
+		*o.up = (t_vect3f){0, 0, 1};
+	}
+	else
+	{
+		*o.right = cross_product(tmp, *o.normal);
+		normalize(o.right);
+		*o.up = cross_product(*o.normal, *o.right);
+		normalize(o.up);
+	}
+	cylinder->q = get_obj_quat(*(cylinder->normal), *(cylinder->up));
+	set_cylinder_cap_inversion(cylinder);
 }
 
 void	set_cone_vects(t_cone *cone)
