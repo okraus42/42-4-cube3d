@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
+#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 15:39:08 by plouda           ###   ########.fr        #
+#    Updated: 2024/03/05 18:56:06 by okraus           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -141,7 +141,14 @@ SRC_C		= 	camera.c \
 SRC_SH		=	object_shaders.c \
 				light_sphere_shader.c \
 				shader_utils.c \
+				shader_utils_cone.c \
+				shader_utils_cylinder.c \
+				shader_utils_disc.c \
+				shader_utils_plane.c \
+				shader_utils_sphere.c \
+				shader_utils_uv.c \
 				shader_utils2.c \
+				shader_utils3.c \
 				phong_illumination.c
 
 SRC_HOOKS	=	draw_string_in_window.c \

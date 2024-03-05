@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 15:39:16 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/05 18:54:57 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -556,7 +556,7 @@ void		update_camera_matrix(t_camera *camera);
 void		detect_camera_inside_cone(t_cone *cone, t_camera *camera);
 void		detect_camera_inside_disc(t_disc *disc, t_camera *camera);
 void		detect_camera_inside_cylinder(t_cylinder *cylinder,
-				 t_camera *camera);
+				t_camera *camera);
 void		detect_camera_inside_plane(t_plane *plane, t_camera *camera);
 void		detect_camera_inside_sphere(t_sphere *sphere, t_camera *camera);
 
@@ -619,6 +619,7 @@ void		cone_shader(t_rayfinder *rf,
 void		light_sphere_shader(t_rayfinder *rf, void *object_ptr);
 
 // Shader utils
+t_vect3f	get_new_normal(int x, int y, int z);
 void		set_ambient_intensity(t_shader *shader,
 				int *ambient_rgb, double ambient_ratio);
 uint32_t	get_clr_int(int *rgb);
@@ -648,7 +649,16 @@ void		set_disc_normal(t_shader *shader,
 void		set_plane_normal(t_shader *shader,
 				t_plane *plane, t_vect3f intersection);
 t_vect3f	array_to_vect(double *array);
-
+void		get_disc_uv(t_vect3f p,
+				long long *u, long long *v, double scale[3]);
+void		get_cylinder_uv(t_vect3f p,
+				long long *u, long long *v, double scale[2]);
+void		get_cone_uv(t_vect3f p,
+				long long *u, long long *v, double scale[2]);
+void		get_plane_uv(t_vect3f p,
+				long long *u, long long *v, double scale[2]);
+void		get_sphere_uv(t_vect3f p,
+				long long *u, long long *v, double scale[2]);
 void		set_sphere_vects(t_sphere *sphere);
 void		set_plane_vects(t_plane *plane);
 void		set_cylinder_vects(t_cylinder *cylinder);
@@ -656,7 +666,6 @@ void		set_disc_vects(t_disc *disc);
 void		clamp(int min, int max, int *value);
 
 void		rotate_o(keys_t key, t_vect33f *axes, t_camera *camera);
-
 
 void		update_ray_direction(t_rayfinder *rf, t_ray *ray, int x, int y);
 t_rayfinder	init_rayfinder(t_master	*master);
@@ -710,7 +719,7 @@ void		manipulate_cone(t_rt *rt, t_cone *cone, mlx_key_data_t keydata);
 void		manipulate_cylinder(t_rt *rt,
 				t_cylinder *cylinder, mlx_key_data_t keydata);
 void		manipulate_plane(t_rt *rt, t_plane *plane, mlx_key_data_t keydata);
-void		manipulate_sphere(t_rt *rt, 
+void		manipulate_sphere(t_rt *rt,
 				t_sphere *sphere, mlx_key_data_t keydata);
 void		qrotate_o(keys_t key, t_quat *q, t_camera *camera);
 
