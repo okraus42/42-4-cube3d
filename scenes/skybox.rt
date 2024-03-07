@@ -1,0 +1,18 @@
+A 0.25 255,255,255
+
+C  0,0,0 0,0,1 45
+L 0,50,-500 0.8 255,255,255
+L 0,0,-80 0.8 255,255,255
+
+SK 2000
+# sp 0,0,0 2500 10,10,200 .tx/01
+pl 0,-25,0 0,1,0 155,155,155 .tx/02 .vm/02
+cy -20,-25,-90 0,1,0 10 10 254,128,0
+co -20,-17.5,-90 0,1,0 12 5 254,128,0
+
+
+.tx/01 0="./textures/milkyway.png"
+.vm/01 0="./textures/skytest.png"
+.tx/02 0="./textures/wet_rocks.png"
+.vm/02 0="./textures/wet_rocks_normal.png"
+# .vm/01 0="./textures/Water_001_NORM.png"

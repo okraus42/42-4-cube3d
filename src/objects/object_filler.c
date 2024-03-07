@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 13:54:24 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 13:54:52 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 14:54:38 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	fill_objects_2(t_rt *rt, char **split, int *flag)
 		*flag = fill_cylinder(rt, split);
 	else if (!ft_strncmp(split[0], "co", 2))
 		*flag = fill_cone(rt, split);
+	else if (!ft_strncmp(split[0], "SK", 2))
+		*flag = fill_skybox(rt, split);
 	else
 		*flag = 1;
 }

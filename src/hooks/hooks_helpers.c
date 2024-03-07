@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hooks_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:00:06 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 11:02:18 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/06 16:01:37 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	object_movements(t_master *master, mlx_key_data_t keydata)
 			|| keydata.key == MLX_KEY_A || keydata.key == MLX_KEY_D
 			|| keydata.key == MLX_KEY_W || keydata.key == MLX_KEY_S
 			|| keydata.key == MLX_KEY_Q || keydata.key == MLX_KEY_E
-			|| keydata.key == MLX_KEY_G
+			|| keydata.key == MLX_KEY_G || keydata.key == MLX_KEY_0
 			|| keydata.key == MLX_KEY_1 || keydata.key == MLX_KEY_2
 			|| keydata.key == MLX_KEY_3 || keydata.key == MLX_KEY_4))
 		manipulate_objects(master, keydata);

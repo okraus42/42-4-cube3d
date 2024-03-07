@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   choose_objects_by_mouse_reference.c                :+:      :+:    :+:   */
+/*   choose_object_by_mouse_reference.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 11:52:05 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:05:07 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 14:15:57 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	set_highlight_from_reference(t_master *master, t_rayfinder rf)
 	int	i;
 
 	i = 0;
-	if (rf.object_flag == EMPTY)
+	if (rf.object_flag == EMPTY || rf.object_flag == SKYBOX)
 		return ;
 	test_reference_spheres_planes(master, rf);
 	test_reference_cylinders_cones(master, rf);

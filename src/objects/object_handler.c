@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:51:52 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 14:18:31 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 14:28:30 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ int	*init_ids(void)
 	int		i;
 
 	i = 0;
-	ids = malloc(sizeof(int) * 10);
-	while (i < 10)
+	ids = malloc(sizeof(int) * 11);
+	while (i < 11)
 		ids[i++] = 0;
 	return (ids);
 }
@@ -36,6 +36,7 @@ void	init_objects(t_rt *rt, int *ids)
 	init_checkerboards(rt, ids);
 	init_textures(rt, ids);
 	init_vector_maps(rt, ids);
+	init_skybox(rt);
 }
 
 void	free_objects(t_rt *rt)
@@ -50,4 +51,5 @@ void	free_objects(t_rt *rt)
 	free_checkerboards(rt);
 	free_textures(rt);
 	free_vector_maps(rt);
+	free_skybox(rt);
 }

@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 13:29:39 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 14:41:14 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 14:53:11 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void	get_identifiers_2(char **split, int *ids, int *flag)
 		ids[5]++;
 	else if (!ft_strncmp(split[0], "co", 2))
 		ids[6]++;
+	else if (!ft_strncmp(split[0], "SK", 2))
+		ids[10]++;
 	else
 		*flag = 1;
 }

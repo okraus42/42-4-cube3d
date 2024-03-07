@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 18:54:57 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/07 15:11:28 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ typedef enum e_object
 	CYLINDER,
 	DISC,
 	CONE,
-	LIGHT
+	LIGHT,
+	SKYBOX
 }				t_object;
 
 typedef struct s_objlist
@@ -354,6 +355,7 @@ typedef struct s_rt
 	t_checkerboard	**checkerboards;
 	t_texture		**textures;
 	t_vector_map	**vector_maps;
+	t_sphere		*skybox;
 	int				n_spheres;
 	int				n_planes;
 	int				n_cylinders;
@@ -434,6 +436,7 @@ void		init_light_sphere(t_rt *rt, int *ids);
 void		init_checkerboards(t_rt *rt, int *ids);
 void		init_textures(t_rt *rt, int *ids);
 void		init_vector_maps(t_rt *rt, int *ids);
+void		init_skybox(t_rt *rt);
 
 // Identifier check
 int			*init_ids(void);
@@ -463,6 +466,7 @@ int			check_format_sphere(char **split);
 int			check_format_plane(char **split);
 int			check_format_cylinder(char **split);
 int			check_format_checkerboard(char **split);
+int			check_format_skybox(char **split);
 
 // Data loading
 //void	get_data_from_line(char *line, t_rt *rt, int *flag);
@@ -477,6 +481,7 @@ int			fill_cylinder(t_rt *rt, char **split);
 int			fill_checkerboard(t_rt *rt, char **split);
 int			fill_texture(t_rt *rt, char **split);
 int			fill_vector_map(t_rt *rt, char **split);
+int			fill_skybox(t_rt *rt, char **split);
 
 double		ft_atof(char *str);
 int			id_err(char *id, char *err_str, char *details);
@@ -492,7 +497,7 @@ int			print_contents(t_rt *rt);
 
 // Free objects
 void		free_ambient(t_rt *rt);
-//void	free_light(t_rt *rt);
+//void		free_light(t_rt *rt);
 void		free_camera(t_rt *rt);
 void		free_spheres(t_rt *rt);
 void		free_planes(t_rt *rt);
@@ -501,6 +506,7 @@ void		free_light_sphere(t_rt *rt);
 void		free_checkerboards(t_rt *rt);
 void		free_textures(t_rt *rt);
 void		free_vector_maps(t_rt *rt);
+void		free_skybox(t_rt *rt);
 
 // Ray casting
 void		cast_rays(t_master *master);
@@ -617,6 +623,8 @@ void		disc_shader(t_rayfinder *rf,
 void		cone_shader(t_rayfinder *rf,
 				t_vect3f intersection, void *object_ptr, t_master *master);
 void		light_sphere_shader(t_rayfinder *rf, void *object_ptr);
+void		skybox_shader(t_rayfinder *rf, t_vect3f intersection,
+				void *object_ptr, t_master *master);
 
 // Shader utils
 t_vect3f	get_new_normal(int x, int y, int z);

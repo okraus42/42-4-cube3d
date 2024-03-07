@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 15:14:02 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 15:35:56 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 14:44:32 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ static void	find_intersections_1(t_master *master,
 	{
 		if (intersect_plane(ray, master->rt->planes[i], &rf->t, PLANE))
 			*flag = update_object_ref(rf, master->rt->planes[i], PLANE);
+		i++;
+	}
+	if (master->rt->skybox->radius)
+	{
+		if (intersect_sphere(ray, master->rt->skybox, &rf->t))
+			*flag = update_object_ref(rf, master->rt->skybox, SKYBOX);
 		i++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_properties.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 12:19:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 12:26:10 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/06 16:03:42 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ void	change_glossiness(double *glossiness, keys_t key)
 		*glossiness += 0.05;
 		if (*glossiness >= 1.01)
 			*glossiness = 0.05;
+	}
+	else if (key == MLX_KEY_0)
+	{
+		if (*glossiness == 0.0001)
+			*glossiness = 0.5;
+		else
+			*glossiness = 0.0001;
 	}
 }
 

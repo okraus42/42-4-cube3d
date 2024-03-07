@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
+#    By: plouda <plouda@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/04 15:40:17 by okraus            #+#    #+#              #
-#    Updated: 2024/03/05 18:56:06 by okraus           ###   ########.fr        #
+#    Updated: 2024/03/07 13:57:18 by plouda           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -117,7 +117,8 @@ SRC_O		=	fill_object_getters.c \
 				set_object_vectors_helpers.c \
 				set_checkerboard_pointer.c \
 				set_texture_pointer.c \
-				set_vector_map_pointer.c
+				set_vector_map_pointer.c \
+				o_skybox.c
 				
 SRC_R		=	cast_rays.c \
 				find_intersections.c \
@@ -149,7 +150,8 @@ SRC_SH		=	object_shaders.c \
 				shader_utils_uv.c \
 				shader_utils2.c \
 				shader_utils3.c \
-				phong_illumination.c
+				phong_illumination.c \
+				skybox_shader.c
 
 SRC_HOOKS	=	draw_string_in_window.c \
 				hooks.c \

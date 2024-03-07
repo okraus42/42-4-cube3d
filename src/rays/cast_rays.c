@@ -6,7 +6,7 @@
 /*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 09:47:21 by plouda            #+#    #+#             */
-/*   Updated: 2024/03/05 15:39:23 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/07 15:11:02 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,20 @@ void	shade_nearest_object(int flag,
 		cone_shader(rf, intersection, object_ptr, master);
 	else if (flag == LIGHT)
 		light_sphere_shader(rf, object_ptr);
+	else if (flag == SKYBOX)
+		skybox_shader(rf, intersection, object_ptr, master);
 }
 
 void	camera_things(t_master *master)
 {
 	update_camera_matrix(master->rt->camera);
 	detect_camera_inside_objects(master->rt);
+	if (master->rt->skybox->radius)
+	{
+		master->rt->skybox->coords[X] = master->rt->camera->coords[X];
+		master->rt->skybox->coords[Y] = master->rt->camera->coords[Y];
+		master->rt->skybox->coords[Z] = master->rt->camera->coords[Z];
+	}
 }
 
 void	cast_rays(t_master *master)
