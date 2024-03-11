@@ -1,18 +1,29 @@
 A 0.25 255,255,255
 
 C  0,0,0 0,0,1 45
-L 0,50,-500 0.8 255,255,255
-L 0,0,-80 0.8 255,255,255
+L 0,50,-500 0.6 255,255,255
+L 450,450,100 0.8 255,255,255
 
-SK 2000
+SK 2000 .tx/01
 # sp 0,0,0 2500 10,10,200 .tx/01
 pl 0,-25,0 0,1,0 155,155,155 .tx/02 .vm/02
-cy -20,-25,-90 0,1,0 10 10 254,128,0
-co -20,-17.5,-90 0,1,0 12 5 254,128,0
+cy 10,-25,-120 0,1,0 10 10 254,128,0 .tx/03 .vm/03
+co 10,-17.5,-120 0,1,0 12 5 254,128,0 .tx/04 .vm/04
+cy -20,-25,-90 0,1,0 10 10 254,128,0 .tx/05 .vm/05
+co -20,-17.5,-90 0,1,0 12 5 254,128,0 .tx/06 .vm/06
+
 
 
 .tx/01 0="./textures/milkyway.png"
 .vm/01 0="./textures/skytest.png"
 .tx/02 0="./textures/wet_rocks.png"
 .vm/02 0="./textures/wet_rocks_normal.png"
+.tx/03 0="./textures/Tiles.png"
+.vm/03 0="./textures/Tiles_normal.png"
+.tx/04 0="./textures/Roof_Tiles.png"
+.vm/04 0="./textures/Roof_Tiles_normal.png"
+.tx/05 0="./textures/Wall.png"
+.vm/05 0="./textures/Wall_normal.png"
+.tx/06 0="./textures/Wood_Tiles.png"
+.vm/06 0="./textures/Wood_Tiles_normal.png"
 # .vm/01 0="./textures/Water_001_NORM.png"
