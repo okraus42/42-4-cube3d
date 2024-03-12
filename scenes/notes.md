@@ -5,10 +5,10 @@ Scenes:
 
 	❌ Invalid scene(s)
 	❌ All basic objects
-	❌ Spheres scene
-	❌ Cylinders scene
+	🚧 Spheres scene
+	✅ Cylinders scene
 	✅ Planes scene
-	❌ Cones scene
+	🚧 Cones scene
 	❌ Checkerboard scene
 	❌ Textures scene
 	❌ Normal maps scene

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 15:57:11 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 18:55:48 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/12 16:53:32 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,16 +90,16 @@ void	set_disc_normal2(t_shader *shader, t_disc *disc, t_map m)
 	rotate_vect(&m.p, disc->q);
 	if (disc->is_inversed)
 		rotate_vect(&m.p, m.invq);
-	m.s[0] = disc->vector_map->vm_main->width;
-	m.s[1] = disc->vector_map->vm_main->height;
+	m.s[0] = disc->vm_disc->width;
+	m.s[1] = disc->vm_disc->height;
 	m.s[2] = 1 * disc->radius;
 	get_disc_uv(m.p, &m.u, &m.v, m.s);
 	m.w = m.s[0] * 4;
-	m.newnormal = get_new_normal(disc->vector_map->vm_main->pixels[(m.v
+	m.newnormal = get_new_normal(disc->vm_disc->pixels[(m.v
 				* m.w) + (m.u * 4)],
-			disc->vector_map->vm_main->pixels[(m.v * m.w)
+			disc->vm_disc->pixels[(m.v * m.w)
 			+ (m.u * 4) + 1],
-			disc->vector_map->vm_main->pixels[(m.v * m.w)
+			disc->vm_disc->pixels[(m.v * m.w)
 			+ (m.u * 4) + 2]);
 	if (disc->is_inversed)
 		rotate_vect(&m.newnormal, m.invq);
@@ -117,7 +117,7 @@ void	set_disc_normal(t_shader *shader, t_disc *disc, t_vect3f intersection)
 	m.invq = (t_quat){0., 0., 1., 0.};
 	if (disc->vector_map)
 	{
-		if (disc->vector_map->vm_main)
+		if (disc->vm_disc)
 		{
 			m.p.x = intersection.x - disc->coords[X];
 			m.p.y = intersection.y - disc->coords[Y];
