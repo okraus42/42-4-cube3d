@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:58:02 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/13 17:28:10 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:41:01 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_vect3f	get_new_normal(int x, int y, int z)
 {
 	t_vect3f	newnorm;
 
-	printf("%i %i %i\n", x, y, z);
 	x -= 128;
 	y -= 128;
 	z -= 128;
@@ -66,8 +65,6 @@ t_vect3f	get_new_normal(int x, int y, int z)
 	newnorm.x = x;
 	newnorm.y = y;
 	newnorm.z = z;
-	printf("newnorm %f %f %f\n", newnorm.x, newnorm.y, newnorm.z);
 	normalize(&newnorm);
-	printf("newnorm %f %f %f\n", newnorm.x, newnorm.y, newnorm.z);
 	return (newnorm);
 }
