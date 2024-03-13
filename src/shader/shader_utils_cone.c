@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 15:57:04 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 18:52:36 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/13 17:32:00 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ void	set_cone_rgb(t_shader *shader, t_cone *cone, t_vect3f intersection)
 void	set_cone_normal2(t_shader *shader, t_cone *cone, t_map m)
 {
 	m.invq = get_inverse_quat(cone->q);
+	printf("cone->q %f %f %f %f\n", cone->q.q0, cone->q.q1, cone->q.q2, cone->q.q3);
+	printf("m.invq %f %f %f %f\n", m.invq.q0, m.invq.q1, m.invq.q2, m.invq.q3);
 	rotate_vect(&m.p, cone->q);
 	m.s[0] = cone->vector_map->vm_main->width;
 	m.s[1] = cone->vector_map->vm_main->height;
@@ -96,9 +98,17 @@ void	set_cone_normal2(t_shader *shader, t_cone *cone, t_map m)
 			+ (m.u * 4) + 1],
 			cone->vector_map->vm_main->pixels[(m.v * m.w)
 			+ (m.u * 4) + 2]);
+	printf("%lli %lli %lli\n", (m.v * m.w) + (m.u * 4), (m.v * m.w) + (m.u * 4) + 1, (m.v * m.w) + (m.u * 4) + 2);
+	printf("%i\n", cone->vector_map->vm_main->pixels[(m.v
+				* m.w) + (m.u * 4)]);
+	printf("%i\n", cone->vector_map->vm_main->pixels[(m.v * m.w) + (m.u * 4)]);
+	printf("%lli %lli %i\n", m.u, m.v, m.w);
+	printf("m.newnormal1  x %f y %f z %f\n", m.newnormal.x, m.newnormal.y, m.newnormal.z);
 	m.invt = get_inverse_quat(m.tanq);
 	rotate_vect(&m.newnormal, m.invt);
+	printf("m.newnormal2  x %f y %f z %f\n", m.newnormal.x, m.newnormal.y, m.newnormal.z);
 	rotate_vect(&m.newnormal, m.invq);
+	printf("m.newnormal3  x %f y %f z %f\n", m.newnormal.x, m.newnormal.y, m.newnormal.z);
 	shader->hit_normal.x = m.newnormal.x;
 	shader->hit_normal.y = m.newnormal.y;
 	shader->hit_normal.z = m.newnormal.z;
@@ -115,8 +125,11 @@ void	set_cone_normal(t_shader *shader, t_cone *cone, t_vect3f intersection)
 			m.p.x = intersection.x - cone->coords[X];
 			m.p.y = intersection.y - cone->coords[Y];
 			m.p.z = intersection.z - cone->coords[Z];
+			rotate_vect(&(shader->hit_normal), cone->q);
 			m.tanq = get_cone_tan_quat(shader->hit_normal, cone, intersection);
+			printf("shader->hit_normal1  x %f y %f z %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 			set_cone_normal2(shader, cone, m);
+			printf("shader->hit_normal2  x %f y %f z %f\n", shader->hit_normal.x, shader->hit_normal.y, shader->hit_normal.z);
 		}
 	}
 }

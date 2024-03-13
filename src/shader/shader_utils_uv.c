@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/05 18:51:48 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/05 18:54:48 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:10:21 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	get_plane_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 		- ((long long)(vv * scale[1] + 2147483648LL) % (int)scale[1]);
 }
 
-void	get_cone_uv(t_vect3f p, long long *u, long long *v, double scale[2])
+void	get_cone_uv(t_vect3f p, long long *u, long long *v, double scale[3])
 {
 	double		uu;
 	double		vv;
@@ -64,7 +64,7 @@ void	get_cone_uv(t_vect3f p, long long *u, long long *v, double scale[2])
 	*v = (int)(vv * scale[1]);
 }
 
-void	get_cylinder_uv(t_vect3f p, long long *u, long long *v, double scale[2])
+void	get_cylinder_uv(t_vect3f p, long long *u, long long *v, double scale[3])
 {
 	double		uu;
 	double		vv;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 15:43:08 by okraus            #+#    #+#             */
-/*   Updated: 2024/03/07 15:11:28 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/13 10:10:35 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,9 +327,9 @@ typedef struct s_cone
 	double			glossiness;
 	int				camera_inside;
 	double			half_angle;
-	double			dist_term; // only used for surface normal math, \
+	double			dist_term; // only used for surface normal math,
 	//DO NOT USE ELSEWHERE
-	t_vect3f		*axis; // only used for intersection test and \
+	t_vect3f		*axis; // only used for intersection test and
 	//surface normal, DO NOT USE ANYWHERE ELSE
 	t_disc			*base;
 	t_disc			*pinnacle;
@@ -660,9 +660,9 @@ t_vect3f	array_to_vect(double *array);
 void		get_disc_uv(t_vect3f p,
 				long long *u, long long *v, double scale[3]);
 void		get_cylinder_uv(t_vect3f p,
-				long long *u, long long *v, double scale[2]);
+				long long *u, long long *v, double scale[3]);
 void		get_cone_uv(t_vect3f p,
-				long long *u, long long *v, double scale[2]);
+				long long *u, long long *v, double scale[3]);
 void		get_plane_uv(t_vect3f p,
 				long long *u, long long *v, double scale[2]);
 void		get_sphere_uv(t_vect3f p,
