@@ -14,7 +14,7 @@ co -20,-17.5,-90 0,1,0 12 5 254,128,0 .tx/06 .vm/06
 
 
 
-.tx/01 0="./textures/milkyway.png"
+.tx/01 0="./textures/skytest.png"
 .vm/01 0="./textures/skytest.png"
 .tx/02 0="./textures/wet_rocks.png"
 .vm/02 0="./textures/wet_rocks_normal.png"

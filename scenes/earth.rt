@@ -1,0 +1,11 @@
+A 0.05 255,255,255
+
+C  0,0,500 0,0,1 45
+L 100,100,1000 1 255,255,255
+
+SK 2000 .tx/01
+sp 8,0,0 254 50,0,255 .tx/02 .vm/01
+
+.tx/01 0="./textures/milkyway.png"
+.tx/02 0="./textures/earth.png" 1="./textures/stonewall1.png" 2="./textures/swall1.png"
+.vm/01 0="./textures/earth_normal.png"

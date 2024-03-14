@@ -7,8 +7,6 @@ sp 8,0,0 12.7 50,0,255 .tx/01 .vm/01
 sp -4,0,0 6.8 50,0,255 .tx/03 .vm/03
 sp -12,0,0 3.5 50,0,255 .tx/02 .vm/02
 
-
-
 .tx/01 0="./textures/earth.png" 1="./textures/stonewall1.png" 2="./textures/swall1.png"
 .vm/01 0="./textures/earth_normal.png"
 .tx/02 0="./textures/moon.png" 1="./textures/stonewall1.png" 2="./textures/swall1.png"
