@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotations.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
+/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:07:57 by plouda            #+#    #+#             */
-/*   Updated: 2024/01/11 10:26:11 by plouda           ###   ########.fr       */
+/*   Updated: 2024/03/01 15:17:49 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	tilt(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle)
 
 // rotation along up/y-axis
 void	pan(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle)
-{	
+{
 	t_quat	res1;
 	t_quat	res2;
 	t_quat	point;
@@ -104,4 +104,3 @@ void	cant(t_vect3f *forward, t_vect3f *right, t_vect3f *up, double angle)
 	up->y = res2.q2;
 	up->z = res2.q3;
 }
-

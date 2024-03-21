@@ -6,13 +6,13 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:46 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/14 11:01:28 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/28 16:46:13 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/libft.h"
 
-int	ft_init_pointer(char c, t_pf_info *data, va_list arg)
+int	ft_init_pointer(char c, t_pf_info *data, t_pf_vargs *varg)
 {
 	if (data->type_flag & LENGTH_MODIFIER)
 		return (1);
@@ -20,18 +20,18 @@ int	ft_init_pointer(char c, t_pf_info *data, va_list arg)
 	{
 		data->type_flag |= LOWERCASE_S;
 		data->value_flag = CHAR_POINTER;
-		data->value.s = va_arg(arg, char *);
+		data->value.s = va_arg(varg->arg, char *);
 	}
 	else if (c == 'p')
 	{
 		data->type_flag |= LOWERCASE_P;
 		data->value_flag = VOID_POINTER;
-		data->value.p = va_arg(arg, void *);
+		data->value.p = va_arg(varg->arg, void *);
 	}
 	return (0);
 }
 
-int	ft_init_conversion(int i, t_pf_info *data, va_list arg)
+int	ft_init_conversion(int i, t_pf_info *data, t_pf_vargs *varg)
 {
 	char	c;
 	int		err;
@@ -39,15 +39,15 @@ int	ft_init_conversion(int i, t_pf_info *data, va_list arg)
 	c = data->orig[i];
 	err = 0;
 	if (c == 'i' || c == 'd' || c == 'c')
-		err = ft_init_int(c, data, arg);
+		err = ft_init_int(c, data, varg);
 	else if (c == 'o' || c == 'u' || c == 'x' || c == 'X'
 		|| c == 'b' || c == 'B')
-		err = ft_init_unsigned(c, data, arg);
+		err = ft_init_unsigned(c, data, varg);
 	else if (c == 'e' || c == 'E' || c == 'f' || c == 'F'
 		|| c == 'g' || c == 'G' || c == 'a' || c == 'A')
-		err = ft_init_double(c, data, arg);
+		err = ft_init_double(c, data, varg);
 	else if (data->orig[i] == 's' || data->orig[i] == 'p')
-		err = ft_init_pointer(c, data, arg);
+		err = ft_init_pointer(c, data, varg);
 	else if (data->orig[i] == 'C')
 		data->type_flag |= UPPERCASE_C;
 	else if (data->orig[i] == 'P')
@@ -59,7 +59,7 @@ int	ft_init_conversion(int i, t_pf_info *data, va_list arg)
 	return (err);
 }
 
-static void	ft_init_baselen(int *i, int *err, t_pf_info *data, va_list arg)
+static void	ft_init_baselen(int *i, int *err, t_pf_info *data, t_pf_vargs *varg)
 {
 	int			n;
 	long long	num;
@@ -68,7 +68,7 @@ static void	ft_init_baselen(int *i, int *err, t_pf_info *data, va_list arg)
 	++(*i);
 	if (data->orig[*i] == '*')
 	{
-		data->baselen = va_arg(arg, int);
+		data->baselen = va_arg(varg->arg, int);
 		++(*i);
 	}
 	else
@@ -87,33 +87,34 @@ static void	ft_init_baselen(int *i, int *err, t_pf_info *data, va_list arg)
 	}
 }
 
-static int	ft_init_list_helper(va_list arg, t_pf_info *data, int *i, int *err)
+static int	ft_init_list_helper(t_pf_vargs *varg,
+	t_pf_info *data, int *i, int *err)
 {
 	if (data->type)
 	{
 		if (data->orig[*i] && ft_strchr(F_FLAGS, data->orig[*i]))
 			ft_init_flags(i, data);
 		if (data->orig[*i] && ft_strchr(F_NUMBERS, data->orig[*i]))
-			ft_init_field_width(i, err, data, arg);
+			ft_init_field_width(i, err, data, varg);
 		if (data->orig[*i] == '.')
 		{
 			data->flag |= PERIOD;
 			++(*i);
-			ft_init_precision(i, err, data, arg);
+			ft_init_precision(i, err, data, varg);
 		}
 		if (data->orig[*i] == '^')
-			ft_init_baselen(i, err, data, arg);
+			ft_init_baselen(i, err, data, varg);
 		if (data->orig[*i] && ft_strchr(F_MODIFIER, data->orig[*i]))
 			ft_init_modifiers(i, data);
 		if (*err || !ft_strchr(F_TYPES, data->orig[*i]))
 			return (1);
-		if (ft_init_conversion(*i, data, arg))
+		if (ft_init_conversion(*i, data, varg))
 			return (1);
 	}
 	return (0);
 }
 
-int	ft_init_list(va_list arg, t_list *lst)
+int	ft_init_list(t_pf_vargs *varg, t_list *lst)
 {
 	t_pf_info	*data;
 	int			i;
@@ -124,7 +125,7 @@ int	ft_init_list(va_list arg, t_list *lst)
 	{
 		data = lst->content;
 		i = 1;
-		if (ft_init_list_helper(arg, data, &i, &err))
+		if (ft_init_list_helper(varg, data, &i, &err))
 			return (1);
 		lst = lst->next;
 	}

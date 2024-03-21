@@ -1,0 +1,18 @@
+A 0.10 255,255,255
+
+C  0,0,100 0,0,1 45
+L 200,300,100 1 255,255,255
+
+sp 0,20,0 40 192,192,192 .vm/04
+pl 0,0,-50 0,0,1 192,192,192 .vm/01
+cy 20,-20,0 0,0,1 20 40 192,192,192 .vm/02
+cy 40,-20,0 0,1,0 20 40 192,192,192 .vm/01
+cy 30,0,-30 0,0,-1 20 40 192,192,192 .vm/03
+co -10,-20,20 0,0,1 20 40 192,192,192 .vm/03
+co -40,20,0 0,1,0 20 40 192,192,192 .vm/02
+co -25,-15,0 0,0,-1 20 40 192,192,192 .vm/01
+
+.vm/01 0="./textures/norm1.png" 1="./textures/norm1.png" 2="./textures/norm2.png"
+.vm/02 0="./textures/norm2.png" 1="./textures/norm1.png" 2="./textures/norm3.png"
+.vm/03 0="./textures/norm3.png" 1="./textures/norm1.png" 2="./textures/norm2.png"
+.vm/04 0="./textures/earth_normal.png" 1="./textures/norm1.png" 2="./textures/norm2.png"

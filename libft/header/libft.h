@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 13:43:29 by okraus            #+#    #+#             */
-/*   Updated: 2024/01/11 17:29:29 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 14:39:30 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@
 // DEFINITIONS
 
 //	Useful Macros
-# define ABS(a) (((a) > 0) * (a) - ((a) < 0) * (a))
-# define PN(a) (((a) > 0) - ((a) < 0))
-# define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
-# define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
-//# define PERCENTIL(a, b, c, d) (MIN(a, b) + (MAX(a, b) - MIN(a, b)) * (c) / (d))
-# define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
+// # define ABS(a) (((a) > 0) * (a) - ((a) < 0) * (a))
+// # define PN(a) (((a) > 0) - ((a) < 0))
+// # define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
+// # define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
+// # define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
 
 // GET_NEXT_LINE definitions
 
@@ -49,6 +48,8 @@
 # define F_MODIFIER	"hlLz"
 # define BASE_CAP	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # define BASE_SML	"0123456789abcdefghijklmnopqrstuvwxyz"
+
+typedef long long	t_fix64;
 
 typedef enum e_print_flag
 {
@@ -293,6 +294,11 @@ typedef struct s_list
 
 // FT_PRINTF structure
 
+typedef struct s_pf_vargs
+{
+	va_list		arg;
+}				t_pf_vargs;
+
 // type: 0 - just text, 1 - %[stuff]
 typedef struct s_pf_info
 {
@@ -528,32 +534,32 @@ int				ft_process_prcptr(t_pf_info *data);
 int				ft_process_prcclr(t_pf_info *data);
 
 //	ft_init0.c
-char			*ft_get_print_string(va_list arg, const char *s, int *len);
+char			*ft_get_print_string(t_pf_vargs *varg, const char *s, int *len);
 void			ft_print_list(t_list *lst);
 
 //	ft_init1.c
 t_list			*ft_process_input_string(const char *s);
 void			ft_init_flags(int *i, t_pf_info *data);
 void			ft_init_field_width(int *i, int *err,
-					t_pf_info *data, va_list arg);
+					t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init2.c
 void			ft_init_precision(int *i, int *err,
-					t_pf_info *data, va_list arg);
+					t_pf_info *data, t_pf_vargs *varg);
 void			ft_init_modifiers(int *i, t_pf_info *data);
-int				ft_get_int_value(t_pf_info *data, va_list arg);
-int				ft_init_int(char c, t_pf_info *data, va_list arg);
+int				ft_get_int_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_int(char c, t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init3.c
-int				ft_get_unsigned_int_value(t_pf_info *data, va_list arg);
-int				ft_init_unsigned(char c, t_pf_info *data, va_list arg);
-int				ft_get_double_value(t_pf_info *data, va_list arg);
-int				ft_init_double(char c, t_pf_info *data, va_list arg);
+int				ft_get_unsigned_int_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_unsigned(char c, t_pf_info *data, t_pf_vargs *varg);
+int				ft_get_double_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_double(char c, t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init4.c
-int				ft_init_pointer(char c, t_pf_info *data, va_list arg);
-int				ft_init_conversion(int i, t_pf_info *data, va_list arg);
-int				ft_init_list(va_list arg, t_list *lst);
+int				ft_init_pointer(char c, t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_conversion(int i, t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_list(t_pf_vargs *varg, t_list *lst);
 
 // void			ft_putstuff(va_list arg, const char *s, int *q, t_output *t);
 // void			ft_writestuff(int fd, const char *s, int *q);

@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:42 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/13 17:54:58 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/26 17:28:10 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,46 @@
 
 //unsigned char and unsigned short promoted to unsigned int
 static void	ft_get_unsigned_int_value_helper(t_pf_info *data,
-	va_list arg, int flag)
+	t_pf_vargs *varg, int flag)
 {
 	data->value_flag = flag;
 	if (flag & UNSIGNED_CHAR)
-		data->value.ull = va_arg(arg, unsigned int);
+		data->value.ull = va_arg(varg->arg, unsigned int);
 	else if (flag & UNSIGNED_SHORT)
-		data->value.ull = va_arg(arg, unsigned int);
+		data->value.ull = va_arg(varg->arg, unsigned int);
 	else if (flag & UNSIGNED_LONG)
-		data->value.ull = va_arg(arg, unsigned long);
+		data->value.ull = va_arg(varg->arg, unsigned long);
 	else if (flag & UNSIGNED_LONG_LONG)
-		data->value.ull = va_arg(arg, unsigned long long);
+		data->value.ull = va_arg(varg->arg, unsigned long long);
 	else if (flag & SIZE_T)
-		data->value.ull = va_arg(arg, size_t);
+		data->value.ull = va_arg(varg->arg, size_t);
 	else if (flag & UNSIGNED_INT)
-		data->value.ull = va_arg(arg, unsigned int);
+		data->value.ull = va_arg(varg->arg, unsigned int);
 }
 
-int	ft_get_unsigned_int_value(t_pf_info *data, va_list arg)
+int	ft_get_unsigned_int_value(t_pf_info *data, t_pf_vargs *varg)
 {
 	if (data->type_flag & LENGTH_MODIFIER)
 	{
 		if (data->type_flag & LOWERCASE_HH)
-			ft_get_unsigned_int_value_helper(data, arg, UNSIGNED_CHAR);
+			ft_get_unsigned_int_value_helper(data, varg, UNSIGNED_CHAR);
 		else if (data->type_flag & LOWERCASE_H)
-			ft_get_unsigned_int_value_helper(data, arg, UNSIGNED_SHORT);
+			ft_get_unsigned_int_value_helper(data, varg, UNSIGNED_SHORT);
 		else if (data->type_flag & LOWERCASE_L)
-			ft_get_unsigned_int_value_helper(data, arg, UNSIGNED_LONG);
+			ft_get_unsigned_int_value_helper(data, varg, UNSIGNED_LONG);
 		else if (data->type_flag & LLL)
-			ft_get_unsigned_int_value_helper(data, arg, UNSIGNED_LONG_LONG);
+			ft_get_unsigned_int_value_helper(data, varg, UNSIGNED_LONG_LONG);
 		else if (data->type_flag & LOWERCASE_Z)
-			ft_get_unsigned_int_value_helper(data, arg, SIZE_T);
+			ft_get_unsigned_int_value_helper(data, varg, SIZE_T);
 		else
 			return (1);
 	}
 	else
-		ft_get_unsigned_int_value_helper(data, arg, UNSIGNED_INT);
+		ft_get_unsigned_int_value_helper(data, varg, UNSIGNED_INT);
 	return (0);
 }
 
-int	ft_init_unsigned(char c, t_pf_info *data, va_list arg)
+int	ft_init_unsigned(char c, t_pf_info *data, t_pf_vargs *varg)
 {
 	if (c == 'o')
 		data->type_flag |= LOWERCASE_O;
@@ -67,23 +67,23 @@ int	ft_init_unsigned(char c, t_pf_info *data, va_list arg)
 		data->type_flag |= LOWERCASE_B;
 	else if (c == 'B')
 		data->type_flag |= UPPERCASE_B;
-	return (ft_get_unsigned_int_value(data, arg));
+	return (ft_get_unsigned_int_value(data, varg));
 }
 
 //float promoted to double
-int	ft_get_double_value(t_pf_info *data, va_list arg)
+int	ft_get_double_value(t_pf_info *data, t_pf_vargs *varg)
 {
 	if (data->type_flag & LENGTH_MODIFIER)
 	{
 		if (data->type_flag & LLL)
 		{
 			data->value_flag = LONG_DOUBLE;
-			data->value.ld = va_arg(arg, long double);
+			data->value.ld = va_arg(varg->arg, long double);
 		}
 		else if (data->type_flag & LOWERCASE_L)
 		{
 			data->value_flag = DOUBLE;
-			data->value.d = va_arg(arg, double);
+			data->value.d = va_arg(varg->arg, double);
 		}
 		else
 			return (1);
@@ -91,12 +91,12 @@ int	ft_get_double_value(t_pf_info *data, va_list arg)
 	else
 	{
 		data->value_flag = DOUBLE;
-		data->value.d = va_arg(arg, double);
+		data->value.d = va_arg(varg->arg, double);
 	}
 	return (0);
 }
 
-int	ft_init_double(char c, t_pf_info *data, va_list arg)
+int	ft_init_double(char c, t_pf_info *data, t_pf_vargs *varg)
 {
 	if (c == 'e')
 		data->type_flag |= LOWERCASE_E;
@@ -114,5 +114,5 @@ int	ft_init_double(char c, t_pf_info *data, va_list arg)
 		data->type_flag |= LOWERCASE_A;
 	else if (c == 'A')
 		data->type_flag |= UPPERCASE_A;
-	return (ft_get_double_value(data, arg));
+	return (ft_get_double_value(data, varg));
 }
