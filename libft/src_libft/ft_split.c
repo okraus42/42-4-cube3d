@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 16:02:36 by okraus            #+#    #+#             */
-/*   Updated: 2023/03/14 15:13:33 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/29 12:46:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	**ft_split(char const *s, char c)
 
 	j = 0;
 	i = 0;
+	if (!s)
+		return (NULL);
 	ss = (char **)malloc(sizeof(char *) * (ft_count_strings((char *)s, c) + 1));
 	if (ss == NULL)
 		return (NULL);

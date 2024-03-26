@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 13:43:29 by okraus            #+#    #+#             */
-/*   Updated: 2023/11/20 16:11:49 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/03 14:39:30 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,19 @@
 # include <stdint.h>
 # include <stdarg.h>
 # include <limits.h>
+# include <sys/stat.h>
+# include <fcntl.h>
+# include <sys/time.h>
 
 // DEFINITIONS
+
+//	Useful Macros
+// # define ABS(a) (((a) > 0) * (a) - ((a) < 0) * (a))
+// # define PN(a) (((a) > 0) - ((a) < 0))
+// # define MAX(a, b) (((a) > (b)) * (a) + ((a) <= (b)) * (b))
+// # define MIN(a, b) (((a) < (b)) * (a) + ((a) >= (b)) * (b))
+// # define PERCENTIL(a, b, c, d) ((a) + ((b) - (a)) * (c) / (d))
+
 // GET_NEXT_LINE definitions
 
 # ifndef BUFFER_SIZE
@@ -31,19 +42,14 @@
 # endif
 
 // FT_PRINTF definitions
-# define F_TYPES	"cspdiouxXBbPCQ%"
+# define F_TYPES	"cspdiouxXBbPC%"
 # define F_FLAGS	"0#-+ 'I"
 # define F_NUMBERS	"0123456789*"
 # define F_MODIFIER	"hlLz"
 # define BASE_CAP	"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 # define BASE_SML	"0123456789abcdefghijklmnopqrstuvwxyz"
-# define BASE_HEX	"0123456789ABCDEF"
-
-//	MACROS - forbidden?
 
 typedef long long	t_fix64;
-
-//# define ABS(Value) (Value < 0 ? -Value : Value)
 
 typedef enum e_print_flag
 {
@@ -194,9 +200,8 @@ typedef enum e_print_flag
 // 	LOWERCASE_B = 0x4000000,		//binary unsigned int
 									//(maybe change to signed base?)
 // 	UPPERCASE_B = 0x8000000,		//bases unsigned int
-// 	UPPERCASE_P = 0x10000000,		//Fixed point numbers
-// 	UPPERCASE_Q = 0x20000000,		// dunno?
-// 	PERCENTAGE = 0x40000000			// percentage
+// 	UPPERCASE_P = 0x10000000,		//dunno?
+// 	PERCENTAGE = 0x20000000			// percentage
 // }	t_type_flag;
 
 typedef enum e_print_type_flag
@@ -236,8 +241,7 @@ typedef enum e_print_type_flag
 	LOWERCASE_B = 0x4000000,
 	UPPERCASE_B = 0x8000000,
 	UPPERCASE_P = 0x10000000,
-	UPPERCASE_Q = 0x20000000,
-	PERCENTAGE = 0x40000000
+	PERCENTAGE = 0x20000000
 }	t_type_flag;
 
 typedef enum e_print_value_flag
@@ -289,6 +293,11 @@ typedef struct s_list
 }					t_list;
 
 // FT_PRINTF structure
+
+typedef struct s_pf_vargs
+{
+	va_list		arg;
+}				t_pf_vargs;
 
 // type: 0 - just text, 1 - %[stuff]
 typedef struct s_pf_info
@@ -402,11 +411,24 @@ t_dlist			*ft_dlstnew(void *content);
 // string stuff
 char			*ft_stringcopy(char const *str);
 
+// time
+time_t			ft_get_time_in_ms(void);
+
 // evil malloc & calloc
 void			*ft_evil_malloc(size_t size);
 void			*ft_evil_malloc_plus(size_t size, size_t padding);
 void			*ft_evil_calloc(size_t nmemb, size_t size);
 void			*ft_evil_calloc_plus(size_t nmemb, size_t size, size_t padding);
+
+//ctype
+int				ft_isblank(int c);
+int				ft_iscntrl(int c);
+int				ft_isgraph(int c);
+int				ft_islower(int c);
+int				ft_ispunct(int c);
+int				ft_isspace(int c);
+int				ft_isupper(int c);
+int				ft_isxdigit(int c);
 
 // math stuff
 int				ft_abs(int n);
@@ -434,6 +456,9 @@ int				ft_splitlen(char **split);
 // memory
 void			*ft_print_memory(void *addr, int fd, unsigned int size);
 void			*ft_print_memory_plus(void *addr, int fd, unsigned int size);
+
+// reading file
+char			**ft_readfile(char *path, int size);
 
 // printing array of strings
 void			ft_put_strarray(char **arr);
@@ -509,39 +534,32 @@ int				ft_process_prcptr(t_pf_info *data);
 int				ft_process_prcclr(t_pf_info *data);
 
 //	ft_init0.c
-char			*ft_get_print_string(va_list arg, const char *s, int *len);
+char			*ft_get_print_string(t_pf_vargs *varg, const char *s, int *len);
 void			ft_print_list(t_list *lst);
 
 //	ft_init1.c
 t_list			*ft_process_input_string(const char *s);
 void			ft_init_flags(int *i, t_pf_info *data);
 void			ft_init_field_width(int *i, int *err,
-					t_pf_info *data, va_list arg);
+					t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init2.c
 void			ft_init_precision(int *i, int *err,
-					t_pf_info *data, va_list arg);
+					t_pf_info *data, t_pf_vargs *varg);
 void			ft_init_modifiers(int *i, t_pf_info *data);
-int				ft_get_int_value(t_pf_info *data, va_list arg);
-int				ft_init_int(char c, t_pf_info *data, va_list arg);
+int				ft_get_int_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_int(char c, t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init3.c
-int				ft_get_unsigned_int_value(t_pf_info *data, va_list arg);
-int				ft_init_unsigned(char c, t_pf_info *data, va_list arg);
-int				ft_get_double_value(t_pf_info *data, va_list arg);
-int				ft_init_double(char c, t_pf_info *data, va_list arg);
+int				ft_get_unsigned_int_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_unsigned(char c, t_pf_info *data, t_pf_vargs *varg);
+int				ft_get_double_value(t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_double(char c, t_pf_info *data, t_pf_vargs *varg);
 
 //	ft_init4.c
-int				ft_init_pointer(char c, t_pf_info *data, va_list arg);
-int				ft_init_conversion(int i, t_pf_info *data, va_list arg);
-int				ft_init_list(va_list arg, t_list *lst);
-
-//	ft_fixtoa. + temp;
-char			*ft_fixtoa(long long n, unsigned int fixbits);
-char			*ft_fixstr(long long n, int declen, char *whole, char *decimal);
-int				ft_process_prcfix(t_pf_info *data);
-int				ft_fix_prec(t_pf_info *data);
-t_fix64			ft_ftofix(double f, unsigned int bits);
+int				ft_init_pointer(char c, t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_conversion(int i, t_pf_info *data, t_pf_vargs *varg);
+int				ft_init_list(t_pf_vargs *varg, t_list *lst);
 
 // void			ft_putstuff(va_list arg, const char *s, int *q, t_output *t);
 // void			ft_writestuff(int fd, const char *s, int *q);

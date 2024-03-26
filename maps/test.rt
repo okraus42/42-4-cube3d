@@ -1,0 +1,19 @@
+A 0.25 255,255,255
+
+C  0,0,40 0,0,1 45
+L 0,0,10 1 255,255,255
+
+cy -16,0,0 0,1,0 4 4 192,192,192  .ch/01
+cy -8,0,0 0,1,0 4 8 192,192,192  .ch/01
+cy 8,0,0 0,1,0 4 1 192,192,192 .ch/01
+cy 16,0,0 0,1,0 4 12.56 192,192,192 .ch/01
+cy 0,0,-80 0,1,0 8 80 192,192,192 .ch/01
+
+.vm/01 0="./textures/norm1.png" 1="./textures/norm1.png" 2="./textures/norm1.png"
+.vm/02 0="./textures/norm2.png" 1="./textures/norm1.png" 2="./textures/norm3.png"
+.vm/03 0="./textures/norm3.png" 1="./textures/norm1.png" 2="./textures/norm2.png"
+.vm/04 0="./textures/earth_normal.png" 1="./textures/norm1.png" 2="./textures/norm2.png"
+.tx/01 0="./textures/mars.png" 1="./textures/earth.png" 2="./textures/norm1.png"
+.tx/02 0="./textures/earth.png" 1="./textures/earth.png" 2="./textures/earth.png"
+.tx/03 0="./textures/stonewall1.png" 1="./textures/earth.png" 2="./textures/norm1.png"
+.ch/01 255,255,255 0,0,0 8

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_camera.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 15:37:54 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:49:58 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_camera(t_rt *rt)
 
 int	check_format_camera(char **split)
 {
-	if (!has_spec_count(split, 4))
+	if (!has_spec_count_strict(split, 4))
 		return (id_err("C", E_SPEC, "3"));
 	if (!is_float_triad(split[1]))
 		return (id_err("C", E_COORD, E_TRIAD_INTFLOAT));
@@ -51,6 +51,9 @@ int	fill_camera(t_rt *rt, char **split)
 	get_coords(rt->camera->coords, split[1]);
 	if (!get_nvect(rt->camera->nvect, split[2]))
 		return (id_err("C", E_VECT_RANGE, E_RANGE_NORM));
+	if (rt->camera->nvect[X] == 0 && rt->camera->nvect[Y] == 0
+		&& rt->camera->nvect[Z] == 0)
+		return (id_err("C", E_NORM_ZERO, NULL));
 	*rt->camera->normal = get_normal(rt->camera->nvect[X], \
 		rt->camera->nvect[Y], rt->camera->nvect[Z]);
 	rt->camera->fov = ft_atoi(split[3]);

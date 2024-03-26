@@ -76,3 +76,15 @@
    ...
    fun:_dl_init
 }
+{
+   <dl_open_worker>
+   Memcheck:Leak
+   ...
+   fun:dl_open_worker
+}
+{
+   <llvm>
+   Memcheck:Leak
+   ...
+   fun:__pthread_once_slow
+}

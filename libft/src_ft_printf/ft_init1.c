@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 17:48:36 by okraus            #+#    #+#             */
-/*   Updated: 2023/10/13 17:56:56 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/26 17:26:46 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,14 @@ void	ft_init_flags(int *i, t_pf_info *data)
 	}
 }
 
-void	ft_init_field_width(int *i, int *err, t_pf_info *data, va_list arg)
+void	ft_init_field_width(int *i, int *err, t_pf_info *data, t_pf_vargs *varg)
 {
 	int			n;
 	long long	num;
 
 	if (data->orig[*i] == '*')
 	{
-		data->field_width = va_arg(arg, unsigned int);
+		data->field_width = va_arg(varg->arg, unsigned int);
 		++(*i);
 	}
 	else

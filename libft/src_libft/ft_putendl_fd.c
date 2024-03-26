@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/12 17:38:59 by okraus            #+#    #+#             */
-/*   Updated: 2023/03/14 15:13:27 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/29 12:46:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@ void	ft_putendl_fd(char *s, int fd)
 	unsigned long	i;
 
 	i = 0;
-	while (s[i])
+	if (!s)
+		write(fd, "(null)", 6);
+	else
 	{
-		write(fd, &s[i], 1);
-		i++;
+		while (s[i])
+		{
+			write(fd, &s[i], 1);
+			i++;
+		}
 	}
 	write(fd, "\n", 1);
 }

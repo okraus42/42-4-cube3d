@@ -1,0 +1,14 @@
+A 0.25 255,255,255
+
+C  0,0,50 0,0,1 45
+L -25,25,100 1 255,255,255
+
+pl 0,0,-25 0,0,1 255,128,32 .vm/01 .tx/01
+
+sp 0,4,0 24 32,64,192 .vm/02 .tx/02
+
+.tx/01 0="./textures/Tiles.png"
+.vm/01 0="./textures/Tiles_normal.png"
+.ch/01 255,255,255 0,0,0 8
+.tx/02 0="./textures/Wall_Shells.png" 1="./textures/Wall_Shells.png" 2="./textures/Wall_Shells.png"
+.vm/02 0="./textures/Wall_Shells_normal.png" 1="./textures/Wall_Shells_normal.png" 2="./textures/Wall_Shells_normal.png"

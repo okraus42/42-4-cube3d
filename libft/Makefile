@@ -6,19 +6,19 @@
 #    By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/14 13:43:18 by okraus            #+#    #+#              #
-#    Updated: 2023/11/20 16:01:15 by okraus           ###   ########.fr        #
+#    Updated: 2024/02/15 14:53:41 by okraus           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # https://stackoverflow.com/questions/451413/make-makefile-progress-indication
-ifndef ECHO
-HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
-HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
-HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
-HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
-PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
-ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
-endif
+# ifndef ECHO
+# HIT_TOTAL	!=	${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" | grep -c "HIT_MARK"
+# HIT_COUNT1	=	$(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
+# HIT_COUNT2	=	$(eval HIT_M != expr ${HIT_M} + 1)${HIT_M}
+# HIT_COUNT3	=	$(eval HIT_O != expr ${HIT_O} + $(BAR_LENGTH))${HIT_O}
+# PERC		=	$(shell expr $(HIT_COUNT3) / $(HIT_TOTAL) | bc)
+# ECHO		=	echo "[`expr ${HIT_COUNT1} '*' 100 / ${HIT_TOTAL}`%]"
+# endif
 
 NAME		=	libft.a
 INCS		=	header/libft.h
@@ -101,6 +101,15 @@ SRC_EX		=	ft_abs.c \
 				ft_evil_calloc.c \
 				ft_evil_malloc.c \
 				ft_free_split.c \
+				ft_gettime.c \
+				ft_isblank.c \
+				ft_iscntrl.c \
+				ft_isgraph.c \
+				ft_islower.c \
+				ft_ispunct.c \
+				ft_isspace.c \
+				ft_isupper.c \
+				ft_isxdigit.c \
 				ft_latoi.c \
 				ft_litoa.c \
 				ft_max.c \
@@ -109,6 +118,7 @@ SRC_EX		=	ft_abs.c \
 				ft_print_memory_plus.c \
 				ft_put_split.c \
 				ft_put_strarray.c \
+				ft_readfile.c \
 				ft_split_add.c \
 				ft_split_rm.c \
 				ft_splitlen.c \
@@ -128,11 +138,6 @@ SRC_GNL		=	get_next_line.c \
 
 SRC_PF		= 	ft_printf.c \
 				ft_vprintf.c \
-				ft_fixed.c \
-				ft_fixprec.c \
-				ft_fixtoa.c \
-				ft_fixtoa2.c \
-				ft_ftofix.c \
 				ft_init0.c \
 				ft_init1.c \
 				ft_init2.c \
@@ -156,19 +161,19 @@ GREEN		=	\033[1;32m
 YELLOW		=	\033[1;93m
 RED			=	\033[1;31m
 REVERSE		=	\033[7m
-RETURN		=	\033[1F\r\033[2K
+RETURN		=	#\033[1F\r\033[2K
 
 # Printing
 
-BAR_LENGTH	:=	50
-PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
-PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
-					if [ $$num -le $(PERC) ] ; then \
-						printf "$(REVERSE) $(NRM_FORMAT)" ; \
-					else \
-						printf " " ; \
-        			fi \
-    			done
+# BAR_LENGTH	:=	50
+# PRINT1		=	printf "[$(HIT_COUNT2)/$(HIT_TOTAL)]" ;
+# PRINT2		=	for num in `seq 1 $(BAR_LENGTH)` ; do \
+# 					if [ $$num -le $(PERC) ] ; then \
+# 						printf "$(REVERSE) $(NRM_FORMAT)" ; \
+# 					else \
+# 						printf " " ; \
+#         			fi \
+#     			done
 
 # Objects
 

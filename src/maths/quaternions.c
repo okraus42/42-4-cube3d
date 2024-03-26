@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quaternions.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 09:33:22 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:25 by okraus           ###   ########.fr       */
+/*   Updated: 2024/03/05 11:43:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,18 @@ t_quat	mult_quat(t_quat i, t_quat j)
 	return (res);
 }
 
-/* res1.q0 = inv.q0 * point.q0 - inv.q1 * point.q1 - inv.q2 * point.q2 - inv.q3 * point.q3;
-res1.q1 = inv.q0 * point.q1 + inv.q1 * point.q0 - inv.q2 * point.q3 + inv.q3 * point.q2;
-res1.q2 = inv.q0 * point.q2 + inv.q1 * point.q3 + inv.q2 * point.q0 - inv.q3 * point.q1;
-res1.q3 = inv.q0 * point.q3 - inv.q1 * point.q2 + inv.q2 * point.q1 + inv.q3 * point.q0;
+/*
+res1.q0 = i.q0 * point.q0 - i.q1 * point.q1 - i.q2 * point.q2 - i.q3 * point.q3;
+res1.q1 = i.q0 * point.q1 + i.q1 * point.q0 - i.q2 * point.q3 + i.q3 * point.q2;
+res1.q2 = i.q0 * point.q2 + i.q1 * point.q3 + i.q2 * point.q0 - i.q3 * point.q1;
+res1.q3 = i.q0 * point.q3 - i.q1 * point.q2 + i.q2 * point.q1 + i.q3 * point.q0;
 
-res2.q0 = res1.q0 * rot.q0 - res1.q1 * rot.q1 - res1.q2 * rot.q2 - res1.q3 * rot.q3;
-res2.q1 = res1.q0 * rot.q1 + res1.q1 * rot.q0 - res1.q2 * rot.q3 + res1.q3 * rot.q2;
-res2.q2 = res1.q0 * rot.q2 + res1.q1 * rot.q3 + res1.q2 * rot.q0 - res1.q3 * rot.q1;
-res2.q3 = res1.q0 * rot.q3 - res1.q1 * rot.q2 + res1.q2 * rot.q1 + res1.q3 * rot.q0; */
+res2.q0 = res1.q0 * r.q0 - res1.q1 * r.q1 - res1.q2 * r.q2 - res1.q3 * r.q3;
+res2.q1 = res1.q0 * r.q1 + res1.q1 * r.q0 - res1.q2 * r.q3 + res1.q3 * r.q2;
+res2.q2 = res1.q0 * r.q2 + res1.q1 * r.q3 + res1.q2 * r.q0 - res1.q3 * r.q1;
+res2.q3 = res1.q0 * r.q3 - res1.q1 * r.q2 + res1.q2 * r.q1 + res1.q3 * r.q0;
+*/
+
+//	vector a = crossproduct(v1, v2);
+//	q.xyz = a;
+//	q.w = sqrt((v1.Length ^ 2) * (v2.Length ^ 2)) + dotproduct(v1, v2);

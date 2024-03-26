@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 14:42:13 by okraus            #+#    #+#             */
-/*   Updated: 2023/03/14 15:13:53 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/29 12:48:35 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_tolower(int c)
 {
-	if ('A' <= c && c <= 'Z')
-		c += 32;
+	if (ft_isupper(c))
+		return (c | ' ');
 	return (c);
 }

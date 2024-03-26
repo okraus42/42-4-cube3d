@@ -6,7 +6,7 @@
 /*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 15:05:43 by okraus            #+#    #+#             */
-/*   Updated: 2023/03/14 15:13:52 by okraus           ###   ########.fr       */
+/*   Updated: 2023/12/29 12:46:23 by okraus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char	*str;
 
 	i = 0;
+	if (!s)
+		return (NULL);
 	while (s[i] && i < start)
 	{
-		i++;
-		if (start > i && s[i] == 0)
+		if (start > i++ && s[i] == 0)
 			return (ft_strdup(""));
 	}
 	i = 0;

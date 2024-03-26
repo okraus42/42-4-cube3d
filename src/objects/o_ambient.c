@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   o_ambient.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: okraus <okraus@student.42prague.com>       +#+  +:+       +#+        */
+/*   By: plouda <plouda@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 14:54:05 by plouda            #+#    #+#             */
-/*   Updated: 2023/12/17 17:56:08 by okraus           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:49:51 by plouda           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	init_ambient(t_rt *rt)
 
 int	check_format_ambient(char **split)
 {
-	if (!has_spec_count(split, 3))
+	if (!has_spec_count_strict(split, 3))
 		return (id_err("A", E_SPEC, "2"));
 	if (!is_floatable(split[1]))
 		return (id_err("A", E_RATIO, E_INTFLOAT));
